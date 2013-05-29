@@ -5,6 +5,7 @@
             <displayName>dummytest</displayName>
             <goals>
                 <goal>org.apache.maven.dist.tools:dist-tool-plugin:check-source</goal>
+                <goal>-X</goal>
             </goals>
         </action>
     </actions>

@@ -51,6 +51,6 @@ public class MavenMetadata
         String lastUpdated;
         @XmlElementWrapper( name = "versions" )
         @XmlElement( name = "version" )
-        List<String> versions = new LinkedList<String>();
+        List<String> versions = new LinkedList<>();
     }
 }
