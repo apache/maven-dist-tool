@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-dummytest</actionName>
+            <displayName>dummytest</displayName>
+            <goals>
+                <goal>org.apache.maven.dist.tools:dist-tool-plugin:check-source</goal>
+            </goals>
+        </action>
+    </actions>

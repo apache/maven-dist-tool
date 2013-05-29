@@ -1,0 +1,1 @@
+JSOUP is under MIT licence

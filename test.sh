@@ -1,0 +1,1 @@
+mvn org.apache.maven.dist.tools:dist-tool-plugin:check-source
