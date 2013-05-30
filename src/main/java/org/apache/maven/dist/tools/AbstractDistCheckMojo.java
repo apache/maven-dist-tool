@@ -1,5 +1,4 @@
 package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,63 +17,89 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
-import org.apache.maven.plugin.AbstractMojo;
+import java.util.List;
+import org.apache.maven.doxia.siterenderer.Renderer;
+
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.reporting.AbstractMavenReport;
 
 /**
  *
  * @author skygo
  */
-public abstract class AbstractDistCheckMojo extends AbstractMojo
+public abstract class AbstractDistCheckMojo extends AbstractMavenReport
 {
 
-    @Parameter( property = "repository.url", defaultValue = "http://repo1.maven.org/maven2/" )
-    private String repoBaseUrl;
-    @Parameter( property = "database.url", defaultValue = "db/mavendb.csv" )
-    private String dbLocation;
+    @Parameter( property = "repositoryUrl", defaultValue = "http://repo1.maven.org/maven2/" )
+    protected String repoBaseUrl;
+    @Parameter( property = "configurationLines", defaultValue = "" )
+    private List<String> configurationLines;
 
     abstract void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException;
+    private static final String MAVEN_DB = "db/mavendb.csv";
+    @Component
+    protected Renderer siteRenderer;
+    @Parameter( property = "project.reporting.outputDirectory", required = true )
+    protected File outputDirectory;
+    @Component
+    protected MavenProject project;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException
+    protected String getOutputDirectory()
     {
-        URL dbURL;
-        if ( dbLocation.equals( "db/mavendb.csv" ) )
-        {
-            dbURL = Thread.currentThread().getContextClassLoader().getResource( "db/mavendb.csv" );
-        }
-        else
-        {
-            throw new MojoFailureException( "Custom data not implemented " );
-        }
+        return outputDirectory.getAbsolutePath();
+    }
 
+    @Override
+    protected Renderer getSiteRenderer()
+    {
+        return siteRenderer;
+    }
 
-        try (BufferedReader input = new BufferedReader( new InputStreamReader( dbURL.openStream() ) ))
+    @Override
+    protected MavenProject getProject()
+    {
+        return project;
+    }
+
+    @Override
+    public void execute() throws MojoExecutionException
+    {
+        if ( configurationLines.isEmpty() )
         {
-            String text;
-            while ( (text = input.readLine()) != null )
+            try (BufferedReader input = new BufferedReader( new InputStreamReader( Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB ).openStream() ) ))
             {
-                if ( text.startsWith( "##" ) )
+                String text;
+                while ( (text = input.readLine()) != null )
                 {
-                    getLog().info( text );
+                    configurationLines.add( text );
                 }
-                else
-                {
-                    String[] artifactInfo = text.split( ";" );
-                    checkArtifact( new ConfigurationLineInfo( artifactInfo[0], artifactInfo[1], artifactInfo[2] ), repoBaseUrl );
-                }
-
+            }
+            catch ( IOException ex )
+            {
+                throw new MojoExecutionException( ex.getMessage(), ex );
             }
         }
-        catch ( IOException ex )
+
+        for ( String line : configurationLines )
         {
-            throw new MojoFailureException( ex.getMessage(), ex );
+            if ( line.startsWith( "##" ) )
+            {
+                getLog().info( line );
+            }
+            else
+            {
+                String[] artifactInfo = line.split( ";" );
+                checkArtifact( new ConfigurationLineInfo( artifactInfo[0], artifactInfo[1], artifactInfo[2] ), repoBaseUrl );
+            }
         }
     }
 }

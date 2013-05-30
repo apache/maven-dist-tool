@@ -1,5 +1,4 @@
 package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,26 +17,32 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Locale;
+import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.apache.maven.project.ProjectBuilder;
+import org.apache.maven.reporting.MavenReportException;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -49,6 +54,19 @@ import org.jsoup.nodes.Element;
 @Mojo( name = "check-site" )
 public class DistCheckSiteMojo extends AbstractDistCheckMojo
 {
+// common type for site checker
+
+    @Component
+    private ProjectBuilder projectBuilder;
+    @Component
+    private RepositorySystem repoSystem;
+    /**
+     * The entry point to Aether, i.e. the component doing all the work.
+     *
+     * @parameter default-value="${repositorySystemSession}"
+     * @readonly
+     */
+    private RepositorySystemSession repoSession;
 
     interface HTMLChecker
     {
@@ -61,7 +79,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         String getName();
 
         /**
-         * true if checker find patter in document
+         * true if checker find pattern in document
          *
          * @param doc
          * @param version
@@ -69,10 +87,148 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
          */
         boolean isOk( Document doc, String version );
     }
+
+    class DistCheckSiteResult extends AbstractCheckResult
+    {
+
+        private String url;
+        private Map<DistCheckSiteMojo.HTMLChecker, Boolean> checkMap = new HashMap<>();
+
+        public DistCheckSiteResult( ConfigurationLineInfo r, String version )
+        {
+            super( r, version );
+        }
+
+        void setUrl( String url )
+        {
+            this.url = url;
+        }
+
+        /**
+         * @return the url
+         */
+        public String getUrl()
+        {
+            return url;
+        }
+
+        /**
+         * @return the checkMap
+         */
+        public Map<DistCheckSiteMojo.HTMLChecker, Boolean> getCheckMap()
+        {
+            return checkMap;
+        }
+    }
+    // keep result
+    private List<DistCheckSiteResult> results = new LinkedList<>();
     private List<HTMLChecker> checker = new LinkedList<>();
 
-    private void checkSite( String repourl, ConfigurationLineInfo r, String version ) throws MojoExecutionException
+    @Override
+    protected void executeReport( Locale locale ) throws MavenReportException
     {
+        if ( !outputDirectory.exists() )
+        {
+            outputDirectory.mkdirs();
+        }
+        try
+        {
+            this.execute();
+        }
+        catch ( MojoExecutionException ex )
+        {
+            throw new MavenReportException( ex.getMessage(), ex );
+        }
+        Sink sink = getSink();
+        sink.head();
+        sink.title();
+        sink.text( "Check sites" );
+        sink.title_();
+        sink.head_();
+
+        sink.body();
+        sink.section1();
+        sink.rawText( "Checked sites" );
+        sink.section1_();
+        sink.table();
+        sink.tableRow();
+        sink.tableHeaderCell();
+        sink.rawText( "groupId:artifactId (from conf file)" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "Latest version from metadata" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "URL" );
+        sink.tableHeaderCell_();
+        for ( HTMLChecker c : checker )
+        {
+            sink.tableHeaderCell();
+            sink.rawText( c.getName() );
+            sink.tableHeaderCell_();
+        }
+
+        sink.tableRow_();
+        for ( DistCheckSiteResult csr : results )
+        {
+            sink.tableRow();
+            sink.tableCell();
+            sink.rawText( csr.getConfigurationLine().getGroupId() + ":" );
+            sink.rawText( csr.getConfigurationLine().getArtifactId() );
+            sink.tableCell_();
+            sink.tableCell();
+            sink.rawText( csr.getVersion() );
+            sink.tableCell_();
+            sink.tableCell();
+            sink.rawText( csr.getUrl() );
+            sink.tableCell_();
+            for ( HTMLChecker c : checker )
+            {
+                sink.tableCell();
+                if ( csr.getCheckMap().get( c ) != null )
+                {
+                    sink.rawText( csr.getCheckMap().get( c ).toString() );
+                }
+                else
+                {
+                    sink.rawText( "Error" );
+                }
+
+                sink.tableCell_();
+            }
+            sink.tableRow_();
+        }
+        sink.table_();
+        sink.body_();
+        sink.flush();
+        sink.close();
+    }
+
+    @Override
+    public String getOutputName()
+    {
+        return "check-siteOutputName";
+    }
+
+    @Override
+    public String getName( Locale locale )
+    {
+        return "Check sites";
+    }
+
+    @Override
+    public String getDescription( Locale locale )
+    {
+        return "check-siteDescription";
+    }
+    /*@Component
+     private RepositorySystemSession repoSession;
+     */
+
+    private void checkSite( String repourl, ConfigurationLineInfo r, String version )
+    {
+        DistCheckSiteResult result = new DistCheckSiteResult( r, version );
+        results.add( result );
         StringBuilder message = new StringBuilder();
         try (BufferedReader input = new BufferedReader( new InputStreamReader( new URL( repourl ).openStream() ) ))
         {
@@ -80,31 +236,40 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             Model m = mavenreader.read( input );
             // need to have parent information and resolve properties 
             // 
-            MavenProject project = new MavenProject( m );
+           /* ModelBuildingRequest md = new DefaultModelBuildingRequest();
+             md.setPomFile( outputDirectory );
+             DefaultModelBuilder d = new DefaultModelBuilder();
 
+             
+             DefaultRepositorySystemSession repoSystem = new MavenRepositorySystemSession();
+             DefaultProjectBuildingRequest req = new DefaultProjectBuildingRequest();
+             //session.
+             req.setRepositorySession( repoSession );
+             //session.
+             getLog().warn( "" + repoSession );
 
-            Document doc = Jsoup.connect( project.getUrl() ).get();
-            message.append( "Site for " ).append( project.getArtifactId() ).append( " at " ).append( project.getUrl() ).append( " seek for" ).append( project.getVersion() ).append( "    " );
+             req.setValidationLevel( ModelBuildingRequest.VALIDATION_LEVEL_STRICT );
+             ProjectBuildingResult res = projectBuilder.build( new UrlModelSource( new URL( repourl ) ), req );*/
+            MavenProject projectc = new MavenProject( m );//res.getProject();
+
+            getLog().info( projectc.getUrl() + "+" + projectc.getProperties() );
+            result.setUrl( projectc.getUrl() );
+            Document doc = Jsoup.connect( projectc.getUrl() ).get();
+            result.setUrl( projectc.getUrl() );
+            message.append( "Site for " ).append( projectc.getArtifactId() ).append( " at " ).append( projectc.getUrl() ).append( " seek for" ).append( projectc.getVersion() ).append( "    " );
             for ( HTMLChecker c : checker )
             {
+                result.getCheckMap().put( c, c.isOk( doc, version ) );
                 message.append( "[" ).append( c.getName() ).append( c.isOk( doc, version ) ).append( "]" );
             }
-
 
             getLog().warn( message.toString() );
 
         }
-        catch ( MalformedURLException ex )
+        catch ( Exception ex )
         {
-            throw new MojoExecutionException( ex.getMessage(), ex );
-        }
-        catch ( IOException ex )
-        {
-            throw new MojoExecutionException( ex.getMessage(), ex );
-        }
-        catch ( XmlPullParserException ex )
-        {
-            Logger.getLogger( DistCheckSiteMojo.class.getName() ).log( Level.SEVERE, null, ex );
+            //continue for  other artifact
+            getLog().error( ex.getMessage() );
         }
 
     }
@@ -138,7 +303,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     }
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException
+    public void execute() throws MojoExecutionException
     {
         //add  html checker
         checker.add( new HTMLChecker()
@@ -185,6 +350,6 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
                 }
             }
         } );
-        super.execute(); 
+        super.execute();
     }
 }

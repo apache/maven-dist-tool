@@ -24,18 +24,24 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <description>Dist tool plugin. 
-        Not to be released.</description>
+        Not to be released.</description>  
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+    
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.0.5</version>
-            <type>jar</type>
-        </dependency>
+            <version>${mvnversion}</version>
+            
+        </dependency>     
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>3.2</version>
+            <scope>provided</scope>
+            
         </dependency> 
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -45,12 +51,67 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>3.0.4</version>
+            <version>${mvnversion}</version>
             <type>jar</type>
+            
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.reporting</groupId>
+            <artifactId>maven-reporting-impl</artifactId>
+            <version>2.2</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>maven-artifact</artifactId>
+                    <groupId>org.apache.maven</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>maven-model</artifactId>
+                    <groupId>org.apache.maven</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-api</artifactId>
+            <version>0.9.0.M2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-util</artifactId>
+            <version>0.9.0.M2</version>
+           
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-aether-provider</artifactId>
+            <version>${mvnversion}</version>
+           
+        </dependency>
+        
     </dependencies>
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>  
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                </plugin>
+                <plugin>  
+                    <groupId>org.apache.maven.doxia</groupId>
+                    <artifactId>doxia-maven-plugin</artifactId>
+                    <version>1.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>animal-sniffer-maven-plugin</artifactId>
+                <version>1.9</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
@@ -84,10 +145,33 @@
                     <source>1.7</source>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${project.artifactId}</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>auto</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>check-site</goal>
+                            <goal>check-source-release</goal>
+                        </goals> 
+                        <configuration>
+                            <configurationLines>
+                                <configurationLine>org.apache.maven.indexer;maven-indexer;https://dist.apache.org/repos/dist/release/maven/indexer/</configurationLine>
+                                <configurationLine>org.apache.maven.plugins;maven-ant-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/</configurationLine>
+                            </configurationLines>
+                        </configuration>
+                    </execution>
+                </executions>        
+            </plugin>
         </plugins>
     </build>
     <properties>
-        <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
+        <netbeans.checkstyle.format>true</netbeans.checkstyle.format> 
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mvnversion>3.1-SNAPSHOT</mvnversion>
     </properties>
     <reporting>
         <plugins>
@@ -96,10 +180,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-                <version>${jxrVersion}</version>
+                <version>2.3</version>
                 <configuration>
                     <aggregate>true</aggregate>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+                
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -109,7 +206,27 @@
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <configLocation>config/maven_checks.xml</configLocation>
                 </configuration>
+            </plugin> 
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${project.artifactId}</artifactId>
+                <version>${project.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <id>html</id>
+                        <reports>
+                            <report>check-site</report>
+                            <report>check-source-release</report>
+                        </reports>  
+                    </reportSet>
+                </reportSets>
+               <!-- <configuration>
+                    <configurationLines>
+                        <configurationLine>org.apache.maven.wagon;wagon;https://dist.apache.org/repos/dist/release/maven/wagon/</configurationLine>
+                    </configurationLines>
+                </configuration>
+                   -->     
             </plugin>
-        </plugins>
+        </plugins>       
     </reporting>
 </project>

@@ -1,5 +1,4 @@
 package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +17,7 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,11 +26,14 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -47,7 +50,130 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
 {
 //Artifact metadata retrieval done y hands.
 
-    private void checkRepos( String repourl, ConfigurationLineInfo r, String version ) throws IOException
+    class DistCheckSourceRelease extends AbstractCheckResult
+    {
+
+        private List<String> central;
+        private List<String> dist;
+
+        public DistCheckSourceRelease( ConfigurationLineInfo r, String version )
+        {
+            super( r, version );
+        }
+
+        private void setMissingDistSourceRelease( List<String> checkRepos )
+        {
+            dist = checkRepos;
+        }
+
+        private void setMisingCentralSourceRelease( List<String> checkRepos )
+        {
+            central = checkRepos;
+        }
+    }
+    private List<DistCheckSourceRelease> results = new LinkedList<>();
+
+    @Override
+    protected void executeReport( Locale locale ) throws MavenReportException
+    {
+        if ( !outputDirectory.exists() )
+        {
+            outputDirectory.mkdirs();
+        }
+        try
+        {
+            this.execute();
+        }
+        catch ( MojoExecutionException ex )
+        {
+            throw new MavenReportException( ex.getMessage(), ex );
+        }
+        Sink sink = getSink();
+        sink.head();
+        sink.title();
+        sink.text( "Check source release" );
+        sink.title_();
+        sink.head_();
+
+        sink.body();
+        sink.section1();
+        sink.rawText( "Missing Source Release (less you have better the result)" );
+        sink.section1_();
+        sink.table();
+        sink.tableRow();
+        sink.tableHeaderCell();
+        sink.rawText( "groupId:artifactId (from conf file)" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "Latest version from metadata" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "Central " + repoBaseUrl );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "Dist" );
+        sink.tableHeaderCell_();
+        sink.tableRow_();
+        for ( DistCheckSourceRelease csr : results )
+        {
+            sink.tableRow();
+            sink.tableCell();
+            sink.rawText( csr.getConfigurationLine().getGroupId() + ":" );
+            sink.rawText( csr.getConfigurationLine().getArtifactId() );
+            sink.tableCell_();
+            sink.tableCell();
+            sink.rawText( csr.getVersion() );
+            sink.tableCell_();
+            sink.tableCell();
+            sink.bold();
+            sink.lineBreak();
+            for ( String missing : csr.central )
+            {
+                sink.rawText( missing );
+                sink.lineBreak();
+            }
+
+            sink.bold_();
+            sink.tableCell_();
+            sink.tableCell();
+            sink.bold();
+            sink.lineBreak();
+            for ( String missing : csr.dist )
+            {
+                sink.rawText( missing );
+                sink.lineBreak();
+            }
+
+            sink.bold_();
+            sink.tableCell_();
+
+            sink.tableRow_();
+        }
+        sink.table_();
+        sink.body_();
+        sink.flush();
+        sink.close();
+    }
+
+    @Override
+    public String getOutputName()
+    {
+        return "check-source-releaseOutputName";
+    }
+
+    @Override
+    public String getName( Locale locale )
+    {
+        return "check-source-releaseName";
+    }
+
+    @Override
+    public String getDescription( Locale locale )
+    {
+        return "check-source-releaseDescription";
+    }
+
+    private List<String> checkRepos( String repourl, ConfigurationLineInfo r, String version ) throws IOException
     {
         Document doc = Jsoup.connect( repourl ).get();
         Elements links = doc.select( "a[href]" );
@@ -73,6 +199,7 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
                 getLog().error( "Missing:" + sourceItem + " in " + repourl );
             }
         }
+        return expectedFile;
     }
 
     @Override
@@ -88,11 +215,12 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             // revert sort versions (not handling alpha and complex vesion scheme but more usefull version are displayed left side
             Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
             getLog().warn( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
-
+            DistCheckSourceRelease result = new DistCheckSourceRelease( r, metadata.versioning.latest );
+            results.add( result );
             // central
-            checkRepos( r.getVersionnedFolderURL( repoBaseUrl, metadata.versioning.latest ), r, metadata.versioning.latest );
+            result.setMisingCentralSourceRelease( checkRepos( r.getVersionnedFolderURL( repoBaseUrl, metadata.versioning.latest ), r, metadata.versioning.latest ) );
             //dist
-            checkRepos( r.getDist(), r, metadata.versioning.latest );
+            result.setMissingDistSourceRelease( checkRepos( r.getDist(), r, metadata.versioning.latest ) );
         }
         catch ( MalformedURLException ex )
         {
