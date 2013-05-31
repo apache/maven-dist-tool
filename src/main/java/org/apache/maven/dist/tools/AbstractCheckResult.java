@@ -35,7 +35,7 @@ class AbstractCheckResult
     }
 
     /**
-     * @return the r
+     * @return the request
      */
     public ConfigurationLineInfo getConfigurationLine()
     {

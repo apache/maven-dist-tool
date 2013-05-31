@@ -50,6 +50,24 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
 {
 //Artifact metadata retrieval done y hands.
 
+    @Override
+    public String getOutputName()
+    {
+        return "dist-tool-checksourcerelease";
+    }
+
+    @Override
+    public String getName( Locale locale )
+    {
+        return "Disttool> Source Release";
+    }
+
+    @Override
+    public String getDescription( Locale locale )
+    {
+        return "Verification of source release";
+    }
+
     class DistCheckSourceRelease extends AbstractCheckResult
     {
 
@@ -153,24 +171,6 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         sink.body_();
         sink.flush();
         sink.close();
-    }
-
-    @Override
-    public String getOutputName()
-    {
-        return "check-source-releaseOutputName";
-    }
-
-    @Override
-    public String getName( Locale locale )
-    {
-        return "check-source-releaseName";
-    }
-
-    @Override
-    public String getDescription( Locale locale )
-    {
-        return "check-source-releaseDescription";
     }
 
     private List<String> checkRepos( String repourl, ConfigurationLineInfo r, String version ) throws IOException
