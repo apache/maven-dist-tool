@@ -213,7 +213,10 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.rawText( "groupId:artifactId (from conf file)" );
+        sink.rawText( "groupId" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "artifactId" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "LATEST" );
@@ -236,7 +239,11 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         {
             sink.tableRow();
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getGroupId() + ":" + csr.getConfigurationLine().getArtifactId() );
+            sink.rawText( csr.getConfigurationLine().getGroupId() );
+            sink.tableCell_();
+
+            sink.tableCell();
+            sink.rawText( csr.getConfigurationLine().getArtifactId() );
             sink.tableCell_();
 
             sink.tableCell();
@@ -336,7 +343,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     @Override
     void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl ) throws MojoExecutionException
     {
-        try (BufferedReader input = new BufferedReader( new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ))
+        try ( BufferedReader input = new BufferedReader( new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
         {
             JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
             Unmarshaller unmarshaller = context.createUnmarshaller();

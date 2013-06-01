@@ -121,7 +121,10 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.rawText( "groupId:artifactId (from conf file)" );
+        sink.rawText( "groupId" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "artifactId" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "LATEST" );
@@ -133,11 +136,14 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         sink.rawText( "Dist" );
         sink.tableHeaderCell_();
         sink.tableRow_();
+
         for ( DistCheckSourceRelease csr : results )
         {
             sink.tableRow();
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getGroupId() + ":" );
+            sink.rawText( csr.getConfigurationLine().getGroupId() );
+            sink.tableCell_();
+            sink.tableCell();
             sink.rawText( csr.getConfigurationLine().getArtifactId() );
             sink.tableCell_();
             sink.tableCell();
