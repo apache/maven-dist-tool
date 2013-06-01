@@ -62,7 +62,7 @@ class ConfigurationLineInfo
         return dist;
     }
 
-    private String getBaseURL( String repoBaseUrl, String folder )
+    String getBaseURL( String repoBaseUrl, String folder )
     {
         return repoBaseUrl + groupId.replaceAll( "\\.", URLSEP ) + URLSEP + artifactId + URLSEP + folder;
     }

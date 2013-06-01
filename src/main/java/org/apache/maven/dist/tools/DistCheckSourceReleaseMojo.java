@@ -165,15 +165,23 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             sink.tableCell_();
 
             sink.tableCell();
-            if ( csr.central.isEmpty() )
-            {
-                iconSuccess( sink );
-            }
+            ConfigurationLineInfo cli = csr.getConfigurationLine();
+            sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
+            sink.text( "artifact" );
+            sink.link_();
+            sink.text( " / " );
+            sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
+            sink.text( "maven-metadata.xml" );
+            sink.link_();
+            sink.text( ", " );
+            sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) );
+            sink.text( csr.getVersion() );
+            sink.link_();
             for ( String missing : csr.central )
             {
+                sink.lineBreak();
                 iconError( sink );
                 sink.rawText( missing );
-                sink.lineBreak();
             }
             sink.tableCell_();
 
