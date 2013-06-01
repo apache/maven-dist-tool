@@ -116,7 +116,21 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
 
         sink.body();
         sink.section1();
-        sink.rawText( "Missing Source Release (less you have better the result)" );
+        sink.paragraph();
+        sink.text( "Check Source Release (= artifactId + version + '-source-release.zip[.asc|.md5]') availability in:" );
+        sink.paragraph_();
+        sink.list();
+        sink.listItem();
+        sink.link( repoBaseUrl );
+        sink.text( "central" );
+        sink.link_();
+        sink.listItem_();
+        sink.listItem();
+        sink.link( "https://dist.apache.org/repos/dist/release/maven/" );
+        sink.text( "Apache distribution area" );
+        sink.link_();
+        sink.listItem_();
+        sink.list_();
         sink.section1_();
         sink.table();
         sink.tableRow();
@@ -130,10 +144,10 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         sink.rawText( "LATEST" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "Central " + repoBaseUrl );
+        sink.rawText( "central" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "Dist" );
+        sink.rawText( "dist" );
         sink.tableHeaderCell_();
         sink.tableRow_();
 
@@ -149,27 +163,31 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             sink.tableCell();
             sink.rawText( csr.getVersion() );
             sink.tableCell_();
+
             sink.tableCell();
-            sink.bold();
-            sink.lineBreak();
+            if ( csr.central.isEmpty() )
+            {
+                iconSuccess( sink );
+            }
             for ( String missing : csr.central )
             {
+                iconError( sink );
                 sink.rawText( missing );
                 sink.lineBreak();
             }
-
-            sink.bold_();
             sink.tableCell_();
+
             sink.tableCell();
-            sink.bold();
-            sink.lineBreak();
+            if ( csr.dist.isEmpty() )
+            {
+                iconSuccess( sink );
+            }
             for ( String missing : csr.dist )
             {
+                iconError( sink );
                 sink.rawText( missing );
                 sink.lineBreak();
             }
-
-            sink.bold_();
             sink.tableCell_();
 
             sink.tableRow_();
@@ -188,9 +206,9 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         List<String> retrievedFile = new LinkedList<>();
         // http://maven.apache.org/developers/release/maven-project-release-procedure.html#Copy_the_source_release_to_the_Apache_Distribution_Area
         // build source artifact name
-        expectedFile.add( r.getArtifactId() + "-" + version + "-" + "source-release.zip" );
-        expectedFile.add( r.getArtifactId() + "-" + version + "-" + "source-release.zip.asc" );
-        expectedFile.add( r.getArtifactId() + "-" + version + "-" + "source-release.zip.md5" );
+        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip" );
+        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip.asc" );
+        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip.md5" );
 
 
 
