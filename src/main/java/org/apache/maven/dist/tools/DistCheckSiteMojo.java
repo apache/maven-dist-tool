@@ -39,6 +39,8 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
+import org.apache.maven.dist.tools.checkers.HTMLChecker;
+import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -50,7 +52,6 @@ import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 /**
  *
@@ -86,26 +87,6 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     public String getDescription( Locale locale )
     {
         return "Verification of various maven web sites";
-    }
-
-    interface HTMLChecker
-    {
-
-        /**
-         * name of the checker.
-         *
-         * @return
-         */
-        String getName();
-
-        /**
-         * true if checker find pattern in document
-         *
-         * @param doc
-         * @param version
-         * @return
-         */
-        boolean isOk( Document doc, String version );
     }
 
     class DistCheckSiteResult extends AbstractCheckResult
@@ -181,7 +162,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     }
     // keep result
     private List<DistCheckSiteResult> results = new LinkedList<>();
-    private List<HTMLChecker> checker = new LinkedList<>();
+    private final List<HTMLChecker> checker = HTMLCheckerFactory.getCheckers();
     private List<ArtifactRepository> artifactRepositories = new LinkedList<>();
 
     @Override
@@ -208,7 +189,9 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
 
         sink.body();
         sink.section1();
-        sink.rawText( "Checked sites" );
+        sink.rawText( "Checked sites, also do some basic checking in index.html contents." );
+        sink.rawText( "This is to help maintaining some choerence. How many site are skin fluido, stylus, where they have version (right left)" );
+        sink.rawText( "All sun icons in one column is kind of objective." );
         sink.section1_();
         sink.table();
         sink.tableRow();
@@ -225,7 +208,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.rawText( "URL" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "check summary" );
+        sink.rawText( "Contents check summary details on your left ==>" );
         sink.tableHeaderCell_();
         for ( HTMLChecker c : checker )
         {
@@ -375,51 +358,6 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         ArtifactRepository aa = new MavenArtifactRepository( "central", repoBaseUrl, new DefaultRepositoryLayout(), new ArtifactRepositoryPolicy( false, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ), new ArtifactRepositoryPolicy( true, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ) );
         artifactRepositories.add( aa );
 
-        //add  html checker
-        checker.add( new HTMLChecker()
-        {
-            @Override
-            public String getName()
-            {
-                return "Stylus Skin";
-            }
-
-            @Override
-            public boolean isOk( Document doc, String version )
-            {
-                Element links = doc.select( "div.xright" ).first();
-                if ( links != null )
-                {
-                    return links.text().contains( version );
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        } );
-        checker.add( new HTMLChecker()
-        {
-            @Override
-            public String getName()
-            {
-                return "Fluido Skin";
-            }
-
-            @Override
-            public boolean isOk( Document doc, String version )
-            {
-                Element links = doc.select( "li#projectVersion" ).first();
-                if ( links != null )
-                {
-                    return links.text().contains( version );
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        } );
         super.execute();
     }
 }
