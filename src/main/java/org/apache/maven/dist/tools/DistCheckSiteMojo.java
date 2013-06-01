@@ -216,7 +216,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.rawText( "groupId:artifactId (from conf file)" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "Latest version from metadata" );
+        sink.rawText( "LATEST" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "URL" );
