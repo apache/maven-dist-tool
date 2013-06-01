@@ -155,6 +155,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
 
         for ( DistCheckSourceRelease csr : results )
         {
+            ConfigurationLineInfo cli = csr.getConfigurationLine();
+
             sink.tableRow();
             sink.tableCell();
             sink.rawText( csr.getConfigurationLine().getGroupId() );
@@ -163,23 +165,20 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             sink.rawText( csr.getConfigurationLine().getArtifactId() );
             sink.tableCell_();
             sink.tableCell();
+            sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
             sink.rawText( csr.getVersion() );
+            sink.link_();
             sink.tableCell_();
 
             sink.tableCell();
-            ConfigurationLineInfo cli = csr.getConfigurationLine();
             sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
             sink.text( "artifact" );
             sink.link_();
-            sink.text( " / " );
-            sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
-            sink.text( "maven-metadata.xml" );
-            sink.link_();
-            sink.text( ", " );
+            sink.text( "/" );
             sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) );
             sink.text( csr.getVersion() );
             sink.link_();
-            sink.text( " / source-release" );
+            sink.text( "/source-release" );
             if ( csr.central.isEmpty() )
             {
                 iconSuccess( sink );
@@ -200,7 +199,7 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             sink.link( cli.getDist() );
             sink.text( cli.getDist().substring( DIST_AREA.length() ) );
             sink.link_();
-            sink.text( " source-release" );
+            sink.text( "source-release" );
             if ( csr.dist.isEmpty() )
             {
                 iconSuccess( sink );
