@@ -422,34 +422,4 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         } );
         super.execute();
     }
-
-    private void iconError( Sink sink )
-    {
-        sink.figure();
-        sink.figureCaption();
-        sink.text( "error" );
-        sink.figureCaption_();
-        sink.figureGraphics( "images/icon_error_sml.gif" );
-        sink.figure_();
-    }
-
-    private void iconWarning( Sink sink )
-    {
-        sink.figure();
-        sink.figureCaption();
-        sink.text( "warning" );
-        sink.figureCaption_();
-        sink.figureGraphics( "images/icon_warning_sml.gif" );
-        sink.figure_();
-    }
-
-    private void iconSuccess( Sink sink )
-    {
-        sink.figure();
-        sink.figureCaption();
-        sink.text( "success" );
-        sink.figureCaption_();
-        sink.figureGraphics( "images/icon_success_sml.gif" );
-        sink.figure_();
-    }
 }

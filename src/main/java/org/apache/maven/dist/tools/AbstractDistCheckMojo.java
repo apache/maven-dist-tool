@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.siterenderer.Renderer;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -106,5 +108,30 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
                 checkArtifact( new ConfigurationLineInfo( artifactInfo[0], artifactInfo[1], artifactInfo[2] ), repoBaseUrl );
             }
         }
+    }
+
+    protected void iconError( Sink sink )
+    {
+        icon( sink, "error" );
+    }
+
+    protected void iconWarning( Sink sink )
+    {
+        icon( sink, "warning" );
+    }
+
+    protected void iconSuccess( Sink sink )
+    {
+        icon( sink, "success" );
+    }
+
+    protected void icon( Sink sink, String level )
+    {
+        sink.figure();
+        sink.figureCaption();
+        sink.text( level );
+        sink.figureCaption_();
+        sink.figureGraphics( "images/icon_" + level + "_sml.gif" );
+        sink.figure_();
     }
 }
