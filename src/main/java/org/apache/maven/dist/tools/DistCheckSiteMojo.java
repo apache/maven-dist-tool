@@ -236,23 +236,24 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         {
             sink.tableRow();
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getGroupId() + ":" );
-            sink.rawText( csr.getConfigurationLine().getArtifactId() );
+            sink.rawText( csr.getConfigurationLine().getGroupId() + ":" + csr.getConfigurationLine().getArtifactId() );
             sink.tableCell_();
+
             sink.tableCell();
             sink.rawText( csr.getVersion() );
             sink.tableCell_();
+
             sink.tableCell();
             if ( csr.getStatusCode() != 200 )
             {
                 iconError( sink );
-                sink.rawText( "[" + csr.getStatusCode() + "]" + csr.getUrl() );
+                sink.rawText( "[" + csr.getStatusCode() + "] " );
             }
-            else
-            {
-                sink.rawText( csr.getUrl() );
-            }
+            sink.link( csr.getUrl() );
+            sink.rawText( csr.getUrl() );
+            sink.link_();
             sink.tableCell_();
+
             sink.tableHeaderCell();
             csr.getOverall( sink );
             sink.tableHeaderCell_();
