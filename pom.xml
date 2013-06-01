@@ -19,21 +19,25 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>dist-tool-plugin</artifactId>
     <groupId>org.apache.maven.dist.tools</groupId>
+    <artifactId>dist-tool-plugin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
+
     <description>Dist tool plugin. 
         Not to be released.</description>  
+
     <prerequisites>
         <maven>3.0.4</maven>
     </prerequisites>
+
     <licenses>
         <license> 
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -58,7 +62,6 @@
             <artifactId>maven-core</artifactId>
             <version>${mvnversion}</version>
             <type>jar</type>
-            
         </dependency>
         <dependency>
             <groupId>org.apache.maven.reporting</groupId>
@@ -85,14 +88,12 @@
             <groupId>org.eclipse.aether</groupId>
             <artifactId>aether-util</artifactId>
             <version>0.9.0.M2</version>
-           
         </dependency>
         
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-aether-provider</artifactId>
             <version>${mvnversion}</version>
-           
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -100,6 +101,7 @@
             <version>2.2.0</version>
         </dependency>
     </dependencies>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -177,11 +179,13 @@
             </plugin>
         </plugins>
     </build>
+
     <properties>
         <netbeans.checkstyle.format>true</netbeans.checkstyle.format> 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mvnversion>3.1-SNAPSHOT</mvnversion>
     </properties>
+
     <reporting>
         <plugins>
       
@@ -205,7 +209,6 @@
                         </reports>
                     </reportSet>
                 </reportSets>
-                
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

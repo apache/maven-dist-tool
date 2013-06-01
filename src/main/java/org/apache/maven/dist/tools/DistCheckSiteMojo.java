@@ -1,4 +1,5 @@
 package org.apache.maven.dist.tools;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -62,8 +63,10 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
 
     @Parameter( property = "localRepository", required = true, readonly = true )
     protected ArtifactRepository localRepository;
+
     @Component
     private ArtifactFactory artifactFactory;
+
     @Component
     private MavenProjectBuilder mavenProjectBuilder;
 

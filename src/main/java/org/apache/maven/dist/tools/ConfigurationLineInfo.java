@@ -1,7 +1,5 @@
 package org.apache.maven.dist.tools;
 
-import org.apache.maven.doxia.sink.Sink;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file

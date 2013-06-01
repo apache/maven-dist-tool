@@ -1,4 +1,5 @@
 package org.apache.maven.dist.tools;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -205,7 +206,7 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
     @Override
     void checkArtifact( ConfigurationLineInfo r, String repoBaseUrl ) throws MojoExecutionException
     {
-        try (BufferedReader input = new BufferedReader( new InputStreamReader( new URL( r.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ))
+        try ( BufferedReader input = new BufferedReader( new InputStreamReader( new URL( r.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
         {
             JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
             Unmarshaller unmarshaller = context.createUnmarshaller();

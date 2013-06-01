@@ -1,4 +1,5 @@
 package org.apache.maven.dist.tools;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -37,20 +38,24 @@ import org.apache.maven.reporting.AbstractMavenReport;
  */
 public abstract class AbstractDistCheckMojo extends AbstractMavenReport
 {
+    private static final String MAVEN_DB = "db/mavendb.csv";
 
-    @Parameter( property = "repositoryUrl", defaultValue = "http://repo1.maven.org/maven2/" )
+    @Parameter( property = "repositoryUrl", defaultValue = "http://repo.maven.apache.org/maven2/" )
     protected String repoBaseUrl;
+
     @Parameter( property = "configurationLines", defaultValue = "" )
     private List<String> configurationLines;
 
-    abstract void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException;
-    private static final String MAVEN_DB = "db/mavendb.csv";
     @Component
     protected Renderer siteRenderer;
+
     @Parameter( property = "project.reporting.outputDirectory", required = true )
     protected File outputDirectory;
+
     @Component
     protected MavenProject project;
+
+    abstract void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException;
 
     @Override
     protected String getOutputDirectory()
@@ -75,10 +80,10 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     {
         if ( configurationLines.isEmpty() )
         {
-            try (BufferedReader input = new BufferedReader( new InputStreamReader( Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB ).openStream() ) ))
+            try ( BufferedReader input = new BufferedReader( new InputStreamReader( Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB ).openStream() ) ) )
             {
                 String text;
-                while ( (text = input.readLine()) != null )
+                while ( ( text = input.readLine() ) != null )
                 {
                     configurationLines.add( text );
                 }
