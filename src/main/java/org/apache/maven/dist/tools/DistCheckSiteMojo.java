@@ -59,7 +59,7 @@ import org.jsoup.nodes.Element;
 @Mojo( name = "check-site" )
 public class DistCheckSiteMojo extends AbstractDistCheckMojo
 {
-// common type for site checker
+    private static final String MAVEN_SITE = "http://maven.apache.org";
 
     @Parameter( property = "localRepository", required = true, readonly = true )
     protected ArtifactRepository localRepository;
@@ -250,7 +250,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
                 sink.rawText( "[" + csr.getStatusCode() + "] " );
             }
             sink.link( csr.getUrl() );
-            sink.rawText( csr.getUrl() );
+            sink.rawText( getSimplifiedUrl( csr.getUrl() ) );
             sink.link_();
             sink.tableCell_();
 
@@ -285,6 +285,15 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.body_();
         sink.flush();
         sink.close();
+    }
+
+    private String getSimplifiedUrl( String url )
+    {
+        if ( url.startsWith( MAVEN_SITE ) )
+        {
+            return url.substring( MAVEN_SITE.length() );
+        }
+        return url;
     }
 
     private void checkSite( String repourl, ConfigurationLineInfo r, String version )
