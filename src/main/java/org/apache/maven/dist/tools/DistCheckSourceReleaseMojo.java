@@ -51,6 +51,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
 {
 //Artifact metadata retrieval done y hands.
 
+    private static final String DIST_AREA = "https://dist.apache.org/repos/dist/release/maven";
+
     @Override
     public String getOutputName()
     {
@@ -177,6 +179,15 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) );
             sink.text( csr.getVersion() );
             sink.link_();
+            sink.text( " / source-release" );
+            if ( csr.central.isEmpty() )
+            {
+                iconSuccess( sink );
+            }
+            else
+            {
+                iconWarning( sink );
+            }
             for ( String missing : csr.central )
             {
                 sink.lineBreak();
@@ -186,15 +197,23 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             sink.tableCell_();
 
             sink.tableCell();
+            sink.link( cli.getDist() );
+            sink.text( cli.getDist().substring( DIST_AREA.length() ) );
+            sink.link_();
+            sink.text( " source-release" );
             if ( csr.dist.isEmpty() )
             {
                 iconSuccess( sink );
             }
+            else
+            {
+                iconWarning( sink );
+            }
             for ( String missing : csr.dist )
             {
+                sink.lineBreak();
                 iconError( sink );
                 sink.rawText( missing );
-                sink.lineBreak();
             }
             sink.tableCell_();
 
