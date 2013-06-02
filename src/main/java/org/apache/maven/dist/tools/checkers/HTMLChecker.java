@@ -25,7 +25,8 @@ import org.jsoup.nodes.Document;
  *
  * @author skygo
  */
-public interface HTMLChecker {
+public interface HTMLChecker
+{
 
     /**
      * name of the checker.

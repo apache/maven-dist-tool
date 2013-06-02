@@ -1,8 +1,5 @@
 package org.apache.maven.dist.tools.checkers;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +18,9 @@ import org.jsoup.nodes.Element;
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class FluidoHTMLChecker implements HTMLChecker
 {
