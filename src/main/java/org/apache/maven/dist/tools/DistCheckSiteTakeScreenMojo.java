@@ -20,6 +20,7 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -33,6 +34,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -51,20 +53,22 @@ import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.select.Elements;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
  *
  * @author skygo
  */
-@Mojo( name = "check-site" )
-public class DistCheckSiteMojo extends AbstractDistCheckMojo
+@Mojo( name = "check-screen-site" )
+public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
 {
     private static final String MAVEN_SITE = "http://maven.apache.org";
+
+    
 
     @Override
     public String getOutputName()
@@ -90,7 +94,6 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         private String url;
         private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
         private int statusCode = 200;
-        private Document document;
 
         public DistCheckSiteResult( ConfigurationLineInfo r, String version )
         {
@@ -131,45 +134,6 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             return statusCode;
         }
 
-        private void getSkins( Sink sink )
-        {
-            if ( statusCode != 200 )
-            {
-                sink.text( "None" );
-            }
-            else 
-            {
-                String text = "";
-                Elements htmlTag = document.select( "html " );
-                for ( Element htmlTa : htmlTag )
-                {
-                    Node n = htmlTa.previousSibling();
-                    if ( n instanceof Comment )
-                    {
-                        text += (( Comment ) n).getData();
-                    }
-                    else
-                    {   text += "Nothing";
-                    }
-                }
-                
-                if ( isSkink( "Fluido" ) )
-                {
-                    sink.text( "Fluido" );
-                }
-                else if ( isSkink( "Stylus" ) )
-                {
-                    sink.text( "Stylus" );
-                }
-                else 
-                {
-                    sink.text( "Not determined" );
-                }
-                sink.monospaced();
-                sink.text( text );
-                sink.monospaced_();
-            }
-        }
         private void getOverall( Sink sink )
         {
 
@@ -194,29 +158,12 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
                 }
             }
         }
-
-        private boolean isSkink( String skinName )
-        {
-            boolean tmp = false;
-            for ( Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet() )
-            {
-                if ( e.getKey().getSkin().equals( skinName ) )
-                {
-                    tmp = tmp || e.getValue();
-                }
-            }
-            return tmp;
-        }
-
-        private void setDocument( Document doc )
-        {
-            this.document = doc ;
-        }
     }
     // keep result
     private List<DistCheckSiteResult> results = new LinkedList<>();
     private final List<HTMLChecker> checker = HTMLCheckerFactory.getCheckers();
     
+
     @Override
     protected void executeReport( Locale locale ) throws MavenReportException
     {
@@ -257,16 +204,10 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.rawText( "LATEST" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "DATE" );
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
         sink.rawText( "URL" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "Skins and comments on top of html (helping for date but not allways)" );
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
-        sink.rawText( "Precise and overkill contents check summary details on your left ==>" );
+        sink.rawText( "Contents check summary details on your left ==>" );
         sink.tableHeaderCell_();
         for ( HTMLChecker c : checker )
         {
@@ -301,11 +242,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             sink.rawText( getSimplifiedUrl( csr.getUrl() ) );
             sink.link_();
             sink.tableCell_();
-            
-            sink.tableHeaderCell();
-            csr.getSkins( sink );
-            sink.tableHeaderCell_();
-            
+
             sink.tableHeaderCell();
             csr.getOverall( sink );
             sink.tableHeaderCell_();
@@ -359,15 +296,23 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             MavenProject pluginProject = mavenProjectBuilder.buildFromRepository( pluginArtifact, artifactRepositories, localRepository, false );
 
             result.setUrl( pluginProject.getUrl() );
-            Document doc = Jsoup.connect( pluginProject.getUrl() ).get();
+            getLog().error( pluginProject.getUrl() );
             
+            WebDriver driver = new FirefoxDriver();
+
+            driver.get( pluginProject.getUrl() + "index.html" );
+            File scrFile = ( (TakesScreenshot) driver ).getScreenshotAs( OutputType.FILE );
+            FileUtils.copyFile( scrFile, new File( r.getGroupId() +  r.getArtifactId() + ".png" ) );
+            driver.close();
+            Document doc = Jsoup.connect( pluginProject.getUrl() ).get();
+            getLog().error( pluginProject.getUrl() );
             message.append( "Site for " ).append( pluginProject.getArtifactId() ).append( " at " ).append( pluginProject.getUrl() ).append( " seek for" ).append( pluginProject.getVersion() ).append( "    " );
             for ( HTMLChecker c : checker )
             {
                 result.getCheckMap().put( c, c.isOk( doc, version ) );
                 message.append( "[" ).append( c.getName() ).append( c.isOk( doc, version ) ).append( "]" );
             }
-            result.setDocument( doc );
+
             getLog().warn( message.toString() );
 
         }

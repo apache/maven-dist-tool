@@ -32,6 +32,12 @@ public class FluidoHTMLChecker implements HTMLChecker
     }
 
     @Override
+    public String getSkin()
+    {
+        return "Fluido";
+    }
+    
+    @Override
     public boolean isOk( Document doc, String version )
     {
         Element links = doc.select( "li#projectVersion" ).first();

@@ -36,6 +36,10 @@ public interface HTMLChecker
     String getName();
 
     /**
+     * skink related ?
+     */
+    String getSkin();
+    /**
      * true if checker find pattern in document
      *
      * @param doc

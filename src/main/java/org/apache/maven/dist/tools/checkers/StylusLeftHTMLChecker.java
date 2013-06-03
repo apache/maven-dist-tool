@@ -32,6 +32,12 @@ public class StylusLeftHTMLChecker implements HTMLChecker
     }
 
     @Override
+    public String getSkin()
+    {
+        return "Stylus";
+    }
+    
+    @Override
     public boolean isOk( Document doc, String version )
     {
         Element links = doc.select( "div.xleft" ).first();

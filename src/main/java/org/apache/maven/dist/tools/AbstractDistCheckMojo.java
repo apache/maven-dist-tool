@@ -23,13 +23,20 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
 import java.util.List;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
+import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.AbstractMavenReport;
 
 /**
@@ -55,6 +62,17 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     @Component
     protected MavenProject project;
 
+    @Parameter( property = "localRepository", required = true, readonly = true )
+    protected ArtifactRepository localRepository;
+
+    @Component
+    protected ArtifactFactory artifactFactory;
+
+    @Component
+    protected MavenProjectBuilder mavenProjectBuilder;
+    
+    protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
+    
     abstract void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException;
 
     @Override
@@ -78,6 +96,8 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     @Override
     public void execute() throws MojoExecutionException
     {
+        ArtifactRepository aa = new MavenArtifactRepository( "central", repoBaseUrl, new DefaultRepositoryLayout(), new ArtifactRepositoryPolicy( false, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ), new ArtifactRepositoryPolicy( true, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ) );
+        artifactRepositories.add( aa );
         if ( configurationLines.isEmpty() )
         {
             try ( BufferedReader input = new BufferedReader( new InputStreamReader( Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB ).openStream() ) ) )
