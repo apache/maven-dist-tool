@@ -19,6 +19,10 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author skygo
@@ -30,6 +34,7 @@ class ConfigurationLineInfo
     private final String artifactId;
     private final String dist;
     private static final String URLSEP = "/";
+    private MavenMetadata metadata;
 
     public ConfigurationLineInfo( String groupId, String artifactId, String dist )
     {
@@ -80,5 +85,27 @@ class ConfigurationLineInfo
     String getVersionnedPomFileURL( String repoBaseUrl, String version )
     {
         return getBaseURL( repoBaseUrl, version + URLSEP + artifactId + "-" + version + ".pom" );
+    }
+
+    void addMetadata( MavenMetadata metadata )
+    {
+        this.metadata = metadata;
+    }
+
+    String getReleaseFromMetadata()
+    {
+
+        try
+        {
+            SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMddkkmmss" );
+            Date f = dateFormatter.parse( metadata.versioning.lastUpdated );
+            SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "MMM dd, yyyy" );
+            return dateFormattertarget.format( f );
+        }
+        catch ( ParseException ex )
+        {
+            return "Cannot parse";
+        }
+
     }
 }

@@ -36,20 +36,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
-import org.apache.maven.artifact.repository.MavenArtifactRepository;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.dist.tools.checkers.HTMLChecker;
 import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -343,7 +335,7 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
             // revert sort versions (not handling alpha and complex vesion scheme but more usefull version are displayed left side
             Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
             getLog().warn( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
-
+            configLine.addMetadata( metadata );
             // central
             checkSite( configLine.getVersionnedPomFileURL( repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest );
 

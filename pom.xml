@@ -232,8 +232,8 @@
                         <id>html</id>
                         <reports>
                             <!--<report>check-screen-site</report>-->
-                             <report>check-site</report> 
-                           <!-- <report>check-source-release</report>-->
+                          <report>check-site</report>
+                          <report>check-source-release</report>
                         </reports>  
                     </reportSet>
                 </reportSets>

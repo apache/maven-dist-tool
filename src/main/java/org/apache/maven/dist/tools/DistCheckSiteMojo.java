@@ -34,20 +34,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
-import org.apache.maven.artifact.repository.MavenArtifactRepository;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.dist.tools.checkers.HTMLChecker;
 import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -65,6 +57,7 @@ import org.jsoup.select.Elements;
 public class DistCheckSiteMojo extends AbstractDistCheckMojo
 {
     private static final String MAVEN_SITE = "http://maven.apache.org";
+    private static final int HTTP_OK = 200;
 
     @Override
     public String getOutputName()
@@ -89,7 +82,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
 
         private String url;
         private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
-        private int statusCode = 200;
+        private int statusCode = HTTP_OK;
         private Document document;
 
         public DistCheckSiteResult( ConfigurationLineInfo r, String version )
@@ -118,9 +111,9 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             return checkMap;
         }
 
-        private void setHTTPErrorUrl( int statusCode )
+        private void setHTTPErrorUrl( int status )
         {
-            this.statusCode = statusCode;
+            this.statusCode = status;
         }
 
         /**
@@ -133,7 +126,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
 
         private void getSkins( Sink sink )
         {
-            if ( statusCode != 200 )
+            if ( statusCode != HTTP_OK )
             {
                 sink.text( "None" );
             }
@@ -146,10 +139,11 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
                     Node n = htmlTa.previousSibling();
                     if ( n instanceof Comment )
                     {
-                        text += (( Comment ) n).getData();
+                        text += ( ( Comment ) n ).getData();
                     }
                     else
-                    {   text += "Nothing";
+                    {
+                        text += "Nothing";
                     }
                 }
                 
@@ -173,7 +167,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         private void getOverall( Sink sink )
         {
 
-            if ( statusCode != 200 )
+            if ( statusCode != HTTP_OK )
             {
                 iconError( sink );
             }
@@ -263,7 +257,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.rawText( "URL" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "Skins and comments on top of html (helping for date but not allways)" );
+        sink.rawText( "Skins and comments on top of html (helping for date but not always)" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "Precise and overkill contents check summary details on your left ==>" );
@@ -290,9 +284,12 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             sink.tableCell();
             sink.rawText( csr.getVersion() );
             sink.tableCell_();
-
+            
             sink.tableCell();
-            if ( csr.getStatusCode() != 200 )
+            sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
+            sink.tableCell_();
+            sink.tableCell();
+            if ( csr.getStatusCode() != HTTP_OK )
             {
                 iconError( sink );
                 sink.rawText( "[" + csr.getStatusCode() + "] " );
@@ -393,7 +390,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
             Unmarshaller unmarshaller = context.createUnmarshaller();
             MavenMetadata metadata = ( MavenMetadata ) unmarshaller.unmarshal( input );
-
+            configLine.addMetadata( metadata );
             getLog().info( "Checking for site for artifact : " + configLine.getGroupId() + ":" + configLine.getArtifactId() + ":" + metadata.versioning.latest );
             // revert sort versions (not handling alpha and complex vesion scheme but more usefull version are displayed left side
             Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
