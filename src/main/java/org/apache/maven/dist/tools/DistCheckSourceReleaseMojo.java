@@ -34,7 +34,6 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
-import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
@@ -74,6 +73,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         return "Verification of source release";
     }
 
+   
+
     
 
     class DistCheckSourceRelease extends AbstractCheckResult
@@ -105,6 +106,133 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
     }
     private List<DistCheckSourceRelease> results = new LinkedList<>();
 
+    private void reportLine( Sink sink, DistCheckSourceRelease csr )
+    {
+        ConfigurationLineInfo cli = csr.getConfigurationLine();
+
+        sink.tableRow();
+        sink.tableCell();
+        // shorten groupid
+        sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
+        sink.tableCell_();
+        sink.tableCell();
+        sink.rawText( csr.getConfigurationLine().getArtifactId() );
+        sink.tableCell_();
+        sink.tableCell();
+        sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
+        sink.rawText( csr.getVersion() );
+        sink.link_();
+        sink.tableCell_();
+
+        sink.tableCell();
+        sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
+        sink.tableCell_();
+
+        sink.tableCell();
+        sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
+        sink.text( "artifact" );
+        sink.link_();
+        sink.text( "/" );
+        sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) );
+        sink.text( csr.getVersion() );
+        sink.link_();
+        sink.text( "/source-release" );
+        if ( csr.central.isEmpty() )
+        {
+            iconSuccess( sink );
+        }
+        else
+        {
+            iconWarning( sink );
+        }
+        for ( String missing : csr.central )
+        {
+            sink.lineBreak();
+            iconError( sink );
+            sink.rawText( missing );
+        }
+        sink.tableCell_();
+        // dist
+        sink.tableCell();
+        sink.link( cli.getDist() );
+        sink.text( cli.getDist().substring( DIST_AREA.length() ) );
+        sink.link_();
+        sink.text( "source-release" );
+        if ( csr.dist.isEmpty() )
+        {
+            iconSuccess( sink );
+        }
+        else
+        {
+            iconWarning( sink );
+        }
+        StringBuilder cliMissing = new StringBuilder();
+        for ( String missing : csr.dist )
+        {
+            sink.lineBreak();
+            iconError( sink );
+            sink.rawText( missing );
+            cliMissing.append( "\nwget -O " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
+                    append( "/" ).append( missing );
+            cliMissing.append( "\nsvn co " ).append( missing );
+        }
+        if ( !cliMissing.toString().isEmpty() )
+        {
+            sink.lineBreak();
+            SinkEventAttributeSet atts = new SinkEventAttributeSet();
+            sink.unknown( "pre", new Object[]
+            {
+                new Integer( HtmlMarkup.TAG_TYPE_START )
+            }, atts );
+            sink.text( cliMissing.toString() );
+            sink.unknown( "pre", new Object[]
+            {
+                new Integer( HtmlMarkup.TAG_TYPE_END )
+            }, null );
+        }
+        sink.tableCell_();
+        //older
+        sink.tableCell();
+        sink.link( cli.getDist() );
+        sink.text( cli.getDist().substring( DIST_AREA.length() ) );
+        sink.link_();
+        sink.text( "source-release" );
+        if ( csr.dist.isEmpty() )
+        {
+            iconSuccess( sink );
+        }
+        else
+        {
+            iconWarning( sink );
+        }
+
+        StringBuilder cliOlder = new StringBuilder();
+        for ( String missing : csr.older )
+        {
+            sink.lineBreak();
+            iconError( sink );
+            sink.rawText( missing );
+            cliOlder.append( "\nsvn rm " ).append( missing );
+        }
+        if ( !cliOlder.toString().isEmpty() )
+        {
+            sink.lineBreak();
+            SinkEventAttributeSet atts = new SinkEventAttributeSet();
+            sink.unknown( "pre", new Object[]
+            {
+                new Integer( HtmlMarkup.TAG_TYPE_START )
+            }, atts );
+            sink.text( cliOlder.toString() );
+            sink.unknown( "pre", new Object[]
+            {
+                new Integer( HtmlMarkup.TAG_TYPE_END )
+            }, null );
+        }
+
+        sink.tableCell_();
+        sink.tableRow_();
+    }
+     
     @Override
     protected void executeReport( Locale locale ) throws MavenReportException
     {
@@ -130,7 +258,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         sink.body();
         sink.section1();
         sink.paragraph();
-        sink.text( "Check Source Release (= artifactId + version + '-source-release.zip[.asc|.md5]') availability in:" );
+        sink.text( "Check Source Release"
+                + " (= artifactId + version + '-source-release.zip[.asc|.md5]') availability in:" );
         sink.paragraph_();
         sink.paragraph();
         sink.text( "cli command and olders artifact exploration is Work In Progress" );
@@ -175,123 +304,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
 
         for ( DistCheckSourceRelease csr : results )
         {
-            ConfigurationLineInfo cli = csr.getConfigurationLine();
+            reportLine( sink, csr );
 
-            sink.tableRow();
-            sink.tableCell();
-            // shorten groupid
-            sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
-            sink.tableCell_();
-            sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getArtifactId() );
-            sink.tableCell_();
-            sink.tableCell();
-            sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
-            sink.rawText( csr.getVersion() );
-            sink.link_();
-            sink.tableCell_();
-            
-            sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
-            sink.tableCell_();
-            
-            sink.tableCell();
-            sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
-            sink.text( "artifact" );
-            sink.link_();
-            sink.text( "/" );
-            sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) );
-            sink.text( csr.getVersion() );
-            sink.link_();
-            sink.text( "/source-release" );
-            if ( csr.central.isEmpty() )
-            {
-                iconSuccess( sink );
-            }
-            else
-            {
-                iconWarning( sink );
-            }
-            for ( String missing : csr.central )
-            {
-                sink.lineBreak();
-                iconError( sink );
-                sink.rawText( missing );
-            }
-            sink.tableCell_();
-            // dist
-            sink.tableCell();
-            sink.link( cli.getDist() );
-            sink.text( cli.getDist().substring( DIST_AREA.length() ) );
-            sink.link_();
-            sink.text( "source-release" );
-            if ( csr.dist.isEmpty() )
-            {
-                iconSuccess( sink );
-            }
-            else
-            {
-                iconWarning( sink );
-            }
-            StringBuilder cliMissing = new StringBuilder();
-            for ( String missing : csr.dist )
-            {
-                sink.lineBreak();
-                iconError( sink );
-                sink.rawText( missing );
-                cliMissing.append( "\nwget -O " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
-                        append( "/" ).append( missing );
-                cliMissing.append( "\nsvn co " ).append( missing );
-            }
-            if ( !cliMissing.toString().isEmpty() )
-            {
-                sink.lineBreak();
-                SinkEventAttributeSet atts = new SinkEventAttributeSet();
-                sink.unknown( "pre", new Object[]
-                {
-                    new Integer( HtmlMarkup.TAG_TYPE_START )
-                }, atts );
-                sink.text( cliMissing.toString() );
-                sink.unknown( "pre", new Object[]{new Integer( HtmlMarkup.TAG_TYPE_END )}, null );
-            }
-            sink.tableCell_();
-            //older
-            sink.tableCell();
-            sink.link( cli.getDist() );
-            sink.text( cli.getDist().substring( DIST_AREA.length() ) );
-            sink.link_();
-            sink.text( "source-release" );
-            if ( csr.dist.isEmpty() )
-            {
-                iconSuccess( sink );
-            }
-            else
-            {
-                iconWarning( sink );
-            }
-            
-            StringBuilder cliOlder = new StringBuilder();
-            for ( String missing : csr.older )
-            {
-                sink.lineBreak();
-                iconError( sink );
-                sink.rawText( missing );
-                cliOlder.append( "\nsvn rm " ).append( missing );
-            }
-            if ( !cliOlder.toString().isEmpty() )
-            {
-                sink.lineBreak();
-                SinkEventAttributeSet atts = new SinkEventAttributeSet();
-                sink.unknown( "pre", new Object[]
-                {
-                    new Integer( HtmlMarkup.TAG_TYPE_START )
-                }, atts );
-                sink.text( cliOlder.toString() );
-                sink.unknown( "pre", new Object[]{new Integer( HtmlMarkup.TAG_TYPE_END )}, null );
-            }
-           
-            sink.tableCell_();
-            sink.tableRow_();
         }
         sink.table_();
         sink.body_();
@@ -299,28 +313,36 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         sink.close();
     }
     
-    private List<String> checkOldinRepos( String repourl, ConfigurationLineInfo r, String version ) throws IOException
+    /**
+     * Report a pattern for an artifact.
+     *
+     * @param artifact artifact name
+     * @return regex
+     */
+    protected static String getArtifactPattern( String artifact )
+    {
+        /// not the safest
+        return "^" + artifact + "-[0-9].*source-release.*$";
+    }
+    
+    private List<String> checkOldinRepos( String repourl, ConfigurationLineInfo configLine, String version )
+            throws IOException
     {
         Document doc = Jsoup.connect( repourl ).get();
         Elements links = doc.select( "a[href]" );
         List<String> expectedFile = new LinkedList<>();
         List<String> retrievedFile = new LinkedList<>();
-        // http://maven.apache.org/developers/release/maven-project-release-procedure.html#Copy_the_source_release_to_the_Apache_Distribution_Area
-        // build source artifact name
-        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip" );
-        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip.asc" );
-        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip.md5" );
+        
+        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
+        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
+        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
 
 
 
         for ( Element e : links )
         {
             String art = e.attr( "href" );
-            // need a regex no strong enough
-            if ( art.startsWith( r.getArtifactId() + "-" ) && (art.endsWith( "-source-release.zip" )
-                    || art.endsWith( "-source-release.zip.asc" )
-                    || art.endsWith( "-source-release.zip.md5" )) )
-            //if (art.matches( "^"+r.getArtifactId()+"-\d.-source-release.zip[]"))
+            if ( art.matches( getArtifactPattern( configLine.getArtifactId() ) ) )
             {
 
                 retrievedFile.add( e.attr( "href" ) );
@@ -336,17 +358,17 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         }
         return retrievedFile;
     }
-    private List<String> checkRepos( String repourl, ConfigurationLineInfo r, String version ) throws IOException
+    private List<String> checkRepos( String repourl, ConfigurationLineInfo configLine, String version )
+            throws IOException
     {
         Document doc = Jsoup.connect( repourl ).get();
         Elements links = doc.select( "a[href]" );
         List<String> expectedFile = new LinkedList<>();
         List<String> retrievedFile = new LinkedList<>();
-        // http://maven.apache.org/developers/release/maven-project-release-procedure.html#Copy_the_source_release_to_the_Apache_Distribution_Area
         // build source artifact name
-        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip" );
-        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip.asc" );
-        expectedFile.add( r.getArtifactId() + "-" + version + "-source-release.zip.md5" );
+        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
+        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
+        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
 
 
 
@@ -368,24 +390,31 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
     @Override
     void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl ) throws MojoExecutionException
     {
-        try ( BufferedReader input = new BufferedReader( new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
+        try ( BufferedReader input = new BufferedReader( 
+                new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
         {
             JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
             Unmarshaller unmarshaller = context.createUnmarshaller();
             MavenMetadata metadata = ( MavenMetadata ) unmarshaller.unmarshal( input );
 
-            getLog().info( "Checking for artifact : " + configLine.getGroupId() + ":" + configLine.getArtifactId() + ":" + metadata.versioning.latest );
-            // revert sort versions (not handling alpha and complex vesion scheme but more usefull version are displayed left side
+            getLog().debug( "Checking for artifact : " + configLine.getGroupId() + ":"
+                    + configLine.getArtifactId() + ":" + metadata.versioning.latest );
+            // revert sort versions (not handling alpha and 
+            //complex version scheme but more usefull version are displayed left side
             Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
-            getLog().warn( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
+            getLog().debug( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
             configLine.addMetadata( metadata );
             DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, metadata.versioning.latest );
             results.add( result );
             // central
-            result.setMisingCentralSourceRelease( checkRepos( configLine.getVersionnedFolderURL( repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest ) );
+            result.setMisingCentralSourceRelease(
+                    checkRepos( configLine.getVersionnedFolderURL(
+                    repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest ) );
             //dist
-            result.setMissingDistSourceRelease( checkRepos( configLine.getDist(), configLine, metadata.versioning.latest ) );
-            result.setOlderSourceRelease( checkOldinRepos( configLine.getDist(), configLine, metadata.versioning.latest ) );
+            result.setMissingDistSourceRelease(
+                    checkRepos( configLine.getDist(), configLine, metadata.versioning.latest ) );
+            result.setOlderSourceRelease(
+                    checkOldinRepos( configLine.getDist(), configLine, metadata.versioning.latest ) );
         }
         catch ( MalformedURLException ex )
         {

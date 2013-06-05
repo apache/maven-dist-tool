@@ -56,7 +56,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  * @author skygo
  */
 @Mojo( name = "check-screen-site" )
-public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
+public class DistCheckSiteTakeScreenMojo extends DistCheckSiteMojo
 {
     private static final String MAVEN_SITE = "http://maven.apache.org";
 
@@ -85,7 +85,7 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
 
         private String url;
         private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
-        private int statusCode = 200;
+        private int statusCode = HTTP_OK;
 
         public DistCheckSiteResult( ConfigurationLineInfo r, String version )
         {
@@ -113,9 +113,9 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
             return checkMap;
         }
 
-        private void setHTTPErrorUrl( int statusCode )
+        private void setHTTPErrorUrl( int aStatusCode )
         {
-            this.statusCode = statusCode;
+            this.statusCode = aStatusCode;
         }
 
         /**
@@ -129,7 +129,7 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
         private void getOverall( Sink sink )
         {
 
-            if ( statusCode != 200 )
+            if ( statusCode != HTTP_OK )
             {
                 iconError( sink );
             }
@@ -181,7 +181,8 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
         sink.body();
         sink.section1();
         sink.rawText( "Checked sites, also do some basic checking in index.html contents." );
-        sink.rawText( "This is to help maintaining some coherence. How many site are skin fluido, stylus, where they have version (right left)" );
+        sink.rawText( "This is to help maintaining some coherence. How many site are skin fluido, "
+                + "stylus, where they have version (right left)" );
         sink.rawText( "All sun icons in one column is kind of objective." );
         sink.section1_();
         sink.table();
@@ -225,7 +226,7 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
             sink.tableCell_();
 
             sink.tableCell();
-            if ( csr.getStatusCode() != 200 )
+            if ( csr.getStatusCode() != HTTP_OK )
             {
                 iconError( sink );
                 sink.rawText( "[" + csr.getStatusCode() + "] " );
@@ -284,8 +285,10 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
         StringBuilder message = new StringBuilder();
         try
         {
-            Artifact pluginArtifact = artifactFactory.createProjectArtifact( r.getGroupId(), r.getArtifactId(), version );
-            MavenProject pluginProject = mavenProjectBuilder.buildFromRepository( pluginArtifact, artifactRepositories, localRepository, false );
+            Artifact pluginArtifact = artifactFactory.createProjectArtifact(
+                    r.getGroupId(), r.getArtifactId(), version );
+            MavenProject pluginProject = mavenProjectBuilder.buildFromRepository(
+                    pluginArtifact, artifactRepositories, localRepository, false );
 
             result.setUrl( pluginProject.getUrl() );
             getLog().error( pluginProject.getUrl() );
@@ -298,7 +301,13 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
             driver.close();
             Document doc = Jsoup.connect( pluginProject.getUrl() ).get();
             getLog().error( pluginProject.getUrl() );
-            message.append( "Site for " ).append( pluginProject.getArtifactId() ).append( " at " ).append( pluginProject.getUrl() ).append( " seek for" ).append( pluginProject.getVersion() ).append( "    " );
+            message.append( "Site for " ).
+                    append( pluginProject.getArtifactId() ).
+                    append( " at " ).
+                    append( pluginProject.getUrl() ).
+                    append( " seek for" ).
+                    append( pluginProject.getVersion() ).
+                    append( "    " );
             for ( HTMLChecker c : checker )
             {
                 result.getCheckMap().put( c, c.isOk( doc, version ) );
@@ -325,19 +334,24 @@ public class DistCheckSiteTakeScreenMojo extends AbstractDistCheckMojo
     @Override
     void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl ) throws MojoExecutionException
     {
-        try ( BufferedReader input = new BufferedReader( new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
+        try ( BufferedReader input = new BufferedReader( 
+                new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
         {
             JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
             Unmarshaller unmarshaller = context.createUnmarshaller();
             MavenMetadata metadata = ( MavenMetadata ) unmarshaller.unmarshal( input );
 
-            getLog().info( "Checking for site for artifact : " + configLine.getGroupId() + ":" + configLine.getArtifactId() + ":" + metadata.versioning.latest );
-            // revert sort versions (not handling alpha and complex vesion scheme but more usefull version are displayed left side
+            getLog().info( "Checking for site for artifact : " + configLine.getGroupId() + ":"
+                    + configLine.getArtifactId() + ":" + metadata.versioning.latest );
+            // revert sort versions (not handling alpha and complex 
+            // vesion scheme but more usefull version are displayed left side
             Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
             getLog().warn( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
             configLine.addMetadata( metadata );
             // central
-            checkSite( configLine.getVersionnedPomFileURL( repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest );
+            checkSite(
+                    configLine.getVersionnedPomFileURL( repoBaseUrl, metadata.versioning.latest ),
+                    configLine, metadata.versioning.latest );
 
         }
         catch ( MalformedURLException ex )

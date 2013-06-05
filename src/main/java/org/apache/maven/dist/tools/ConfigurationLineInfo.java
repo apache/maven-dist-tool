@@ -87,9 +87,9 @@ class ConfigurationLineInfo
         return getBaseURL( repoBaseUrl, version + URLSEP + artifactId + "-" + version + ".pom" );
     }
 
-    void addMetadata( MavenMetadata metadata )
+    void addMetadata( MavenMetadata aMetadata )
     {
-        this.metadata = metadata;
+        this.metadata = aMetadata;
     }
 
     String getReleaseFromMetadata()

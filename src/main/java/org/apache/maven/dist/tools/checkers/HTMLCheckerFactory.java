@@ -33,6 +33,10 @@ public final class HTMLCheckerFactory
     {
     }
 
+    /**
+     * get all checker
+     * @return list of checker
+     */
     public static List<HTMLChecker> getCheckers()
     {
         List<HTMLChecker> tmp = new LinkedList<>();

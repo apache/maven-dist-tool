@@ -22,6 +22,11 @@ package org.apache.maven.dist.tools.checkers;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+/**
+ * Check if version is present in fluido skin.
+ * 
+ * @author skygo
+ */
 public class FluidoHTMLChecker implements HTMLChecker
 {
 

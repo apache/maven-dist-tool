@@ -41,6 +41,9 @@ public class MavenMetadata
     @XmlElement
     VersioningTag versioning = new VersioningTag();
 
+    /**
+     * Versioning element of metadata.
+     */
     public static class VersioningTag
     {
 

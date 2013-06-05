@@ -22,6 +22,11 @@ package org.apache.maven.dist.tools.checkers;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+/**
+ * Check if version is present on left side in stylus skin.
+ * 
+ * @author skygo
+ */
 public class StylusLeftHTMLChecker implements HTMLChecker
 {
 

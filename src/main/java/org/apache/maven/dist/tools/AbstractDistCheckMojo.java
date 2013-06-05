@@ -47,30 +47,59 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
 {
     private static final String MAVEN_DB = "db/mavendb.csv";
 
+    /**
+     * URL of repository where artifacts are stored. 
+     */
     @Parameter( property = "repositoryUrl", defaultValue = "http://repo.maven.apache.org/maven2/" )
     protected String repoBaseUrl;
 
+    /**
+     * List of configuration line for specific inspection.
+     * groupId:artifactId:distributionurl.
+     *
+     */
     @Parameter( property = "configurationLines", defaultValue = "" )
     private List<String> configurationLines;
 
+    /**
+     * Site renderer.
+     */
     @Component
     protected Renderer siteRenderer;
 
+    /**
+     * Reporting directory.
+     */
     @Parameter( property = "project.reporting.outputDirectory", required = true )
     protected File outputDirectory;
 
+    /**
+     * Maven project.
+     */
     @Component
     protected MavenProject project;
 
+    /**
+     * Local repository.
+     */
     @Parameter( property = "localRepository", required = true, readonly = true )
     protected ArtifactRepository localRepository;
 
+    /**
+     * Artifact factory.
+     */
     @Component
     protected ArtifactFactory artifactFactory;
 
+    /**
+     * Maven project builder.
+     */
     @Component
     protected MavenProjectBuilder mavenProjectBuilder;
     
+    /**
+     * list of artifacts repositories.
+     */
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
     
     abstract void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException;
@@ -96,11 +125,21 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     @Override
     public void execute() throws MojoExecutionException
     {
-        ArtifactRepository aa = new MavenArtifactRepository( "central", repoBaseUrl, new DefaultRepositoryLayout(), new ArtifactRepositoryPolicy( false, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ), new ArtifactRepositoryPolicy( true, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ) );
+        ArtifactRepository aa = new MavenArtifactRepository( "central",
+                repoBaseUrl,
+                new DefaultRepositoryLayout(),
+                new ArtifactRepositoryPolicy(
+                false,
+                ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ),
+                new ArtifactRepositoryPolicy(
+                true,
+                ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ) );
         artifactRepositories.add( aa );
         if ( configurationLines.isEmpty() )
         {
-            try ( BufferedReader input = new BufferedReader( new InputStreamReader( Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB ).openStream() ) ) )
+            try ( BufferedReader input = new BufferedReader( 
+                    new InputStreamReader( 
+                    Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB ).openStream() ) ) )
             {
                 String text;
                 while ( ( text = input.readLine() ) != null )
@@ -123,27 +162,43 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
             else
             {
                 String[] artifactInfo = line.split( ";" );
-                checkArtifact( new ConfigurationLineInfo( artifactInfo[0], artifactInfo[1], artifactInfo[2] ), repoBaseUrl );
+                checkArtifact(
+                        new ConfigurationLineInfo( artifactInfo[0], artifactInfo[1], artifactInfo[2] ), repoBaseUrl );
             }
         }
     }
 
+    /**
+     * add an error icon.
+     *
+     * @param sink doxiasink
+     */
     protected void iconError( Sink sink )
     {
         icon( sink, "error" );
     }
-
+    
+    /**
+     * add a warning icon.
+     *
+     * @param sink doxiasink
+     */
     protected void iconWarning( Sink sink )
     {
         icon( sink, "warning" );
     }
-
+    
+    /**
+     * add an succses icon.
+     *
+     * @param sink doxiasink
+     */
     protected void iconSuccess( Sink sink )
     {
         icon( sink, "success" );
     }
 
-    protected void icon( Sink sink, String level )
+    private void icon( Sink sink, String level )
     {
         sink.figure();
         sink.figureCaption();

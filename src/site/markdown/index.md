@@ -17,3 +17,6 @@ in other context, it would require more configurations.
 [1]: ./dist-tool-checksite.html
 [2]: ./dist-tool-checksourcerelease.html
 [3]: ./todo.html
+
+http://maven.apache.org/developers/release/maven-project-release-procedure.html#Copy_the_source_release_to_the_Apache_Distribution_Area
+        

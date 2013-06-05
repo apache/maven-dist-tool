@@ -31,20 +31,22 @@ public interface HTMLChecker
     /**
      * name of the checker.
      *
-     * @return
+     * @return name
      */
     String getName();
 
     /**
-     * skink related ?
+     * Get an id representing sink.
+     * 
+     * @return string for skin
      */
     String getSkin();
     /**
      * true if checker find pattern in document
      *
-     * @param doc
-     * @param version
-     * @return
+     * @param doc html document
+     * @param version version to check against
+     * @return true if version is found
      */
     boolean isOk( Document doc, String version );
     

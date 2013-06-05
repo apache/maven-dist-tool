@@ -57,7 +57,10 @@ import org.jsoup.select.Elements;
 public class DistCheckSiteMojo extends AbstractDistCheckMojo
 {
     private static final String MAVEN_SITE = "http://maven.apache.org";
-    private static final int HTTP_OK = 200;
+    /**
+     * Http status ok code.
+     */
+    protected static final int HTTP_OK = 200;
 
     @Override
     public String getOutputName()
@@ -236,7 +239,8 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.body();
         sink.section1();
         sink.rawText( "Checked sites, also do some basic checking in index.html contents." );
-        sink.rawText( "This is to help maintaining some coherence. How many site are skin fluido, stylus, where they have version (right left)" );
+        sink.rawText( "This is to help maintaining some coherence. How many site are skin fluido, stylus,"
+                + " where they have version (right left)" );
         sink.rawText( "All sun icons in one column is kind of objective." );
         sink.section1_();
         sink.table();
@@ -345,20 +349,29 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         return url;
     }
 
-    private void checkSite( String repourl, ConfigurationLineInfo r, String version )
+    private void checkSite( String repourl, ConfigurationLineInfo configLine, String version )
     {
-        DistCheckSiteResult result = new DistCheckSiteResult( r, version );
+        DistCheckSiteResult result = new DistCheckSiteResult( configLine, version );
         results.add( result );
         StringBuilder message = new StringBuilder();
         try
         {
-            Artifact pluginArtifact = artifactFactory.createProjectArtifact( r.getGroupId(), r.getArtifactId(), version );
-            MavenProject pluginProject = mavenProjectBuilder.buildFromRepository( pluginArtifact, artifactRepositories, localRepository, false );
+            Artifact pluginArtifact = artifactFactory.createProjectArtifact(
+                    configLine.getGroupId(),
+                    configLine.getArtifactId(), version );
+            MavenProject pluginProject = mavenProjectBuilder.buildFromRepository(
+                    pluginArtifact,
+                    artifactRepositories, localRepository, false );
 
             result.setUrl( pluginProject.getUrl() );
             Document doc = Jsoup.connect( pluginProject.getUrl() ).get();
             
-            message.append( "Site for " ).append( pluginProject.getArtifactId() ).append( " at " ).append( pluginProject.getUrl() ).append( " seek for" ).append( pluginProject.getVersion() ).append( "    " );
+            message.append( "Site for " ).
+                    append( pluginProject.getArtifactId() ).
+                    append( " at " ).
+                    append( pluginProject.getUrl() ).
+                    append( " seek for" ).
+                    append( pluginProject.getVersion() );
             for ( HTMLChecker c : checker )
             {
                 result.getCheckMap().put( c, c.isOk( doc, version ) );
@@ -385,19 +398,23 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     @Override
     void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl ) throws MojoExecutionException
     {
-        try ( BufferedReader input = new BufferedReader( new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
+        try ( BufferedReader input = new BufferedReader( 
+                new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
         {
             JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
             Unmarshaller unmarshaller = context.createUnmarshaller();
             MavenMetadata metadata = ( MavenMetadata ) unmarshaller.unmarshal( input );
             configLine.addMetadata( metadata );
-            getLog().info( "Checking for site for artifact : " + configLine.getGroupId() + ":" + configLine.getArtifactId() + ":" + metadata.versioning.latest );
-            // revert sort versions (not handling alpha and complex vesion scheme but more usefull version are displayed left side
+            getLog().debug( "Checking for site for artifact : " + configLine.getGroupId() + ":"
+                    + configLine.getArtifactId() + ":" + metadata.versioning.latest );
+            // revert sort versions (not handling alpha and 
+            // complex vesion scheme but more usefull version are displayed left side
             Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
             getLog().warn( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
 
             // central
-            checkSite( configLine.getVersionnedPomFileURL( repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest );
+            checkSite( configLine.getVersionnedPomFileURL( 
+                    repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest );
 
         }
         catch ( MalformedURLException ex )
