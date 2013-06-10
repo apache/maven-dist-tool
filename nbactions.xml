@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
     <action>
-        <actionName>CUSTOM-checksourcerelease</actionName>
+        <actionName>CUSTOM-debugme</actionName>
         <displayName>check-source-release</displayName>
         <goals>
-            <goal>org.apache.maven.dist.tools:dist-tool-plugin:check-source-release</goal>
-            <goal>-X</goal>
+            <goal>clean</goal>
+            <goal>install</goal>
+            <goal>site</goal>
+            <!--<goal>-X</goal>-->
         </goals>
     </action> 
-    <action>
-        <actionName>CUSTOM-checksite</actionName>
-        <displayName>check-site</displayName>
-        <goals>
-            <goal>org.apache.maven.dist.tools:dist-tool-plugin:check-site</goal>
-            <goal>-X</goal>
-        </goals>
-    </action>
 </actions>

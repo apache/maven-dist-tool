@@ -111,33 +111,21 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-htmlunit-driver</artifactId>
-            <version>2.31.0</version>
-            <type>jar</type>           
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-firefox-driver</artifactId>
-            <version>2.31.0</version>
+            <version>2.33.0</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-            <version>2.31.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-ie-driver</artifactId>
-            <version>2.31.0</version>
-            <type>jar</type>
-        </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.5</version>
         </dependency>
     </dependencies>
 
@@ -237,7 +225,6 @@
                     <reportSet>
                         <id>html</id>
                         <reports>
-                            <!--<report>check-screen-site</report>-->
                           <report>check-site</report>
                           <report>check-source-release</report>
                         </reports>  

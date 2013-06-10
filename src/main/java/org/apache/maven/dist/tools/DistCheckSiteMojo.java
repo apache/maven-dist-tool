@@ -20,6 +20,7 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -33,12 +34,15 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.dist.tools.checkers.HTMLChecker;
 import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
@@ -48,6 +52,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
  *
@@ -56,6 +64,13 @@ import org.jsoup.select.Elements;
 @Mojo( name = "check-site" )
 public class DistCheckSiteMojo extends AbstractDistCheckMojo
 {
+    
+    /**
+     * Take screenshot with web browser
+     */
+    @Parameter( property = "screenshot", defaultValue = "true" )
+    protected boolean screenShot;
+    
     private static final String MAVEN_SITE = "http://maven.apache.org";
     /**
      * Http status ok code.
@@ -87,6 +102,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
         private int statusCode = HTTP_OK;
         private Document document;
+        private String screenshotName;
 
         public DistCheckSiteResult( ConfigurationLineInfo r, String version )
         {
@@ -209,10 +225,21 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         {
             this.document = doc ;
         }
+
+        private void setScreenShot( String fileName )
+        {
+            this.screenshotName = fileName;
+        }
+        private String getScreenShot()
+        {
+            return screenshotName;
+        }
     }
     // keep result
     private List<DistCheckSiteResult> results = new LinkedList<>();
     private final List<HTMLChecker> checker = HTMLCheckerFactory.getCheckers();
+    private WebDriver driver;
+    
     
     @Override
     protected void executeReport( Locale locale ) throws MavenReportException
@@ -260,6 +287,12 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         sink.tableHeaderCell();
         sink.rawText( "URL" );
         sink.tableHeaderCell_();
+        if ( screenShot )
+        {
+            sink.tableHeaderCell();
+            sink.rawText( "Screen" );
+            sink.tableHeaderCell_();
+        }
         sink.tableHeaderCell();
         sink.rawText( "Skins and comments on top of html (helping for date but not always)" );
         sink.tableHeaderCell_();
@@ -302,14 +335,25 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             sink.rawText( getSimplifiedUrl( csr.getUrl() ) );
             sink.link_();
             sink.tableCell_();
-            
-            sink.tableHeaderCell();
+            if ( screenShot )
+            {
+                sink.tableCell();
+                sink.figure( null );
+                SinkEventAttributeSet atts = new SinkEventAttributeSet();
+                // no direct attribute, override style only
+                atts.addAttribute( "style", "height:200px;width:200px" );
+                atts.addAttribute( "alt", getSimplifiedUrl( csr.getUrl() ) );
+                sink.figureGraphics( csr.getScreenShot(), atts );
+                sink.figure_();
+                sink.tableCell_();
+            }
+            sink.tableCell();
             csr.getSkins( sink );
-            sink.tableHeaderCell_();
+            sink.tableCell_();
             
-            sink.tableHeaderCell();
+            sink.tableCell();
             csr.getOverall( sink );
-            sink.tableHeaderCell_();
+            sink.tableCell_();
 
             for ( HTMLChecker c : checker )
             {
@@ -365,25 +409,25 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
 
             result.setUrl( pluginProject.getUrl() );
             Document doc = Jsoup.connect( pluginProject.getUrl() ).get();
-            
-            message.append( "Site for " ).
-                    append( pluginProject.getArtifactId() ).
-                    append( " at " ).
-                    append( pluginProject.getUrl() ).
-                    append( " seek for" ).
-                    append( pluginProject.getVersion() );
+            if ( screenShot )
+            {
+                driver.get( pluginProject.getUrl() );
+                File scrFile = ( ( TakesScreenshot ) driver ).getScreenshotAs( OutputType.FILE );
+                String fileName = "images" + File.separator
+                        + configLine.getGroupId() + "_" + configLine.getArtifactId() + ".png";
+                result.setScreenShot( fileName );
+                FileUtils.copyFile( scrFile, new File( getReportOutputDirectory() + File.separator + fileName ) );
+            }
             for ( HTMLChecker c : checker )
             {
                 result.getCheckMap().put( c, c.isOk( doc, version ) );
-                message.append( "[" ).append( c.getName() ).append( c.isOk( doc, version ) ).append( "]" );
             }
             result.setDocument( doc );
-            getLog().warn( message.toString() );
-
+            
         }
         catch ( HttpStatusException hes )
         {
-            getLog().warn( hes.getStatusCode() + " for " + hes.getUrl() );
+            getLog().error( hes.getStatusCode() + " for " + hes.getUrl() );
             result.setHTTPErrorUrl( hes.getStatusCode() );
         }
         catch ( Exception ex )
@@ -410,8 +454,8 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             // revert sort versions (not handling alpha and 
             // complex vesion scheme but more usefull version are displayed left side
             Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
-            getLog().warn( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
-
+            getLog().debug( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
+            
             // central
             checkSite( configLine.getVersionnedPomFileURL( 
                     repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest );
@@ -431,8 +475,16 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     public void execute() throws MojoExecutionException
     {
         //resolve only to what we set
-        
+        if ( screenShot )
+        {
+            // create driver once reduce time to complete mojo
+            driver = new FirefoxDriver();
+        }
 
         super.execute();
+        if ( screenShot )
+        {
+            driver.close();
+        }
     }
 }

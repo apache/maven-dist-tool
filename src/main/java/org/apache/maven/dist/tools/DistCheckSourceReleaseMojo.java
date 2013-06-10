@@ -349,11 +349,11 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             }
         }
         retrievedFile.removeAll( expectedFile );
-        if ( !expectedFile.isEmpty() )
+        if ( !retrievedFile.isEmpty() )
         {
-            for ( String sourceItem : expectedFile )
+            for ( String sourceItem : retrievedFile )
             {
-                getLog().error( "Older:" + sourceItem + " in " + repourl );
+                getLog().error( "Older than " + version + " version >> " + sourceItem + " << in " + repourl );
             }
         }
         return retrievedFile;
@@ -381,7 +381,7 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         {
             for ( String sourceItem : expectedFile )
             {
-                getLog().error( "Missing:" + sourceItem + " in " + repourl );
+                getLog().error( "Missing archive >> " + sourceItem + " << in " + repourl );
             }
         }
         return expectedFile;
