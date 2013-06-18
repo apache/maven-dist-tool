@@ -323,31 +323,44 @@ public class DistCheckSourceReleaseMojo
         /// not the safest
         return "^" + artifact + "-[0-9].*source-release.*$";
     }
-    
-    private List<String> checkOldinRepos( String repourl, ConfigurationLineInfo configLine, String version )
-            throws IOException
+
+    private Elements selectLinks( String repourl )
+        throws IOException
     {
-        Document doc = Jsoup.connect( repourl ).get();
-        Elements links = doc.select( "a[href]" );
+        try
+        {
+            Document doc = Jsoup.connect( repourl ).get();
+            return doc.select( "a[href]" );
+        }
+        catch ( IOException ioe )
+        {
+            throw new IOException( "IOException while reading " + repourl, ioe );
+        }
+    }
+
+    private List<String> checkOldinRepos( String repourl, ConfigurationLineInfo configLine, String version )
+        throws IOException
+    {
+        Elements links = selectLinks( repourl );
+
         List<String> expectedFile = new LinkedList<>();
-        List<String> retrievedFile = new LinkedList<>();
         
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
 
-
-
+        List<String> retrievedFile = new LinkedList<>();
         for ( Element e : links )
         {
             String art = e.attr( "href" );
             if ( art.matches( getArtifactPattern( configLine.getArtifactId() ) ) )
             {
-
                 retrievedFile.add( e.attr( "href" ) );
             }
         }
+
         retrievedFile.removeAll( expectedFile );
+
         if ( !retrievedFile.isEmpty() )
         {
             for ( String sourceItem : retrievedFile )
@@ -355,28 +368,29 @@ public class DistCheckSourceReleaseMojo
                 getLog().error( "Older than " + version + " version >> " + sourceItem + " << in " + repourl );
             }
         }
+
         return retrievedFile;
     }
 
     private List<String> checkRepos( String repourl, ConfigurationLineInfo configLine, String version )
             throws IOException
     {
-        Document doc = Jsoup.connect( repourl ).get();
-        Elements links = doc.select( "a[href]" );
+        Elements links = selectLinks( repourl );
+
         List<String> expectedFile = new LinkedList<>();
-        List<String> retrievedFile = new LinkedList<>();
         // build source artifact name
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
 
-
-
+        List<String> retrievedFile = new LinkedList<>();
         for ( Element e : links )
         {
             retrievedFile.add( e.attr( "href" ) );
         }
+
         expectedFile.removeAll( retrievedFile );
+
         if ( !expectedFile.isEmpty() )
         {
             for ( String sourceItem : expectedFile )
@@ -384,6 +398,7 @@ public class DistCheckSourceReleaseMojo
                 getLog().error( "Missing archive >> " + sourceItem + " << in " + repourl );
             }
         }
+
         return expectedFile;
     }
 
