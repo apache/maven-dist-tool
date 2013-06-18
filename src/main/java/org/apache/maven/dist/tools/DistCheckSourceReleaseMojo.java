@@ -49,7 +49,8 @@ import org.jsoup.select.Elements;
  * @author skygo
  */
 @Mojo( name = "check-source-release" )
-public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
+public class DistCheckSourceReleaseMojo
+    extends AbstractDistCheckMojo
 {
 //Artifact metadata retrieval done y hands.
 
@@ -73,11 +74,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         return "Verification of source release";
     }
 
-   
-
-    
-
-    class DistCheckSourceRelease extends AbstractCheckResult
+    class DistCheckSourceRelease
+        extends AbstractCheckResult
     {
 
         private List<String> central;
@@ -94,7 +92,7 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             dist = checkRepos;
         }
 
-        private void setMisingCentralSourceRelease( List<String> checkRepos )
+        private void setMissingCentralSourceRelease( List<String> checkRepos )
         {
             central = checkRepos;
         }
@@ -234,7 +232,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
     }
      
     @Override
-    protected void executeReport( Locale locale ) throws MavenReportException
+    protected void executeReport( Locale locale )
+        throws MavenReportException
     {
         if ( !outputDirectory.exists() )
         {
@@ -358,6 +357,7 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
         }
         return retrievedFile;
     }
+
     private List<String> checkRepos( String repourl, ConfigurationLineInfo configLine, String version )
             throws IOException
     {
@@ -388,7 +388,8 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl ) throws MojoExecutionException
+    void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl )
+        throws MojoExecutionException
     {
         try ( BufferedReader input = new BufferedReader( 
                 new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
@@ -407,7 +408,7 @@ public class DistCheckSourceReleaseMojo extends AbstractDistCheckMojo
             DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, metadata.versioning.latest );
             results.add( result );
             // central
-            result.setMisingCentralSourceRelease(
+            result.setMissingCentralSourceRelease(
                     checkRepos( configLine.getVersionnedFolderURL(
                     repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest ) );
             //dist
