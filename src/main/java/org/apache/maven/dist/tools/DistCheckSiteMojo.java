@@ -166,11 +166,11 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
                     }
                 }
                 
-                if ( isSkink( "Fluido" ) )
+                if ( isSkin( "Fluido" ) )
                 {
                     sink.text( "Fluido" );
                 }
-                else if ( isSkink( "Stylus" ) )
+                else if ( isSkin( "Stylus" ) )
                 {
                     sink.text( "Stylus" );
                 }
@@ -208,7 +208,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             }
         }
 
-        private boolean isSkink( String skinName )
+        private boolean isSkin( String skinName )
         {
             boolean tmp = false;
             for ( Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet() )
