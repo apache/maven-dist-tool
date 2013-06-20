@@ -23,6 +23,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.maven.artifact.repository.metadata.Metadata;
+
 /**
  *
  * @author skygo
@@ -34,7 +36,7 @@ class ConfigurationLineInfo
     private final String artifactId;
     private final String dist;
     private static final String URLSEP = "/";
-    private MavenMetadata metadata;
+    private Metadata metadata;
 
     public ConfigurationLineInfo( String groupId, String artifactId, String dist )
     {
@@ -87,7 +89,7 @@ class ConfigurationLineInfo
         return getBaseURL( repoBaseUrl, version + URLSEP + artifactId + "-" + version + ".pom" );
     }
 
-    void addMetadata( MavenMetadata aMetadata )
+    void addMetadata( Metadata aMetadata )
     {
         this.metadata = aMetadata;
     }
@@ -98,7 +100,7 @@ class ConfigurationLineInfo
         try
         {
             SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMddkkmmss" );
-            Date f = dateFormatter.parse( metadata.versioning.lastUpdated );
+            Date f = dateFormatter.parse( metadata.getVersioning().getLastUpdated() );
             SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "MMM dd, yyyy" );
             return dateFormattertarget.format( f );
         }

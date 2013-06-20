@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,11 +30,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.repository.metadata.Metadata;
+import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.dist.tools.checkers.HTMLChecker;
 import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
 import org.apache.maven.doxia.sink.Sink;
@@ -45,6 +44,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Comment;
@@ -61,7 +61,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  *
  * @author skygo
  */
-@Mojo( name = "check-site" )
+@Mojo( name = "check-site", requiresProject = false )
 public class DistCheckSiteMojo extends AbstractDistCheckMojo
 {
     
@@ -445,27 +445,23 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         try ( BufferedReader input = new BufferedReader( 
                 new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
         {
-            JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            MavenMetadata metadata = ( MavenMetadata ) unmarshaller.unmarshal( input );
+            MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
+            Metadata metadata = metadataReader.read( input );
+            
             configLine.addMetadata( metadata );
             getLog().debug( "Checking for site for artifact : " + configLine.getGroupId() + ":"
-                    + configLine.getArtifactId() + ":" + metadata.versioning.latest );
+                    + configLine.getArtifactId() + ":" + metadata.getVersioning().getLatest() );
             // revert sort versions (not handling alpha and 
             // complex vesion scheme but more usefull version are displayed left side
-            Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
-            getLog().debug( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
+            Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
+            getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
             
             // central
             checkSite( configLine.getVersionnedPomFileURL( 
-                    repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest );
+                    repoBaseUrl, metadata.getVersioning().getLatest() ), configLine, metadata.getVersioning().getLatest() );
 
         }
-        catch ( MalformedURLException ex )
-        {
-            throw new MojoExecutionException( ex.getMessage(), ex );
-        }
-        catch ( IOException | JAXBException ex )
+        catch ( IOException | XmlPullParserException ex )
         {
             throw new MojoExecutionException( ex.getMessage(), ex );
         }

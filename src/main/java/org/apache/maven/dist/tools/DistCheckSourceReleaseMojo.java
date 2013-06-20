@@ -22,21 +22,21 @@ package org.apache.maven.dist.tools;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+
+import org.apache.maven.artifact.repository.metadata.Metadata;
+import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -48,7 +48,7 @@ import org.jsoup.select.Elements;
  *
  * @author skygo
  */
-@Mojo( name = "check-source-release" )
+@Mojo( name = "check-source-release", requiresProject = false )
 public class DistCheckSourceReleaseMojo
     extends AbstractDistCheckMojo
 {
@@ -409,34 +409,29 @@ public class DistCheckSourceReleaseMojo
         try ( BufferedReader input = new BufferedReader( 
                 new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
         {
-            JAXBContext context = JAXBContext.newInstance( MavenMetadata.class );
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            MavenMetadata metadata = ( MavenMetadata ) unmarshaller.unmarshal( input );
-
+            MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
+            Metadata metadata = metadataReader.read( input );
+            
             getLog().debug( "Checking for artifact : " + configLine.getGroupId() + ":"
-                    + configLine.getArtifactId() + ":" + metadata.versioning.latest );
+                    + configLine.getArtifactId() + ":" + metadata.getVersioning().getLatest() );
             // revert sort versions (not handling alpha and 
             //complex version scheme but more usefull version are displayed left side
-            Collections.sort( metadata.versioning.versions, Collections.reverseOrder() );
-            getLog().debug( metadata.versioning.versions + " version(s) detected " + repoBaseUrl );
+            Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
+            getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
             configLine.addMetadata( metadata );
-            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, metadata.versioning.latest );
+            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, metadata.getVersioning().getLatest() );
             results.add( result );
             // central
             result.setMissingCentralSourceRelease(
                     checkRepos( configLine.getVersionnedFolderURL(
-                    repoBaseUrl, metadata.versioning.latest ), configLine, metadata.versioning.latest ) );
+                    repoBaseUrl, metadata.getVersioning().getLatest() ), configLine, metadata.getVersioning().getLatest() ) );
             //dist
             result.setMissingDistSourceRelease(
-                    checkRepos( configLine.getDist(), configLine, metadata.versioning.latest ) );
+                    checkRepos( configLine.getDist(), configLine, metadata.getVersioning().getLatest() ) );
             result.setOlderSourceRelease(
-                    checkOldinRepos( configLine.getDist(), configLine, metadata.versioning.latest ) );
+                    checkOldinRepos( configLine.getDist(), configLine, metadata.getVersioning().getLatest() ) );
         }
-        catch ( MalformedURLException ex )
-        {
-            throw new MojoExecutionException( ex.getMessage(), ex );
-        }
-        catch ( IOException | JAXBException ex )
+        catch ( IOException | XmlPullParserException ex )
         {
             throw new MojoExecutionException( ex.getMessage(), ex );
         }

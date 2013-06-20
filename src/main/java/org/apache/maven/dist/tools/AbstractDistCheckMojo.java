@@ -70,7 +70,7 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     /**
      * Reporting directory.
      */
-    @Parameter( defaultValue = "${project.reporting.outputDirectory}", required = true )
+    @Parameter( defaultValue = "target/site", required = true )
     protected File outputDirectory;
 
     /**
