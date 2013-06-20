@@ -70,7 +70,7 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     /**
      * Reporting directory.
      */
-    @Parameter( property = "project.reporting.outputDirectory", required = true )
+    @Parameter( defaultValue = "${project.reporting.outputDirectory}", required = true )
     protected File outputDirectory;
 
     /**
@@ -82,7 +82,7 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     /**
      * Local repository.
      */
-    @Parameter( property = "localRepository", required = true, readonly = true )
+    @Parameter( defaultValue = "${localRepository}", required = true, readonly = true )
     protected ArtifactRepository localRepository;
 
     /**
