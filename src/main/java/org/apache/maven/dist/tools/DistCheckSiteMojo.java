@@ -470,17 +470,22 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     @Override
     public void execute() throws MojoExecutionException
     {
-        //resolve only to what we set
-        if ( screenShot )
+        try
         {
-            // create driver once reduce time to complete mojo
-            driver = new FirefoxDriver();
+            //resolve only to what we set
+            if ( screenShot )
+            {
+                // create driver once reduce time to complete mojo
+                driver = new FirefoxDriver();
+            }
+            super.execute();
         }
-
-        super.execute();
-        if ( screenShot )
+        finally
         {
-            driver.close();
+            if ( screenShot )
+            {
+                driver.close();
+            }
         }
     }
 }
