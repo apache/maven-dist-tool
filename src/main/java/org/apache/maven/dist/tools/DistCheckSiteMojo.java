@@ -68,7 +68,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     /**
      * Take screenshot with web browser
      */
-    @Parameter( property = "screenshot", defaultValue = "true" )
+    @Parameter( property = "screenshot", defaultValue = "false" )
     protected boolean screenShot;
     
     private static final String MAVEN_SITE = "http://maven.apache.org";
