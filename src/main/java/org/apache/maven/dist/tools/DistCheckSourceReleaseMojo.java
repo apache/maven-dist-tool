@@ -102,7 +102,7 @@ public class DistCheckSourceReleaseMojo
             older = checkRepos;
         }
     }
-    private List<DistCheckSourceRelease> results = new LinkedList<>();
+    private final List<DistCheckSourceRelease> results = new LinkedList<>();
 
     private void reportLine( Sink sink, DistCheckSourceRelease csr )
     {
@@ -363,9 +363,12 @@ public class DistCheckSourceReleaseMojo
 
         if ( !retrievedFile.isEmpty() )
         {
+            // write the following output in red so it's more readable in jenkins console
+            getLog().error( "Older version than " + version + " for "
+                    + configLine.getArtifactId() + " still available in " + repourl );
             for ( String sourceItem : retrievedFile )
             {
-                getLog().error( "Older than " + version + " version >> " + sourceItem + " << in " + repourl );
+                getLog().error( " > " + sourceItem + " <" );
             }
         }
 
@@ -393,9 +396,10 @@ public class DistCheckSourceReleaseMojo
 
         if ( !expectedFile.isEmpty() )
         {
+            getLog().error( "Missing archive for " + configLine.getArtifactId() + " in " + repourl );
             for ( String sourceItem : expectedFile )
             {
-                getLog().error( "Missing archive >> " + sourceItem + " << in " + repourl );
+                getLog().error( " > " + sourceItem + " <" );
             }
         }
 
@@ -419,12 +423,14 @@ public class DistCheckSourceReleaseMojo
             Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
             getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
             configLine.addMetadata( metadata );
-            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, metadata.getVersioning().getLatest() );
+            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, 
+                    metadata.getVersioning().getLatest() );
             results.add( result );
             // central
             result.setMissingCentralSourceRelease(
                     checkRepos( configLine.getVersionnedFolderURL(
-                    repoBaseUrl, metadata.getVersioning().getLatest() ), configLine, metadata.getVersioning().getLatest() ) );
+                    repoBaseUrl, metadata.getVersioning().getLatest() ), 
+                    configLine, metadata.getVersioning().getLatest() ) );
             //dist
             result.setMissingDistSourceRelease(
                     checkRepos( configLine.getDist(), configLine, metadata.getVersioning().getLatest() ) );

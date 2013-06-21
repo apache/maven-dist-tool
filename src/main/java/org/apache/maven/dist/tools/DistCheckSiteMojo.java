@@ -433,8 +433,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         catch ( Exception ex )
         {
             //continue for  other artifact
-            getLog().error( ex.getMessage() );
-            getLog().error( ex );
+            getLog().error( ex.getMessage() + configLine.getArtifactId() );
         }
 
     }
@@ -458,7 +457,8 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             
             // central
             checkSite( configLine.getVersionnedPomFileURL( 
-                    repoBaseUrl, metadata.getVersioning().getLatest() ), configLine, metadata.getVersioning().getLatest() );
+                    repoBaseUrl, metadata.getVersioning().getLatest() ), 
+                    configLine, metadata.getVersioning().getLatest() );
 
         }
         catch ( IOException | XmlPullParserException ex )
