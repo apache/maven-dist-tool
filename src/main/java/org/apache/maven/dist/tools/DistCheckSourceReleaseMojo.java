@@ -19,24 +19,17 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.maven.artifact.repository.metadata.Metadata;
-import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -50,7 +43,7 @@ import org.jsoup.select.Elements;
  */
 @Mojo( name = "check-source-release", requiresProject = false )
 public class DistCheckSourceReleaseMojo
-    extends AbstractDistCheckMojo
+        extends AbstractDistCheckMojo
 {
 //Artifact metadata retrieval done y hands.
 
@@ -75,7 +68,7 @@ public class DistCheckSourceReleaseMojo
     }
 
     class DistCheckSourceRelease
-        extends AbstractCheckResult
+            extends AbstractCheckResult
     {
 
         private List<String> central;
@@ -230,10 +223,10 @@ public class DistCheckSourceReleaseMojo
         sink.tableCell_();
         sink.tableRow_();
     }
-     
+
     @Override
     protected void executeReport( Locale locale )
-        throws MavenReportException
+            throws MavenReportException
     {
         if ( !outputDirectory.exists() )
         {
@@ -311,7 +304,7 @@ public class DistCheckSourceReleaseMojo
         sink.flush();
         sink.close();
     }
-    
+
     /**
      * Report a pattern for an artifact.
      *
@@ -325,7 +318,7 @@ public class DistCheckSourceReleaseMojo
     }
 
     private Elements selectLinks( String repourl )
-        throws IOException
+            throws IOException
     {
         try
         {
@@ -339,12 +332,12 @@ public class DistCheckSourceReleaseMojo
     }
 
     private List<String> checkOldinRepos( String repourl, ConfigurationLineInfo configLine, String version )
-        throws IOException
+            throws IOException
     {
         Elements links = selectLinks( repourl );
 
         List<String> expectedFile = new LinkedList<>();
-        
+
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
         expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
@@ -407,37 +400,26 @@ public class DistCheckSourceReleaseMojo
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl )
-        throws MojoExecutionException
+    void checkArtifact( ConfigurationLineInfo configLine, String latestVersion )
+            throws MojoExecutionException
     {
-        try ( BufferedReader input = new BufferedReader( 
-                new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
+        try
         {
-            MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
-            Metadata metadata = metadataReader.read( input );
-            
-            getLog().debug( "Checking for artifact : " + configLine.getGroupId() + ":"
-                    + configLine.getArtifactId() + ":" + metadata.getVersioning().getLatest() );
-            // revert sort versions (not handling alpha and 
-            //complex version scheme but more usefull version are displayed left side
-            Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
-            getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
-            configLine.addMetadata( metadata );
-            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, 
-                    metadata.getVersioning().getLatest() );
+            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine,
+                    latestVersion );
             results.add( result );
             // central
             result.setMissingCentralSourceRelease(
                     checkRepos( configLine.getVersionnedFolderURL(
-                    repoBaseUrl, metadata.getVersioning().getLatest() ), 
-                    configLine, metadata.getVersioning().getLatest() ) );
+                    repoBaseUrl, latestVersion ),
+                    configLine, latestVersion ) );
             //dist
             result.setMissingDistSourceRelease(
-                    checkRepos( configLine.getDist(), configLine, metadata.getVersioning().getLatest() ) );
+                    checkRepos( configLine.getDist(), configLine, latestVersion ) );
             result.setOlderSourceRelease(
-                    checkOldinRepos( configLine.getDist(), configLine, metadata.getVersioning().getLatest() ) );
+                    checkOldinRepos( configLine.getDist(), configLine, latestVersion ) );
         }
-        catch ( IOException | XmlPullParserException ex )
+        catch ( IOException ex )
         {
             throw new MojoExecutionException( ex.getMessage(), ex );
         }

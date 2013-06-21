@@ -19,12 +19,7 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +28,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.metadata.Metadata;
-import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.dist.tools.checkers.HTMLChecker;
 import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
 import org.apache.maven.doxia.sink.Sink;
@@ -44,7 +37,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.MavenReportException;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Comment;
@@ -393,11 +385,10 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         return url;
     }
 
-    private void checkSite( String repourl, ConfigurationLineInfo configLine, String version )
+    private void checkSite( ConfigurationLineInfo configLine, String version )
     {
         DistCheckSiteResult result = new DistCheckSiteResult( configLine, version );
         results.add( result );
-        StringBuilder message = new StringBuilder();
         try
         {
             Artifact pluginArtifact = artifactFactory.createProjectArtifact(
@@ -439,32 +430,9 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String repoBaseUrl ) throws MojoExecutionException
+    void checkArtifact( ConfigurationLineInfo configLine, String latestVersion ) throws MojoExecutionException
     {
-        try ( BufferedReader input = new BufferedReader( 
-                new InputStreamReader( new URL( configLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
-        {
-            MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
-            Metadata metadata = metadataReader.read( input );
-            
-            configLine.addMetadata( metadata );
-            getLog().debug( "Checking for site for artifact : " + configLine.getGroupId() + ":"
-                    + configLine.getArtifactId() + ":" + metadata.getVersioning().getLatest() );
-            // revert sort versions (not handling alpha and 
-            // complex vesion scheme but more usefull version are displayed left side
-            Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
-            getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
-            
-            // central
-            checkSite( configLine.getVersionnedPomFileURL( 
-                    repoBaseUrl, metadata.getVersioning().getLatest() ), 
-                    configLine, metadata.getVersioning().getLatest() );
-
-        }
-        catch ( IOException | XmlPullParserException ex )
-        {
-            throw new MojoExecutionException( ex.getMessage(), ex );
-        }
+        checkSite( configLine, latestVersion );
     }
 
     @Override

@@ -23,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.maven.artifact.factory.ArtifactFactory;
@@ -30,6 +32,8 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
+import org.apache.maven.artifact.repository.metadata.Metadata;
+import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -38,6 +42,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.AbstractMavenReport;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  *
@@ -161,9 +166,31 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
             }
             else
             {
-                String[] artifactInfo = line.split( ";" );
-                checkArtifact(
-                        new ConfigurationLineInfo( artifactInfo[0], artifactInfo[1], artifactInfo[2] ), repoBaseUrl );
+                ConfigurationLineInfo aLine = new ConfigurationLineInfo( line.split( ";" ) );
+                // 
+                try ( BufferedReader input = new BufferedReader(
+                        new InputStreamReader( new URL( aLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
+                {
+                    MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
+                    Metadata metadata = metadataReader.read( input );
+
+                    aLine.addMetadata( metadata );
+                    getLog().debug( "Checking for site for artifact : " + aLine.getGroupId() + ":"
+                            + aLine.getArtifactId() + ":" + metadata.getVersioning().getLatest() );
+                    // revert sort versions (not handling alpha and 
+                    // complex vesion scheme but more usefull version are displayed left side
+                    Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
+                    getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
+
+                    // central
+                    checkArtifact( aLine, metadata.getVersioning().getLatest() );                   
+
+                }
+                catch ( IOException | XmlPullParserException ex )
+                {
+                    throw new MojoExecutionException( ex.getMessage(), ex );
+                }
+                
             }
         }
     }

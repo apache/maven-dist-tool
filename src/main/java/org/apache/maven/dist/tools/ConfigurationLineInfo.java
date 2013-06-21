@@ -38,11 +38,11 @@ class ConfigurationLineInfo
     private static final String URLSEP = "/";
     private Metadata metadata;
 
-    public ConfigurationLineInfo( String groupId, String artifactId, String dist )
+    public ConfigurationLineInfo( String[] infos )
     {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.dist = dist;
+        this.groupId = infos[0];
+        this.artifactId = infos[1];
+        this.dist = infos[2];
     }
 
     /**
