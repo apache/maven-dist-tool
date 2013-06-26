@@ -183,7 +183,19 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
                     getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
 
                     // central
-                    checkArtifact( aLine, metadata.getVersioning().getLatest() );                   
+                    if ( aLine.getForcedVersion() == null )
+                    {
+                        checkArtifact( aLine, metadata.getVersioning().getLatest() );
+                    }
+                    else
+                    {
+                        //
+                        getLog().error( "metadata lastest version value is "
+                                + metadata.getVersioning().getLatest() + " but was manually set to " 
+                                + aLine.getForcedVersion() 
+                                + " as it's the actual latest version ");
+                        checkArtifact( aLine, aLine.getForcedVersion() );
+                    }
 
                 }
                 catch ( IOException | XmlPullParserException ex )

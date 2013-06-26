@@ -36,13 +36,27 @@ class ConfigurationLineInfo
     private final String artifactId;
     private final String dist;
     private static final String URLSEP = "/";
+    private final String forceVersion;
     private Metadata metadata;
 
     public ConfigurationLineInfo( String[] infos )
     {
-        this.groupId = infos[0];
-        this.artifactId = infos[1];
-        this.dist = infos[2];
+        this.groupId = infos[1];
+        this.artifactId = infos[2];
+        this.dist = infos[3];
+        if ( infos.length == 5 )
+        {
+            this.forceVersion = infos[4];
+        }
+        else
+        {
+            this.forceVersion = null;
+        }
+    }
+
+    public String getForcedVersion()
+    {
+        return forceVersion;
     }
 
     /**
