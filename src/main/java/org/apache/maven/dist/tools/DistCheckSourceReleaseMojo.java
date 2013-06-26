@@ -47,7 +47,8 @@ public class DistCheckSourceReleaseMojo
 {
 //Artifact metadata retrieval done y hands.
 
-    private static final String DIST_AREA = "https://dist.apache.org/repos/dist/release/maven";
+    private static final String DIST_AREA = "http://www.apache.org/dist/maven";
+    private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven";
 
     @Override
     public String getOutputName()
@@ -263,7 +264,7 @@ public class DistCheckSourceReleaseMojo
         sink.link_();
         sink.listItem_();
         sink.listItem();
-        sink.link( "https://dist.apache.org/repos/dist/release/maven/" );
+        sink.link( DIST_AREA );
         sink.text( "Apache distribution area" );
         sink.link_();
         sink.listItem_();

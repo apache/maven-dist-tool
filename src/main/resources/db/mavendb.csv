@@ -2,95 +2,95 @@
 ## ant-tasks nothing
 ## binaries nothing
 ## doxia
-org.apache.maven.doxia;doxia;https://dist.apache.org/repos/dist/release/maven/doxia/
-org.apache.maven.doxia;doxia-sitetools;https://dist.apache.org/repos/dist/release/maven/doxia/
+org.apache.maven.doxia;doxia;http://www.apache.org/dist/maven/doxia/
+org.apache.maven.doxia;doxia-sitetools;http://www.apache.org/dist/maven/doxia/
 ## indexer
-org.apache.maven.indexer;maven-indexer;https://dist.apache.org/repos/dist/release/maven/indexer/
+org.apache.maven.indexer;maven-indexer;http://www.apache.org/dist/maven/indexer/
 ## maven-1 nothing
 ## maven-2 nothing
 ## maven-3 nothing
 ## plugin-testing
-org.apache.maven.plugin-testing;maven-plugin-testing;https://dist.apache.org/repos/dist/release/maven/plugin-testing/
+org.apache.maven.plugin-testing;maven-plugin-testing;http://www.apache.org/dist/maven/plugin-testing/
 ## plugin-tools
-org.apache.maven.plugin-tools;maven-plugin-tools;https://dist.apache.org/repos/dist/release/maven/plugin-tools/
+org.apache.maven.plugin-tools;maven-plugin-tools;http://www.apache.org/dist/maven/plugin-tools/
 ## plugins
-org.apache.maven.plugins;maven-acr-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-ant-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-antrun-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-assembly-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-changelog-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-changes-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-checkstyle-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-clean-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-compiler-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-dependency-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-deploy-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-doap-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-docck-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-ear-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-eclipse-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-ejb-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-gpg-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-help-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-idea-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-install-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-invoker-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-jar-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-jarsigner-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-javadoc-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-linkcheck-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-one-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-patch-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-pdf-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-plugins;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-pmd-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-project-info-reports-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-rar-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-reactor-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-remote-resources-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-repository-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-resources-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-scm-publish-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-shade-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-site-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-source-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-stage-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-toolchains-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-verifier-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
-org.apache.maven.plugins;maven-war-plugin;https://dist.apache.org/repos/dist/release/maven/plugins/
+org.apache.maven.plugins;maven-acr-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-ant-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-antrun-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-assembly-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-changelog-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-changes-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-checkstyle-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-clean-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-compiler-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-dependency-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-deploy-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-doap-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-docck-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-ear-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-eclipse-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-ejb-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-gpg-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-help-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-idea-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-install-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-invoker-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-jar-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-jarsigner-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-javadoc-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-linkcheck-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-one-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-patch-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-pdf-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-plugins;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-pmd-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-project-info-reports-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-rar-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-reactor-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-remote-resources-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-repository-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-resources-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-scm-publish-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-shade-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-site-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-source-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-stage-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-toolchains-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-verifier-plugin;http://www.apache.org/dist/maven/plugins/
+org.apache.maven.plugins;maven-war-plugin;http://www.apache.org/dist/maven/plugins/
 ## release
-org.apache.maven.release;maven-release;https://dist.apache.org/repos/dist/release/maven/release/
+org.apache.maven.release;maven-release;http://www.apache.org/dist/maven/release/
 ## reporting
-org.apache.maven.reporting;maven-reporting-api;https://dist.apache.org/repos/dist/release/maven/reporting/
-org.apache.maven.reporting;maven-reporting-exec;https://dist.apache.org/repos/dist/release/maven/reporting/
-org.apache.maven.reporting;maven-reporting-impl;https://dist.apache.org/repos/dist/release/maven/reporting/
+org.apache.maven.reporting;maven-reporting-api;http://www.apache.org/dist/maven/reporting/
+org.apache.maven.reporting;maven-reporting-exec;http://www.apache.org/dist/maven/reporting/
+org.apache.maven.reporting;maven-reporting-impl;http://www.apache.org/dist/maven/reporting/
 ## scm
-org.apache.maven.scm;maven-scm;https://dist.apache.org/repos/dist/release/maven/scm/
+org.apache.maven.scm;maven-scm;http://www.apache.org/dist/maven/scm/
 ## shared
-org.apache.maven.shared;maven-artifact-resolver;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-common-artifact-filters;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-dependency-analyzer;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-dependency-tree;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-doxia-tools;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-filtering;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-invoker;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-jarsigner;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-runtime;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-script-interpreter;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-shared-components;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-shared-incremental;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-shared-jar;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-shared-resources;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-shared-utils;https://dist.apache.org/repos/dist/release/maven/shared/
-org.apache.maven.shared;maven-verifier;https://dist.apache.org/repos/dist/release/maven/shared/
+org.apache.maven.shared;maven-artifact-resolver;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-common-artifact-filters;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-dependency-analyzer;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-dependency-tree;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-doxia-tools;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-filtering;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-invoker;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-jarsigner;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-runtime;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-script-interpreter;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-shared-components;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-shared-incremental;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-shared-jar;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-shared-resources;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-shared-utils;http://www.apache.org/dist/maven/shared/
+org.apache.maven.shared;maven-verifier;http://www.apache.org/dist/maven/shared/
 ## skins
-org.apache.maven.skins;maven-application-skin;https://dist.apache.org/repos/dist/release/maven/skins/
-org.apache.maven.skins;maven-classic-skin;https://dist.apache.org/repos/dist/release/maven/skins/
-org.apache.maven.skins;maven-default-skin;https://dist.apache.org/repos/dist/release/maven/skins/
-org.apache.maven.skins;maven-fluido-skin;https://dist.apache.org/repos/dist/release/maven/skins/
-org.apache.maven.skins;maven-skins;https://dist.apache.org/repos/dist/release/maven/skins/
-org.apache.maven.skins;maven-stylus-skin;https://dist.apache.org/repos/dist/release/maven/skins/
+org.apache.maven.skins;maven-application-skin;http://www.apache.org/dist/maven/skins/
+org.apache.maven.skins;maven-classic-skin;http://www.apache.org/dist/maven/skins/
+org.apache.maven.skins;maven-default-skin;http://www.apache.org/dist/maven/skins/
+org.apache.maven.skins;maven-fluido-skin;http://www.apache.org/dist/maven/skins/
+org.apache.maven.skins;maven-skins;http://www.apache.org/dist/maven/skins/
+org.apache.maven.skins;maven-stylus-skin;http://www.apache.org/dist/maven/skins/
 ## surefire
-org.apache.maven.surefire;surefire;https://dist.apache.org/repos/dist/release/maven/surefire/
+org.apache.maven.surefire;surefire;http://www.apache.org/dist/maven/surefire/
 ## wagon
-org.apache.maven.wagon;wagon;https://dist.apache.org/repos/dist/release/maven/wagon/
+org.apache.maven.wagon;wagon;http://www.apache.org/dist/maven/wagon/
