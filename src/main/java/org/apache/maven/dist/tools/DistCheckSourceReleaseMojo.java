@@ -110,16 +110,20 @@ public class DistCheckSourceReleaseMojo
         sink.tableCell();
         sink.rawText( csr.getConfigurationLine().getArtifactId() );
         sink.tableCell_();
+
+        // LATEST column
         sink.tableCell();
         sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
         sink.rawText( csr.getVersion() );
         sink.link_();
         sink.tableCell_();
 
+        // DATE column
         sink.tableCell();
         sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
         sink.tableCell_();
 
+        // central column
         sink.tableCell();
         sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
         sink.text( "artifact" );
@@ -144,13 +148,14 @@ public class DistCheckSourceReleaseMojo
             sink.rawText( missing );
         }
         sink.tableCell_();
-        // dist
+
+        // dist column
         sink.tableCell();
         sink.link( cli.getDist() );
         sink.text( cli.getDist().substring( DIST_AREA.length() ) );
         sink.link_();
         sink.text( "source-release" );
-        if ( csr.dist.isEmpty() )
+        if ( csr.dist.isEmpty() && csr.older.isEmpty() )
         {
             iconSuccess( sink );
         }
@@ -181,21 +186,6 @@ public class DistCheckSourceReleaseMojo
             {
                 new Integer( HtmlMarkup.TAG_TYPE_END )
             }, null );
-        }
-        sink.tableCell_();
-        //older
-        sink.tableCell();
-        sink.link( cli.getDist() );
-        sink.text( cli.getDist().substring( DIST_AREA.length() ) );
-        sink.link_();
-        sink.text( "source-release" );
-        if ( csr.dist.isEmpty() )
-        {
-            iconSuccess( sink );
-        }
-        else
-        {
-            iconWarning( sink );
         }
 
         StringBuilder cliOlder = new StringBuilder();
@@ -289,9 +279,6 @@ public class DistCheckSourceReleaseMojo
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "dist" );
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
-        sink.rawText( "Older in dist REGEX ISSUE NO TRUST (mainly for doxia) " );
         sink.tableHeaderCell_();
         sink.tableRow_();
 
