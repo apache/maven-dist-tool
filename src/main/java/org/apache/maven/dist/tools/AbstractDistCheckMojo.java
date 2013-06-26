@@ -202,7 +202,7 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
      */
     protected void iconError( Sink sink )
     {
-        icon( sink, "error" );
+        icon( sink, "icon_error_sml" );
     }
     
     /**
@@ -212,17 +212,27 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
      */
     protected void iconWarning( Sink sink )
     {
-        icon( sink, "warning" );
+        icon( sink, "icon_warning_sml" );
     }
     
     /**
-     * add an succses icon.
+     * add an success icon.
      *
      * @param sink doxiasink
      */
     protected void iconSuccess( Sink sink )
     {
-        icon( sink, "success" );
+        icon( sink, "icon_success_sml" );
+    }
+
+    /**
+     * add a "remove" icon.
+     *
+     * @param sink doxiasink
+     */
+    protected void iconRemove( Sink sink )
+    {
+        icon( sink, "remove" );
     }
 
     private void icon( Sink sink, String level )
@@ -231,7 +241,7 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
         sink.figureCaption();
         sink.text( level );
         sink.figureCaption_();
-        sink.figureGraphics( "images/icon_" + level + "_sml.gif" );
+        sink.figureGraphics( "images/" + level + ".gif" );
         sink.figure_();
     }
 }

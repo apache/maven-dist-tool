@@ -192,7 +192,7 @@ public class DistCheckSourceReleaseMojo
         for ( String missing : csr.older )
         {
             sink.lineBreak();
-            iconError( sink );
+            iconRemove( sink );
             sink.rawText( missing );
             cliOlder.append( "\nsvn rm " ).append( missing );
         }
