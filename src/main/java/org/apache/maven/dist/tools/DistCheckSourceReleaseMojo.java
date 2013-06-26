@@ -166,7 +166,7 @@ public class DistCheckSourceReleaseMojo
             sink.rawText( missing );
             cliMissing.append( "\nwget -O " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
                     append( "/" ).append( missing );
-            cliMissing.append( "\nsvn ci " ).append( missing );
+            cliMissing.append( "\nsvn add " ).append( missing );
         }
         if ( !cliMissing.toString().isEmpty() )
         {
