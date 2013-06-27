@@ -244,9 +244,6 @@ public class DistCheckSourceReleaseMojo
         sink.text( "Check Source Release"
                 + " (= artifactId + version + '-source-release.zip[.asc|.md5]') availability in:" );
         sink.paragraph_();
-        sink.paragraph();
-        sink.text( "cli command and olders artifact exploration is Work In Progress" );
-        sink.paragraph_();
         sink.list();
         sink.listItem();
         sink.link( repoBaseUrl );
@@ -259,6 +256,9 @@ public class DistCheckSourceReleaseMojo
         sink.link_();
         sink.listItem_();
         sink.list_();
+        sink.paragraph();
+        sink.text( "Cli command to fix problems and older artifacts exploration are Work In Progress..." );
+        sink.paragraph_();
         sink.section1_();
         sink.table();
         sink.tableRow();
