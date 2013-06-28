@@ -48,7 +48,8 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  *
  * @author skygo
  */
-public abstract class AbstractDistCheckMojo extends AbstractMavenReport
+public abstract class AbstractDistCheckMojo
+    extends AbstractMavenReport
 {
     private static final String MAVEN_DB = "db/mavendb.csv";
 
@@ -107,7 +108,8 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
      */
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
     
-    abstract void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException;
+    abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
+        throws MojoExecutionException;
 
     @Override
     protected String getOutputDirectory()
@@ -128,18 +130,19 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
     }
 
     @Override
-    public void execute() throws MojoExecutionException
+    public void execute()
+        throws MojoExecutionException
     {
-        ArtifactRepository aa = new MavenArtifactRepository( "central",
-                repoBaseUrl,
-                new DefaultRepositoryLayout(),
-                new ArtifactRepositoryPolicy(
-                false,
-                ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ),
-                new ArtifactRepositoryPolicy(
-                true,
-                ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ) );
+        ArtifactRepository aa =
+            new MavenArtifactRepository( "central", repoBaseUrl, new DefaultRepositoryLayout(),
+                                         new ArtifactRepositoryPolicy( false,
+                                                                       ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
+                                                                       ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ),
+                                         new ArtifactRepositoryPolicy( true,
+                                                                       ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
+                                                                       ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ) );
         artifactRepositories.add( aa );
+
         if ( configurationLines.isEmpty() )
         {
             try ( BufferedReader input = new BufferedReader( 
@@ -175,28 +178,29 @@ public abstract class AbstractDistCheckMojo extends AbstractMavenReport
                     Metadata metadata = metadataReader.read( input );
 
                     aLine.addMetadata( metadata );
-                    getLog().debug( "Checking for site for artifact : " + aLine.getGroupId() + ":"
-                            + aLine.getArtifactId() + ":" + metadata.getVersioning().getLatest() );
-                    // revert sort versions (not handling alpha and 
-                    // complex vesion scheme but more usefull version are displayed left side
-                    Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
-                    getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
 
-                    // central
-                    if ( aLine.getForcedVersion() == null )
+                    String version =
+                        ( aLine.getForcedVersion() == null ) ? metadata.getVersioning().getLatest()
+                                        : aLine.getForcedVersion();
+
+                    if ( getLog().isDebugEnabled() )
                     {
-                        checkArtifact( aLine, metadata.getVersioning().getLatest() );
-                    }
-                    else
-                    {
-                        //
-                        getLog().error( "metadata lastest version value is "
-                                + metadata.getVersioning().getLatest() + " but was manually set to " 
-                                + aLine.getForcedVersion() 
-                                + " as it's the actual latest version ");
-                        checkArtifact( aLine, aLine.getForcedVersion() );
+                        getLog().debug( "Checking information for artifact: " + aLine.getGroupId() + ":"
+                                            + aLine.getArtifactId() + ":" + version );
+                        // revert sort versions (not handling alpha and
+                        // complex version schemes but more useful versions are displayed left side)
+                        Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
+                        getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
                     }
 
+                    if ( aLine.getForcedVersion() != null )
+                    {
+                        getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
+                                           + " metadata latest version value is " + metadata.getVersioning().getLatest()
+                                           + " but check was manually set to " + aLine.getForcedVersion() );
+                    }
+
+                    checkArtifact( aLine, version );
                 }
                 catch ( IOException | XmlPullParserException ex )
                 {
