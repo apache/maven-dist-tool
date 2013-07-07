@@ -28,14 +28,18 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.dist.tools.checkers.HTMLChecker;
 import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -56,6 +60,23 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 @Mojo( name = "check-site", requiresProject = false )
 public class DistCheckSiteMojo extends AbstractDistCheckMojo
 {
+    /**
+     * Artifact factory.
+     */
+    @Component
+    protected ArtifactFactory artifactFactory;
+
+    /**
+     * Local repository.
+     */
+    @Parameter( defaultValue = "${localRepository}", required = true, readonly = true )
+    protected ArtifactRepository localRepository;
+
+    /**
+     * Maven project builder.
+     */
+    @Component
+    protected MavenProjectBuilder mavenProjectBuilder;
     
     /**
      * Take screenshot with web browser
@@ -391,12 +412,10 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         results.add( result );
         try
         {
-            Artifact pluginArtifact = artifactFactory.createProjectArtifact(
-                    configLine.getGroupId(),
-                    configLine.getArtifactId(), version );
-            MavenProject pluginProject = mavenProjectBuilder.buildFromRepository(
-                    pluginArtifact,
-                    artifactRepositories, localRepository, false );
+            Artifact pluginArtifact =
+                artifactFactory.createProjectArtifact( configLine.getGroupId(), configLine.getArtifactId(), version );
+            MavenProject pluginProject =
+                mavenProjectBuilder.buildFromRepository( pluginArtifact, artifactRepositories, localRepository, false );
 
             result.setUrl( pluginProject.getUrl() );
             Document doc = Jsoup.connect( pluginProject.getUrl() ).get();
@@ -436,7 +455,8 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     }
 
     @Override
-    public void execute() throws MojoExecutionException
+    public void execute()
+        throws MojoExecutionException
     {
         try
         {

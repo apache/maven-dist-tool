@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
@@ -43,7 +42,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
@@ -86,24 +84,6 @@ public abstract class AbstractDistCheckMojo
     @Component
     protected MavenProject project;
 
-    /**
-     * Local repository.
-     */
-    @Parameter( defaultValue = "${localRepository}", required = true, readonly = true )
-    protected ArtifactRepository localRepository;
-
-    /**
-     * Artifact factory.
-     */
-    @Component
-    protected ArtifactFactory artifactFactory;
-
-    /**
-     * Maven project builder.
-     */
-    @Component
-    protected MavenProjectBuilder mavenProjectBuilder;
-    
     /**
      * list of artifacts repositories.
      */
