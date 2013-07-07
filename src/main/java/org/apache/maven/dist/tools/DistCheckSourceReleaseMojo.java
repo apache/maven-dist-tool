@@ -76,7 +76,7 @@ public class DistCheckSourceReleaseMojo
 
         private List<String> central;
         private List<String> dist;
-        private List<String> older;
+        private List<String> distOlder;
 
         public DistCheckSourceRelease( ConfigurationLineInfo r, String version )
         {
@@ -93,9 +93,9 @@ public class DistCheckSourceReleaseMojo
             central = checkRepos;
         }
 
-        private void setOlderSourceRelease( List<String> checkRepos )
+        private void setDistOlderSourceRelease( List<String> checkRepos )
         {
-            older = checkRepos;
+            distOlder = checkRepos;
         }
     }
     private final List<DistCheckSourceRelease> results = new LinkedList<>();
@@ -104,7 +104,10 @@ public class DistCheckSourceReleaseMojo
     {
         final String directory;
         int artifactsCount = 0;
-        int centralError = 0;
+        int centralMissing = 0;
+        int distError = 0;
+        int distMissing = 0;
+        int distOlder = 0;
 
         public DirectoryStatistics( String directory )
         {
@@ -121,7 +124,19 @@ public class DistCheckSourceReleaseMojo
             artifactsCount++;
             if ( !result.central.isEmpty() )
             {
-                centralError++;
+                centralMissing++;
+            }
+            if ( !result.dist.isEmpty() || !result.distOlder.isEmpty() )
+            {
+                distError++;
+            }
+            if ( !result.dist.isEmpty() )
+            {
+                distMissing++;
+            }
+            if ( !result.distOlder.isEmpty() )
+            {
+                distOlder++;
             }
         }
     }
@@ -179,7 +194,7 @@ public class DistCheckSourceReleaseMojo
         sink.text( cli.getDirectory() );
         sink.link_();
         sink.text( "source-release" );
-        if ( csr.dist.isEmpty() && csr.older.isEmpty() )
+        if ( csr.dist.isEmpty() && csr.distOlder.isEmpty() )
         {
             iconSuccess( sink );
         }
@@ -217,7 +232,7 @@ public class DistCheckSourceReleaseMojo
         }
 
         StringBuilder cliOlder = new StringBuilder();
-        for ( String missing : csr.older )
+        for ( String missing : csr.distOlder )
         {
             sink.lineBreak();
             iconRemove( sink );
@@ -342,16 +357,26 @@ public class DistCheckSourceReleaseMojo
                 sink.rawText( " " );
                 sink.tableHeaderCell_();
                 sink.tableHeaderCell();
-                sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralError ) );
+                sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralMissing ) );
                 iconSuccess( sink );
-                if ( current.centralError > 0 )
+                if ( current.centralMissing > 0 )
                 {
-                    sink.rawText( "/" + String.valueOf( current.centralError ) );
+                    sink.rawText( "/" + String.valueOf( current.centralMissing ) );
                     iconWarning( sink );
                 }
                 sink.tableHeaderCell_();
                 sink.tableHeaderCell();
-                sink.rawText( "dist" );
+                sink.rawText( "dist: " + String.valueOf( current.artifactsCount - current.distError ) );
+                iconSuccess( sink );
+                if ( current.distError > 0 )
+                {
+                    sink.rawText( "/" + String.valueOf( current.distError ) );
+                    iconWarning( sink );
+                    sink.rawText( "= " + String.valueOf( current.distMissing ) );
+                    iconError( sink );
+                    sink.rawText( "/" + String.valueOf( current.distOlder ) );
+                    iconRemove( sink );
+                }
                 sink.tableHeaderCell_();
                 sink.tableRow_();
             }
@@ -476,7 +501,7 @@ public class DistCheckSourceReleaseMojo
             //dist
             result.setMissingDistSourceRelease(
                     checkRepos( DIST_AREA + configLine.getDirectory(), configLine, latestVersion ) );
-            result.setOlderSourceRelease(
+            result.setDistOlderSourceRelease(
                     checkOldinRepos( DIST_AREA + configLine.getDirectory(), configLine, latestVersion ) );
         }
         catch ( IOException ex )
