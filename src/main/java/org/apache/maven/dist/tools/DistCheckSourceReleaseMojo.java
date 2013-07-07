@@ -275,6 +275,8 @@ public class DistCheckSourceReleaseMojo
             throw new MavenReportException( ex.getMessage(), ex );
         }
 
+        DirectoryStatistics stats = new DirectoryStatistics( "" ); // global stats
+
         List<DirectoryStatistics> statistics = new ArrayList<>();
         DirectoryStatistics current = null;
         for ( DistCheckSourceRelease csr : results )
@@ -285,6 +287,7 @@ public class DistCheckSourceReleaseMojo
                 statistics.add( current );
             }
             current.addArtifact( csr );
+            stats.addArtifact( csr );
         }
 
         Sink sink = getSink();
@@ -319,7 +322,7 @@ public class DistCheckSourceReleaseMojo
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.rawText( "groupId/artifactId" );
+        sink.rawText( "groupId/artifactId: " + String.valueOf( stats.artifactsCount ) );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "LATEST" );
@@ -327,12 +330,7 @@ public class DistCheckSourceReleaseMojo
         sink.tableHeaderCell();
         sink.rawText( "DATE" );
         sink.tableHeaderCell_();
-        sink.tableHeaderCell();
-        sink.rawText( "central" );
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
-        sink.rawText( "dist" );
-        sink.tableHeaderCell_();
+        reportStatisticsHeader( stats, sink );
         sink.tableRow_();
 
         Iterator<DirectoryStatistics> dirs = statistics.iterator();
@@ -356,28 +354,7 @@ public class DistCheckSourceReleaseMojo
                 sink.tableHeaderCell();
                 sink.rawText( " " );
                 sink.tableHeaderCell_();
-                sink.tableHeaderCell();
-                sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralMissing ) );
-                iconSuccess( sink );
-                if ( current.centralMissing > 0 )
-                {
-                    sink.rawText( "/" + String.valueOf( current.centralMissing ) );
-                    iconWarning( sink );
-                }
-                sink.tableHeaderCell_();
-                sink.tableHeaderCell();
-                sink.rawText( "dist: " + String.valueOf( current.artifactsCount - current.distError ) );
-                iconSuccess( sink );
-                if ( current.distError > 0 )
-                {
-                    sink.rawText( "/" + String.valueOf( current.distError ) );
-                    iconWarning( sink );
-                    sink.rawText( "= " + String.valueOf( current.distMissing ) );
-                    iconError( sink );
-                    sink.rawText( "/" + String.valueOf( current.distOlder ) );
-                    iconRemove( sink );
-                }
-                sink.tableHeaderCell_();
+                reportStatisticsHeader( current, sink );
                 sink.tableRow_();
             }
 
@@ -388,6 +365,32 @@ public class DistCheckSourceReleaseMojo
         sink.body_();
         sink.flush();
         sink.close();
+    }
+
+    private void reportStatisticsHeader( DirectoryStatistics current, Sink sink )
+    {
+        sink.tableHeaderCell();
+        sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralMissing ) );
+        iconSuccess( sink );
+        if ( current.centralMissing > 0 )
+        {
+            sink.rawText( "/" + String.valueOf( current.centralMissing ) );
+            iconWarning( sink );
+        }
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "dist: " + String.valueOf( current.artifactsCount - current.distError ) );
+        iconSuccess( sink );
+        if ( current.distError > 0 )
+        {
+            sink.rawText( "/" + String.valueOf( current.distError ) );
+            iconWarning( sink );
+            sink.rawText( "= " + String.valueOf( current.distMissing ) );
+            iconError( sink );
+            sink.rawText( "/" + String.valueOf( current.distOlder ) );
+            iconRemove( sink );
+        }
+        sink.tableHeaderCell_();
     }
 
     /**
