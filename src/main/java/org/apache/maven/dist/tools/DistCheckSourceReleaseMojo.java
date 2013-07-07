@@ -169,7 +169,7 @@ public class DistCheckSourceReleaseMojo
             sink.lineBreak();
             iconError( sink );
             sink.rawText( missing );
-            cliMissing.append( "\nwget -O " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
+            cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
                     append( "/" ).append( missing );
             cliMissing.append( "\nsvn add " ).append( missing );
         }
@@ -257,7 +257,7 @@ public class DistCheckSourceReleaseMojo
         sink.listItem_();
         sink.list_();
         sink.paragraph();
-        sink.text( "Cli command to fix problems and older artifacts exploration are Work In Progress..." );
+        sink.text( "Older artifacts exploration is Work In Progress..." );
         sink.paragraph_();
         sink.section1_();
         sink.table();
