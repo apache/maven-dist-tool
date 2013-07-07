@@ -120,7 +120,7 @@ class ConfigurationLineInfo
         {
             SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMddkkmmss" );
             Date f = dateFormatter.parse( metadata.getVersioning().getLastUpdated() );
-            SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "MMM dd, yyyy" );
+            SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "dd-MM-yyyy" );
             return dateFormattertarget.format( f );
         }
         catch ( ParseException ex )
