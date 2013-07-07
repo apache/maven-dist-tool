@@ -8,8 +8,8 @@ archetype org.apache.maven.archetype
 ## binaries
 doxia org.apache.maven.doxia
   doxia
-  doxia-book-maven-plugin
-  doxia-book-renderer
+##  doxia-book-maven-plugin
+##  doxia-book-renderer
   doxia-converter
   doxia-integration-tools
   doxia-linkcheck
@@ -83,7 +83,6 @@ scm org.apache.maven.scm
   maven-scm
 shared org.apache.maven.shared
   file-management
-  maven-archiver
   maven-artifact-resolver
   maven-common-artifact-filters
   maven-dependency-analyzer
@@ -102,6 +101,8 @@ shared org.apache.maven.shared
   maven-shared-resources
   maven-shared-utils
   maven-verifier
+shared org.apache.maven
+  maven-archiver
 skins org.apache.maven.skins
   maven-application-skin
   maven-classic-skin
