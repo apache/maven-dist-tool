@@ -104,6 +104,7 @@ public class DistCheckSourceReleaseMojo
     {
         final String directory;
         int artifactsCount = 0;
+        int centralError = 0;
 
         public DirectoryStatistics( String directory )
         {
@@ -118,6 +119,10 @@ public class DistCheckSourceReleaseMojo
         public void addArtifact( DistCheckSourceRelease result )
         {
             artifactsCount++;
+            if ( !result.central.isEmpty() )
+            {
+                centralError++;
+            }
         }
     }
 
@@ -327,16 +332,23 @@ public class DistCheckSourceReleaseMojo
                 sink.tableRow();
                 sink.tableHeaderCell();
                 // shorten groupid
-                sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
-                sink.tableHeaderCell_();
-                sink.tableHeaderCell();
-                sink.rawText( String.valueOf( current.artifactsCount ) );
+                sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) + ": "
+                    + String.valueOf( current.artifactsCount ) );
                 sink.tableHeaderCell_();
                 sink.tableHeaderCell();
                 sink.rawText( " " );
                 sink.tableHeaderCell_();
                 sink.tableHeaderCell();
-                sink.rawText( "central" );
+                sink.rawText( " " );
+                sink.tableHeaderCell_();
+                sink.tableHeaderCell();
+                sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralError ) );
+                iconSuccess( sink );
+                if ( current.centralError > 0 )
+                {
+                    sink.rawText( "/" + String.valueOf( current.centralError ) );
+                    iconWarning( sink );
+                }
                 sink.tableHeaderCell_();
                 sink.tableHeaderCell();
                 sink.rawText( "dist" );
