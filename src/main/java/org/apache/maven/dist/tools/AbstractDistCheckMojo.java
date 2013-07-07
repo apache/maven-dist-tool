@@ -19,6 +19,7 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -181,43 +182,48 @@ public abstract class AbstractDistCheckMojo
             {
                 ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
 
-                try ( BufferedReader input = new BufferedReader(
-                        new InputStreamReader( new URL( aLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
-                {
-                    MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
-                    Metadata metadata = metadataReader.read( input );
-
-                    aLine.addMetadata( metadata );
-
-                    String version =
-                        ( aLine.getForcedVersion() == null ) ? metadata.getVersioning().getLatest()
-                                        : aLine.getForcedVersion();
-
-                    if ( getLog().isDebugEnabled() )
-                    {
-                        getLog().debug( "Checking information for artifact: " + aLine.getGroupId() + ":"
-                                            + aLine.getArtifactId() + ":" + version );
-                        // revert sort versions (not handling alpha and
-                        // complex version schemes but more useful versions are displayed left side)
-                        Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
-                        getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
-                    }
-
-                    if ( aLine.getForcedVersion() != null )
-                    {
-                        getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
-                                           + " metadata latest version value is " + metadata.getVersioning().getLatest()
-                                           + " but check was manually set to " + aLine.getForcedVersion() );
-                    }
-
-                    checkArtifact( aLine, version );
-                }
-                catch ( IOException | XmlPullParserException ex )
-                {
-                    throw new MojoExecutionException( ex.getMessage(), ex );
-                }
-                
+                checkArtifact( aLine, getVersion( aLine ) );
             }
+        }
+    }
+
+    private String getVersion( ConfigurationLineInfo aLine )
+        throws MojoExecutionException
+    {
+        String metadataUrl = aLine.getMetadataFileURL( repoBaseUrl );
+        try ( InputStream input = new BufferedInputStream( new URL( metadataUrl ).openStream() ) )
+        {
+            MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
+            Metadata metadata = metadataReader.read( input );
+
+            aLine.addMetadata( metadata );
+
+            String version =
+                ( aLine.getForcedVersion() == null ) ? metadata.getVersioning().getLatest()
+                                : aLine.getForcedVersion();
+
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "Checking information for artifact: " + aLine.getGroupId() + ":"
+                                    + aLine.getArtifactId() + ":" + version );
+                // revert sort versions (not handling alpha and
+                // complex version schemes but more useful versions are displayed left side)
+                Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
+                getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
+            }
+
+            if ( aLine.getForcedVersion() != null )
+            {
+                getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
+                                   + " metadata latest version value is " + metadata.getVersioning().getLatest()
+                                   + " but check was manually set to " + aLine.getForcedVersion() );
+            }
+           
+            return version;
+        }
+        catch ( IOException | XmlPullParserException ex )
+        {
+            throw new MojoExecutionException( "error while reading " + metadataUrl, ex );
         }
     }
 
