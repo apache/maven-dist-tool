@@ -22,11 +22,13 @@ package org.apache.maven.dist.tools;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
@@ -61,8 +63,6 @@ public abstract class AbstractDistCheckMojo
 
     /**
      * List of configuration line for specific inspection.
-     * groupId:artifactId:distributionurl.
-     *
      */
     @Parameter( property = "configurationLines", defaultValue = "" )
     private List<String> configurationLines;
@@ -129,6 +129,24 @@ public abstract class AbstractDistCheckMojo
         return project;
     }
 
+    private void loadMavenDb()
+        throws MojoExecutionException
+    {
+        URL mavenDb = this.getClass().getResource( MAVEN_DB );
+        try ( BufferedReader in = new BufferedReader( new InputStreamReader( mavenDb.openStream() ) ) )
+        {
+            String text;
+            while ( ( text = in.readLine() ) != null )
+            {
+                configurationLines.add( text );
+            }
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "error while reading " + mavenDb, e );
+        }
+    }
+
     @Override
     public void execute()
         throws MojoExecutionException
@@ -145,20 +163,7 @@ public abstract class AbstractDistCheckMojo
 
         if ( configurationLines.isEmpty() )
         {
-            try ( BufferedReader input = new BufferedReader( 
-                    new InputStreamReader( 
-                    Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB ).openStream() ) ) )
-            {
-                String text;
-                while ( ( text = input.readLine() ) != null )
-                {
-                    configurationLines.add( text );
-                }
-            }
-            catch ( IOException ex )
-            {
-                throw new MojoExecutionException( ex.getMessage(), ex );
-            }
+            loadMavenDb();
         }
 
         for ( String line : configurationLines )
