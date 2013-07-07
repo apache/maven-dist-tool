@@ -20,6 +20,8 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +29,7 @@ import java.util.Locale;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
+import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
@@ -45,10 +48,9 @@ import org.jsoup.select.Elements;
 public class DistCheckSourceReleaseMojo
         extends AbstractDistCheckMojo
 {
-//Artifact metadata retrieval done y hands.
 
     private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
-    private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
+    //private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
 
     @Override
     public String getOutputName()
@@ -68,8 +70,8 @@ public class DistCheckSourceReleaseMojo
         return "Verification of source release";
     }
 
-    class DistCheckSourceRelease
-            extends AbstractCheckResult
+    private static class DistCheckSourceRelease
+        extends AbstractCheckResult
     {
 
         private List<String> central;
@@ -98,15 +100,32 @@ public class DistCheckSourceReleaseMojo
     }
     private final List<DistCheckSourceRelease> results = new LinkedList<>();
 
+    private static class DirectoryStatistics
+    {
+        final String directory;
+        int artifactsCount = 0;
+
+        public DirectoryStatistics( String directory )
+        {
+            this.directory = directory;
+        }
+
+        public boolean contains( DistCheckSourceRelease csr )
+        {
+            return csr.getConfigurationLine().getDirectory().equals( directory );
+        }
+
+        public void addArtifact( DistCheckSourceRelease result )
+        {
+            artifactsCount++;
+        }
+    }
+
     private void reportLine( Sink sink, DistCheckSourceRelease csr )
     {
         ConfigurationLineInfo cli = csr.getConfigurationLine();
 
         sink.tableRow();
-        sink.tableCell();
-        // shorten groupid
-        sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
-        sink.tableCell_();
         sink.tableCell();
         sink.rawText( csr.getConfigurationLine().getArtifactId() );
         sink.tableCell_();
@@ -235,6 +254,19 @@ public class DistCheckSourceReleaseMojo
         {
             throw new MavenReportException( ex.getMessage(), ex );
         }
+
+        List<DirectoryStatistics> statistics = new ArrayList<>();
+        DirectoryStatistics current = null;
+        for ( DistCheckSourceRelease csr : results )
+        {
+            if ( ( current == null ) || !current.contains( csr ) )
+            {
+                current = new DirectoryStatistics( csr.getConfigurationLine().getDirectory() );
+                statistics.add( current );
+            }
+            current.addArtifact( csr );
+        }
+
         Sink sink = getSink();
         sink.head();
         sink.title();
@@ -267,10 +299,7 @@ public class DistCheckSourceReleaseMojo
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.rawText( "groupId" );
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
-        sink.rawText( "artifactId" );
+        sink.rawText( "groupId/artifactId" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "LATEST" );
@@ -286,11 +315,38 @@ public class DistCheckSourceReleaseMojo
         sink.tableHeaderCell_();
         sink.tableRow_();
 
+        Iterator<DirectoryStatistics> dirs = statistics.iterator();
+        current = null;
+
         for ( DistCheckSourceRelease csr : results )
         {
-            reportLine( sink, csr );
+            if ( ( current == null ) || !current.contains( csr ) )
+            {
+                current = dirs.next();
 
+                sink.tableRow();
+                sink.tableHeaderCell();
+                // shorten groupid
+                sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
+                sink.tableHeaderCell_();
+                sink.tableHeaderCell();
+                sink.rawText( String.valueOf( current.artifactsCount ) );
+                sink.tableHeaderCell_();
+                sink.tableHeaderCell();
+                sink.rawText( " " );
+                sink.tableHeaderCell_();
+                sink.tableHeaderCell();
+                sink.rawText( "central" );
+                sink.tableHeaderCell_();
+                sink.tableHeaderCell();
+                sink.rawText( "dist" );
+                sink.tableHeaderCell_();
+                sink.tableRow_();
+            }
+
+            reportLine( sink, csr );
         }
+
         sink.table_();
         sink.body_();
         sink.flush();
