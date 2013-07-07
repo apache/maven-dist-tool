@@ -1,15 +1,13 @@
 Todo
 ====
 
-### Source Release
-
-* Shell command for cleaning older artifacts
-    * [sky] review needed
-
 ### Sites
 
-* Check if artifact versions are up to date in /plugins/, /shared/, /pom/ and so on
-    * [sky] not sure to get your point :)
+* Check if artifact versions are up to date in listing pages:
+    * http://maven.apache.org/plugins/
+    * http://maven.apache.org/shared/
+    * http://maven.apache.org/poms/
+    * http://maven.apache.org/skins/
 
 
 # Done
@@ -17,13 +15,15 @@ Todo
 * take screenshot of site. ( os specific )
 
 * See where to publish the result on Maven site
-    * jenkins site URL https://builds.apache.org/job/dist-tool-plugin/site/
+    * jenkins site URL https://builds.apache.org/view/M-R/view/Maven/job/dist-tool-plugin/site
 
 ### Source Release
 * add date of release (from artifact)
   * date from metadata is ok ?
 
 * Check older artifact in dist (only latest should be present, previous version removed)
+
+* Shell command for cleaning older artifacts
 
 ### Sites
 
