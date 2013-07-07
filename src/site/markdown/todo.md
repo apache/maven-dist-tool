@@ -25,6 +25,8 @@ Todo
 
 * Shell command for cleaning older artifacts
 
+* Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing.
+
 ### Sites
 
 * add date of site
@@ -35,3 +37,6 @@ Todo
     * [sky] no garantee some site like http://maven.apache.org/plugins/maven-one-plugin/ have no style header 
 * add date of release (from artifact)
     * [sky] date from metadata is ok ?
+
+* Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing
+    
