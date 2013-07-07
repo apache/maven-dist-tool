@@ -4,6 +4,8 @@
 ## doxia
 MVA;org.apache.maven.doxia;doxia;http://www.apache.org/dist/maven/doxia/
 MVA;org.apache.maven.doxia;doxia-sitetools;http://www.apache.org/dist/maven/doxia/
+## enforcer
+MVA;org.apache.maven.enforcer;enforcer;http://www.apache.org/dist/maven/enforcer/
 ## indexer
 MVA;org.apache.maven.indexer;maven-indexer;http://www.apache.org/dist/maven/indexer/
 ## maven-1 nothing
