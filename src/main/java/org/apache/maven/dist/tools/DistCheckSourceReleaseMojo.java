@@ -169,9 +169,13 @@ public class DistCheckSourceReleaseMojo
             sink.lineBreak();
             iconError( sink );
             sink.rawText( missing );
-            cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
-                    append( "/" ).append( missing );
-            cliMissing.append( "\nsvn add " ).append( missing );
+            if ( !csr.central.contains( missing ) )
+            {
+                // if the release distribution is in central repository, we can get it from there...
+                cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
+                        append( "/" ).append( missing );
+                cliMissing.append( "\nsvn add " ).append( missing );
+            }
         }
         if ( !cliMissing.toString().isEmpty() )
         {
