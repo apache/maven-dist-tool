@@ -31,27 +31,32 @@ import org.apache.maven.artifact.repository.metadata.Metadata;
  */
 class ConfigurationLineInfo
 {
+    private static final String URLSEP = "/";
 
     private final String groupId;
+    private final String directory;
+
     private final String artifactId;
-    private final String dist;
-    private static final String URLSEP = "/";
     private final String forceVersion;
+
     private Metadata metadata;
 
     public ConfigurationLineInfo( String[] infos )
     {
+        this.directory = infos[0];
         this.groupId = infos[1];
-        this.artifactId = infos[2];
-        this.dist = infos[3];
-        if ( infos.length == 5 )
-        {
-            this.forceVersion = infos[4];
-        }
-        else
-        {
-            this.forceVersion = null;
-        }
+
+        this.artifactId = null;
+        this.forceVersion = null;
+    }
+
+    public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos )
+    {
+        this.directory = group.getDirectory();
+        this.groupId = group.getGroupId();
+
+        this.artifactId = infos[0];
+        this.forceVersion = ( infos.length > 1 ) ? infos[1] : null;
     }
 
     public String getForcedVersion()
@@ -76,11 +81,11 @@ class ConfigurationLineInfo
     }
 
     /**
-     * @return the dist
+     * @return the directory
      */
-    public String getDist()
+    public String getDirectory()
     {
-        return dist;
+        return directory;
     }
 
     String getBaseURL( String repoBaseUrl, String folder )

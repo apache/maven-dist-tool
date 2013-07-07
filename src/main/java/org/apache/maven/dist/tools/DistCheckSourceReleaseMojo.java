@@ -47,8 +47,8 @@ public class DistCheckSourceReleaseMojo
 {
 //Artifact metadata retrieval done y hands.
 
-    private static final String DIST_AREA = "http://www.apache.org/dist/maven";
-    private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven";
+    private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
+    private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
 
     @Override
     public String getOutputName()
@@ -151,8 +151,8 @@ public class DistCheckSourceReleaseMojo
 
         // dist column
         sink.tableCell();
-        sink.link( cli.getDist() );
-        sink.text( cli.getDist().substring( DIST_AREA.length() ) );
+        sink.link( DIST_AREA + cli.getDirectory() );
+        sink.text( cli.getDirectory() );
         sink.link_();
         sink.text( "source-release" );
         if ( csr.dist.isEmpty() && csr.older.isEmpty() )
@@ -407,9 +407,9 @@ public class DistCheckSourceReleaseMojo
                     configLine, latestVersion ) );
             //dist
             result.setMissingDistSourceRelease(
-                    checkRepos( configLine.getDist(), configLine, latestVersion ) );
+                    checkRepos( DIST_AREA + configLine.getDirectory(), configLine, latestVersion ) );
             result.setOlderSourceRelease(
-                    checkOldinRepos( configLine.getDist(), configLine, latestVersion ) );
+                    checkOldinRepos( DIST_AREA + configLine.getDirectory(), configLine, latestVersion ) );
         }
         catch ( IOException ex )
         {

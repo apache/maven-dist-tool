@@ -53,7 +53,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 public abstract class AbstractDistCheckMojo
     extends AbstractMavenReport
 {
-    private static final String MAVEN_DB = "db/mavendb.csv";
+    private static final String MAVEN_DB = "db/mavendb.txt";
 
     /**
      * URL of repository where artifacts are stored. 
@@ -132,7 +132,7 @@ public abstract class AbstractDistCheckMojo
     private void loadMavenDb()
         throws MojoExecutionException
     {
-        URL mavenDb = this.getClass().getResource( MAVEN_DB );
+        URL mavenDb = Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB );
         try ( BufferedReader in = new BufferedReader( new InputStreamReader( mavenDb.openStream() ) ) )
         {
             String text;
@@ -166,16 +166,21 @@ public abstract class AbstractDistCheckMojo
             loadMavenDb();
         }
 
+        ConfigurationLineInfo currentGroup = null;
         for ( String line : configurationLines )
         {
             if ( line.startsWith( "##" ) )
             {
                 getLog().info( line );
             }
+            else if ( !line.startsWith( "  " ) )
+            {
+                currentGroup = new ConfigurationLineInfo( line.split( " " ) );
+            }
             else
             {
-                ConfigurationLineInfo aLine = new ConfigurationLineInfo( line.split( ";" ) );
-                // 
+                ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+
                 try ( BufferedReader input = new BufferedReader(
                         new InputStreamReader( new URL( aLine.getMetadataFileURL( repoBaseUrl ) ).openStream() ) ) )
                 {
