@@ -1,6 +1,13 @@
 Todo
 ====
 
+### Source Release
+
+* Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing.
+    * notice that failing the build will make the report unusable: so we must have either a separate goal or a mail sent explicitely from plugin
+    * there are some known issues with old artifacts, which don't have newer version expected: need to configure these as "accepted exceptions"
+
+
 ### Sites
 
 * Check if artifact versions are up to date in listing pages:
@@ -9,6 +16,7 @@ Todo
     * http://maven.apache.org/poms/
     * http://maven.apache.org/skins/
 
+* Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing
 
 # Done
 
@@ -25,8 +33,6 @@ Todo
 
 * Shell command for cleaning older artifacts
 
-* Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing.
-
 ### Sites
 
 * add date of site
@@ -37,6 +43,3 @@ Todo
     * [sky] no garantee some site like http://maven.apache.org/plugins/maven-one-plugin/ have no style header 
 * add date of release (from artifact)
     * [sky] date from metadata is ok ?
-
-* Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing
-    
