@@ -13,7 +13,7 @@ Todo
 * Check if artifact versions are up to date in listing pages:
     * http://maven.apache.org/plugins/
     * http://maven.apache.org/shared/
-    * http://maven.apache.org/poms/
+    * http://maven.apache.org/pom/
     * http://maven.apache.org/skins/
 
 * Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing
