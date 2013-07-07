@@ -29,7 +29,6 @@ import java.util.Locale;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
-import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
@@ -493,14 +492,12 @@ public class DistCheckSourceReleaseMojo
     {
         try
         {
-            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine,
-                    latestVersion );
+            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, latestVersion );
             results.add( result );
             // central
-            result.setMissingCentralSourceRelease(
-                    checkRepos( configLine.getVersionnedFolderURL(
-                    repoBaseUrl, latestVersion ),
-                    configLine, latestVersion ) );
+            result.setMissingCentralSourceRelease( checkRepos( configLine.getVersionnedFolderURL( repoBaseUrl,
+                                                                                                  latestVersion ),
+                                                               configLine, latestVersion ) );
             //dist
             result.setMissingDistSourceRelease(
                     checkRepos( DIST_AREA + configLine.getDirectory(), configLine, latestVersion ) );
