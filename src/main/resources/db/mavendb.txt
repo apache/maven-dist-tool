@@ -80,6 +80,9 @@ reporting org.apache.maven.reporting
   maven-reporting-api
   maven-reporting-exec
   maven-reporting-impl
+resources org.apache.apache.resources
+  apache-resource-bundles
+  apache-source-release-assembly-descriptor
 scm org.apache.maven.scm
   maven-scm
 shared org.apache.maven.shared
