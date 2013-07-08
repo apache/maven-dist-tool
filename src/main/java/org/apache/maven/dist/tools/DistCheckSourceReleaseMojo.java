@@ -444,11 +444,11 @@ public class DistCheckSourceReleaseMojo
         if ( !retrievedFile.isEmpty() )
         {
             // write the following output in red so it's more readable in jenkins console
-            getLog().error( "Older version than " + version + " for "
+            addErrorLine( "Older version than " + version + " for "
                     + configLine.getArtifactId() + " still available in " + repourl );
             for ( String sourceItem : retrievedFile )
             {
-                getLog().error( " > " + sourceItem + " <" );
+                addErrorLine( " > " + sourceItem + " <" );
             }
         }
 
@@ -476,10 +476,10 @@ public class DistCheckSourceReleaseMojo
 
         if ( !expectedFile.isEmpty() )
         {
-            getLog().error( "Missing archive for " + configLine.getArtifactId() + " in " + repourl );
+            addErrorLine( "Missing archive for " + configLine.getArtifactId() + " in " + repourl );
             for ( String sourceItem : expectedFile )
             {
-                getLog().error( " > " + sourceItem + " <" );
+                addErrorLine( " > " + sourceItem + " <" );
             }
         }
 

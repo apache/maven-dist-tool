@@ -437,7 +437,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         }
         catch ( HttpStatusException hes )
         {
-            getLog().error( hes.getStatusCode() + " for " + hes.getUrl() );
+            addErrorLine( "HTTP result code: " + hes.getStatusCode() + " for " + hes.getUrl() );
             result.setHTTPErrorUrl( hes.getStatusCode() );
         }
         catch ( Exception ex )
