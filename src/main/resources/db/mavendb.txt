@@ -2,7 +2,8 @@
 ## directory groupId
 ##   artifactId [forced version]
 ##
-## ant-tasks
+ant-tasks org.apache.maven
+  maven-ant-tasks
 archetype org.apache.maven.archetype
   maven-archetype
 ## binaries
