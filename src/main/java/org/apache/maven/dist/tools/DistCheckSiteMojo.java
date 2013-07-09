@@ -58,7 +58,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  * @author skygo
  */
 @Mojo( name = "check-site", requiresProject = false )
-public class DistCheckSiteMojo extends AbstractDistCheckMojo
+public class DistCheckSiteMojo
+    extends AbstractDistCheckMojo
 {
     /**
      * Artifact factory.
@@ -196,6 +197,7 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
                 sink.monospaced_();
             }
         }
+
         private void getOverall( Sink sink )
         {
 
@@ -248,14 +250,15 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
             return screenshotName;
         }
     }
+
     // keep result
     private List<DistCheckSiteResult> results = new LinkedList<>();
     private final List<HTMLChecker> checker = HTMLCheckerFactory.getCheckers();
     private WebDriver driver;
-    
-    
+
     @Override
-    protected void executeReport( Locale locale ) throws MavenReportException
+    protected void executeReport( Locale locale )
+        throws MavenReportException
     {
         if ( !outputDirectory.exists() )
         {
@@ -324,7 +327,8 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
         {
             sink.tableRow();
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getGroupId() );
+            // shorten groupid
+            sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
             sink.tableCell_();
 
             sink.tableCell();
@@ -449,7 +453,8 @@ public class DistCheckSiteMojo extends AbstractDistCheckMojo
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String latestVersion ) throws MojoExecutionException
+    void checkArtifact( ConfigurationLineInfo configLine, String latestVersion )
+        throws MojoExecutionException
     {
         checkSite( configLine, latestVersion );
     }
