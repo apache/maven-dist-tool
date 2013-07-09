@@ -78,7 +78,7 @@ public class DummyFailureMojo extends AbstractDistCheckMojo
         }
         catch ( MojoExecutionException ex )
         {
-            throw new MavenReportException( ex.getMessage(), ex );
+            throw new MavenReportException( ex.getMessage() );
         }
 
     }
