@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 /**
- * Check if version is present in fluido skin.
+ * Check if artifact version is present in fluido skin.
  * 
  * @author skygo
  */
@@ -33,7 +33,7 @@ public class FluidoHTMLChecker implements HTMLChecker
     @Override
     public String getName()
     {
-        return "Is version present in Fluido Skin";
+        return "Fluido";
     }
 
     @Override
@@ -41,18 +41,11 @@ public class FluidoHTMLChecker implements HTMLChecker
     {
         return "Fluido";
     }
-    
+
     @Override
     public boolean isOk( Document doc, String version )
     {
         Element links = doc.select( "li#projectVersion" ).first();
-        if ( links != null )
-        {
-            return links.text().contains( version );
-        }
-        else
-        {
-            return false;
-        }
+        return ( links != null ) && links.text().contains( version );
     }
 }

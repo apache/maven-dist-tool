@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 /**
- * Check if version is present on left side in stylus skin.
+ * Check if artifact version is present on left side in stylus skin.
  * 
  * @author skygo
  */
@@ -33,7 +33,7 @@ public class StylusLeftHTMLChecker implements HTMLChecker
     @Override
     public String getName()
     {
-        return "Is version present in Stylus Skin (on left side)";
+        return "Stylus left side";
     }
 
     @Override
@@ -41,18 +41,12 @@ public class StylusLeftHTMLChecker implements HTMLChecker
     {
         return "Stylus";
     }
-    
+
     @Override
     public boolean isOk( Document doc, String version )
     {
         Element links = doc.select( "div.xleft" ).first();
-        if ( links != null )
-        {
-            return links.text().contains( version );
-        }
-        else
-        {
-            return false;
-        }
+
+        return ( links != null ) && links.text().contains( version );
     }
 }

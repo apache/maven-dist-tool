@@ -284,7 +284,7 @@ public class DistCheckSiteMojo
         sink.section1();
         sink.rawText( "Checked sites, also do some basic checking in index.html contents." );
         sink.rawText( "This is to help maintaining some coherence. How many site are skin fluido, stylus,"
-                + " where they have version (right left)" );
+                + " where they have artifact version (right, left)" );
         sink.rawText( "All sun icons in one column is kind of objective." );
         sink.section1_();
         sink.table();
@@ -311,14 +311,8 @@ public class DistCheckSiteMojo
         sink.rawText( "Skins and comments on top of html (helping for date but not always)" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "Precise and overkill contents check summary details on your left ==>" );
+        sink.rawText( "Artifact version displayed" );
         sink.tableHeaderCell_();
-        for ( HTMLChecker c : checker )
-        {
-            sink.tableHeaderCell();
-            sink.rawText( c.getName() );
-            sink.tableHeaderCell_();
-        }
         sink.tableRow_();
 
         String directory = null;
@@ -332,7 +326,7 @@ public class DistCheckSiteMojo
                 // shorten groupid
                 sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
                 sink.tableHeaderCell_();
-                for ( int i = 0; i < 5 + checker.size() ; i++ )
+                for ( int i = 0; i < 5 ; i++ )
                 {
                     sink.tableHeaderCell();
                     sink.rawText( " " );
@@ -381,29 +375,15 @@ public class DistCheckSiteMojo
             
             sink.tableCell();
             csr.getOverall( sink );
-            sink.tableCell_();
-
             for ( HTMLChecker c : checker )
             {
-                sink.tableCell();
-                if ( csr.getCheckMap().get( c ) != null )
+                if ( ( csr.getCheckMap().get( c ) != null ) && csr.getCheckMap().get( c ) )
                 {
-                    if ( csr.getCheckMap().get( c ) )
-                    {
-                        iconSuccess( sink );
-                    }
-                    else
-                    {
-                        iconWarning( sink );
-                    }
+                    sink.text( ": " + c.getName() );
                 }
-                else
-                {
-                    iconError( sink );
-                }
-
-                sink.tableCell_();
             }
+            sink.tableCell_();
+
             sink.tableRow_();
         }
         sink.table_();

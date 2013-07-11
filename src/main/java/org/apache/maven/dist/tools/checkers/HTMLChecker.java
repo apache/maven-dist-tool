@@ -41,6 +41,7 @@ public interface HTMLChecker
      * @return string for skin
      */
     String getSkin();
+
     /**
      * true if checker find pattern in document
      *
