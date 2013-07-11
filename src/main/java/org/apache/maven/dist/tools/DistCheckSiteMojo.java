@@ -194,7 +194,7 @@ public class DistCheckSiteMojo
                     sink.text( "Not determined" );
                 }
                 sink.verbatim( null );
-                sink.text( text.trim() );
+                sink.text( text.trim().replace( " |", "|" ).replace( "| ", "" ) );
                 sink.verbatim_();
             }
         }
