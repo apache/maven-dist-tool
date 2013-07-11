@@ -289,10 +289,7 @@ public class DistCheckSiteMojo
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.rawText( "groupId" );
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
-        sink.rawText( "artifactId" );
+        sink.rawText( "groupId/artifactId" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "LATEST" );
@@ -321,16 +318,29 @@ public class DistCheckSiteMojo
             sink.rawText( c.getName() );
             sink.tableHeaderCell_();
         }
-
         sink.tableRow_();
+
+        String directory = null;
         for ( DistCheckSiteResult csr : results )
         {
-            sink.tableRow();
-            sink.tableCell();
-            // shorten groupid
-            sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
-            sink.tableCell_();
+            if ( !csr.getConfigurationLine().getDirectory().equals( directory ) )
+            {
+                directory = csr.getConfigurationLine().getDirectory();
+                sink.tableRow();
+                sink.tableHeaderCell();
+                // shorten groupid
+                sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
+                sink.tableHeaderCell_();
+                for ( int i = 0; i < 5 + checker.size() ; i++ )
+                {
+                    sink.tableHeaderCell();
+                    sink.rawText( " " );
+                    sink.tableHeaderCell_();
+                }
+                sink.tableRow_();
+            }
 
+            sink.tableRow();
             sink.tableCell();
             sink.rawText( csr.getConfigurationLine().getArtifactId() );
             sink.tableCell_();
