@@ -393,12 +393,12 @@ public class DistCheckSourceReleaseMojo
     }
 
     /**
-     * Report a pattern for an artifact.
+     * Report a pattern for an artifact source release.
      *
      * @param artifact artifact name
      * @return regex
      */
-    protected static String getArtifactPattern( String artifact )
+    protected static String getSourceReleasePattern( String artifact )
     {
         /// not the safest
         return "^" + artifact + "-[0-9].*source-release.*$";
@@ -418,34 +418,34 @@ public class DistCheckSourceReleaseMojo
         }
     }
 
-    private List<String> checkOldinRepos( String repourl, ConfigurationLineInfo configLine, String version )
+    private List<String> checkContainsOld( String url, ConfigurationLineInfo configLine, String version )
             throws IOException
     {
-        Elements links = selectLinks( repourl );
-
-        List<String> expectedFile = new LinkedList<>();
-
-        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
-        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
-        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
+        Elements links = selectLinks( url );
 
         List<String> retrievedFile = new LinkedList<>();
         for ( Element e : links )
         {
             String art = e.attr( "href" );
-            if ( art.matches( getArtifactPattern( configLine.getArtifactId() ) ) )
+            if ( art.matches( getSourceReleasePattern( configLine.getArtifactId() ) ) )
             {
                 retrievedFile.add( e.attr( "href" ) );
             }
         }
 
-        retrievedFile.removeAll( expectedFile );
+        List<String> expectedFiles = new LinkedList<>();
+
+        expectedFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
+        expectedFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
+        expectedFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
+
+        retrievedFile.removeAll( expectedFiles );
 
         if ( !retrievedFile.isEmpty() )
         {
             // write the following output in red so it's more readable in jenkins console
             addErrorLine( "Older version than " + version + " for "
-                    + configLine.getArtifactId() + " still available in " + repourl );
+                    + configLine.getArtifactId() + " still available in " + url );
             for ( String sourceItem : retrievedFile )
             {
                 addErrorLine( " > " + sourceItem + " <" );
@@ -455,54 +455,62 @@ public class DistCheckSourceReleaseMojo
         return retrievedFile;
     }
 
-    private List<String> checkRepos( String repourl, ConfigurationLineInfo configLine, String version )
+    /**
+     * Check that url points to a directory index containing expected release files
+     * @param url
+     * @param configLine
+     * @param version
+     * @return missing files
+     * @throws IOException
+     */
+    private List<String> checkDirectoryIndex( String url, ConfigurationLineInfo configLine, String version )
             throws IOException
     {
-        Elements links = selectLinks( repourl );
-
-        List<String> expectedFile = new LinkedList<>();
-        // build source artifact name
-        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
-        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
-        expectedFile.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
-
         List<String> retrievedFile = new LinkedList<>();
+        Elements links = selectLinks( url );
         for ( Element e : links )
         {
             retrievedFile.add( e.attr( "href" ) );
         }
 
-        expectedFile.removeAll( retrievedFile );
+        List<String> missingFiles = new LinkedList<>();
+        // initialize missing files with expected release file names
+        missingFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
+        missingFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
+        missingFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
 
-        if ( !expectedFile.isEmpty() )
+        // removed retrieved files
+        missingFiles.removeAll( retrievedFile );
+
+        if ( !missingFiles.isEmpty() )
         {
-            addErrorLine( "Missing archive for " + configLine.getArtifactId() + " in " + repourl );
-            for ( String sourceItem : expectedFile )
+            addErrorLine( "Missing file for " + configLine.getArtifactId() + " in " + url );
+            for ( String sourceItem : missingFiles )
             {
                 addErrorLine( " > " + sourceItem + " <" );
             }
         }
 
-        return expectedFile;
+        return missingFiles;
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String latestVersion )
+    void checkArtifact( ConfigurationLineInfo configLine, String version )
             throws MojoExecutionException
     {
         try
         {
-            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, latestVersion );
+            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, version );
             results.add( result );
+
             // central
-            result.setMissingCentralSourceRelease( checkRepos( configLine.getVersionnedFolderURL( repoBaseUrl,
-                                                                                                  latestVersion ),
-                                                               configLine, latestVersion ) );
-            //dist
-            result.setMissingDistSourceRelease(
-                    checkRepos( DIST_AREA + configLine.getDirectory(), configLine, latestVersion ) );
-            result.setDistOlderSourceRelease(
-                    checkOldinRepos( DIST_AREA + configLine.getDirectory(), configLine, latestVersion ) );
+            String centralUrl = configLine.getVersionnedFolderURL( repoBaseUrl, version );
+            result.setMissingCentralSourceRelease( checkDirectoryIndex( centralUrl, configLine, version ) );
+
+            // dist
+            String distUrl = DIST_AREA + configLine.getDirectory();
+            result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version ) );
+            result.setDistOlderSourceRelease( checkContainsOld( distUrl, configLine, version ) );
         }
         catch ( IOException ex )
         {
