@@ -300,6 +300,10 @@ public class DistCheckSiteMojo
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "URL" );
+        sink.lineBreak();
+        sink.rawText( "Skins" );
+        sink.lineBreak();
+        sink.rawText( "Comments on top of html" );
         sink.tableHeaderCell_();
         if ( screenShot )
         {
@@ -307,9 +311,6 @@ public class DistCheckSiteMojo
             sink.rawText( "Screen" );
             sink.tableHeaderCell_();
         }
-        sink.tableHeaderCell();
-        sink.rawText( "Skins and comments on top of html (helping for date but not always)" );
-        sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.rawText( "Artifact version displayed" );
         sink.tableHeaderCell_();
@@ -356,6 +357,8 @@ public class DistCheckSiteMojo
             sink.link( csr.getUrl() );
             sink.rawText( getSimplifiedUrl( csr.getUrl() ) );
             sink.link_();
+            sink.lineBreak();
+            csr.getSkins( sink );
             sink.tableCell_();
             if ( screenShot )
             {
@@ -369,9 +372,6 @@ public class DistCheckSiteMojo
                 sink.figure_();
                 sink.tableCell_();
             }
-            sink.tableCell();
-            csr.getSkins( sink );
-            sink.tableCell_();
             
             sink.tableCell();
             csr.getOverall( sink );
