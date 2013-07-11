@@ -33,7 +33,7 @@ public class PatternTest
     @Test
     public void testGetGroupId()
     {
-        String q = DistCheckSourceReleaseMojo.getArtifactPattern( "doxia" );
+        String q = DistCheckSourceReleaseMojo.getSourceReleasePattern( "doxia" );
 
         assertTrue( "doxia-1.4-source-release.zip.asc".matches( q ) );
         assertTrue( "doxia-1.4-source-release.zip.md5".matches( q ) );
@@ -42,7 +42,7 @@ public class PatternTest
         assertFalse( "doxia-sitetools-1.4-source-release.zip.md5".matches( q ) );
         assertFalse( "doxia-sitetools-1.4-source-release.zip".matches( q ) );
 
-        String r = DistCheckSourceReleaseMojo.getArtifactPattern( "doxia-sitetools" );
+        String r = DistCheckSourceReleaseMojo.getSourceReleasePattern( "doxia-sitetools" );
 
         assertFalse( "doxia-1.4-source-release.zip.asc".matches( r ) );
         assertFalse( "doxia-1.4-source-release.zip.md5".matches( r ) );

@@ -22,6 +22,8 @@ package org.apache.maven.dist.tools;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
 
@@ -33,8 +35,9 @@ class ConfigurationLineInfo
 {
     private static final String URLSEP = "/";
 
-    private final String groupId;
     private final String directory;
+    private final String groupId;
+    private final boolean srcBin;
 
     private final String artifactId;
     private final String forceVersion;
@@ -45,6 +48,7 @@ class ConfigurationLineInfo
     {
         this.directory = infos[0];
         this.groupId = infos[1];
+        this.srcBin = ( infos.length > 2 ) && "src+bin".equals( infos[2] );
 
         this.artifactId = null;
         this.forceVersion = null;
@@ -54,6 +58,7 @@ class ConfigurationLineInfo
     {
         this.directory = group.getDirectory();
         this.groupId = group.getGroupId();
+        this.srcBin = group.isSrcBin();
 
         this.artifactId = infos[0];
         this.forceVersion = ( infos.length > 1 ) ? infos[1] : null;
@@ -86,6 +91,11 @@ class ConfigurationLineInfo
     public String getDirectory()
     {
         return directory;
+    }
+
+    public boolean isSrcBin()
+    {
+        return srcBin;
     }
 
     String getBaseURL( String repoBaseUrl, String folder )
@@ -128,5 +138,23 @@ class ConfigurationLineInfo
             return "Cannot parse";
         }
 
+    }
+
+    String getSourceReleaseFilename( String version, boolean dist )
+    {
+        return artifactId + "-" + version
+            + ( srcBin && ( dist || !"maven-ant-tasks".equals( artifactId ) ) ? "-src" : "-source-release" ) + ".zip";
+    }
+
+    List<String> getExpectedFilenames( String version, boolean dist )
+    {
+        String sourceReleaseFilename = getSourceReleaseFilename( version, dist );
+
+        List<String> expectedFiles = new LinkedList<>();
+        expectedFiles.add( sourceReleaseFilename );
+        expectedFiles.add( sourceReleaseFilename + ".asc" );
+        expectedFiles.add( sourceReleaseFilename + ".md5" );
+
+        return expectedFiles;
     }
 }

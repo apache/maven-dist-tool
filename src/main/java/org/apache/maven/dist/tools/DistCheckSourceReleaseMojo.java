@@ -189,8 +189,9 @@ public class DistCheckSourceReleaseMojo
 
         // dist column
         sink.tableCell();
-        sink.link( DIST_AREA + cli.getDirectory() );
-        sink.text( cli.getDirectory() );
+        String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csr.getVersion() + "/source" ) : "" );
+        sink.link( DIST_AREA + directory );
+        sink.text( directory );
         sink.link_();
         sink.text( "source-release" );
         if ( csr.dist.isEmpty() && csr.distOlder.isEmpty() )
@@ -433,11 +434,7 @@ public class DistCheckSourceReleaseMojo
             }
         }
 
-        List<String> expectedFiles = new LinkedList<>();
-
-        expectedFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
-        expectedFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
-        expectedFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
+        List<String> expectedFiles = configLine.getExpectedFilenames( version, true );
 
         retrievedFile.removeAll( expectedFiles );
 
@@ -463,7 +460,7 @@ public class DistCheckSourceReleaseMojo
      * @return missing files
      * @throws IOException
      */
-    private List<String> checkDirectoryIndex( String url, ConfigurationLineInfo configLine, String version )
+    private List<String> checkDirectoryIndex( String url, ConfigurationLineInfo configLine, String version, boolean dist )
             throws IOException
     {
         List<String> retrievedFile = new LinkedList<>();
@@ -473,11 +470,9 @@ public class DistCheckSourceReleaseMojo
             retrievedFile.add( e.attr( "href" ) );
         }
 
-        List<String> missingFiles = new LinkedList<>();
+        List<String> missingFiles;
         // initialize missing files with expected release file names
-        missingFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip" );
-        missingFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.asc" );
-        missingFiles.add( configLine.getArtifactId() + "-" + version + "-source-release.zip.md5" );
+        missingFiles = configLine.getExpectedFilenames( version, dist );
 
         // removed retrieved files
         missingFiles.removeAll( retrievedFile );
@@ -505,11 +500,12 @@ public class DistCheckSourceReleaseMojo
 
             // central
             String centralUrl = configLine.getVersionnedFolderURL( repoBaseUrl, version );
-            result.setMissingCentralSourceRelease( checkDirectoryIndex( centralUrl, configLine, version ) );
+            result.setMissingCentralSourceRelease( checkDirectoryIndex( centralUrl, configLine, version, false ) );
 
             // dist
-            String distUrl = DIST_AREA + configLine.getDirectory();
-            result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version ) );
+            String distUrl =
+                DIST_AREA + configLine.getDirectory() + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
+            result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version, true ) );
             result.setDistOlderSourceRelease( checkContainsOld( distUrl, configLine, version ) );
         }
         catch ( IOException ex )
