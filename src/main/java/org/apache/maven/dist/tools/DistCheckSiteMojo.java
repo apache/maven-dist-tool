@@ -176,10 +176,11 @@ public class DistCheckSiteMojo
                     }
                     else
                     {
-                        text += "Nothing";
+                        text += " ";
                     }
                 }
-                
+
+                sink.text( "skin: " );
                 if ( isSkin( "Fluido" ) )
                 {
                     sink.text( "Fluido" );
@@ -192,9 +193,9 @@ public class DistCheckSiteMojo
                 {
                     sink.text( "Not determined" );
                 }
-                sink.monospaced();
-                sink.text( text );
-                sink.monospaced_();
+                sink.verbatim( null );
+                sink.text( text.trim() );
+                sink.verbatim_();
             }
         }
 
