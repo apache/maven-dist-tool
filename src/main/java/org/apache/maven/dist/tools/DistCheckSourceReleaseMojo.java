@@ -31,6 +31,7 @@ import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,6 +51,12 @@ public class DistCheckSourceReleaseMojo
 
     private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
     //private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
+
+    /**
+     * Ignore dist failure for <code>artifactId</code> or <code>artifactId:version</code>
+     */
+    @Parameter
+    protected List<String> ignoreDistFailures;
 
     @Override
     public String getOutputName()
@@ -419,7 +426,7 @@ public class DistCheckSourceReleaseMojo
         }
     }
 
-    private List<String> checkContainsOld( String url, ConfigurationLineInfo configLine, String version )
+    private List<String> checkContainsOld( String url, ConfigurationLineInfo cli, String version )
             throws IOException
     {
         Elements links = selectLinks( url );
@@ -428,24 +435,25 @@ public class DistCheckSourceReleaseMojo
         for ( Element e : links )
         {
             String art = e.attr( "href" );
-            if ( art.matches( getSourceReleasePattern( configLine.getArtifactId() ) ) )
+            if ( art.matches( getSourceReleasePattern( cli.getArtifactId() ) ) )
             {
                 retrievedFile.add( e.attr( "href" ) );
             }
         }
 
-        List<String> expectedFiles = configLine.getExpectedFilenames( version, true );
+        List<String> expectedFiles = cli.getExpectedFilenames( version, true );
 
         retrievedFile.removeAll( expectedFiles );
 
         if ( !retrievedFile.isEmpty() )
         {
             // write the following output in red so it's more readable in jenkins console
-            addErrorLine( "Older version than " + version + " for "
-                    + configLine.getArtifactId() + " still available in " + url );
+            addErrorLine( cli, version, ignoreDistFailures,
+                          "Older version than " + version + " for " + cli.getArtifactId() + " still available in "
+                              + url );
             for ( String sourceItem : retrievedFile )
             {
-                addErrorLine( " > " + sourceItem + " <" );
+                addErrorLine( cli, version, ignoreDistFailures, " > " + sourceItem + " <" );
             }
         }
 
@@ -455,12 +463,12 @@ public class DistCheckSourceReleaseMojo
     /**
      * Check that url points to a directory index containing expected release files
      * @param url
-     * @param configLine
+     * @param cli
      * @param version
      * @return missing files
      * @throws IOException
      */
-    private List<String> checkDirectoryIndex( String url, ConfigurationLineInfo configLine, String version, boolean dist )
+    private List<String> checkDirectoryIndex( String url, ConfigurationLineInfo cli, String version, boolean dist )
             throws IOException
     {
         List<String> retrievedFile = new LinkedList<>();
@@ -472,17 +480,17 @@ public class DistCheckSourceReleaseMojo
 
         List<String> missingFiles;
         // initialize missing files with expected release file names
-        missingFiles = configLine.getExpectedFilenames( version, dist );
+        missingFiles = cli.getExpectedFilenames( version, dist );
 
         // removed retrieved files
         missingFiles.removeAll( retrievedFile );
 
         if ( !missingFiles.isEmpty() )
         {
-            addErrorLine( "Missing file for " + configLine.getArtifactId() + " in " + url );
+            addErrorLine( cli, version, ignoreDistFailures, "Missing file for " + cli.getArtifactId() + " in " + url );
             for ( String sourceItem : missingFiles )
             {
-                addErrorLine( " > " + sourceItem + " <" );
+                addErrorLine( cli, version, ignoreDistFailures, " > " + sourceItem + " <" );
             }
         }
 

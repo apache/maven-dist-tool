@@ -253,13 +253,31 @@
         <groupId>${project.groupId}</groupId>
         <artifactId>${project.artifactId}</artifactId>
         <version>${project.version}</version>
+        <configuration>
+          <ignoreSiteFailures>
+            <ignoreSiteFailure>apache-maven:2.0.11</ignoreSiteFailure>
+            <ignoreSiteFailure>apache-maven:2.2.1</ignoreSiteFailure>
+            <ignoreSiteFailure>maven-indexer:5.1.1</ignoreSiteFailure>
+            <ignoreSiteFailure>file-management:1.2.1</ignoreSiteFailure>
+          </ignoreSiteFailures>
+          <ignoreDistFailures>
+            <ignoreDistFailure>doxia-linkcheck:1.2</ignoreDistFailure>
+            <ignoreDistFailure>apache-maven:2.0.11</ignoreDistFailure>
+            <ignoreDistFailure>maven-docck-plugin:1.0</ignoreDistFailure>
+            <ignoreDistFailure>maven-idea-plugin:2.2</ignoreDistFailure>
+            <ignoreDistFailure>maven-one-plugin:1.2</ignoreDistFailure>
+            <ignoreDistFailure>maven-reactor-plugin:1.0</ignoreDistFailure>
+            <ignoreDistFailure>file-management:1.2.1</ignoreDistFailure>
+            <ignoreDistFailure>maven-model-converter:2.2</ignoreDistFailure>
+            <ignoreDistFailure>maven-repository-builder:1.0-alpha-2</ignoreDistFailure>
+          </ignoreDistFailures>
+        </configuration>
         <reportSets>
           <reportSet>
             <id>html</id>
             <reports>
               <report>check-site</report>
               <report>check-source-release</report>
-              
             </reports>
           </reportSet>
           <reportSet>

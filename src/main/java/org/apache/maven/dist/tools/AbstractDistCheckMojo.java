@@ -260,21 +260,29 @@ public abstract class AbstractDistCheckMojo
     }
     
     /**
-     * Add Error line to logs.txt
+     * Log and add Error line to logs.txt if not configured to ignore the artifact+version
      * 
      * @param error 
      */
-    protected void addErrorLine( String error ) 
+    protected void addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String error ) 
     {
-        getLog().error( error );
-        try ( PrintWriter output = new PrintWriter(
-                new FileWriter( new File( "target", "logs.txt" ).getAbsolutePath(), true ) ) )
+        if ( ignore.contains( cli.getArtifactId() + ':' + version ) || ignore.contains( cli.getArtifactId() ) )
         {
-            output.printf( "%s\r\n", error );
+            getLog().warn( error );
         }
-        catch ( Exception e )
+        else
         {
-            getLog().error( "Cannot append logs.txt" );
+            getLog().error( error );
+
+            try ( PrintWriter output = new PrintWriter(
+                    new FileWriter( new File( "target", "logs.txt" ).getAbsolutePath(), true ) ) )
+            {
+                output.printf( "%s\r\n", error );
+            }
+            catch ( Exception e )
+            {
+                getLog().error( "Cannot append to logs.txt" );
+            }
         }
     }
 }

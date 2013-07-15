@@ -62,6 +62,12 @@ public class DistCheckSiteMojo
     extends AbstractDistCheckMojo
 {
     /**
+     * Ignore site failure for <code>artifactId</code> or <code>artifactId:version</code>
+     */
+    @Parameter
+    protected List<String> ignoreSiteFailures;
+
+    /**
      * Artifact factory.
      */
     @Component
@@ -401,27 +407,27 @@ public class DistCheckSiteMojo
         return url;
     }
 
-    private void checkSite( ConfigurationLineInfo configLine, String version )
+    private void checkSite( ConfigurationLineInfo cli, String version )
     {
-        DistCheckSiteResult result = new DistCheckSiteResult( configLine, version );
+        DistCheckSiteResult result = new DistCheckSiteResult( cli, version );
         results.add( result );
         try
         {
-            Artifact pluginArtifact =
-                artifactFactory.createProjectArtifact( configLine.getGroupId(), configLine.getArtifactId(), version );
-            MavenProject pluginProject =
-                mavenProjectBuilder.buildFromRepository( pluginArtifact, artifactRepositories, localRepository, false );
+            Artifact artifact =
+                artifactFactory.createProjectArtifact( cli.getGroupId(), cli.getArtifactId(), version );
+            MavenProject artifactProject =
+                mavenProjectBuilder.buildFromRepository( artifact, artifactRepositories, localRepository, false );
 
-            result.setUrl( pluginProject.getUrl() );
-            Document doc = Jsoup.connect( pluginProject.getUrl() ).get();
+            result.setUrl( artifactProject.getUrl() );
+            Document doc = Jsoup.connect( artifactProject.getUrl() ).get();
             if ( screenShot )
             {
-                driver.get( pluginProject.getUrl() );
+                driver.get( artifactProject.getUrl() );
                 File scrFile = ( ( TakesScreenshot ) driver ).getScreenshotAs( OutputType.FILE );
                 String fileName = "images" + File.separator
-                        + configLine.getGroupId() + "_" + configLine.getArtifactId() + ".png";
+                        + cli.getGroupId() + "_" + cli.getArtifactId() + ".png";
                 result.setScreenShot( fileName );
-                FileUtils.copyFile( scrFile, new File( getReportOutputDirectory() + File.separator + fileName ) );
+                FileUtils.copyFile( scrFile, new File( getReportOutputDirectory(), fileName ) );
             }
             for ( HTMLChecker c : checker )
             {
@@ -432,13 +438,17 @@ public class DistCheckSiteMojo
         }
         catch ( HttpStatusException hes )
         {
-            addErrorLine( "HTTP result code: " + hes.getStatusCode() + " for " + hes.getUrl() );
+            addErrorLine( cli,
+                          version,
+                          ignoreSiteFailures,
+                          "HTTP result code: " + hes.getStatusCode() + " for " + cli.getArtifactId() + " site = "
+                              + hes.getUrl() );
             result.setHTTPErrorUrl( hes.getStatusCode() );
         }
         catch ( Exception ex )
         {
             //continue for  other artifact
-            getLog().error( ex.getMessage() + configLine.getArtifactId() );
+            getLog().error( ex.getMessage() + cli.getArtifactId() );
         }
 
     }
