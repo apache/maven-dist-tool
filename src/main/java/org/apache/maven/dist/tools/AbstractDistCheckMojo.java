@@ -262,6 +262,9 @@ public abstract class AbstractDistCheckMojo
     /**
      * Log and add Error line to logs.txt if not configured to ignore the artifact+version
      * 
+     * @param cli
+     * @param version
+     * @param ignore
      * @param error 
      */
     protected void addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String error ) 

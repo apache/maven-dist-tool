@@ -41,7 +41,7 @@ class ConfigurationLineInfo
 
     private final String artifactId;
     private final String forceVersion;
-
+    private String aggregateSite;
     private Metadata metadata;
 
     public ConfigurationLineInfo( String[] infos )
@@ -52,6 +52,7 @@ class ConfigurationLineInfo
 
         this.artifactId = null;
         this.forceVersion = null;
+        this.aggregateSite = null;
     }
 
     public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos )
@@ -61,9 +62,23 @@ class ConfigurationLineInfo
         this.srcBin = group.isSrcBin();
 
         this.artifactId = infos[0];
-        this.forceVersion = ( infos.length > 1 ) ? infos[1] : null;
+        this.forceVersion = ( infos.length > 1 && !infos[1].startsWith( "A") ) ? infos[1] : null;
+        this.aggregateSite = null;
+        for ( String info : infos )
+        {
+            if ( info.startsWith( "A" ) )
+            {
+                this.aggregateSite = info;
+            }
+        }
+        
     }
 
+    public String getAggregatedCode()
+    {
+        return aggregateSite;
+    }
+    
     public String getForcedVersion()
     {
         return forceVersion;
@@ -130,7 +145,8 @@ class ConfigurationLineInfo
         {
             SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMddkkmmss" );
             Date f = dateFormatter.parse( metadata.getVersioning().getLastUpdated() );
-            SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "dd-MM-yyyy" );
+            // inverted for check aggregator
+            SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "yyyy-MM-dd" );
             return dateFormattertarget.format( f );
         }
         catch ( ParseException ex )

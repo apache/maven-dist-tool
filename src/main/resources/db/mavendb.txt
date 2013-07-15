@@ -41,19 +41,19 @@ plugins org.apache.maven.plugins
   maven-changelog-plugin
   maven-changes-plugin
   maven-checkstyle-plugin
-  maven-clean-plugin
-  maven-compiler-plugin
+  maven-clean-plugin A1
+  maven-compiler-plugin A1
   maven-dependency-plugin
-  maven-deploy-plugin
+  maven-deploy-plugin A1
   maven-doap-plugin
   maven-docck-plugin
-  maven-ear-plugin
+  maven-ear-plugin A1
   maven-eclipse-plugin
   maven-ejb-plugin
   maven-gpg-plugin
   maven-help-plugin
   maven-idea-plugin
-  maven-install-plugin
+  maven-install-plugin A1
   maven-invoker-plugin
   maven-jar-plugin
   maven-jarsigner-plugin
@@ -69,7 +69,7 @@ plugins org.apache.maven.plugins
   maven-reactor-plugin
   maven-remote-resources-plugin
   maven-repository-plugin
-  maven-resources-plugin
+  maven-resources-plugin A1
   maven-scm-publish-plugin
   maven-shade-plugin
   maven-site-plugin
@@ -79,7 +79,7 @@ plugins org.apache.maven.plugins
   maven-verifier-plugin
   maven-war-plugin
 release org.apache.maven.release
-  maven-release 2.4.1
+  maven-release 2.4.1 A1
 reporting org.apache.maven.reporting
   maven-reporting-api
   maven-reporting-exec
@@ -97,7 +97,7 @@ shared org.apache.maven.shared
   maven-dependency-tree
   maven-doxia-tools
   maven-filtering
-  maven-invoker
+  maven-invoker A2
   maven-jarsigner
   maven-model-converter
   maven-repository-builder
@@ -110,7 +110,7 @@ shared org.apache.maven.shared
   maven-shared-utils
   maven-verifier
 shared org.apache.maven
-  maven-archiver
+  maven-archiver A2
 skins org.apache.maven.skins
   maven-application-skin
   maven-classic-skin

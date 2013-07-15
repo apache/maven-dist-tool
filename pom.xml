@@ -278,6 +278,7 @@
             <reports>
               <report>check-site</report>
               <report>check-source-release</report>
+              <report>check-aggregator</report>
             </reports>
           </reportSet>
           <reportSet>
