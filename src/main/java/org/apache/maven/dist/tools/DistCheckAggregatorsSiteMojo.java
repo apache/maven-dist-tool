@@ -56,6 +56,7 @@ public class DistCheckAggregatorsSiteMojo
     static
     {
         Map<String, Object[]> aMap = new HashMap<>();
+        // url title version date
         aMap.put( "A1", new Object[]
         {
             "http://maven.apache.org/plugins/", "Plugins", 2, 3
@@ -63,6 +64,14 @@ public class DistCheckAggregatorsSiteMojo
         aMap.put( "A2", new Object[]
         {
             "http://maven.apache.org/shared/", "Shared", 1, 2
+        } );
+        aMap.put( "A3", new Object[]
+        {
+            "http://maven.apache.org/skins/", "Skins", 1, null
+        } );
+        aMap.put( "A4", new Object[]
+        {
+            "http://maven.apache.org/pom/", "Poms", 1, 2
         } );
         HARDCODEDAGGREGATEREF = Collections.unmodifiableMap( aMap );
     }
@@ -127,7 +136,7 @@ public class DistCheckAggregatorsSiteMojo
     private final Map<String, List<DistCheckAggregatorSite>> results = new HashMap<>();
 
 
-    private void reportLine( Sink sink, DistCheckAggregatorSite csr )
+    private void reportLine( Sink sink, DistCheckAggregatorSite csr , boolean displayDate )
     {
         ConfigurationLineInfo cli = csr.getConfigurationLine();
 
@@ -153,18 +162,21 @@ public class DistCheckAggregatorsSiteMojo
         sink.tableCell_();
 
         // DATE column
-        sink.tableCell();
-        sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
-        if ( csr.getConfigurationLine().getReleaseFromMetadata().equals( csr.dateAggr ) )
+        if ( displayDate )
         {
-            iconSuccess( sink );
+            sink.tableCell();
+            sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
+            if ( csr.getConfigurationLine().getReleaseFromMetadata().equals( csr.dateAggr ) )
+            {
+                iconSuccess( sink );
+            }
+            else
+            {
+                iconError( sink );
+                sink.rawText( csr.dateAggr );
+            }
+            sink.tableCell_();
         }
-        else
-        {
-            iconError( sink );
-            sink.rawText( csr.dateAggr );
-        }
-        sink.tableCell_();
         // central column
         
         sink.tableRow_();
@@ -227,16 +239,20 @@ public class DistCheckAggregatorsSiteMojo
             sink.tableHeaderCell();
             sink.rawText( "LATEST" );
             sink.tableHeaderCell_();
-            sink.tableHeaderCell();
-            sink.rawText( "DATE" );
-            sink.tableHeaderCell_();
+            boolean displayDate = HARDCODEDAGGREGATEREF.get( key )[3] != null;
+            if ( displayDate )
+            {
+                sink.tableHeaderCell();
+                sink.rawText( "DATE" );
+                sink.tableHeaderCell_();
+            }
             sink.tableHeaderCell();
             sink.rawText( "VERSION" );
             sink.tableHeaderCell_();
             sink.tableRow_();
             for ( DistCheckAggregatorSite csr : results.get( key ) )
             {
-               reportLine( sink, csr );
+                reportLine( sink, csr, displayDate );
             }
             sink.table_();
         }
@@ -257,10 +273,27 @@ public class DistCheckAggregatorsSiteMojo
             {
                 // skins do not have release date
                 String art = e.attr( "href" );
-                if ( art.contains( cli.getArtifactId() ) )
+                String id = cli.getArtifactId();
+                // UGLY 
+                if ( cli.getArtifactId().equals( "maven-parent" ) )
+                {
+                    id = "maven/";
+                }
+                if ( cli.getArtifactId().equals( "maven-skins" ) )
+                {
+                    id = "skins/";
+                }
+                if ( cli.getArtifactId().equals( "apache" ) )
+                {
+                    id = "asf/";
+                }
+                if ( art.contains( id ) )
                 {
                     r.setAggregatedVersion( e.parent().parent().child( ( Integer ) inf[2] ).ownText() );
-                    r.setAggregatedDate( e.parent().parent().child( ( Integer ) inf[3] ).ownText() );   
+                    if ( inf[3] != null )
+                    {
+                        r.setAggregatedDate( e.parent().parent().child( ( Integer ) inf[3] ).ownText() );
+                    }
                }
             }
         }

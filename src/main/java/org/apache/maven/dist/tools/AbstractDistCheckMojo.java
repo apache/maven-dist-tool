@@ -185,17 +185,23 @@ public abstract class AbstractDistCheckMojo
             else
             {
                 // 3 space
-                if ( line.startsWith( "   " ) && useDetailed() )
+                if ( line.startsWith( "   " ) )
+                {
+                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+                    if ( useDetailed() )
+                    {
+                        checkArtifact( aLine, getVersion( aLine ) );
+                    }
+                }
+                else if ( line.startsWith( "  " ) ) 
                 {
                     ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
 
                     checkArtifact( aLine, getVersion( aLine ) );
-                }
+                } 
                 else
                 {
-                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
-
-                    checkArtifact( aLine, getVersion( aLine ) );
+                    getLog().warn( "No good Condition WIP" );
                 }
                 
             }

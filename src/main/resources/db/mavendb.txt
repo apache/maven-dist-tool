@@ -1,7 +1,13 @@
 ## line format:
 ## directory groupId [src+bin]
-##   artifactId [forced version]
-##
+##   artifactId [forced version] An
+##    artifactId [forced version] An
+## n : 1 plugins
+## n : 2 shared
+## n : 3 skins
+## n : 4 poms
+#### A1 site2X 
+#### A4 ASF (skin and parent find pattern hardcoded)
 ant-tasks org.apache.maven src+bin
   maven-ant-tasks
 archetype org.apache.maven.archetype
@@ -27,6 +33,10 @@ maven-2 org.apache.maven src+bin
 maven-3 org.apache.maven src+bin
   apache-maven 3.0.5
   apache-maven
+notvalid org.apache.maven
+   maven-parent A4
+notvalid org.apache
+   apache A4
 jxr org.apache.maven.jxr
   jxr
 plugin-testing org.apache.maven.plugin-testing
@@ -62,7 +72,7 @@ plugins org.apache.maven.plugins
   maven-one-plugin A1
   maven-patch-plugin A1
   maven-pdf-plugin A1
-  maven-plugins
+  maven-plugins A4
   maven-pmd-plugin A1
   maven-project-info-reports-plugin A1
   maven-rar-plugin A1
@@ -87,7 +97,6 @@ plugins org.apache.maven.plugins
    maven-surefire-plugin A1
    maven-surefire-report-plugin A1
    maven-plugin-plugin A1
-#### A1 site2X 
 release org.apache.maven.release
   maven-release 2.4.1 
 reporting org.apache.maven.reporting
@@ -95,7 +104,7 @@ reporting org.apache.maven.reporting
   maven-reporting-exec A2
   maven-reporting-impl A2
 resources org.apache.apache.resources
-  apache-resource-bundles
+  apache-resource-bundles A4
   apache-source-release-assembly-descriptor
 scm org.apache.maven.scm
   maven-scm 
@@ -113,7 +122,7 @@ shared org.apache.maven.shared
   maven-repository-builder A2
   maven-runtime A2
   maven-script-interpreter A2
-  maven-shared-components
+  maven-shared-components A4
   maven-shared-incremental A2
   maven-shared-jar A2
   maven-shared-resources A2
@@ -122,12 +131,12 @@ shared org.apache.maven.shared
 shared org.apache.maven
   maven-archiver A2
 skins org.apache.maven.skins
-  maven-application-skin
-  maven-classic-skin
-  maven-default-skin
-  maven-fluido-skin
-  maven-skins
-  maven-stylus-skin
+  maven-application-skin A3
+  maven-classic-skin A3
+  maven-default-skin A3
+  maven-fluido-skin A3
+  maven-skins A4
+  maven-stylus-skin A3
 surefire org.apache.maven.surefire
   surefire
 wagon org.apache.maven.wagon
