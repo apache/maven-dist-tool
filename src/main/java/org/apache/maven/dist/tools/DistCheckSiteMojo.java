@@ -92,6 +92,7 @@ public class DistCheckSiteMojo
     protected boolean screenShot;
     
     private static final String MAVEN_SITE = "http://maven.apache.org";
+
     /**
      * Http status ok code.
      */
@@ -207,25 +208,26 @@ public class DistCheckSiteMojo
 
         private void getOverall( Sink sink )
         {
-
             if ( statusCode != HTTP_OK )
             {
                 iconError( sink );
             }
             else
             {
-                boolean tmp = false;
+                boolean found = false;
                 for ( Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet() )
                 {
-                    tmp = tmp || e.getValue();
+                    if ( e.getValue() )
+                    {
+                        iconSuccess( sink );
+                        sink.text( ": " + e.getKey().getName() );
+                        found = true;
+                    }
                 }
-                if ( tmp )
-                {
-                    iconSuccess( sink );
-                }
-                else
+                if ( !found )
                 {
                     iconWarning( sink );
+                    sink.text( ": artifact version not found" );
                 }
             }
         }
@@ -381,13 +383,6 @@ public class DistCheckSiteMojo
             
             sink.tableCell();
             csr.getOverall( sink );
-            for ( HTMLChecker c : checker )
-            {
-                if ( ( csr.getCheckMap().get( c ) != null ) && csr.getCheckMap().get( c ) )
-                {
-                    sink.text( ": " + c.getName() );
-                }
-            }
             sink.tableCell_();
 
             sink.tableRow_();
