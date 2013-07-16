@@ -91,34 +91,34 @@ plugins org.apache.maven.plugins
 release org.apache.maven.release
   maven-release 2.4.1 
 reporting org.apache.maven.reporting
-  maven-reporting-api
-  maven-reporting-exec
-  maven-reporting-impl
+  maven-reporting-api A2
+  maven-reporting-exec A2
+  maven-reporting-impl A2
 resources org.apache.apache.resources
   apache-resource-bundles
   apache-source-release-assembly-descriptor
 scm org.apache.maven.scm
   maven-scm 
 shared org.apache.maven.shared
-  file-management
-  maven-artifact-resolver
-  maven-common-artifact-filters
-  maven-dependency-analyzer
-  maven-dependency-tree
-  maven-doxia-tools
-  maven-filtering
+  file-management A2
+  maven-artifact-resolver A2
+  maven-common-artifact-filters A2
+  maven-dependency-analyzer A2
+  maven-dependency-tree A2
+  maven-doxia-tools 
+  maven-filtering A2
   maven-invoker A2
-  maven-jarsigner
-  maven-model-converter
-  maven-repository-builder
-  maven-runtime
-  maven-script-interpreter
+  maven-jarsigner A2
+  maven-model-converter A2
+  maven-repository-builder A2
+  maven-runtime A2
+  maven-script-interpreter A2
   maven-shared-components
-  maven-shared-incremental
-  maven-shared-jar
-  maven-shared-resources
-  maven-shared-utils
-  maven-verifier
+  maven-shared-incremental A2
+  maven-shared-jar A2
+  maven-shared-resources A2
+  maven-shared-utils A2
+  maven-verifier A2
 shared org.apache.maven
   maven-archiver A2
 skins org.apache.maven.skins
