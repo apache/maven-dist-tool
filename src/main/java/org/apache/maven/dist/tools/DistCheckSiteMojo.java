@@ -61,6 +61,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class DistCheckSiteMojo
     extends AbstractDistCheckMojo
 {
+    static final String FAILURES_FILENAME = "check-site.log";
+
     /**
      * Ignore site failure for <code>artifactId</code> or <code>artifactId:version</code>
      */
@@ -102,6 +104,11 @@ public class DistCheckSiteMojo
     {
         return false;
     }
+    protected String getFailuresFilename()
+    {
+        return FAILURES_FILENAME;
+    }
+
     @Override
     public String getOutputName()
     {
@@ -453,7 +460,7 @@ public class DistCheckSiteMojo
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String latestVersion )
+    protected void checkArtifact( ConfigurationLineInfo configLine, String latestVersion )
         throws MojoExecutionException
     {
         checkSite( configLine, latestVersion );

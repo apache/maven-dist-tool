@@ -21,6 +21,7 @@ package org.apache.maven.dist.tools;
 
 import java.io.File;
 import java.util.Locale;
+
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -34,8 +35,12 @@ import org.apache.maven.reporting.MavenReportException;
  * @author skygo
  */
 @Mojo( name = "failure-report", requiresProject = false )
-public class DummyFailureMojo extends AbstractDistCheckMojo
+public class DummyFailureMojo
+    extends AbstractDistCheckMojo
 {
+    private final static String[] FAILURES_FILENAMES = { DistCheckSourceReleaseMojo.FAILURES_FILENAME,
+        DistCheckSiteMojo.FAILURES_FILENAME, DistCheckAggregatorsSiteMojo.FAILURES_FILENAME };
+
     /**
      * Site renderer.
      */
@@ -53,24 +58,31 @@ public class DummyFailureMojo extends AbstractDistCheckMojo
      */
     @Component
     protected MavenProject project;
+
     @Override
     boolean useDetailed()
     {
         return false;
     }
+
     @Override
-    public void execute() throws MojoExecutionException
+    public void execute()
+        throws MojoExecutionException
     {
-        // if logs.txt is present throw exception to fail build
-        if ( new File( "target", "logs.txt" ).exists() )
+        // if failures log file is present, throw exception to fail build
+        for ( String failuresFilename : FAILURES_FILENAMES )
         {
-            throw new MojoExecutionException( "Dist tools report non empty please check: "
-                    + " https://builds.apache.org/job/dist-tool-plugin/site/" );
+            if ( new File( failuresDirectory, failuresFilename ).exists() )
+            {
+                throw new MojoExecutionException( "Dist tools report non empty please check: "
+                        + "https://builds.apache.org/job/dist-tool-plugin/site/" );
+            }
         }
     }
 
     @Override
-    protected void executeReport( Locale locale ) throws MavenReportException
+    protected void executeReport( Locale locale )
+        throws MavenReportException
     {
         if ( !outputDirectory.exists() )
         {
@@ -84,7 +96,11 @@ public class DummyFailureMojo extends AbstractDistCheckMojo
         {
             throw new MavenReportException( ex.getMessage() );
         }
+    }
 
+    protected String getFailuresFilename()
+    {
+        return "dummy";
     }
 
     @Override
@@ -106,8 +122,8 @@ public class DummyFailureMojo extends AbstractDistCheckMojo
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException
+    protected void checkArtifact( ConfigurationLineInfo request, String repoBase )
+        throws MojoExecutionException
     {
     }
-  
 }

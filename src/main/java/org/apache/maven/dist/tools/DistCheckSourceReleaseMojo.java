@@ -48,6 +48,7 @@ import org.jsoup.select.Elements;
 public class DistCheckSourceReleaseMojo
         extends AbstractDistCheckMojo
 {
+    static final String FAILURES_FILENAME = "check-source-release.log";
 
     private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
     //private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
@@ -61,6 +62,11 @@ public class DistCheckSourceReleaseMojo
      */
     @Parameter
     protected List<String> ignoreDistFailures;
+
+    protected String getFailuresFilename()
+    {
+        return FAILURES_FILENAME;
+    }
 
     @Override
     public String getOutputName()
@@ -502,7 +508,7 @@ public class DistCheckSourceReleaseMojo
     }
 
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String version )
+    protected void checkArtifact( ConfigurationLineInfo configLine, String version )
             throws MojoExecutionException
     {
         try

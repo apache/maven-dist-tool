@@ -47,6 +47,7 @@ import org.jsoup.select.Elements;
 public class DistCheckAggregatorsSiteMojo
         extends AbstractDistCheckMojo
 {
+    static final String FAILURES_FILENAME = "check-aggregator.log";
 
     private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
     //private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
@@ -70,6 +71,11 @@ public class DistCheckAggregatorsSiteMojo
      */
     @Parameter
     protected List<String> ignoreDistFailures;
+
+    protected String getFailuresFilename()
+    {
+        return FAILURES_FILENAME;
+    }
 
     @Override
     public String getOutputName()
@@ -181,7 +187,6 @@ public class DistCheckAggregatorsSiteMojo
             throw new MavenReportException( ex.getMessage(), ex );
         }
 
-       
         Sink sink = getSink();
         sink.head();
         sink.title();
@@ -241,9 +246,6 @@ public class DistCheckAggregatorsSiteMojo
         sink.close();
     }
 
-   
-
-
     private void checkAggregate( ConfigurationLineInfo cli ,  
             DistCheckAggregatorSite r, Object[] inf ) throws IOException
     {
@@ -254,7 +256,6 @@ public class DistCheckAggregatorsSiteMojo
             for ( Element e : a )
             {
                 // skins do not have release date
-                
                 String art = e.attr( "href" );
                 if ( art.contains( cli.getArtifactId() ) )
                 {
@@ -268,16 +269,15 @@ public class DistCheckAggregatorsSiteMojo
             throw new IOException( "IOException while reading " + (String) inf[0] , ioe );
         }
     }
-    
-    
+
     @Override
-    void checkArtifact( ConfigurationLineInfo configLine, String version )
+    protected void checkArtifact( ConfigurationLineInfo configLine, String version )
             throws MojoExecutionException
     {
         try
         {
             DistCheckAggregatorSite result = new DistCheckAggregatorSite( configLine, version );
-            
+
             if ( configLine.getAggregatedCode() != null )
             {
                 if ( results.get( configLine.getAggregatedCode() ) == null )
@@ -286,10 +286,7 @@ public class DistCheckAggregatorsSiteMojo
                 } 
                 results.get( configLine.getAggregatedCode() ).add( result );
                 checkAggregate( configLine, result, HARDCODEDAGGREGATEREF.get( configLine.getAggregatedCode() ) );
-                
-                
             }
-            
         }
         catch ( IOException ex )
         {

@@ -86,6 +86,9 @@ public abstract class AbstractDistCheckMojo
     @Component
     protected MavenProject project;
 
+    @Parameter( defaultValue = "${project.build.directory}/dist-tool" )
+    protected File failuresDirectory;
+
     /**
      * list of artifacts repositories.
      */
@@ -98,8 +101,10 @@ public abstract class AbstractDistCheckMojo
      */
     abstract boolean useDetailed();
     
-    abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
+    protected abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
         throws MojoExecutionException;
+
+    protected abstract String getFailuresFilename();
 
     @Override
     protected String getOutputDirectory()
@@ -154,6 +159,16 @@ public abstract class AbstractDistCheckMojo
         if ( configurationLines.isEmpty() )
         {
             loadMavenDb();
+        }
+
+        File failures = getFailuresFile();
+        if ( failures.exists() )
+        {
+            failures.delete();
+        }
+        else
+        {
+            failuresDirectory.mkdirs();
         }
 
         ConfigurationLineInfo currentGroup = null;
@@ -295,15 +310,19 @@ public abstract class AbstractDistCheckMojo
         {
             getLog().error( error );
 
-            try ( PrintWriter output = new PrintWriter(
-                    new FileWriter( new File( "target", "logs.txt" ).getAbsolutePath(), true ) ) )
+            try ( PrintWriter output = new PrintWriter( new FileWriter( getFailuresFile(), true ) ) )
             {
                 output.printf( "%s\r\n", error );
             }
             catch ( Exception e )
             {
-                getLog().error( "Cannot append to logs.txt" );
+                getLog().error( "Cannot append to " + getFailuresFilename() );
             }
         }
+    }
+
+    private File getFailuresFile()
+    {
+        return new File( failuresDirectory, getFailuresFilename() );
     }
 }
