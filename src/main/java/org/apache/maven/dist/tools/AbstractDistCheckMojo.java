@@ -91,6 +91,13 @@ public abstract class AbstractDistCheckMojo
      */
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
     
+    /**
+     * use detailed artifact ?
+     * true to allow triple space line in db (use for scm plugins)
+     * @return 
+     */
+    abstract boolean useDetailed();
+    
     abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
         throws MojoExecutionException;
 
@@ -162,9 +169,20 @@ public abstract class AbstractDistCheckMojo
             }
             else
             {
-                ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+                // 3 space
+                if ( line.startsWith( "   " ) && useDetailed() )
+                {
+                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
 
-                checkArtifact( aLine, getVersion( aLine ) );
+                    checkArtifact( aLine, getVersion( aLine ) );
+                }
+                else
+                {
+                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+
+                    checkArtifact( aLine, getVersion( aLine ) );
+                }
+                
             }
         }
     }

@@ -97,7 +97,11 @@ public class DistCheckSiteMojo
      * Http status ok code.
      */
     protected static final int HTTP_OK = 200;
-
+    @Override
+    boolean useDetailed()
+    {
+        return false;
+    }
     @Override
     public String getOutputName()
     {

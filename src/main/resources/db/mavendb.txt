@@ -34,52 +34,62 @@ plugin-testing org.apache.maven.plugin-testing
 plugin-tools org.apache.maven.plugin-tools
   maven-plugin-tools
 plugins org.apache.maven.plugins
-  maven-acr-plugin
-  maven-ant-plugin
-  maven-antrun-plugin
-  maven-assembly-plugin
-  maven-changelog-plugin
-  maven-changes-plugin
-  maven-checkstyle-plugin
+  maven-acr-plugin A1
+  maven-ant-plugin A1
+  maven-antrun-plugin A1
+  maven-assembly-plugin A1
+  maven-changelog-plugin A1
+  maven-changes-plugin A1
+  maven-checkstyle-plugin A1
   maven-clean-plugin A1
   maven-compiler-plugin A1
-  maven-dependency-plugin
+  maven-dependency-plugin A1
   maven-deploy-plugin A1
-  maven-doap-plugin
-  maven-docck-plugin
+  maven-doap-plugin A1
+  maven-docck-plugin A1
   maven-ear-plugin A1
-  maven-eclipse-plugin
-  maven-ejb-plugin
-  maven-gpg-plugin
-  maven-help-plugin
-  maven-idea-plugin
+  maven-eclipse-plugin A1
+  maven-ejb-plugin A1
+  maven-gpg-plugin A1
+  maven-help-plugin A1
+  maven-idea-plugin A1
   maven-install-plugin A1
-  maven-invoker-plugin
-  maven-jar-plugin
-  maven-jarsigner-plugin
-  maven-javadoc-plugin
-  maven-linkcheck-plugin
-  maven-one-plugin
-  maven-patch-plugin
-  maven-pdf-plugin
+  maven-invoker-plugin A1
+  maven-jar-plugin A1
+  maven-jarsigner-plugin A1
+  maven-javadoc-plugin A1
+  maven-linkcheck-plugin A1
+  maven-one-plugin A1
+  maven-patch-plugin A1
+  maven-pdf-plugin A1
   maven-plugins
-  maven-pmd-plugin
-  maven-project-info-reports-plugin
-  maven-rar-plugin
-  maven-reactor-plugin
-  maven-remote-resources-plugin
-  maven-repository-plugin
+  maven-pmd-plugin A1
+  maven-project-info-reports-plugin A1
+  maven-rar-plugin A1
+  maven-reactor-plugin A1
+  maven-remote-resources-plugin A1
+  maven-repository-plugin A1
   maven-resources-plugin A1
-  maven-scm-publish-plugin
-  maven-shade-plugin
-  maven-site-plugin
-  maven-source-plugin
-  maven-stage-plugin
-  maven-toolchains-plugin
-  maven-verifier-plugin
-  maven-war-plugin
+  maven-scm-publish-plugin A1
+  maven-shade-plugin A1
+  maven-site-plugin A1
+  maven-source-plugin A1
+  maven-stage-plugin A1
+  maven-toolchains-plugin A1
+  maven-verifier-plugin A1
+  maven-war-plugin A1
+   maven-release-plugin 2.4.1 A1  
+   maven-scm-plugin A1
+   maven-jxr-plugin A1 
+   maven-enforcer-plugin A1 
+   maven-archetype-plugin A1
+   maven-failsafe-plugin A1
+   maven-surefire-plugin A1
+   maven-surefire-report-plugin A1
+   maven-plugin-plugin A1
+#### A1 site2X 
 release org.apache.maven.release
-  maven-release 2.4.1 A1
+  maven-release 2.4.1 
 reporting org.apache.maven.reporting
   maven-reporting-api
   maven-reporting-exec
@@ -88,7 +98,7 @@ resources org.apache.apache.resources
   apache-resource-bundles
   apache-source-release-assembly-descriptor
 scm org.apache.maven.scm
-  maven-scm
+  maven-scm 
 shared org.apache.maven.shared
   file-management
   maven-artifact-resolver

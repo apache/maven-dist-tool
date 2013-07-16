@@ -89,6 +89,13 @@ public class DistCheckAggregatorsSiteMojo
         return "Verification aggregators";
     }
 
+    @Override
+    boolean useDetailed()
+    {
+        return true;
+    }
+
+    
     private static class DistCheckAggregatorSite
         extends AbstractCheckResult
     {

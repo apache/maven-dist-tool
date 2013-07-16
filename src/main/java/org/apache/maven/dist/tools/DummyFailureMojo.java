@@ -53,7 +53,11 @@ public class DummyFailureMojo extends AbstractDistCheckMojo
      */
     @Component
     protected MavenProject project;
-    
+    @Override
+    boolean useDetailed()
+    {
+        return false;
+    }
     @Override
     public void execute() throws MojoExecutionException
     {
