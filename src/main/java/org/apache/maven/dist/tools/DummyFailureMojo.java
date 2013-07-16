@@ -45,7 +45,7 @@ public class DummyFailureMojo extends AbstractDistCheckMojo
     /**
      * Reporting directory.
      */
-    @Parameter( defaultValue = "target/site", required = true )
+    @Parameter( defaultValue = "${project.reporting.outputDirectory}", required = true )
     protected File outputDirectory;
 
     /**
