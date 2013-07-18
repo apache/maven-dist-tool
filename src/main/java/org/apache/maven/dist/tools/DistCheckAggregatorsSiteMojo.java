@@ -81,6 +81,7 @@ public class DistCheckAggregatorsSiteMojo
     @Parameter
     protected List<String> ignoreDistFailures;
 
+    @Override
     protected String getFailuresFilename()
     {
         return FAILURES_FILENAME;
@@ -202,15 +203,14 @@ public class DistCheckAggregatorsSiteMojo
         Sink sink = getSink();
         sink.head();
         sink.title();
-        sink.text( "Check source release" );
+        sink.text( "Check listing pages" );
         sink.title_();
         sink.head_();
 
         sink.body();
         sink.section1();
         sink.paragraph();
-        sink.text( "Check Source Release"
-                + " (= artifactId + version + '-source-release.zip[.asc|.md5]') availability in:" );
+        sink.text( "If error the element from artifact is shown after icon" );
         sink.paragraph_();
         sink.list();
         sink.listItem();
@@ -225,7 +225,7 @@ public class DistCheckAggregatorsSiteMojo
         sink.listItem_();
         sink.list_();
         sink.paragraph();
-        sink.text( "Older artifacts exploration is Work In Progress..." );
+        sink.text( "Not good display yet..." );
         sink.paragraph_();
         sink.section1_();
 

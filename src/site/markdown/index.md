@@ -9,14 +9,17 @@ Results are displayed in 2 reports:
 
 * [Disttool> Source Release][2] report, for checks about artifacts source release publication.
 
-This is [Work In Progress][3]...
+* [Disttool> Listing page][3] report, for checks listing page.
+
+This is [Work In Progress][4]...
 
 Notice that this plugin is actually intended for Maven itself only: if interest is expressed to use it
 in other context, it would require more configurations.
 
 [1]: ./dist-tool-checksite.html
 [2]: ./dist-tool-checksourcerelease.html
-[3]: ./todo.html
+[3]: ./dist-tool-checkaggregator.html
+[4]: ./todo.html
 
 http://maven.apache.org/developers/release/maven-project-release-procedure.html#Copy_the_source_release_to_the_Apache_Distribution_Area
         

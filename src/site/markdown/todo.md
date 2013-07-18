@@ -15,6 +15,10 @@ Todo
     * http://maven.apache.org/shared/
     * http://maven.apache.org/pom/
     * http://maven.apache.org/skins/
+pom listing handled ugly hardcoded way :(
+
+Start think on a more database way of storing infos.
+ * sources may contains artifacts,artifact may be on listings listing may have categories ...
 
 * Option to fail the build (or separate goal), so we don't have to check the report daily, but let the CI server mail when failing
 
