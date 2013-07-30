@@ -264,7 +264,6 @@
             <ignoreDistFailure>doxia-linkcheck:1.2</ignoreDistFailure>
             <ignoreDistFailure>apache-maven:2.0.11</ignoreDistFailure><!-- this one is in dist but not in central -->
             <ignoreDistFailure>maven-docck-plugin:1.0</ignoreDistFailure>
-            <ignoreDistFailure>maven-one-plugin:1.2</ignoreDistFailure>
             <ignoreDistFailure>maven-reactor-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>file-management:1.2.1</ignoreDistFailure>
             <ignoreDistFailure>maven-repository-builder:1.0-alpha-2</ignoreDistFailure>
