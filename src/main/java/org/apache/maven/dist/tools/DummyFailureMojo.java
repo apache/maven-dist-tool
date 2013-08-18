@@ -20,6 +20,7 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.maven.doxia.siterenderer.Renderer;
@@ -29,6 +30,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  *
@@ -41,6 +43,7 @@ public class DummyFailureMojo
     private final static String[] FAILURES_FILENAMES = { DistCheckSourceReleaseMojo.FAILURES_FILENAME,
         DistCheckSiteMojo.FAILURES_FILENAME, DistCheckAggregatorsSiteMojo.FAILURES_FILENAME };
 
+    private static final String EOL = System.getProperty( "line.separator" );
     /**
      * Site renderer.
      */
@@ -69,14 +72,37 @@ public class DummyFailureMojo
     public void execute()
         throws MojoExecutionException
     {
+        boolean failure = false;
         // if failures log file is present, throw exception to fail build
         for ( String failuresFilename : FAILURES_FILENAMES )
         {
-            if ( new File( failuresDirectory, failuresFilename ).exists() )
+            failure |= checkFailure( failuresFilename );
+        }
+
+        if ( failure )
+        {
+            throw new MojoExecutionException( "Dist tools report non empty please check: "
+                + "https://builds.apache.org/job/dist-tool-plugin/site/" );
+        }
+    }
+
+    private boolean checkFailure( String failuresFilename )
+        throws MojoExecutionException
+    {
+        File failureFile = new File( failuresDirectory, failuresFilename );
+
+        try
+        {
+            if ( failureFile.exists() )
             {
-                throw new MojoExecutionException( "Dist tools report non empty please check: "
-                        + "https://builds.apache.org/job/dist-tool-plugin/site/" );
+                getLog().error( failuresFilename + " error log not empty:" + EOL + FileUtils.fileRead( failureFile ) );
             }
+
+            return failureFile.exists();
+        }
+        catch ( IOException ioe )
+        {
+            throw new MojoExecutionException( "Cannot read " + failureFile, ioe );
         }
     }
 
