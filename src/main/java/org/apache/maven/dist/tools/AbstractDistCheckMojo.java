@@ -56,6 +56,8 @@ public abstract class AbstractDistCheckMojo
 {
     private static final String MAVEN_DB = "db/mavendb.txt";
 
+    private static final String EOL = System.getProperty( "line.separator" );
+
     /**
      * URL of repository where artifacts are stored. 
      */
@@ -318,7 +320,7 @@ public abstract class AbstractDistCheckMojo
 
             try ( PrintWriter output = new PrintWriter( new FileWriter( getFailuresFile(), true ) ) )
             {
-                output.printf( "%s\r\n", error );
+                output.printf( "%s%s", error, EOL );
             }
             catch ( Exception e )
             {
