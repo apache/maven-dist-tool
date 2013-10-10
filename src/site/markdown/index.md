@@ -3,13 +3,13 @@ About dist-tool-plugin
 
 The dist-tool-plugin checks that Maven release rules are well applied across every artifact.
 
-Results are displayed in 2 reports:
+Results are displayed in 3 reports:
 
 * [Disttool> Sites][1] report, for checks about sites associated to artifacts,
 
 * [Disttool> Source Release][2] report, for checks about artifacts source release publication.
 
-* [Disttool> Listing page][3] report, for checks listing page.
+* [Disttool> Listing page][3] report, for checks about listing page.
 
 This is [Work In Progress][4]...
 
