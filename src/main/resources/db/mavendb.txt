@@ -97,8 +97,9 @@ plugins org.apache.maven.plugins
    maven-surefire-plugin A1
    maven-surefire-report-plugin A1
    maven-plugin-plugin A1
+## release version is hardcoded because parent pom version 3, 4 and 5 were released earlier, but > to actual 2.x version
 release org.apache.maven.release
-  maven-release 2.4.1 
+  maven-release 2.4.2 
 reporting org.apache.maven.reporting
   maven-reporting-api A2
   maven-reporting-exec A2
