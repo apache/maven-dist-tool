@@ -109,6 +109,12 @@ public abstract class AbstractDistCheckMojo
     protected abstract String getFailuresFilename();
 
     @Override
+    public String getOutputName()
+    {
+        return "dist-tool-" + getFailuresFilename().replace( ".old", "" );
+    }
+
+    @Override
     protected String getOutputDirectory()
     {
         return outputDirectory.getAbsolutePath();

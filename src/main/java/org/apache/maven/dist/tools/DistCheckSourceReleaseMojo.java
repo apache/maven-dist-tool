@@ -69,15 +69,9 @@ public class DistCheckSourceReleaseMojo
     }
 
     @Override
-    public String getOutputName()
-    {
-        return "dist-tool-checksourcerelease";
-    }
-
-    @Override
     public String getName( Locale locale )
     {
-        return "Disttool> Source Release";
+        return "Dist Tool> Source Release";
     }
 
     @Override

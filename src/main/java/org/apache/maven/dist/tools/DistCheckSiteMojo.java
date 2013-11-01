@@ -99,32 +99,28 @@ public class DistCheckSiteMojo
      * Http status ok code.
      */
     protected static final int HTTP_OK = 200;
+
     @Override
     boolean useDetailed()
     {
         return false;
     }
+
     protected String getFailuresFilename()
     {
         return FAILURES_FILENAME;
     }
 
     @Override
-    public String getOutputName()
-    {
-        return "dist-tool-checksite";
-    }
-
-    @Override
     public String getName( Locale locale )
     {
-        return "Disttool> Sites";
+        return "Dist Tool> Sites";
     }
 
     @Override
     public String getDescription( Locale locale )
     {
-        return "Verification of various maven web sites";
+        return "Verification of documentation site corresponding to artifact";
     }
 
     class CheckSiteResult

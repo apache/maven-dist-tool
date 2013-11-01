@@ -5,20 +5,20 @@ The dist-tool-plugin checks that Maven release rules are well applied across eve
 
 Results are displayed in 3 reports:
 
-* [Disttool> Sites][1] report, for checks about sites associated to artifacts,
+* [Dist Tool> Sites][1] report, for checks about sites associated to artifacts,
 
-* [Disttool> Source Release][2] report, for checks about artifacts source release publication.
+* [Dist Tool> Source Release][2] report, for checks about artifacts source release publication.
 
-* [Disttool> Index page][3] report, for checks about index pages.
+* [Dist Tool> Index page][3] report, for checks about index pages.
 
 This is [Work In Progress][4]...
 
 Notice that this plugin is actually intended for Maven itself only: if interest is expressed to use it
 in other context, it would require more configurations.
 
-[1]: ./dist-tool-checksite.html
-[2]: ./dist-tool-checksourcerelease.html
-[3]: ./dist-tool-checkindexpage.html
+[1]: ./dist-tool-check-site.html
+[2]: ./dist-tool-check-source-release.html
+[3]: ./dist-tool-check-index-page.html
 [4]: ./todo.html
 
 http://maven.apache.org/developers/release/maven-project-release-procedure.html#Copy_the_source_release_to_the_Apache_Distribution_Area

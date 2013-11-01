@@ -85,15 +85,9 @@ public class DistCheckIndexPageMojo
     }
 
     @Override
-    public String getOutputName()
-    {
-        return "dist-tool-checkindexpage";
-    }
-
-    @Override
     public String getName( Locale locale )
     {
-        return "Disttool> Index Pages";
+        return "Dist Tool> Index Pages";
     }
 
     @Override

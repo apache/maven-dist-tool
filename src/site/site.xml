@@ -32,9 +32,9 @@ under the License.
     <body>
         <menu name="Overwiev">
             <item name="Introduction" href="index.html" />
-            <item name="Disttool> Sites" href="dist-tool-checksite.html" />
-            <item name="Disttool> Source Release" href="dist-tool-checksourcerelease.html" />
-            <item name="Disttool> Index Pages" href="dist-tool-checkindexpage.html" />
+            <item name="Dist Tool> Sites" href="dist-tool-check-site.html" />
+            <item name="Dist Tool> Source Release" href="dist-tool-check-source-release.html" />
+            <item name="Dist Tool> Index Pages" href="dist-tool-check-index-page.html" />
         </menu>        
         <menu name="for dev">
             <item name="TODO" href="todo.html" />
