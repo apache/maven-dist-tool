@@ -109,14 +109,14 @@ public class DistCheckIndexPageMojo
     }
 
     
-    private static class DistCheckIndexPage
+    private static class CheckIndexPageResult
         extends AbstractCheckResult
     {
 
         private String indexVersion;
         private String indexDate;
         
-        public DistCheckIndexPage( ConfigurationLineInfo r, String version )
+        public CheckIndexPageResult( ConfigurationLineInfo r, String version )
         {
             super( r, version );
         }
@@ -131,31 +131,32 @@ public class DistCheckIndexPageMojo
             this.indexDate = ownText;
         }
     }
-    private final Map<String, List<DistCheckIndexPage>> results = new HashMap<>();
+    private final Map<String, List<CheckIndexPageResult>> results = new HashMap<>();
 
 
-    private void reportLine( Sink sink, DistCheckIndexPage csr , boolean displayDate )
+    private void reportLine( Sink sink, CheckIndexPageResult cipr , boolean displayDate )
     {
-        ConfigurationLineInfo cli = csr.getConfigurationLine();
+        ConfigurationLineInfo cli = cipr.getConfigurationLine();
 
         sink.tableRow();
         sink.tableCell();
-        sink.rawText( csr.getConfigurationLine().getArtifactId() );
+        sink.rawText( cipr.getConfigurationLine().getArtifactId() );
         sink.tableCell_();
 
         // LATEST column
         sink.tableCell();
         sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
-        sink.rawText( csr.getVersion() );
+        sink.rawText( cipr.getVersion() );
         sink.link_();
-        if ( csr.getVersion().equals( csr.indexVersion ) )
+        if ( cipr.getVersion().equals( cipr.indexVersion ) )
         {
             iconSuccess( sink );
         }
         else
         {
             iconError( sink );
-            sink.rawText( csr.indexVersion );
+            sink.lineBreak();
+            sink.rawText( cipr.indexVersion + " in index page" );
         }
         sink.tableCell_();
 
@@ -163,15 +164,16 @@ public class DistCheckIndexPageMojo
         if ( displayDate )
         {
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getReleaseDateFromMetadata() );
-            if ( csr.getConfigurationLine().getReleaseDateFromMetadata().equals( csr.indexDate ) )
+            sink.rawText( cipr.getConfigurationLine().getReleaseDateFromMetadata() );
+            if ( cipr.getConfigurationLine().getReleaseDateFromMetadata().equals( cipr.indexDate ) )
             {
                 iconSuccess( sink );
             }
             else
             {
                 iconError( sink );
-                sink.rawText( csr.indexDate );
+                sink.lineBreak();
+                sink.rawText( cipr.indexDate + " in index page" );
             }
             sink.tableCell_();
         }
@@ -211,28 +213,39 @@ public class DistCheckIndexPageMojo
         sink.paragraph_();
         sink.section1_();
 
-        for ( String key : results.keySet() )
+        for ( Map.Entry<String, List<CheckIndexPageResult>> result: results.entrySet() )
         {
-            sink.paragraph();
-            sink.text( (String) INDEXES_REF.get( key )[1] );
-            sink.paragraph_();
+            String indexPageId = result.getKey();
+            Object[] indexPageInfo = INDEXES_REF.get( indexPageId );
+            String indexPageUrl = (String) indexPageInfo[0];
+            String indexPageName = (String) indexPageInfo[1];
+            List<CheckIndexPageResult> indexPageResults = result.getValue();
+
+            sink.sectionTitle2();
+            sink.text( indexPageName + " index page: " );
+            sink.anchor( indexPageUrl );
+            sink.text( indexPageUrl );
+            sink.anchor_();
+            sink.sectionTitle2_();
+
             sink.table();
             sink.tableRow();
             sink.tableHeaderCell();
-            sink.rawText( "LATEST" );
+            sink.rawText( "Component" );
             sink.tableHeaderCell_();
-            boolean displayDate = INDEXES_REF.get( key )[3] != null;
+            sink.tableHeaderCell();
+            sink.rawText( "VERSION" );
+            sink.tableHeaderCell_();
+            boolean displayDate = indexPageInfo[3] != null;
             if ( displayDate )
             {
                 sink.tableHeaderCell();
                 sink.rawText( "DATE" );
                 sink.tableHeaderCell_();
             }
-            sink.tableHeaderCell();
-            sink.rawText( "VERSION" );
-            sink.tableHeaderCell_();
             sink.tableRow_();
-            for ( DistCheckIndexPage csr : results.get( key ) )
+
+            for ( CheckIndexPageResult csr : indexPageResults )
             {
                 reportLine( sink, csr, displayDate );
             }
@@ -244,7 +257,7 @@ public class DistCheckIndexPageMojo
         sink.close();
     }
 
-    private void updateIndexPageInfo( ConfigurationLineInfo cli, DistCheckIndexPage r, Object[] inf )
+    private void updateIndexPageInfo( ConfigurationLineInfo cli, CheckIndexPageResult r, Object[] inf )
         throws IOException
     {
         try
@@ -292,13 +305,13 @@ public class DistCheckIndexPageMojo
     {
         try
         {
-            DistCheckIndexPage result = new DistCheckIndexPage( configLine, version );
+            CheckIndexPageResult result = new CheckIndexPageResult( configLine, version );
 
             if ( configLine.getIndexPageId() != null )
             {
                 if ( results.get( configLine.getIndexPageId() ) == null )
                 {
-                    results.put( configLine.getIndexPageId(), new LinkedList<DistCheckIndexPage>() );
+                    results.put( configLine.getIndexPageId(), new LinkedList<CheckIndexPageResult>() );
                 } 
                 results.get( configLine.getIndexPageId() ).add( result );
                 updateIndexPageInfo( configLine, result, INDEXES_REF.get( configLine.getIndexPageId() ) );

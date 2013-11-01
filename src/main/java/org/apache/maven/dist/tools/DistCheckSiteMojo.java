@@ -127,7 +127,8 @@ public class DistCheckSiteMojo
         return "Verification of various maven web sites";
     }
 
-    class DistCheckSiteResult extends AbstractCheckResult
+    class CheckSiteResult
+        extends AbstractCheckResult
     {
 
         private String url;
@@ -136,7 +137,7 @@ public class DistCheckSiteMojo
         private Document document;
         private String screenshotName;
 
-        public DistCheckSiteResult( ConfigurationLineInfo r, String version )
+        public CheckSiteResult( ConfigurationLineInfo r, String version )
         {
             super( r, version );
         }
@@ -272,7 +273,7 @@ public class DistCheckSiteMojo
     }
 
     // keep result
-    private List<DistCheckSiteResult> results = new LinkedList<>();
+    private List<CheckSiteResult> results = new LinkedList<>();
     private final List<HTMLChecker> checker = HTMLCheckerFactory.getCheckers();
     private WebDriver driver;
 
@@ -336,7 +337,7 @@ public class DistCheckSiteMojo
         sink.tableRow_();
 
         String directory = null;
-        for ( DistCheckSiteResult csr : results )
+        for ( CheckSiteResult csr : results )
         {
             if ( !csr.getConfigurationLine().getDirectory().equals( directory ) )
             {
@@ -415,7 +416,7 @@ public class DistCheckSiteMojo
 
     private void checkSite( ConfigurationLineInfo cli, String version )
     {
-        DistCheckSiteResult result = new DistCheckSiteResult( cli, version );
+        CheckSiteResult result = new CheckSiteResult( cli, version );
         results.add( result );
         try
         {

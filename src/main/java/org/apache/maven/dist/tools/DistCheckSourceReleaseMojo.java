@@ -86,7 +86,7 @@ public class DistCheckSourceReleaseMojo
         return "Verification of source release";
     }
 
-    private static class DistCheckSourceRelease
+    private static class CheckSourceReleaseResult
         extends AbstractCheckResult
     {
 
@@ -94,7 +94,7 @@ public class DistCheckSourceReleaseMojo
         private List<String> dist;
         private List<String> distOlder;
 
-        public DistCheckSourceRelease( ConfigurationLineInfo r, String version )
+        public CheckSourceReleaseResult( ConfigurationLineInfo r, String version )
         {
             super( r, version );
         }
@@ -114,7 +114,7 @@ public class DistCheckSourceReleaseMojo
             distOlder = checkRepos;
         }
     }
-    private final List<DistCheckSourceRelease> results = new LinkedList<>();
+    private final List<CheckSourceReleaseResult> results = new LinkedList<>();
 
     private static class DirectoryStatistics
     {
@@ -130,12 +130,12 @@ public class DistCheckSourceReleaseMojo
             this.directory = directory;
         }
 
-        public boolean contains( DistCheckSourceRelease csr )
+        public boolean contains( CheckSourceReleaseResult csrr )
         {
-            return csr.getConfigurationLine().getDirectory().equals( directory );
+            return csrr.getConfigurationLine().getDirectory().equals( directory );
         }
 
-        public void addArtifact( DistCheckSourceRelease result )
+        public void addArtifact( CheckSourceReleaseResult result )
         {
             artifactsCount++;
             if ( !result.central.isEmpty() )
@@ -157,25 +157,25 @@ public class DistCheckSourceReleaseMojo
         }
     }
 
-    private void reportLine( Sink sink, DistCheckSourceRelease csr )
+    private void reportLine( Sink sink, CheckSourceReleaseResult csrr )
     {
-        ConfigurationLineInfo cli = csr.getConfigurationLine();
+        ConfigurationLineInfo cli = csrr.getConfigurationLine();
 
         sink.tableRow();
         sink.tableCell();
-        sink.rawText( csr.getConfigurationLine().getArtifactId() );
+        sink.rawText( csrr.getConfigurationLine().getArtifactId() );
         sink.tableCell_();
 
         // LATEST column
         sink.tableCell();
         sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
-        sink.rawText( csr.getVersion() );
+        sink.rawText( csrr.getVersion() );
         sink.link_();
         sink.tableCell_();
 
         // DATE column
         sink.tableCell();
-        sink.rawText( csr.getConfigurationLine().getReleaseDateFromMetadata() );
+        sink.rawText( csrr.getConfigurationLine().getReleaseDateFromMetadata() );
         sink.tableCell_();
 
         // central column
@@ -184,11 +184,11 @@ public class DistCheckSourceReleaseMojo
         sink.text( "artifact" );
         sink.link_();
         sink.text( "/" );
-        sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) );
-        sink.text( csr.getVersion() );
+        sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) );
+        sink.text( csrr.getVersion() );
         sink.link_();
         sink.text( "/" );
-        if ( csr.central.isEmpty() )
+        if ( csrr.central.isEmpty() )
         {
             iconSuccess( sink );
         }
@@ -196,7 +196,7 @@ public class DistCheckSourceReleaseMojo
         {
             iconWarning( sink );
         }
-        for ( String missing : csr.central )
+        for ( String missing : csrr.central )
         {
             sink.lineBreak();
             iconError( sink );
@@ -206,12 +206,12 @@ public class DistCheckSourceReleaseMojo
 
         // dist column
         sink.tableCell();
-        String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csr.getVersion() + "/source" ) : "" );
+        String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csrr.getVersion() + "/source" ) : "" );
         sink.link( DIST_AREA + directory );
         sink.text( directory );
         sink.link_();
         sink.text( "source-release" );
-        if ( csr.dist.isEmpty() && csr.distOlder.isEmpty() )
+        if ( csrr.dist.isEmpty() && csrr.distOlder.isEmpty() )
         {
             iconSuccess( sink );
         }
@@ -220,15 +220,15 @@ public class DistCheckSourceReleaseMojo
             iconWarning( sink );
         }
         StringBuilder cliMissing = new StringBuilder();
-        for ( String missing : csr.dist )
+        for ( String missing : csrr.dist )
         {
             sink.lineBreak();
             iconError( sink );
             sink.rawText( missing );
-            if ( !csr.central.contains( missing ) )
+            if ( !csrr.central.contains( missing ) )
             {
                 // if the release distribution is in central repository, we can get it from there...
-                cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csr.getVersion() ) ).
+                cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) ).
                         append( "/" ).append( missing );
                 cliMissing.append( "\nsvn add " ).append( missing );
             }
@@ -249,7 +249,7 @@ public class DistCheckSourceReleaseMojo
         }
 
         StringBuilder cliOlder = new StringBuilder();
-        for ( String missing : csr.distOlder )
+        for ( String missing : csrr.distOlder )
         {
             sink.lineBreak();
             iconRemove( sink );
@@ -296,15 +296,15 @@ public class DistCheckSourceReleaseMojo
 
         List<DirectoryStatistics> statistics = new ArrayList<>();
         DirectoryStatistics current = null;
-        for ( DistCheckSourceRelease csr : results )
+        for ( CheckSourceReleaseResult csrr : results )
         {
-            if ( ( current == null ) || !current.contains( csr ) )
+            if ( ( current == null ) || !current.contains( csrr ) )
             {
-                current = new DirectoryStatistics( csr.getConfigurationLine().getDirectory() );
+                current = new DirectoryStatistics( csrr.getConfigurationLine().getDirectory() );
                 statistics.add( current );
             }
-            current.addArtifact( csr );
-            stats.addArtifact( csr );
+            current.addArtifact( csrr );
+            stats.addArtifact( csrr );
         }
 
         Sink sink = getSink();
@@ -353,16 +353,16 @@ public class DistCheckSourceReleaseMojo
         Iterator<DirectoryStatistics> dirs = statistics.iterator();
         current = null;
 
-        for ( DistCheckSourceRelease csr : results )
+        for ( CheckSourceReleaseResult csrr : results )
         {
-            if ( ( current == null ) || !current.contains( csr ) )
+            if ( ( current == null ) || !current.contains( csrr ) )
             {
                 current = dirs.next();
 
                 sink.tableRow();
                 sink.tableHeaderCell();
                 // shorten groupid
-                sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) + ": "
+                sink.rawText( csrr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) + ": "
                     + String.valueOf( current.artifactsCount ) );
                 sink.tableHeaderCell_();
                 sink.tableHeaderCell();
@@ -375,7 +375,7 @@ public class DistCheckSourceReleaseMojo
                 sink.tableRow_();
             }
 
-            reportLine( sink, csr );
+            reportLine( sink, csrr );
         }
 
         sink.table_();
@@ -513,7 +513,7 @@ public class DistCheckSourceReleaseMojo
     {
         try
         {
-            DistCheckSourceRelease result = new DistCheckSourceRelease( configLine, version );
+            CheckSourceReleaseResult result = new CheckSourceReleaseResult( configLine, version );
             results.add( result );
 
             // central
