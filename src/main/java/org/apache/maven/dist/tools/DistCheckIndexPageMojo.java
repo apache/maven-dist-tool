@@ -154,9 +154,10 @@ public class DistCheckIndexPageMojo
         }
         else
         {
-            iconError( sink );
             sink.lineBreak();
-            sink.rawText( cipr.indexVersion + " in index page" );
+            sink.rawText( cipr.indexVersion );
+            iconError( sink );
+            sink.rawText( " in index page" );
         }
         sink.tableCell_();
 
@@ -171,9 +172,10 @@ public class DistCheckIndexPageMojo
             }
             else
             {
-                iconError( sink );
                 sink.lineBreak();
-                sink.rawText( cipr.indexDate + " in index page" );
+                sink.rawText( cipr.indexDate );
+                iconError( sink );
+                sink.rawText( " in index page" );
             }
             sink.tableCell_();
         }
@@ -221,11 +223,13 @@ public class DistCheckIndexPageMojo
             String indexPageName = (String) indexPageInfo[1];
             List<CheckIndexPageResult> indexPageResults = result.getValue();
 
+            sink.anchor( indexPageResults.get( 0 ).getConfigurationLine().getDirectory() );
+            sink.anchor_();
             sink.sectionTitle2();
             sink.text( indexPageName + " index page: " );
-            sink.anchor( indexPageUrl );
+            sink.link( indexPageUrl );
             sink.text( indexPageUrl );
-            sink.anchor_();
+            sink.link_();
             sink.sectionTitle2_();
 
             sink.table();
