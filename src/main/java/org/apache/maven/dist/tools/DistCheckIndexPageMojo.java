@@ -56,19 +56,19 @@ public class DistCheckIndexPageMojo
         // url title version date
         aMap.put( "IP1", new Object[]
         {
-            "http://maven.apache.org/plugins/", "Plugins", 2, 3
+            "http://maven.apache.org/plugins/", "Plugins", 2, 3, null
         } );
         aMap.put( "IP2", new Object[]
         {
-            "http://maven.apache.org/shared/", "Shared", 1, 2
+            "http://maven.apache.org/shared/", "Shared", 1, 2, null
         } );
         aMap.put( "IP3", new Object[]
         {
-            "http://maven.apache.org/skins/", "Skins", 1, null
+            "http://maven.apache.org/skins/", "Skins", 1, null, null
         } );
         aMap.put( "IP4", new Object[]
         {
-            "http://maven.apache.org/pom/", "Poms", 1, 2
+            "http://maven.apache.org/pom/", "Poms", 1, 2, null
         } );
         INDEXES_REF = Collections.unmodifiableMap( aMap );
     }
@@ -264,42 +264,51 @@ public class DistCheckIndexPageMojo
     private void updateIndexPageInfo( ConfigurationLineInfo cli, CheckIndexPageResult r, Object[] inf )
         throws IOException
     {
-        try
+        Document doc = (Document) inf[4];
+        if ( doc == null )
         {
-            Document doc = Jsoup.connect( (String) inf[0] ).get();
-            Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
-            for ( Element e : a )
+            // document not yet downloaded: download and cache
+            String url = (String) inf[0];
+            try
             {
-                // skins do not have release date
-                String art = e.attr( "href" );
-                String id = cli.getArtifactId();
-                // UGLY 
-                if ( cli.getArtifactId().equals( "maven-parent" ) )
-                {
-                    id = "maven/";
-                }
-                if ( cli.getArtifactId().equals( "maven-skins" ) )
-                {
-                    id = "skins/";
-                }
-                if ( cli.getArtifactId().equals( "apache" ) )
-                {
-                    id = "asf/";
-                }
-
-                if ( art.contains( id ) )
-                {
-                    r.setIndexVersion( e.parent().parent().child( ( Integer ) inf[2] ).ownText() );
-                    if ( inf[3] != null )
-                    {
-                        r.setIndexDate( e.parent().parent().child( ( Integer ) inf[3] ).ownText() );
-                    }
-               }
+                doc = Jsoup.connect( url ).get();
             }
+            catch ( IOException ioe )
+            {
+                throw new IOException( "IOException while reading " + url, ioe );
+            }
+            inf[4] = doc;
         }
-        catch ( IOException ioe )
+
+        Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
+
+        for ( Element e : a )
         {
-            throw new IOException( "IOException while reading " + (String) inf[0] , ioe );
+            // skins do not have release date
+            String art = e.attr( "href" );
+            String id = cli.getArtifactId();
+            // UGLY 
+            if ( cli.getArtifactId().equals( "maven-parent" ) )
+            {
+                id = "maven/";
+            }
+            if ( cli.getArtifactId().equals( "maven-skins" ) )
+            {
+                id = "skins/";
+            }
+            if ( cli.getArtifactId().equals( "apache" ) )
+            {
+                id = "asf/";
+            }
+
+            if ( art.contains( id ) )
+            {
+                r.setIndexVersion( e.parent().parent().child( ( Integer ) inf[2] ).ownText() );
+                if ( inf[3] != null )
+                {
+                    r.setIndexDate( e.parent().parent().child( ( Integer ) inf[3] ).ownText() );
+                }
+           }
         }
     }
 
