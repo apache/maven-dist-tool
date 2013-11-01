@@ -365,7 +365,7 @@ public class DistCheckSiteMojo
             sink.tableCell_();
             
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
+            sink.rawText( csr.getConfigurationLine().getReleaseDateFromMetadata() );
             sink.tableCell_();
             sink.tableCell();
             if ( csr.getStatusCode() != HTTP_OK )

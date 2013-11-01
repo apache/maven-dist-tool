@@ -275,7 +275,7 @@
             <reports>
               <report>check-site</report>
               <report>check-source-release</report>
-              <report>check-aggregator</report>
+              <report>check-index-page</report>
             </reports>
           </reportSet>
           <reportSet>

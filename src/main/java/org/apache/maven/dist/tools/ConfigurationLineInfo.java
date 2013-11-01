@@ -41,7 +41,7 @@ class ConfigurationLineInfo
 
     private final String artifactId;
     private final String forceVersion;
-    private String aggregateSite;
+    private String indexPageId;
     private Metadata metadata;
 
     public ConfigurationLineInfo( String[] infos )
@@ -52,7 +52,7 @@ class ConfigurationLineInfo
 
         this.artifactId = null;
         this.forceVersion = null;
-        this.aggregateSite = null;
+        this.indexPageId = null;
     }
 
     public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos )
@@ -62,21 +62,21 @@ class ConfigurationLineInfo
         this.srcBin = group.isSrcBin();
 
         this.artifactId = infos[0];
-        this.forceVersion = ( infos.length > 1 && !infos[1].startsWith( "A") ) ? infos[1] : null;
-        this.aggregateSite = null;
+        this.forceVersion = ( infos.length > 1 && !infos[1].startsWith( "IP" ) ) ? infos[1] : null;
+        this.indexPageId = null;
         for ( String info : infos )
         {
-            if ( info.startsWith( "A" ) )
+            if ( info.startsWith( "IP" ) )
             {
-                this.aggregateSite = info;
+                this.indexPageId = info;
             }
         }
         
     }
 
-    public String getAggregatedCode()
+    public String getIndexPageId()
     {
-        return aggregateSite;
+        return indexPageId;
     }
     
     public String getForcedVersion()
@@ -138,14 +138,13 @@ class ConfigurationLineInfo
         this.metadata = aMetadata;
     }
 
-    String getReleaseFromMetadata()
+    String getReleaseDateFromMetadata()
     {
-
         try
         {
             SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMddkkmmss" );
             Date f = dateFormatter.parse( metadata.getVersioning().getLastUpdated() );
-            // inverted for check aggregator
+            // inverted for index page check
             SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "yyyy-MM-dd" );
             return dateFormattertarget.format( f );
         }

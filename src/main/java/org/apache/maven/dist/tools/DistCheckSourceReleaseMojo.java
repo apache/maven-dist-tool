@@ -175,7 +175,7 @@ public class DistCheckSourceReleaseMojo
 
         // DATE column
         sink.tableCell();
-        sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
+        sink.rawText( csr.getConfigurationLine().getReleaseDateFromMetadata() );
         sink.tableCell_();
 
         // central column

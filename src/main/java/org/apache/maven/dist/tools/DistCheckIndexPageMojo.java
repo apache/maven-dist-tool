@@ -38,42 +38,39 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- *
- * Check presence of source-release.zip in dist repo and central repo
+ * Check index page for information about components.
  *
  * @author skygo
  */
-@Mojo( name = "check-aggregator", requiresProject = false )
-public class DistCheckAggregatorsSiteMojo
+@Mojo( name = "check-index-page", requiresProject = false )
+public class DistCheckIndexPageMojo
         extends AbstractDistCheckMojo
 {
-    static final String FAILURES_FILENAME = "check-aggregator.log";
+    static final String FAILURES_FILENAME = "check-index-page.log";
 
-    private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
-    //private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
-    private static final Map<String, Object[]> HARDCODEDAGGREGATEREF;
+    private static final Map<String, Object[]> INDEXES_REF;
 
     static
     {
         Map<String, Object[]> aMap = new HashMap<>();
         // url title version date
-        aMap.put( "A1", new Object[]
+        aMap.put( "IP1", new Object[]
         {
             "http://maven.apache.org/plugins/", "Plugins", 2, 3
         } );
-        aMap.put( "A2", new Object[]
+        aMap.put( "IP2", new Object[]
         {
             "http://maven.apache.org/shared/", "Shared", 1, 2
         } );
-        aMap.put( "A3", new Object[]
+        aMap.put( "IP3", new Object[]
         {
             "http://maven.apache.org/skins/", "Skins", 1, null
         } );
-        aMap.put( "A4", new Object[]
+        aMap.put( "IP4", new Object[]
         {
             "http://maven.apache.org/pom/", "Poms", 1, 2
         } );
-        HARDCODEDAGGREGATEREF = Collections.unmodifiableMap( aMap );
+        INDEXES_REF = Collections.unmodifiableMap( aMap );
     }
     /**
      * Ignore dist failure for <code>artifactId</code> or <code>artifactId:version</code>
@@ -90,19 +87,19 @@ public class DistCheckAggregatorsSiteMojo
     @Override
     public String getOutputName()
     {
-        return "dist-tool-checkaggregator";
+        return "dist-tool-checkindexpage";
     }
 
     @Override
     public String getName( Locale locale )
     {
-        return "Disttool> Aggregator Check";
+        return "Disttool> Index Page";
     }
 
     @Override
     public String getDescription( Locale locale )
     {
-        return "Verification aggregators";
+        return "Verification of index page";
     }
 
     @Override
@@ -112,32 +109,32 @@ public class DistCheckAggregatorsSiteMojo
     }
 
     
-    private static class DistCheckAggregatorSite
+    private static class DistCheckIndexPage
         extends AbstractCheckResult
     {
 
-        private String versionAggr;
-        private String dateAggr;
+        private String indexVersion;
+        private String indexDate;
         
-        public DistCheckAggregatorSite( ConfigurationLineInfo r, String version )
+        public DistCheckIndexPage( ConfigurationLineInfo r, String version )
         {
             super( r, version );
         }
 
-        private void setAggregatedVersion( String ownText )
+        private void setIndexVersion( String ownText )
         {
-            this.versionAggr = ownText;
+            this.indexVersion = ownText;
         }
 
-        private void setAggregatedDate( String ownText )
+        private void setIndexDate( String ownText )
         {
-            this.dateAggr = ownText;
+            this.indexDate = ownText;
         }
     }
-    private final Map<String, List<DistCheckAggregatorSite>> results = new HashMap<>();
+    private final Map<String, List<DistCheckIndexPage>> results = new HashMap<>();
 
 
-    private void reportLine( Sink sink, DistCheckAggregatorSite csr , boolean displayDate )
+    private void reportLine( Sink sink, DistCheckIndexPage csr , boolean displayDate )
     {
         ConfigurationLineInfo cli = csr.getConfigurationLine();
 
@@ -151,14 +148,14 @@ public class DistCheckAggregatorsSiteMojo
         sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
         sink.rawText( csr.getVersion() );
         sink.link_();
-        if ( csr.getVersion().equals( csr.versionAggr ) )
+        if ( csr.getVersion().equals( csr.indexVersion ) )
         {
             iconSuccess( sink );
         }
         else
         {
             iconError( sink );
-            sink.rawText( csr.versionAggr );
+            sink.rawText( csr.indexVersion );
         }
         sink.tableCell_();
 
@@ -166,15 +163,15 @@ public class DistCheckAggregatorsSiteMojo
         if ( displayDate )
         {
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getReleaseFromMetadata() );
-            if ( csr.getConfigurationLine().getReleaseFromMetadata().equals( csr.dateAggr ) )
+            sink.rawText( csr.getConfigurationLine().getReleaseDateFromMetadata() );
+            if ( csr.getConfigurationLine().getReleaseDateFromMetadata().equals( csr.indexDate ) )
             {
                 iconSuccess( sink );
             }
             else
             {
                 iconError( sink );
-                sink.rawText( csr.dateAggr );
+                sink.rawText( csr.indexDate );
             }
             sink.tableCell_();
         }
@@ -203,43 +200,28 @@ public class DistCheckAggregatorsSiteMojo
         Sink sink = getSink();
         sink.head();
         sink.title();
-        sink.text( "Check listing pages" );
+        sink.text( "Check index pages" );
         sink.title_();
         sink.head_();
 
         sink.body();
         sink.section1();
         sink.paragraph();
-        sink.text( "If error the element from artifact is shown after icon" );
-        sink.paragraph_();
-        sink.list();
-        sink.listItem();
-        sink.link( repoBaseUrl );
-        sink.text( "central" );
-        sink.link_();
-        sink.listItem_();
-        sink.listItem();
-        sink.link( DIST_AREA );
-        sink.text( "Apache distribution area" );
-        sink.link_();
-        sink.listItem_();
-        sink.list_();
-        sink.paragraph();
-        sink.text( "Not good display yet..." );
+        sink.text( "Check that index pages have been updated with latest release info." );
         sink.paragraph_();
         sink.section1_();
 
         for ( String key : results.keySet() )
         {
             sink.paragraph();
-            sink.text( (String) HARDCODEDAGGREGATEREF.get( key )[1] );
+            sink.text( (String) INDEXES_REF.get( key )[1] );
             sink.paragraph_();
             sink.table();
             sink.tableRow();
             sink.tableHeaderCell();
             sink.rawText( "LATEST" );
             sink.tableHeaderCell_();
-            boolean displayDate = HARDCODEDAGGREGATEREF.get( key )[3] != null;
+            boolean displayDate = INDEXES_REF.get( key )[3] != null;
             if ( displayDate )
             {
                 sink.tableHeaderCell();
@@ -250,7 +232,7 @@ public class DistCheckAggregatorsSiteMojo
             sink.rawText( "VERSION" );
             sink.tableHeaderCell_();
             sink.tableRow_();
-            for ( DistCheckAggregatorSite csr : results.get( key ) )
+            for ( DistCheckIndexPage csr : results.get( key ) )
             {
                 reportLine( sink, csr, displayDate );
             }
@@ -262,8 +244,8 @@ public class DistCheckAggregatorsSiteMojo
         sink.close();
     }
 
-    private void checkAggregate( ConfigurationLineInfo cli ,  
-            DistCheckAggregatorSite r, Object[] inf ) throws IOException
+    private void updateIndexPageInfo( ConfigurationLineInfo cli, DistCheckIndexPage r, Object[] inf )
+        throws IOException
     {
         try
         {
@@ -287,12 +269,13 @@ public class DistCheckAggregatorsSiteMojo
                 {
                     id = "asf/";
                 }
+
                 if ( art.contains( id ) )
                 {
-                    r.setAggregatedVersion( e.parent().parent().child( ( Integer ) inf[2] ).ownText() );
+                    r.setIndexVersion( e.parent().parent().child( ( Integer ) inf[2] ).ownText() );
                     if ( inf[3] != null )
                     {
-                        r.setAggregatedDate( e.parent().parent().child( ( Integer ) inf[3] ).ownText() );
+                        r.setIndexDate( e.parent().parent().child( ( Integer ) inf[3] ).ownText() );
                     }
                }
             }
@@ -309,16 +292,16 @@ public class DistCheckAggregatorsSiteMojo
     {
         try
         {
-            DistCheckAggregatorSite result = new DistCheckAggregatorSite( configLine, version );
+            DistCheckIndexPage result = new DistCheckIndexPage( configLine, version );
 
-            if ( configLine.getAggregatedCode() != null )
+            if ( configLine.getIndexPageId() != null )
             {
-                if ( results.get( configLine.getAggregatedCode() ) == null )
+                if ( results.get( configLine.getIndexPageId() ) == null )
                 {
-                    results.put( configLine.getAggregatedCode(), new LinkedList<DistCheckAggregatorSite>() );
+                    results.put( configLine.getIndexPageId(), new LinkedList<DistCheckIndexPage>() );
                 } 
-                results.get( configLine.getAggregatedCode() ).add( result );
-                checkAggregate( configLine, result, HARDCODEDAGGREGATEREF.get( configLine.getAggregatedCode() ) );
+                results.get( configLine.getIndexPageId() ).add( result );
+                updateIndexPageInfo( configLine, result, INDEXES_REF.get( configLine.getIndexPageId() ) );
             }
         }
         catch ( IOException ex )

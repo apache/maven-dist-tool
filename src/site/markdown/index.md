@@ -9,7 +9,7 @@ Results are displayed in 3 reports:
 
 * [Disttool> Source Release][2] report, for checks about artifacts source release publication.
 
-* [Disttool> Listing page][3] report, for checks about listing page.
+* [Disttool> Index page][3] report, for checks about index pages.
 
 This is [Work In Progress][4]...
 
@@ -18,7 +18,7 @@ in other context, it would require more configurations.
 
 [1]: ./dist-tool-checksite.html
 [2]: ./dist-tool-checksourcerelease.html
-[3]: ./dist-tool-checkaggregator.html
+[3]: ./dist-tool-checkindexpage.html
 [4]: ./todo.html
 
 http://maven.apache.org/developers/release/maven-project-release-procedure.html#Copy_the_source_release_to_the_Apache_Distribution_Area

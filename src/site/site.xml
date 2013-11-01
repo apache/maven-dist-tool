@@ -34,7 +34,7 @@ under the License.
             <item name="Introduction" href="index.html" />
             <item name="Disttool> Sites" href="dist-tool-checksite.html" />
             <item name="Disttool> Source Release" href="dist-tool-checksourcerelease.html" />
-            <item name="Disttool> Check &ldquo;aggregated&rdquo; listing " href="dist-tool-checkaggregator.html" />
+            <item name="Disttool> Check Index Pages" href="dist-tool-checkindexpage.html" />
         </menu>        
         <menu name="for dev">
             <item name="TODO" href="todo.html" />
