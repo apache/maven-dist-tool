@@ -93,13 +93,13 @@ public class DistCheckIndexPageMojo
     @Override
     public String getName( Locale locale )
     {
-        return "Disttool> Index Page";
+        return "Disttool> Index Pages";
     }
 
     @Override
     public String getDescription( Locale locale )
     {
-        return "Verification of index page";
+        return "Verification of index pages";
     }
 
     @Override
