@@ -19,6 +19,7 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -414,13 +415,34 @@ public class DistCheckSourceReleaseMojo
         return "^" + artifact + "-[0-9].*source-release.*$";
     }
 
+    private String cachedUrl;
+    private Document cachedDocument;
+
+    private Document read( String url )
+        throws IOException
+    {
+        if ( url.startsWith( distributionAreaUrl ) )
+        {
+            // distribution area: cache content, since it is read multiple times
+            if ( !url.equals( cachedUrl ) )
+            {
+                cachedUrl = url;
+                cachedDocument = Jsoup.connect( url ).get();
+            }
+            return cachedDocument;
+        }
+        else
+        {
+            return Jsoup.connect( url ).get();
+        }
+    }
+
     private Elements selectLinks( String repourl )
             throws IOException
     {
         try
         {
-            Document doc = Jsoup.connect( repourl ).get();
-            return doc.select( "a[href]" );
+            return read( repourl ).select( "a[href]" );
         }
         catch ( IOException ioe )
         {
