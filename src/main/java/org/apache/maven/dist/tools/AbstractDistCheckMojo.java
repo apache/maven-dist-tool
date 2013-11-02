@@ -58,7 +58,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 public abstract class AbstractDistCheckMojo
     extends AbstractMavenReport
 {
-    private static final String MAVEN_DB = "db/mavendb.txt";
+    private static final String CONF = "dist-tool.conf";
 
     private static final String EOL = System.getProperty( "line.separator" );
 
@@ -138,11 +138,11 @@ public abstract class AbstractDistCheckMojo
         return project;
     }
 
-    private void loadMavenDb()
+    private void loadConfiguration()
         throws MojoExecutionException
     {
-        URL mavenDb = Thread.currentThread().getContextClassLoader().getResource( MAVEN_DB );
-        try ( BufferedReader in = new BufferedReader( new InputStreamReader( mavenDb.openStream() ) ) )
+        URL configuration = Thread.currentThread().getContextClassLoader().getResource( CONF );
+        try ( BufferedReader in = new BufferedReader( new InputStreamReader( configuration.openStream() ) ) )
         {
             String text;
             while ( ( text = in.readLine() ) != null )
@@ -152,7 +152,7 @@ public abstract class AbstractDistCheckMojo
         }
         catch ( IOException e )
         {
-            throw new MojoExecutionException( "error while reading " + mavenDb, e );
+            throw new MojoExecutionException( "error while reading " + configuration, e );
         }
     }
 
@@ -172,7 +172,7 @@ public abstract class AbstractDistCheckMojo
 
         if ( configurationLines.isEmpty() )
         {
-            loadMavenDb();
+            loadConfiguration();
         }
 
         File failures = getFailuresFile();
