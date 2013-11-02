@@ -282,9 +282,18 @@ public abstract class AbstractDistCheckMojo
 
             if ( aLine.getForcedVersion() != null )
             {
-                getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
+                if ( aLine.getVersionRange().hasRestrictions() )
+                {
+                    getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
+                                   + " metadata latest version value is " + metadata.getVersioning().getLatest()
+                                   + " but check was restricted to " + aLine.getForcedVersion() );
+                }
+                else
+                {
+                    getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
                                    + " metadata latest version value is " + metadata.getVersioning().getLatest()
                                    + " but check was manually set to " + aLine.getForcedVersion() );
+                }
             }
            
             return version;
