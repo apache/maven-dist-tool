@@ -186,7 +186,11 @@ public abstract class AbstractDistCheckMojo
         ConfigurationLineInfo currentGroup = null;
         for ( String line : configurationLines )
         {
-            if ( line.startsWith( "##" ) )
+            if ( "".equals( line ) )
+            {
+                continue;
+            }
+            else if ( line.startsWith( "##" ) )
             {
                 getLog().info( line );
             }
