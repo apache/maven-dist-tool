@@ -188,13 +188,9 @@ public abstract class AbstractDistCheckMojo
         ConfigurationLineInfo currentGroup = null;
         for ( String line : configurationLines )
         {
-            if ( "".equals( line ) )
+            if ( "".equals( line ) || line.startsWith( "##" ) )
             {
                 continue;
-            }
-            else if ( line.startsWith( "##" ) )
-            {
-                getLog().info( line );
             }
             else if ( distributionAreaUrl == null )
             {
@@ -283,9 +279,10 @@ public abstract class AbstractDistCheckMojo
             {
                 if ( aLine.getVersionRange().hasRestrictions() )
                 {
-                    getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
-                                   + " metadata latest version value is " + metadata.getVersioning().getLatest()
-                                   + " but check was restricted to " + aLine.getForcedVersion() );
+                    getLog().debug( aLine.getGroupId() + ":" + aLine.getArtifactId()
+                                        + " metadata latest version value is " + metadata.getVersioning().getLatest()
+                                        + " but check was restricted to " + aLine.getVersionRange()
+                                        + " which selected " + aLine.getForcedVersion() );
                 }
                 else
                 {
