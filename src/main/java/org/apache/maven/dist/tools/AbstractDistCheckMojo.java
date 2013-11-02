@@ -188,6 +188,8 @@ public abstract class AbstractDistCheckMojo
         ConfigurationLineInfo currentGroup = null;
         for ( String line : configurationLines )
         {
+            ConfigurationLineInfo aLine = null;
+
             if ( "".equals( line ) || line.startsWith( "##" ) )
             {
                 continue;
@@ -195,10 +197,17 @@ public abstract class AbstractDistCheckMojo
             else if ( distributionAreaUrl == null )
             {
                 distributionAreaUrl = line.trim();
+                continue;
             }
             else if ( line.startsWith( "/" ) )
             {
                 currentGroup = new ConfigurationLineInfo( line.split( " " ) );
+                if ( currentGroup.getArtifactId() == null )
+                {
+                    continue;
+                }
+                // check group's parent pom artifact
+                aLine = currentGroup;
             }
             else
             {
@@ -219,15 +228,16 @@ public abstract class AbstractDistCheckMojo
 
                 try
                 {
-                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.split( " " ) );
+                    aLine = new ConfigurationLineInfo( currentGroup, line.split( " " ) );
 
-                    checkArtifact( aLine, getVersion( aLine ) );
                 }
                 catch ( InvalidVersionSpecificationException e )
                 {
                     throw new MojoExecutionException( e.getMessage() );
                 }
             }
+
+            checkArtifact( aLine, getVersion( aLine ) );
         }
     }
 

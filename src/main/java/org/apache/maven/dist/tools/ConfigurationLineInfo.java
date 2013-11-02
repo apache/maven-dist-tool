@@ -51,12 +51,14 @@ class ConfigurationLineInfo
     public ConfigurationLineInfo( String[] infos )
     {
         this.directory = infos[0].replace( '/', ' ' ).replace( ':', ' ' ).trim();
-        this.groupId = infos[1];
+        String g = infos[1];
+        int index = g.indexOf( ':' );
+        this.groupId = ( index < 0 ) ? g : g.substring( 0, index );
         this.srcBin = ( infos.length > 2 ) && "src+bin".equals( infos[2] );
 
-        this.artifactId = null;
+        this.artifactId = ( index < 0 ) ? null : g.substring( index + 1 );
         this.versionRange = null;
-        this.indexPageId = null;
+        this.indexPageId = "IP4"; // in case of group parent pom artifact
     }
 
     public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos ) throws InvalidVersionSpecificationException
@@ -75,7 +77,6 @@ class ConfigurationLineInfo
                 this.indexPageId = info;
             }
         }
-        
     }
 
     public String getIndexPageId()
