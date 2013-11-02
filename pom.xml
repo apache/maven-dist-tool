@@ -259,6 +259,7 @@
             <ignoreSiteFailure>apache-maven:2.2.1</ignoreSiteFailure>
             <ignoreSiteFailure>maven-indexer:5.1.1</ignoreSiteFailure>
             <ignoreSiteFailure>file-management:1.2.1</ignoreSiteFailure>
+            <ignoreSiteFailure>apache-incubator-disclaimer-resource-bundle:1.1</ignoreSiteFailure>
           </ignoreSiteFailures>
           <ignoreDistFailures>
             <ignoreDistFailure>doxia-linkcheck:1.2</ignoreDistFailure>
@@ -267,6 +268,9 @@
             <ignoreDistFailure>maven-reactor-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>file-management:1.2.1</ignoreDistFailure>
             <ignoreDistFailure>maven-repository-builder:1.0-alpha-2</ignoreDistFailure>
+            <ignoreDistFailure>apache-incubator-disclaimer-resource-bundle:1.1</ignoreDistFailure>
+            <ignoreDistFailure>apache-jar-resource-bundle:1.4</ignoreDistFailure>
+            <ignoreDistFailure>apache-license-header-resource-bundle:1.1</ignoreDistFailure>
           </ignoreDistFailures>
         </configuration>
         <reportSets>
