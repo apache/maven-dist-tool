@@ -124,7 +124,7 @@ public class DistCheckIndexPageMojo
     }
 
     @Override
-    boolean useDetailed()
+    boolean isIndexPageCheck()
     {
         return true;
     }

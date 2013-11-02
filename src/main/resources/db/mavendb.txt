@@ -1,6 +1,7 @@
 ## line format:
 ## directory groupId [src+bin]
-##   artifactId [version restriction] IPn
+##   [*] artifactId [version restriction] IPn
+##         * = only check info in index page, but not dist nor site (for plugins provided by components, like archetype, release, ...)
 ##         n : 1 = plugins, 2 = shared,  3 = skins, 4 = poms
 #### IP1 site2X 
 #### IP4 ASF (skin and parent find pattern hardcoded)
@@ -30,9 +31,9 @@ maven-3 org.apache.maven src+bin
   apache-maven [3.0,3.1.0-alpha-1)
   apache-maven
 notvalid org.apache.maven
-  maven-parent IP4
+  * maven-parent IP4
 notvalid org.apache
-  apache IP4
+  * apache IP4
 jxr org.apache.maven.jxr
   jxr
 plugin-testing org.apache.maven.plugin-testing
@@ -43,6 +44,7 @@ plugins org.apache.maven.plugins
   maven-acr-plugin IP1
   maven-ant-plugin IP1
   maven-antrun-plugin IP1
+  * maven-archetype-plugin IP1
   maven-assembly-plugin IP1
   maven-changelog-plugin IP1
   maven-changes-plugin IP1
@@ -56,6 +58,8 @@ plugins org.apache.maven.plugins
   maven-ear-plugin IP1
   maven-eclipse-plugin IP1
   maven-ejb-plugin IP1
+  * maven-enforcer-plugin IP1 
+  * maven-failsafe-plugin IP1
   maven-gpg-plugin IP1
   maven-help-plugin IP1
   maven-idea-plugin IP1
@@ -64,35 +68,32 @@ plugins org.apache.maven.plugins
   maven-jar-plugin IP1
   maven-jarsigner-plugin IP1
   maven-javadoc-plugin IP1
+  * maven-jxr-plugin IP1 
   maven-linkcheck-plugin IP1
   maven-one-plugin IP1
   maven-patch-plugin IP1
   maven-pdf-plugin IP1
   maven-plugins IP4
+  * maven-plugin-plugin IP1
   maven-pmd-plugin IP1
   maven-project-info-reports-plugin IP1
   maven-rar-plugin IP1
   maven-reactor-plugin IP1
+  * maven-release-plugin IP1  
   maven-remote-resources-plugin IP1
   maven-repository-plugin IP1
   maven-resources-plugin IP1
+  * maven-scm-plugin IP1
   maven-scm-publish-plugin IP1
   maven-shade-plugin IP1
   maven-site-plugin IP1
   maven-source-plugin IP1
   maven-stage-plugin IP1
+  * maven-surefire-plugin IP1
+  * maven-surefire-report-plugin IP1
   maven-toolchains-plugin IP1
   maven-verifier-plugin IP1
   maven-war-plugin IP1
-  maven-release-plugin IP1  
-  maven-scm-plugin IP1
-  maven-jxr-plugin IP1 
-  maven-enforcer-plugin IP1 
-  maven-archetype-plugin IP1
-  maven-failsafe-plugin IP1
-  maven-surefire-plugin IP1
-  maven-surefire-report-plugin IP1
-  maven-plugin-plugin IP1
 ## release version is restricted because maven-release (=parent pom) versions 3, 4 and 5 were released earlier, but > to actual 2.x version
 release org.apache.maven.release
   maven-release (,3) 

@@ -101,7 +101,7 @@ public class DistCheckSiteMojo
     protected static final int HTTP_OK = 200;
 
     @Override
-    boolean useDetailed()
+    boolean isIndexPageCheck()
     {
         return false;
     }

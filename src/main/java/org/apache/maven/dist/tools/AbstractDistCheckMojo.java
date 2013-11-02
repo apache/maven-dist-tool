@@ -101,11 +101,11 @@ public abstract class AbstractDistCheckMojo
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
     
     /**
-     * use detailed artifact ?
-     * true to allow triple space line in db (use for scm plugins)
-     * @return 
+     * is it index page check mojo?
+     * necessary to only check index page information for plugins marked with asterisk * in db,
+     * because they are released as part of a global component (archetype, scm, release, ...)
      */
-    abstract boolean useDetailed();
+    abstract boolean isIndexPageCheck();
     
     protected abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
         throws MojoExecutionException;
@@ -196,42 +196,31 @@ public abstract class AbstractDistCheckMojo
             }
             else
             {
-                // 3 space
-                if ( line.startsWith( "   " ) )
+                line = line.trim();
+
+                if ( line.startsWith( "*" ) )
                 {
-                    ConfigurationLineInfo aLine;
-                    try
+                    // special artifact
+                    if ( !isIndexPageCheck() )
                     {
-                        aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
-                    }
-                    catch ( InvalidVersionSpecificationException e )
-                    {
-                        throw new MojoExecutionException( e.getMessage() );
-                    }
-                    if ( useDetailed() )
-                    {
-                        checkArtifact( aLine, getVersion( aLine ) );
-                    }
-                }
-                else if ( line.startsWith( "  " ) ) 
-                {
-                    ConfigurationLineInfo aLine;
-                    try
-                    {
-                        aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
-                    }
-                    catch ( InvalidVersionSpecificationException e )
-                    {
-                        throw new MojoExecutionException( e.getMessage() );
+                        // not check-index-page mojo, so ignore this artifact
+                        continue;
                     }
 
-                    checkArtifact( aLine, getVersion( aLine ) );
-                } 
-                else
-                {
-                    getLog().warn( "No good Condition WIP" );
+                    // remove the asterisk before running the check
+                    line = line.substring( 1 ).trim();
                 }
-                
+
+                try
+                {
+                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.split( " " ) );
+
+                    checkArtifact( aLine, getVersion( aLine ) );
+                }
+                catch ( InvalidVersionSpecificationException e )
+                {
+                    throw new MojoExecutionException( e.getMessage() );
+                }
             }
         }
     }

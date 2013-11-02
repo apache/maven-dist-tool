@@ -52,11 +52,13 @@ public class DistCheckSourceReleaseMojo
 
     private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
     //private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
+
     @Override
-    boolean useDetailed()
+    boolean isIndexPageCheck()
     {
         return false;
     }
+
     /**
      * Ignore dist failure for <code>artifactId</code> or <code>artifactId:version</code>
      */

@@ -63,7 +63,7 @@ public class DummyFailureMojo
     protected MavenProject project;
 
     @Override
-    boolean useDetailed()
+    boolean isIndexPageCheck()
     {
         return false;
     }
