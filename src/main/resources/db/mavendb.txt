@@ -93,7 +93,7 @@ plugins org.apache.maven.plugins
   maven-surefire-plugin IP1
   maven-surefire-report-plugin IP1
   maven-plugin-plugin IP1
-## release version is hardcoded because parent pom version 3, 4 and 5 were released earlier, but > to actual 2.x version
+## release version is restricted because maven-release (=parent pom) versions 3, 4 and 5 were released earlier, but > to actual 2.x version
 release org.apache.maven.release
   maven-release (,3) 
 reporting org.apache.maven.reporting
