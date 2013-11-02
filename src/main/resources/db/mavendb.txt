@@ -84,7 +84,7 @@ plugins org.apache.maven.plugins
   maven-toolchains-plugin IP1
   maven-verifier-plugin IP1
   maven-war-plugin IP1
-  maven-release-plugin 2.4.1 IP1  
+  maven-release-plugin IP1  
   maven-scm-plugin IP1
   maven-jxr-plugin IP1 
   maven-enforcer-plugin IP1 
