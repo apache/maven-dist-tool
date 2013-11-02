@@ -6,6 +6,7 @@
 #### IP1 site2X 
 #### IP4 ASF (skin and parent find pattern hardcoded)
 
+http://www.apache.org/dist/maven/
 
 ant-tasks org.apache.maven src+bin
   maven-ant-tasks

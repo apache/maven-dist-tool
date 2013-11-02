@@ -99,7 +99,9 @@ public abstract class AbstractDistCheckMojo
      * list of artifacts repositories.
      */
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
-    
+
+    protected String distributionAreaUrl;
+
     /**
      * is it index page check mojo?
      * necessary to only check index page information for plugins marked with asterisk * in db,
@@ -193,6 +195,10 @@ public abstract class AbstractDistCheckMojo
             else if ( line.startsWith( "##" ) )
             {
                 getLog().info( line );
+            }
+            else if ( distributionAreaUrl == null )
+            {
+                distributionAreaUrl = line.trim();
             }
             else if ( !line.startsWith( "  " ) )
             {

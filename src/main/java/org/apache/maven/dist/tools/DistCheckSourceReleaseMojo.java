@@ -39,8 +39,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- *
- * Check presence of source-release.zip in dist repo and central repo
+ * Check presence of source-release.zip in distribution area and central repo
  *
  * @author skygo
  */
@@ -49,9 +48,6 @@ public class DistCheckSourceReleaseMojo
         extends AbstractDistCheckMojo
 {
     static final String FAILURES_FILENAME = "check-source-release.log";
-
-    private static final String DIST_AREA = "http://www.apache.org/dist/maven/";
-    //private static final String DIST_SVNPUBSUB = "https://dist.apache.org/repos/dist/release/maven/";
 
     @Override
     boolean isIndexPageCheck()
@@ -203,7 +199,7 @@ public class DistCheckSourceReleaseMojo
         // dist column
         sink.tableCell();
         String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csrr.getVersion() + "/source" ) : "" );
-        sink.link( DIST_AREA + directory );
+        sink.link( distributionAreaUrl + directory );
         sink.text( directory );
         sink.link_();
         sink.text( "source-release" );
@@ -323,7 +319,7 @@ public class DistCheckSourceReleaseMojo
         sink.link_();
         sink.listItem_();
         sink.listItem();
-        sink.link( DIST_AREA );
+        sink.link( distributionAreaUrl );
         sink.text( "Apache distribution area" );
         sink.link_();
         sink.listItem_();
@@ -518,7 +514,7 @@ public class DistCheckSourceReleaseMojo
 
             // dist
             String distUrl =
-                DIST_AREA + configLine.getDirectory() + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
+                distributionAreaUrl + configLine.getDirectory() + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
             result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version, true ) );
             result.setDistOlderSourceRelease( checkContainsOld( distUrl, configLine, version ) );
         }
