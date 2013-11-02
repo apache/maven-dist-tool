@@ -80,23 +80,6 @@ public class DistCheckIndexPageMojo
         {
             aMap.put(  "IP" + index++, ip );
         }
-        /*// url title version date
-        aMap.put( "IP1", new Object[]
-        {
-            "http://maven.apache.org/plugins/", "Plugins", 2, 3, null
-        } );
-        aMap.put( "IP2", new Object[]
-        {
-            "http://maven.apache.org/shared/", "Shared", 1, 2, null
-        } );
-        aMap.put( "IP3", new Object[]
-        {
-            "http://maven.apache.org/skins/", "Skins", 1, null, null
-        } );
-        aMap.put( "IP4", new Object[]
-        {
-            "http://maven.apache.org/pom/", "Poms", 1, 2, null
-        } );*/
         INDEX_PAGES_REF = Collections.unmodifiableMap( aMap );
     }
     /**
