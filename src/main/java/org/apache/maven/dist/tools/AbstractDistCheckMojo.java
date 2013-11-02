@@ -225,7 +225,7 @@ public abstract class AbstractDistCheckMojo
             MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
             Metadata metadata = metadataReader.read( input );
 
-            aLine.addMetadata( metadata );
+            aLine.setMetadata( metadata );
 
             String version =
                 ( aLine.getForcedVersion() == null ) ? metadata.getVersioning().getLatest()

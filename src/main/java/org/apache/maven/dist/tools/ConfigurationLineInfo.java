@@ -133,7 +133,7 @@ class ConfigurationLineInfo
         return getBaseURL( repoBaseUrl, version + URLSEP + artifactId + "-" + version + ".pom" );
     }
 
-    void addMetadata( Metadata aMetadata )
+    void setMetadata( Metadata aMetadata )
     {
         this.metadata = aMetadata;
     }
