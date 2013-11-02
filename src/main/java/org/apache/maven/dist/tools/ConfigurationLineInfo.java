@@ -50,7 +50,7 @@ class ConfigurationLineInfo
 
     public ConfigurationLineInfo( String[] infos )
     {
-        this.directory = infos[0];
+        this.directory = infos[0].replace( '/', ' ' ).replace( ':', ' ' ).trim();
         this.groupId = infos[1];
         this.srcBin = ( infos.length > 2 ) && "src+bin".equals( infos[2] );
 

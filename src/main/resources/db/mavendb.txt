@@ -1,5 +1,5 @@
 ## line format:
-## directory groupId [src+bin]
+## /directory: groupId [src+bin]
 ##   [*] artifactId [version restriction] IPn
 ##         * = only check info in index page, but not dist nor site (for plugins provided by components, like archetype, release, ...)
 ##         n : 1 = plugins, 2 = shared,  3 = skins, 4 = poms
@@ -8,15 +8,15 @@
 
 http://www.apache.org/dist/maven/
 
-ant-tasks org.apache.maven src+bin
+/ant-tasks: org.apache.maven src+bin
   maven-ant-tasks
 
-archetype org.apache.maven.archetype
+/archetype: org.apache.maven.archetype
   maven-archetype
 
-binaries content.not.checked
+/binaries: content.not.checked
 
-doxia org.apache.maven.doxia
+/doxia: org.apache.maven.doxia
   doxia
 ##  doxia-book-maven-plugin
 ##  doxia-book-renderer
@@ -26,37 +26,37 @@ doxia org.apache.maven.doxia
   doxia-sitetools
   doxia-tools
 
-enforcer org.apache.maven.enforcer
+/enforcer: org.apache.maven.enforcer
   enforcer
 
-indexer org.apache.maven.indexer
+/indexer: org.apache.maven.indexer
   maven-indexer
 
-maven-1 content.not.checked
+/maven-1: content.not.checked
 
-maven-2 org.apache.maven src+bin
+/maven-2: org.apache.maven src+bin
   apache-maven [2.0,2.1.0-alpha-1)
   apache-maven [2.2,3.0-alpha-1)
 
-maven-3 org.apache.maven src+bin
+/maven-3: org.apache.maven src+bin
   apache-maven [3.0,3.1.0-alpha-1)
   apache-maven
 
-notvalid org.apache.maven
+/notvalid: org.apache.maven
   * maven-parent IP4
-notvalid org.apache
+/notvalid: org.apache
   * apache IP4
 
-jxr org.apache.maven.jxr
+/jxr: org.apache.maven.jxr
   jxr
 
-plugin-testing org.apache.maven.plugin-testing
+/plugin-testing: org.apache.maven.plugin-testing
   maven-plugin-testing
 
-plugin-tools org.apache.maven.plugin-tools
+/plugin-tools: org.apache.maven.plugin-tools
   maven-plugin-tools
 
-plugins org.apache.maven.plugins
+/plugins: org.apache.maven.plugins
   maven-acr-plugin IP1
   maven-ant-plugin IP1
   maven-antrun-plugin IP1
@@ -111,23 +111,24 @@ plugins org.apache.maven.plugins
   maven-verifier-plugin IP1
   maven-war-plugin IP1
 
-release org.apache.maven.release
-## release version is restricted because maven-release (=parent pom) versions 3, 4 and 5 were released earlier, but > to actual 2.x version
+/release: org.apache.maven.release
+## release version is restricted because maven-release (=parent pom) versions 3, 4 and 5
+## were released in the past separately, with integer value > to actual 2.x version
   maven-release (,3) 
 
-reporting org.apache.maven.reporting
+/reporting: org.apache.maven.reporting
   maven-reporting-api IP2
   maven-reporting-exec IP2
   maven-reporting-impl IP2
 
-resources org.apache.apache.resources
+/resources: org.apache.apache.resources
   apache-resource-bundles IP4
   apache-source-release-assembly-descriptor
 
-scm org.apache.maven.scm
+/scm: org.apache.maven.scm
   maven-scm 
 
-shared org.apache.maven.shared
+/shared: org.apache.maven.shared
   file-management IP2
   maven-artifact-resolver IP2
   maven-common-artifact-filters IP2
@@ -148,10 +149,10 @@ shared org.apache.maven.shared
   maven-shared-utils IP2
   maven-verifier IP2
 
-shared org.apache.maven
+/shared: org.apache.maven
   maven-archiver IP2
 
-skins org.apache.maven.skins
+/skins: org.apache.maven.skins
   maven-application-skin IP3
   maven-classic-skin IP3
   maven-default-skin IP3
@@ -159,8 +160,8 @@ skins org.apache.maven.skins
   maven-skins IP4
   maven-stylus-skin IP3
 
-surefire org.apache.maven.surefire
+/surefire: org.apache.maven.surefire
   surefire
 
-wagon org.apache.maven.wagon
+/wagon: org.apache.maven.wagon
   wagon

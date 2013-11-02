@@ -200,7 +200,7 @@ public abstract class AbstractDistCheckMojo
             {
                 distributionAreaUrl = line.trim();
             }
-            else if ( !line.startsWith( "  " ) )
+            else if ( line.startsWith( "/" ) )
             {
                 currentGroup = new ConfigurationLineInfo( line.split( " " ) );
             }

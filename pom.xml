@@ -25,7 +25,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <description>Dist tool plugin. 
+  <description>Dist tool plugin: check content of Maven distribution area. 
         Not to be released.</description>
 
   <prerequisites>
