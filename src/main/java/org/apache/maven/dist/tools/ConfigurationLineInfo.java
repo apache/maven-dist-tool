@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
+import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
+import org.apache.maven.artifact.versioning.VersionRange;
 
 /**
  *
@@ -40,7 +42,9 @@ class ConfigurationLineInfo
     private final boolean srcBin;
 
     private final String artifactId;
-    private final String forceVersion;
+    private final VersionRange versionRange;
+    
+    private String forceVersion;
     private String indexPageId;
     private Metadata metadata;
 
@@ -51,18 +55,18 @@ class ConfigurationLineInfo
         this.srcBin = ( infos.length > 2 ) && "src+bin".equals( infos[2] );
 
         this.artifactId = null;
-        this.forceVersion = null;
+        this.versionRange = null;
         this.indexPageId = null;
     }
 
-    public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos )
+    public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos ) throws InvalidVersionSpecificationException
     {
         this.directory = group.getDirectory();
         this.groupId = group.getGroupId();
         this.srcBin = group.isSrcBin();
 
         this.artifactId = infos[0];
-        this.forceVersion = ( infos.length > 1 && !infos[1].startsWith( "IP" ) ) ? infos[1] : null;
+        this.versionRange = ( infos.length > 1 && !infos[1].startsWith( "IP" ) ) ? VersionRange.createFromVersionSpec( infos[1] ) : null;
         this.indexPageId = null;
         for ( String info : infos )
         {
@@ -82,6 +86,16 @@ class ConfigurationLineInfo
     public String getForcedVersion()
     {
         return forceVersion;
+    }
+    
+    public void setForceVersion( String forceVersion )
+    {
+        this.forceVersion = forceVersion;
+    }
+    
+    public VersionRange getVersionRange()
+    {
+        return versionRange;
     }
 
     /**

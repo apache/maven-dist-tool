@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +39,9 @@ import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -195,7 +199,15 @@ public abstract class AbstractDistCheckMojo
                 // 3 space
                 if ( line.startsWith( "   " ) )
                 {
-                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+                    ConfigurationLineInfo aLine;
+                    try
+                    {
+                        aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+                    }
+                    catch ( InvalidVersionSpecificationException e )
+                    {
+                        throw new MojoExecutionException( e.getMessage() );
+                    }
                     if ( useDetailed() )
                     {
                         checkArtifact( aLine, getVersion( aLine ) );
@@ -203,7 +215,15 @@ public abstract class AbstractDistCheckMojo
                 }
                 else if ( line.startsWith( "  " ) ) 
                 {
-                    ConfigurationLineInfo aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+                    ConfigurationLineInfo aLine;
+                    try
+                    {
+                        aLine = new ConfigurationLineInfo( currentGroup, line.trim().split( " " ) );
+                    }
+                    catch ( InvalidVersionSpecificationException e )
+                    {
+                        throw new MojoExecutionException( e.getMessage() );
+                    }
 
                     checkArtifact( aLine, getVersion( aLine ) );
                 } 
@@ -227,10 +247,29 @@ public abstract class AbstractDistCheckMojo
 
             aLine.setMetadata( metadata );
 
-            String version =
-                ( aLine.getForcedVersion() == null ) ? metadata.getVersioning().getLatest()
-                                : aLine.getForcedVersion();
-
+            String version;
+            if ( aLine.getVersionRange() != null )
+            {
+                if ( aLine.getVersionRange().hasRestrictions() )
+                {
+                    List<ArtifactVersion> artifactVersions = new ArrayList<>();
+                    for ( String versioningVersion : metadata.getVersioning().getVersions() )
+                    {
+                        artifactVersions.add( new DefaultArtifactVersion( versioningVersion ) );
+                    }
+                    version = aLine.getVersionRange().matchVersion( artifactVersions ).toString();
+                }
+                else
+                {
+                    version = aLine.getVersionRange().getRecommendedVersion().toString();
+                }
+                aLine.setForceVersion( version );
+            }
+            else
+            {
+                version = metadata.getVersioning().getLatest();
+            }
+            
             if ( getLog().isDebugEnabled() )
             {
                 getLog().debug( "Checking information for artifact: " + aLine.getGroupId() + ":"
