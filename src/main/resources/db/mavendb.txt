@@ -1,10 +1,7 @@
 ## line format:
 ## directory groupId [src+bin]
-##   artifactId [forced version] IPn
-## n : 1 plugins
-## n : 2 shared
-## n : 3 skins
-## n : 4 poms
+##   artifactId [version restriction] IPn
+##         n : 1 = plugins, 2 = shared,  3 = skins, 4 = poms
 #### IP1 site2X 
 #### IP4 ASF (skin and parent find pattern hardcoded)
 ant-tasks org.apache.maven src+bin
@@ -33,9 +30,9 @@ maven-3 org.apache.maven src+bin
   apache-maven [3.0,3.1.0-alpha-1)
   apache-maven
 notvalid org.apache.maven
-   maven-parent IP4
+  maven-parent IP4
 notvalid org.apache
-   apache IP4
+  apache IP4
 jxr org.apache.maven.jxr
   jxr
 plugin-testing org.apache.maven.plugin-testing
@@ -87,15 +84,15 @@ plugins org.apache.maven.plugins
   maven-toolchains-plugin IP1
   maven-verifier-plugin IP1
   maven-war-plugin IP1
-   maven-release-plugin 2.4.1 IP1  
-   maven-scm-plugin IP1
-   maven-jxr-plugin IP1 
-   maven-enforcer-plugin IP1 
-   maven-archetype-plugin IP1
-   maven-failsafe-plugin IP1
-   maven-surefire-plugin IP1
-   maven-surefire-report-plugin IP1
-   maven-plugin-plugin IP1
+  maven-release-plugin 2.4.1 IP1  
+  maven-scm-plugin IP1
+  maven-jxr-plugin IP1 
+  maven-enforcer-plugin IP1 
+  maven-archetype-plugin IP1
+  maven-failsafe-plugin IP1
+  maven-surefire-plugin IP1
+  maven-surefire-report-plugin IP1
+  maven-plugin-plugin IP1
 ## release version is hardcoded because parent pom version 3, 4 and 5 were released earlier, but > to actual 2.x version
 release org.apache.maven.release
   maven-release (,3) 
