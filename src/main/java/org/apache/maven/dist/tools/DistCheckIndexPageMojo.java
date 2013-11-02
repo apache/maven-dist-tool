@@ -48,12 +48,39 @@ public class DistCheckIndexPageMojo
 {
     static final String FAILURES_FILENAME = "check-index-page.log";
 
-    private static final Map<String, Object[]> INDEXES_REF;
+    private static final IndexPage[] INDEX_PAGES = new IndexPage[] {
+        new IndexPage( "http://maven.apache.org/plugins/", "Plugins", 3, true ),
+        new IndexPage( "http://maven.apache.org/shared/", "Shared", 2, true ),
+        new IndexPage( "http://maven.apache.org/skins/", "Skins", 2, false ),
+        new IndexPage( "http://maven.apache.org/pom/", "Poms", 2, true ) };
 
+    private static final Map<String, IndexPage> INDEX_PAGES_REF;
+
+    private static class IndexPage
+    {
+        final String url;
+        final String name;
+        final int versionColumn;
+        final boolean containsDate;
+        Document document;
+        
+        IndexPage( String url, String name, int versionColumn, boolean containsDate )
+        {
+            this.url = url;
+            this.name = name;
+            this.versionColumn = versionColumn;
+            this.containsDate = containsDate;
+        }
+    }
     static
     {
-        Map<String, Object[]> aMap = new HashMap<>();
-        // url title version date
+        Map<String, IndexPage> aMap = new HashMap<>();
+        int index = 1;
+        for ( IndexPage ip : INDEX_PAGES )
+        {
+            aMap.put(  "IP" + index++, ip );
+        }
+        /*// url title version date
         aMap.put( "IP1", new Object[]
         {
             "http://maven.apache.org/plugins/", "Plugins", 2, 3, null
@@ -69,8 +96,8 @@ public class DistCheckIndexPageMojo
         aMap.put( "IP4", new Object[]
         {
             "http://maven.apache.org/pom/", "Poms", 1, 2, null
-        } );
-        INDEXES_REF = Collections.unmodifiableMap( aMap );
+        } );*/
+        INDEX_PAGES_REF = Collections.unmodifiableMap( aMap );
     }
     /**
      * Ignore dist failure for <code>artifactId</code> or <code>artifactId:version</code>
@@ -212,17 +239,15 @@ public class DistCheckIndexPageMojo
         for ( Map.Entry<String, List<CheckIndexPageResult>> result: results.entrySet() )
         {
             String indexPageId = result.getKey();
-            Object[] indexPageInfo = INDEXES_REF.get( indexPageId );
-            String indexPageUrl = (String) indexPageInfo[0];
-            String indexPageName = (String) indexPageInfo[1];
+            IndexPage indexPage = INDEX_PAGES_REF.get( indexPageId );
             List<CheckIndexPageResult> indexPageResults = result.getValue();
 
             sink.anchor( indexPageResults.get( 0 ).getConfigurationLine().getDirectory() );
             sink.anchor_();
             sink.sectionTitle2();
-            sink.text( indexPageName + " index page: " );
-            sink.link( indexPageUrl );
-            sink.text( indexPageUrl );
+            sink.text( indexPage.name + " index page: " );
+            sink.link( indexPage.url );
+            sink.text( indexPage.url );
             sink.link_();
             sink.sectionTitle2_();
 
@@ -234,8 +259,7 @@ public class DistCheckIndexPageMojo
             sink.tableHeaderCell();
             sink.rawText( "VERSION" );
             sink.tableHeaderCell_();
-            boolean displayDate = indexPageInfo[3] != null;
-            if ( displayDate )
+            if ( indexPage.containsDate )
             {
                 sink.tableHeaderCell();
                 sink.rawText( "DATE" );
@@ -245,7 +269,7 @@ public class DistCheckIndexPageMojo
 
             for ( CheckIndexPageResult csr : indexPageResults )
             {
-                reportLine( sink, csr, displayDate );
+                reportLine( sink, csr, indexPage.containsDate );
             }
             sink.table_();
         }
@@ -255,23 +279,22 @@ public class DistCheckIndexPageMojo
         sink.close();
     }
 
-    private void updateIndexPageInfo( ConfigurationLineInfo cli, CheckIndexPageResult r, Object[] inf )
+    private void updateIndexPageInfo( ConfigurationLineInfo cli, CheckIndexPageResult r, IndexPage indexPage )
         throws IOException
     {
-        Document doc = (Document) inf[4];
+        Document doc = indexPage.document;
         if ( doc == null )
         {
             // document not yet downloaded: download and cache
-            String url = (String) inf[0];
             try
             {
-                doc = Jsoup.connect( url ).get();
+                doc = Jsoup.connect( indexPage.url ).get();
             }
             catch ( IOException ioe )
             {
-                throw new IOException( "IOException while reading " + url, ioe );
+                throw new IOException( "IOException while reading " + indexPage.url, ioe );
             }
-            inf[4] = doc;
+            indexPage.document = doc;
         }
 
         Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
@@ -297,10 +320,11 @@ public class DistCheckIndexPageMojo
 
             if ( art.contains( id ) )
             {
-                r.setIndexVersion( e.parent().parent().child( ( Integer ) inf[2] ).ownText() );
-                if ( inf[3] != null )
+                Element row = e.parent().parent();
+                r.setIndexVersion( row.child( indexPage.versionColumn - 1 ).ownText() );
+                if ( indexPage.containsDate )
                 {
-                    r.setIndexDate( e.parent().parent().child( ( Integer ) inf[3] ).ownText() );
+                    r.setIndexDate( row.child( indexPage.versionColumn ).ownText() );
                 }
            }
         }
@@ -321,7 +345,7 @@ public class DistCheckIndexPageMojo
                     results.put( configLine.getIndexPageId(), new LinkedList<CheckIndexPageResult>() );
                 } 
                 results.get( configLine.getIndexPageId() ).add( result );
-                updateIndexPageInfo( configLine, result, INDEXES_REF.get( configLine.getIndexPageId() ) );
+                updateIndexPageInfo( configLine, result, INDEX_PAGES_REF.get( configLine.getIndexPageId() ) );
             }
         }
         catch ( IOException ex )
