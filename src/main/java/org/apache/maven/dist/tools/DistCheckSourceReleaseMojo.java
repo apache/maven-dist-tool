@@ -47,6 +47,8 @@ import org.jsoup.select.Elements;
 public class DistCheckSourceReleaseMojo
         extends AbstractDistCheckMojo
 {
+    private final static String NOT_IN_DISTRIBUTION_AREA = "_not_in_distribution_area_";
+
     static final String FAILURES_FILENAME = "check-source-release.log";
 
     @Override
@@ -134,6 +136,10 @@ public class DistCheckSourceReleaseMojo
             {
                 centralMissing++;
             }
+            if ( result.dist == null )
+            {
+                return;
+            }
             if ( !result.dist.isEmpty() || !result.distOlder.isEmpty() )
             {
                 distError++;
@@ -198,69 +204,63 @@ public class DistCheckSourceReleaseMojo
 
         // dist column
         sink.tableCell();
-        String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csrr.getVersion() + "/source" ) : "" );
-        sink.link( distributionAreaUrl + directory );
-        sink.text( directory );
-        sink.link_();
-        sink.text( "source-release" );
-        if ( csrr.dist.isEmpty() && csrr.distOlder.isEmpty() )
+        if ( csrr.dist == null )
         {
-            iconSuccess( sink );
+            sink.text(  "not in distribution area" );
         }
         else
         {
-            iconWarning( sink );
-        }
-        StringBuilder cliMissing = new StringBuilder();
-        for ( String missing : csrr.dist )
-        {
-            sink.lineBreak();
-            iconError( sink );
-            sink.rawText( missing );
-            if ( !csrr.central.contains( missing ) )
+            String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csrr.getVersion() + "/source" ) : "" );
+            sink.link( distributionAreaUrl + directory );
+            sink.text( directory );
+            sink.link_();
+            sink.text( "source-release" );
+            if ( csrr.dist.isEmpty() && csrr.distOlder.isEmpty() )
             {
-                // if the release distribution is in central repository, we can get it from there...
-                cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) ).
-                        append( "/" ).append( missing );
-                cliMissing.append( "\nsvn add " ).append( missing );
+                iconSuccess( sink );
             }
-        }
-        if ( !cliMissing.toString().isEmpty() )
-        {
-            sink.lineBreak();
-            SinkEventAttributeSet atts = new SinkEventAttributeSet();
-            sink.unknown( "pre", new Object[]
+            else
             {
-                new Integer( HtmlMarkup.TAG_TYPE_START )
-            }, atts );
-            sink.text( cliMissing.toString() );
-            sink.unknown( "pre", new Object[]
+                iconWarning( sink );
+            }
+            StringBuilder cliMissing = new StringBuilder();
+            for ( String missing : csrr.dist )
             {
-                new Integer( HtmlMarkup.TAG_TYPE_END )
-            }, null );
-        }
+                sink.lineBreak();
+                iconError( sink );
+                sink.rawText( missing );
+                if ( !csrr.central.contains( missing ) )
+                {
+                    // if the release distribution is in central repository, we can get it from there...
+                    cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) ).append( "/" ).append( missing );
+                    cliMissing.append( "\nsvn add " ).append( missing );
+                }
+            }
+            if ( !cliMissing.toString().isEmpty() )
+            {
+                sink.lineBreak();
+                SinkEventAttributeSet atts = new SinkEventAttributeSet();
+                sink.unknown( "pre", new Object[] { new Integer( HtmlMarkup.TAG_TYPE_START ) }, atts );
+                sink.text( cliMissing.toString() );
+                sink.unknown( "pre", new Object[] { new Integer( HtmlMarkup.TAG_TYPE_END ) }, null );
+            }
 
-        StringBuilder cliOlder = new StringBuilder();
-        for ( String missing : csrr.distOlder )
-        {
-            sink.lineBreak();
-            iconRemove( sink );
-            sink.rawText( missing );
-            cliOlder.append( "\nsvn rm " ).append( missing );
-        }
-        if ( !cliOlder.toString().isEmpty() )
-        {
-            sink.lineBreak();
-            SinkEventAttributeSet atts = new SinkEventAttributeSet();
-            sink.unknown( "pre", new Object[]
+            StringBuilder cliOlder = new StringBuilder();
+            for ( String missing : csrr.distOlder )
             {
-                new Integer( HtmlMarkup.TAG_TYPE_START )
-            }, atts );
-            sink.text( cliOlder.toString() );
-            sink.unknown( "pre", new Object[]
+                sink.lineBreak();
+                iconRemove( sink );
+                sink.rawText( missing );
+                cliOlder.append( "\nsvn rm " ).append( missing );
+            }
+            if ( !cliOlder.toString().isEmpty() )
             {
-                new Integer( HtmlMarkup.TAG_TYPE_END )
-            }, null );
+                sink.lineBreak();
+                SinkEventAttributeSet atts = new SinkEventAttributeSet();
+                sink.unknown( "pre", new Object[] { new Integer( HtmlMarkup.TAG_TYPE_START ) }, atts );
+                sink.text( cliOlder.toString() );
+                sink.unknown( "pre", new Object[] { new Integer( HtmlMarkup.TAG_TYPE_END ) }, null );
+            }
         }
 
         sink.tableCell_();
@@ -532,6 +532,12 @@ public class DistCheckSourceReleaseMojo
             // central
             String centralUrl = configLine.getVersionnedFolderURL( repoBaseUrl, version );
             result.setMissingCentralSourceRelease( checkDirectoryIndex( centralUrl, configLine, version, false ) );
+
+            if ( NOT_IN_DISTRIBUTION_AREA.equals( configLine.getDirectory() ) )
+            {
+                // no distribution check
+                return;
+            }
 
             // dist
             String distUrl =
