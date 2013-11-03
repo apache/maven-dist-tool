@@ -283,26 +283,26 @@ public class DistCheckIndexPageMojo
 
         Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
 
+        String path = cli.getArtifactId();
+        // poms index page hack: neither link text nor url are equal to artifactId
+        if ( cli.getArtifactId().equals( "maven-parent" ) )
+        {
+            path = "maven/";
+        }
+        else if ( cli.getArtifactId().equals( "maven-skins" ) )
+        {
+            path = "skins/";
+        }
+        else if ( cli.getArtifactId().equals( "apache" ) )
+        {
+            path = "asf/";
+        }
+
         for ( Element e : a )
         {
-            // skins do not have release date
-            String art = e.attr( "href" );
-            String id = cli.getArtifactId();
-            // UGLY 
-            if ( cli.getArtifactId().equals( "maven-parent" ) )
-            {
-                id = "maven/";
-            }
-            if ( cli.getArtifactId().equals( "maven-skins" ) )
-            {
-                id = "skins/";
-            }
-            if ( cli.getArtifactId().equals( "apache" ) )
-            {
-                id = "asf/";
-            }
+            String href = e.attr( "href" );
 
-            if ( art.contains( id ) )
+            if ( href.contains( path ) )
             {
                 Element row = e.parent().parent();
                 r.setIndexVersion( row.child( indexPage.versionColumn - 1 ).ownText() );
@@ -310,6 +310,7 @@ public class DistCheckIndexPageMojo
                 {
                     r.setIndexDate( row.child( indexPage.versionColumn ).ownText() );
                 }
+                break;
            }
         }
     }
