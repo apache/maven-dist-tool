@@ -40,12 +40,13 @@ class ConfigurationLineInfo
     private final String directory;
     private final String groupId;
     private final boolean srcBin;
+    private final String groupIndexPageUrl;
 
     private final String artifactId;
     private final VersionRange versionRange;
     
     private String forceVersion;
-    private String indexPageId;
+    private String indexPageUrl;
     private Metadata metadata;
 
     public ConfigurationLineInfo( String[] infos )
@@ -55,33 +56,29 @@ class ConfigurationLineInfo
         int index = g.indexOf( ':' );
         this.groupId = ( index < 0 ) ? g : g.substring( 0, index );
         this.srcBin = ( infos.length > 2 ) && "src+bin".equals( infos[2] );
+        this.groupIndexPageUrl = ( !srcBin && ( infos.length > 2 ) ) ? infos[2] : null;
 
         this.artifactId = ( index < 0 ) ? null : g.substring( index + 1 );
         this.versionRange = null;
-        this.indexPageId = "IP4"; // in case of group parent pom artifact
+        this.indexPageUrl = DistCheckIndexPageMojo.POMS_INDEX_URL; // in case of group parent pom artifact
     }
 
-    public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos ) throws InvalidVersionSpecificationException
+    public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos )
+        throws InvalidVersionSpecificationException
     {
         this.directory = group.getDirectory();
         this.groupId = group.getGroupId();
         this.srcBin = group.isSrcBin();
+        this.groupIndexPageUrl = group.groupIndexPageUrl;
 
         this.artifactId = infos[0];
-        this.versionRange = ( infos.length > 1 && !infos[1].startsWith( "IP" ) ) ? VersionRange.createFromVersionSpec( infos[1] ) : null;
-        this.indexPageId = null;
-        for ( String info : infos )
-        {
-            if ( info.startsWith( "IP" ) )
-            {
-                this.indexPageId = info;
-            }
-        }
+        this.versionRange = ( infos.length > 1 ) ? VersionRange.createFromVersionSpec( infos[1] ) : null;
+        this.indexPageUrl = group.groupIndexPageUrl;
     }
 
-    public String getIndexPageId()
+    public String getIndexPageUrl()
     {
-        return indexPageId;
+        return indexPageUrl;
     }
     
     public String getForcedVersion()

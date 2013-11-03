@@ -48,11 +48,13 @@ public class DistCheckIndexPageMojo
 {
     static final String FAILURES_FILENAME = "check-index-page.log";
 
+    static final String POMS_INDEX_URL = "http://maven.apache.org/pom/";
+
     private static final IndexPage[] INDEX_PAGES = new IndexPage[] {
         new IndexPage( "http://maven.apache.org/plugins/", "Plugins", 3, true ),
         new IndexPage( "http://maven.apache.org/shared/", "Shared", 2, true ),
         new IndexPage( "http://maven.apache.org/skins/", "Skins", 2, false ),
-        new IndexPage( "http://maven.apache.org/pom/", "Poms", 2, true ) };
+        new IndexPage( POMS_INDEX_URL, "Poms", 2, true ) };
 
     private static final Map<String, IndexPage> INDEX_PAGES_REF;
 
@@ -75,10 +77,9 @@ public class DistCheckIndexPageMojo
     static
     {
         Map<String, IndexPage> aMap = new HashMap<>();
-        int index = 1;
         for ( IndexPage ip : INDEX_PAGES )
         {
-            aMap.put(  "IP" + index++, ip );
+            aMap.put(  ip.url, ip );
         }
         INDEX_PAGES_REF = Collections.unmodifiableMap( aMap );
     }
@@ -321,14 +322,14 @@ public class DistCheckIndexPageMojo
         {
             CheckIndexPageResult result = new CheckIndexPageResult( configLine, version );
 
-            if ( configLine.getIndexPageId() != null )
+            if ( configLine.getIndexPageUrl() != null )
             {
-                if ( results.get( configLine.getIndexPageId() ) == null )
+                if ( results.get( configLine.getIndexPageUrl() ) == null )
                 {
-                    results.put( configLine.getIndexPageId(), new LinkedList<CheckIndexPageResult>() );
+                    results.put( configLine.getIndexPageUrl(), new LinkedList<CheckIndexPageResult>() );
                 } 
-                results.get( configLine.getIndexPageId() ).add( result );
-                updateIndexPageInfo( configLine, result, INDEX_PAGES_REF.get( configLine.getIndexPageId() ) );
+                results.get( configLine.getIndexPageUrl() ).add( result );
+                updateIndexPageInfo( configLine, result, INDEX_PAGES_REF.get( configLine.getIndexPageUrl() ) );
             }
         }
         catch ( IOException ex )
