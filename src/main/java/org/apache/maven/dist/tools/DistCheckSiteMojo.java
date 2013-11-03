@@ -420,9 +420,19 @@ public class DistCheckSiteMojo
                 artifactFactory.createProjectArtifact( cli.getGroupId(), cli.getArtifactId(), version );
             MavenProject artifactProject =
                 mavenProjectBuilder.buildFromRepository( artifact, artifactRepositories, localRepository, false );
+            String siteUrl = artifactProject.getUrl();
 
-            result.setUrl( artifactProject.getUrl() );
-            Document doc = Jsoup.connect( artifactProject.getUrl() ).get();
+            if ( "apache".equals( cli.getArtifactId() ) )
+            {
+                siteUrl = "http://maven.apache.org/pom/asf/";
+            }
+            else if ( "maven-parent".equals( cli.getArtifactId() ) )
+            {
+                siteUrl = "http://maven.apache.org/pom/maven/";
+            }
+
+            result.setUrl( siteUrl );
+            Document doc = Jsoup.connect( siteUrl ).get();
             if ( screenShot )
             {
                 driver.get( artifactProject.getUrl() );
