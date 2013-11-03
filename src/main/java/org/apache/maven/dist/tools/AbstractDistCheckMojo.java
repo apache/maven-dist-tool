@@ -370,7 +370,8 @@ public abstract class AbstractDistCheckMojo
      */
     protected void addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String error ) 
     {
-        if ( ignore.contains( cli.getArtifactId() + ':' + version ) || ignore.contains( cli.getArtifactId() ) )
+        if ( ( ignore != null )
+            && ( ignore.contains( cli.getArtifactId() + ':' + version ) || ignore.contains( cli.getArtifactId() ) ) )
         {
             getLog().warn( error );
         }

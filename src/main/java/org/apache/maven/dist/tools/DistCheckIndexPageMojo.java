@@ -163,6 +163,9 @@ public class DistCheckIndexPageMojo
             sink.rawText( cipr.indexVersion );
             iconError( sink );
             sink.rawText( " in index page" );
+            addErrorLine( cli, null, null,
+                          cli.getArtifactId() + ": found " + cipr.indexVersion + " instead of " + cipr.getVersion()
+                              + " in " + cli.getIndexPageUrl() );
         }
         sink.tableCell_();
 
@@ -283,19 +286,19 @@ public class DistCheckIndexPageMojo
 
         Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
 
-        String path = cli.getArtifactId();
+        String path = '/' + cli.getArtifactId() + '/';
         // poms index page hack: neither link text nor url are equal to artifactId
         if ( cli.getArtifactId().equals( "maven-parent" ) )
         {
-            path = "maven/";
+            path = "/maven/";
         }
         else if ( cli.getArtifactId().equals( "maven-skins" ) )
         {
-            path = "skins/";
+            path = "/skins/";
         }
         else if ( cli.getArtifactId().equals( "apache" ) )
         {
-            path = "asf/";
+            path = "/asf/";
         }
 
         for ( Element e : a )
