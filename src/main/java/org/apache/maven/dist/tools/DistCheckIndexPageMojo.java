@@ -58,8 +58,17 @@ public class DistCheckIndexPageMojo
 
     private static final Map<String, IndexPage> INDEX_PAGES_REF;
 
-    // artifact-id -> path when path is not the classical /artifact-id/
-    private static final Map<String, String> ARTIFACT_PATHS;
+    /**
+     * Path in index page mapping, when path is not the classical /artifact-id/ 
+     * The configuration looks like this:
+     * <pre>
+     *   &lt;paths&gt;
+     *     &lt;artifact-id&gt;/directory/&lt;/artifact-id&gt;
+     *   &lt;/paths&gt;
+     * </pre>
+     */
+    @Parameter
+    private Map<String, String> paths;
 
     private static class IndexPage
     {
@@ -86,12 +95,6 @@ public class DistCheckIndexPageMojo
             aMap.put(  ip.url, ip );
         }
         INDEX_PAGES_REF = Collections.unmodifiableMap( aMap );
-
-        Map<String, String> path = new HashMap<>();
-        path.put( "apache", "/asf/" );
-        path.put( "maven-parent", "/maven/" );
-        path.put( "maven-skins", "/skins/" );
-        ARTIFACT_PATHS = Collections.unmodifiableMap( path );
     }
 
     /**
@@ -297,7 +300,7 @@ public class DistCheckIndexPageMojo
 
         Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
 
-        String path = ARTIFACT_PATHS.get( cli.getArtifactId() );
+        String path = paths.get( cli.getArtifactId() );
         if ( path == null )
         {
             path = '/' + cli.getArtifactId() + '/';

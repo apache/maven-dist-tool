@@ -272,6 +272,15 @@
             <ignoreDistFailure>apache-jar-resource-bundle:1.4</ignoreDistFailure>
             <ignoreDistFailure>apache-license-header-resource-bundle:1.1</ignoreDistFailure>
           </ignoreDistFailures>
+          <sites>
+            <apache>http://maven.apache.org/pom/asf/</apache>
+            <maven-parent>http://maven.apache.org/pom/maven/</maven-parent>
+          </sites>
+          <paths>
+            <apache>/asf/</apache>
+            <maven-parent>/maven/</maven-parent>
+            <maven-skins>/skins/</maven-skins>
+          </paths>
         </configuration>
         <reportSets>
           <reportSet>

@@ -20,7 +20,6 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -101,16 +100,17 @@ public class DistCheckSiteMojo
      */
     protected static final int HTTP_OK = 200;
 
-    // artifact-id -> url when site url read in pom doesn't get the expected value
-    private static final Map<String, String> ARTIFACT_SITE_URLS;
-
-    static
-    {
-        Map<String, String> urls = new HashMap<>();
-        urls.put( "apache", "http://maven.apache.org/pom/asf/" );
-        urls.put( "maven-parent", "http://maven.apache.org/pom/maven/" );
-        ARTIFACT_SITE_URLS = Collections.unmodifiableMap( urls );
-    }
+    /**
+     * Site url mapping, when site url read in pom doesn't get the expected value 
+     * The configuration looks like this:
+     * <pre>
+     *   &lt;sites&gt;
+     *     &lt;artifact-id&gt;site url&lt;/artifact-id&gt;
+     *   &lt;/sites&gt;
+     * </pre>
+     */
+    @Parameter
+    private Map<String, String> sites;
 
     @Override
     boolean isIndexPageCheck()
@@ -433,7 +433,7 @@ public class DistCheckSiteMojo
             MavenProject artifactProject =
                 mavenProjectBuilder.buildFromRepository( artifact, artifactRepositories, localRepository, false );
 
-            String siteUrl = ARTIFACT_SITE_URLS.get( cli.getArtifactId() );
+            String siteUrl = sites.get( cli.getArtifactId() );
             if ( siteUrl == null )
             {
                 siteUrl = artifactProject.getUrl();
