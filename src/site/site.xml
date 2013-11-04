@@ -35,6 +35,7 @@ under the License.
             <item name="Dist Tool> Sites" href="dist-tool-check-site.html" />
             <item name="Dist Tool> Source Release" href="dist-tool-check-source-release.html" />
             <item name="Dist Tool> Index Pages" href="dist-tool-check-index-page.html" />
+            <item name="Configuration" href="dist-tool.conf.html" />
         </menu>        
         <menu name="for dev">
             <item name="TODO" href="todo.html" />
