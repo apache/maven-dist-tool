@@ -3,10 +3,6 @@ Todo
 
 ### Index Pages
 
-* path detection for some parent POMs (ASF, Maven) handled ugly hardcoded way :(
-
-* site url for ASF and Maven parent poms hardcoded
-
 # Done
 
 * See where to publish the result on Maven site
