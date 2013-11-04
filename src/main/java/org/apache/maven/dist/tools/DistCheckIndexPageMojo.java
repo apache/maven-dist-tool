@@ -58,6 +58,9 @@ public class DistCheckIndexPageMojo
 
     private static final Map<String, IndexPage> INDEX_PAGES_REF;
 
+    // artifact-id -> path when path is not the classical /artifact-id/
+    private static final Map<String, String> ARTIFACT_PATHS;
+
     private static class IndexPage
     {
         final String url;
@@ -74,6 +77,7 @@ public class DistCheckIndexPageMojo
             this.containsDate = containsDate;
         }
     }
+
     static
     {
         Map<String, IndexPage> aMap = new HashMap<>();
@@ -82,7 +86,14 @@ public class DistCheckIndexPageMojo
             aMap.put(  ip.url, ip );
         }
         INDEX_PAGES_REF = Collections.unmodifiableMap( aMap );
+
+        Map<String, String> path = new HashMap<>();
+        path.put( "apache", "/asf/" );
+        path.put( "maven-parent", "/maven/" );
+        path.put( "maven-skins", "/skins/" );
+        ARTIFACT_PATHS = Collections.unmodifiableMap( path );
     }
+
     /**
      * Ignore dist failure for <code>artifactId</code> or <code>artifactId:version</code>
      */
@@ -286,19 +297,10 @@ public class DistCheckIndexPageMojo
 
         Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
 
-        String path = '/' + cli.getArtifactId() + '/';
-        // poms index page hack: neither link text nor url are equal to artifactId
-        if ( cli.getArtifactId().equals( "maven-parent" ) )
+        String path = ARTIFACT_PATHS.get( cli.getArtifactId() );
+        if ( path == null )
         {
-            path = "/maven/";
-        }
-        else if ( cli.getArtifactId().equals( "maven-skins" ) )
-        {
-            path = "/skins/";
-        }
-        else if ( cli.getArtifactId().equals( "apache" ) )
-        {
-            path = "/asf/";
+            path = '/' + cli.getArtifactId() + '/';
         }
 
         for ( Element e : a )

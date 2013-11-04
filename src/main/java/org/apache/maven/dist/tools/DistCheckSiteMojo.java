@@ -20,6 +20,7 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -99,6 +100,17 @@ public class DistCheckSiteMojo
      * Http status ok code.
      */
     protected static final int HTTP_OK = 200;
+
+    // artifact-id -> url when site url read in pom doesn't get the expected value
+    private static final Map<String, String> ARTIFACT_SITE_URLS;
+
+    static
+    {
+        Map<String, String> urls = new HashMap<>();
+        urls.put( "apache", "http://maven.apache.org/pom/asf/" );
+        urls.put( "maven-parent", "http://maven.apache.org/pom/maven/" );
+        ARTIFACT_SITE_URLS = Collections.unmodifiableMap( urls );
+    }
 
     @Override
     boolean isIndexPageCheck()
@@ -420,15 +432,11 @@ public class DistCheckSiteMojo
                 artifactFactory.createProjectArtifact( cli.getGroupId(), cli.getArtifactId(), version );
             MavenProject artifactProject =
                 mavenProjectBuilder.buildFromRepository( artifact, artifactRepositories, localRepository, false );
-            String siteUrl = artifactProject.getUrl();
 
-            if ( "apache".equals( cli.getArtifactId() ) )
+            String siteUrl = ARTIFACT_SITE_URLS.get( cli.getArtifactId() );
+            if ( siteUrl == null )
             {
-                siteUrl = "http://maven.apache.org/pom/asf/";
-            }
-            else if ( "maven-parent".equals( cli.getArtifactId() ) )
-            {
-                siteUrl = "http://maven.apache.org/pom/maven/";
+                siteUrl = artifactProject.getUrl();
             }
 
             result.setUrl( siteUrl );
