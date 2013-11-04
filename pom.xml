@@ -255,14 +255,12 @@
         <version>${project.version}</version>
         <configuration>
           <ignoreSiteFailures>
-            <ignoreSiteFailure>apache-maven:2.0.11</ignoreSiteFailure>
-            <ignoreSiteFailure>apache-maven:2.2.1</ignoreSiteFailure>
             <ignoreSiteFailure>file-management:1.2.1</ignoreSiteFailure>
             <ignoreSiteFailure>apache-incubator-disclaimer-resource-bundle:1.1</ignoreSiteFailure>
           </ignoreSiteFailures>
           <ignoreDistFailures>
             <ignoreDistFailure>doxia-linkcheck:1.2</ignoreDistFailure>
-            <ignoreDistFailure>apache-maven:2.0.11</ignoreDistFailure><!-- this one is in dist but not in central -->
+            <ignoreDistFailure>apache-maven:2.0.11</ignoreDistFailure><!-- this one is in distribution area but not in central -->
             <ignoreDistFailure>maven-docck-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>maven-reactor-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>file-management:1.2.1</ignoreDistFailure>
@@ -274,6 +272,8 @@
           <sites>
             <apache>http://maven.apache.org/pom/asf/</apache>
             <maven-parent>http://maven.apache.org/pom/maven/</maven-parent>
+            <apache-maven:2.0.11>http://maven.apache.org/ref/2.0.11/</apache-maven:2.0.11>
+            <apache-maven:2.2.1>http://maven.apache.org/ref/2.2.1/</apache-maven:2.2.1>
           </sites>
           <paths>
             <apache>/asf/</apache>

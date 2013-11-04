@@ -106,6 +106,7 @@ public class DistCheckSiteMojo
      * <pre>
      *   &lt;sites&gt;
      *     &lt;artifact-id&gt;site url&lt;/artifact-id&gt;
+     *     &lt;artifact-id:version&gt;site url&lt;/artifact-id:version&gt;
      *   &lt;/sites&gt;
      * </pre>
      */
@@ -436,7 +437,11 @@ public class DistCheckSiteMojo
             String siteUrl = sites.get( cli.getArtifactId() );
             if ( siteUrl == null )
             {
-                siteUrl = artifactProject.getUrl();
+                siteUrl = sites.get( cli.getArtifactId() + ':' + version );
+                if ( siteUrl == null )
+                {
+                    siteUrl = artifactProject.getUrl();
+                }
             }
 
             result.setUrl( siteUrl );
