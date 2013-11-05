@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
@@ -105,13 +106,19 @@ public class DistCheckSiteMojo
      * The configuration looks like this:
      * <pre>
      *   &lt;sites&gt;
-     *     &lt;artifact-id&gt;site url&lt;/artifact-id&gt;
-     *     &lt;artifact-id:version&gt;site url&lt;/artifact-id:version&gt;
+     *     &lt;property&gt;
+     *       &lt;name&gt;artifact-id&lt;/name&gt;
+     *       &lt;value&gt;site url&lt;/value&gt;
+     *     &lt;/property&gt;
+     *     &lt;property&gt;
+     *       &lt;name&gt;artifact-id:version&lt;/name&gt;
+     *       &lt;value&gt;site url&lt;/value&gt;
+     *     &lt;/property&gt;
      *   &lt;/sites&gt;
      * </pre>
      */
     @Parameter
-    private Map<String, String> sites;
+    private Properties sites;
 
     @Override
     boolean isIndexPageCheck()
@@ -434,10 +441,10 @@ public class DistCheckSiteMojo
             MavenProject artifactProject =
                 mavenProjectBuilder.buildFromRepository( artifact, artifactRepositories, localRepository, false );
 
-            String siteUrl = sites.get( cli.getArtifactId() );
+            String siteUrl = sites.getProperty( cli.getArtifactId() );
             if ( siteUrl == null )
             {
-                siteUrl = sites.get( cli.getArtifactId() + ':' + version );
+                siteUrl = sites.getProperty( cli.getArtifactId() + ':' + version );
                 if ( siteUrl == null )
                 {
                     siteUrl = artifactProject.getUrl();
