@@ -310,17 +310,19 @@ public class DistCheckSourceReleaseMojo
         sink.section1();
         sink.paragraph();
         sink.text( "Check Source Release"
-                + " (= artifactId + version + '-source-release.zip[.asc|.md5]') availability in:" );
+                + " (= <artifactId>-<version>-source-release.zip + .asc + .md5) availability in:" );
         sink.paragraph_();
         sink.list();
         sink.listItem();
-        sink.link( repoBaseUrl );
-        sink.text( "central" );
+        sink.text( "Apache Maven distribution area: " );
+        sink.link( distributionAreaUrl );
+        sink.text( distributionAreaUrl );
         sink.link_();
         sink.listItem_();
         sink.listItem();
-        sink.link( distributionAreaUrl );
-        sink.text( "Apache distribution area" );
+        sink.text( "Maven central repository: " );
+        sink.link( repoBaseUrl );
+        sink.text( repoBaseUrl );
         sink.link_();
         sink.listItem_();
         sink.list_();
