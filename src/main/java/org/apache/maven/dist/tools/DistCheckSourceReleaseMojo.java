@@ -204,11 +204,7 @@ public class DistCheckSourceReleaseMojo
 
         // dist column
         sink.tableCell();
-        if ( csrr.dist == null )
-        {
-            sink.text(  "not in distribution area" );
-        }
-        else
+        if ( csrr.dist != null )
         {
             String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csrr.getVersion() + "/source" ) : "" );
             sink.link( distributionAreaUrl + directory );
@@ -390,16 +386,19 @@ public class DistCheckSourceReleaseMojo
         }
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "dist: " + String.valueOf( current.artifactsCount - current.distError ) );
-        iconSuccess( sink );
-        if ( current.distError > 0 )
+        if ( !NOT_IN_DISTRIBUTION_AREA.equals( current.directory ) )
         {
-            sink.rawText( "/" + String.valueOf( current.distError ) );
-            iconWarning( sink );
-            sink.rawText( "= " + String.valueOf( current.distMissing ) );
-            iconError( sink );
-            sink.rawText( "/" + String.valueOf( current.distOlder ) );
-            iconRemove( sink );
+            sink.rawText( "dist: " + String.valueOf( current.artifactsCount - current.distError ) );
+            iconSuccess( sink );
+            if ( current.distError > 0 )
+            {
+                sink.rawText( "/" + String.valueOf( current.distError ) );
+                iconWarning( sink );
+                sink.rawText( "= " + String.valueOf( current.distMissing ) );
+                iconError( sink );
+                sink.rawText( "/" + String.valueOf( current.distOlder ) );
+                iconRemove( sink );
+            }
         }
         sink.tableHeaderCell_();
     }
