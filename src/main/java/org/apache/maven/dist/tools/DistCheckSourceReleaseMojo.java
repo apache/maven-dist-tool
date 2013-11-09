@@ -37,6 +37,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.w3c.dom.css.CSSRule;
 
 /**
  * Check presence of source-release.zip in distribution area and central repo
@@ -180,18 +181,17 @@ public class DistCheckSourceReleaseMojo
         sink.tableCell();
         if ( csrr.dist != null )
         {
-            String directory = cli.getDirectory() + ( cli.isSrcBin() ? ( "/" + csrr.getVersion() + "/source" ) : "" );
-            sink.link( distributionAreaUrl + directory );
-            sink.text( directory );
-            sink.link_();
-            sink.text( "source-release" );
+            if ( cli.isSrcBin() )
+            {
+                String directory = csrr.getVersion() + "/source/";
+                sink.link( distributionAreaUrl + cli.getDirectory() + '/' + directory );
+                sink.text( directory );
+                sink.link_();
+            }
             if ( csrr.dist.isEmpty() && csrr.distOlder.isEmpty() )
             {
+                sink.text( cli.getSourceReleaseFilename( csrr.getVersion(), true ) );
                 iconSuccess( sink );
-            }
-            else
-            {
-                iconWarning( sink );
             }
             StringBuilder cliMissing = new StringBuilder();
             for ( String missing : csrr.dist )

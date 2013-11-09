@@ -167,7 +167,7 @@ class ConfigurationLineInfo
 
     }
 
-    String getSourceReleaseFilename( String version, boolean dist )
+    public String getSourceReleaseFilename( String version, boolean dist )
     {
         return artifactId + "-" + version
             + ( srcBin && ( dist || !"maven-ant-tasks".equals( artifactId ) ) ? "-src" : "-source-release" ) + ".zip";
