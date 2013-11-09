@@ -379,7 +379,10 @@ public class DistCheckSourceReleaseMojo
         sink.tableHeaderCell();
         if ( !NOT_IN_DISTRIBUTION_AREA.equals( current.directory ) )
         {
-            sink.rawText( "dist: " + String.valueOf( current.artifactsCount - current.distError ) );
+            sink.link( distributionAreaUrl + current.directory );
+            sink.text( "/dist/maven/" + current.directory );
+            sink.link_();
+            sink.rawText( ": " + String.valueOf( current.artifactsCount - current.distError ) );
             iconSuccess( sink );
             if ( current.distError > 0 )
             {
