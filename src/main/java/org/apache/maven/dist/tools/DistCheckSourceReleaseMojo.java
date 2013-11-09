@@ -176,32 +176,6 @@ public class DistCheckSourceReleaseMojo
         sink.rawText( csrr.getConfigurationLine().getReleaseDateFromMetadata() );
         sink.tableCell_();
 
-        // central column
-        sink.tableCell();
-        sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
-        sink.text( "artifact" );
-        sink.link_();
-        sink.text( "/" );
-        sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) );
-        sink.text( csrr.getVersion() );
-        sink.link_();
-        sink.text( "/" );
-        if ( csrr.central.isEmpty() )
-        {
-            iconSuccess( sink );
-        }
-        else
-        {
-            iconWarning( sink );
-        }
-        for ( String missing : csrr.central )
-        {
-            sink.lineBreak();
-            iconError( sink );
-            sink.rawText( missing );
-        }
-        sink.tableCell_();
-
         // dist column
         sink.tableCell();
         if ( csrr.dist != null )
@@ -258,6 +232,32 @@ public class DistCheckSourceReleaseMojo
                 sink.unknown( "pre", new Object[] { new Integer( HtmlMarkup.TAG_TYPE_END ) }, null );
             }
         }
+
+        // central column
+        sink.tableCell();
+        sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
+        sink.text( "artifact" );
+        sink.link_();
+        sink.text( "/" );
+        sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) );
+        sink.text( csrr.getVersion() );
+        sink.link_();
+        sink.text( "/" );
+        if ( csrr.central.isEmpty() )
+        {
+            iconSuccess( sink );
+        }
+        else
+        {
+            iconWarning( sink );
+        }
+        for ( String missing : csrr.central )
+        {
+            sink.lineBreak();
+            iconError( sink );
+            sink.rawText( missing );
+        }
+        sink.tableCell_();
 
         sink.tableCell_();
         sink.tableRow_();
@@ -377,15 +377,6 @@ public class DistCheckSourceReleaseMojo
     private void reportStatisticsHeader( DirectoryStatistics current, Sink sink )
     {
         sink.tableHeaderCell();
-        sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralMissing ) );
-        iconSuccess( sink );
-        if ( current.centralMissing > 0 )
-        {
-            sink.rawText( "/" + String.valueOf( current.centralMissing ) );
-            iconWarning( sink );
-        }
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
         if ( !NOT_IN_DISTRIBUTION_AREA.equals( current.directory ) )
         {
             sink.rawText( "dist: " + String.valueOf( current.artifactsCount - current.distError ) );
@@ -399,6 +390,15 @@ public class DistCheckSourceReleaseMojo
                 sink.rawText( "/" + String.valueOf( current.distOlder ) );
                 iconRemove( sink );
             }
+        }
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralMissing ) );
+        iconSuccess( sink );
+        if ( current.centralMissing > 0 )
+        {
+            sink.rawText( "/" + String.valueOf( current.centralMissing ) );
+            iconWarning( sink );
         }
         sink.tableHeaderCell_();
     }
