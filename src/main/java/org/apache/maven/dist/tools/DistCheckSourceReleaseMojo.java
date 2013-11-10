@@ -37,7 +37,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.css.CSSRule;
 
 /**
  * Check presence of source-release.zip in distribution area and central repo
@@ -114,15 +113,17 @@ public class DistCheckSourceReleaseMojo
     private static class DirectoryStatistics
     {
         final String directory;
+        final String groupId;
         int artifactsCount = 0;
         int centralMissing = 0;
         int distError = 0;
         int distMissing = 0;
         int distOlder = 0;
 
-        public DirectoryStatistics( String directory )
+        public DirectoryStatistics( String directory, String groupId )
         {
             this.directory = directory;
+            this.groupId = groupId;
         }
 
         public boolean contains( CheckSourceReleaseResult csrr )
@@ -236,7 +237,7 @@ public class DistCheckSourceReleaseMojo
         // central column
         sink.tableCell();
         sink.link( cli.getBaseURL( repoBaseUrl, "" ) );
-        sink.text( "artifact" );
+        sink.text( "<artifactId>" );
         sink.link_();
         sink.text( "/" );
         sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) );
@@ -280,7 +281,7 @@ public class DistCheckSourceReleaseMojo
             throw new MavenReportException( ex.getMessage(), ex );
         }
 
-        DirectoryStatistics stats = new DirectoryStatistics( "" ); // global stats
+        DirectoryStatistics stats = new DirectoryStatistics( "", "org.apache.maven" ); // global stats
 
         List<DirectoryStatistics> statistics = new ArrayList<>();
         DirectoryStatistics current = null;
@@ -288,7 +289,9 @@ public class DistCheckSourceReleaseMojo
         {
             if ( ( current == null ) || !current.contains( csrr ) )
             {
-                current = new DirectoryStatistics( csrr.getConfigurationLine().getDirectory() );
+                current =
+                    new DirectoryStatistics( csrr.getConfigurationLine().getDirectory(),
+                                             csrr.getConfigurationLine().getGroupId() );
                 statistics.add( current );
             }
             current.addArtifact( csrr );
@@ -380,7 +383,7 @@ public class DistCheckSourceReleaseMojo
         if ( !NOT_IN_DISTRIBUTION_AREA.equals( current.directory ) )
         {
             sink.link( distributionAreaUrl + current.directory );
-            sink.text( "/dist/maven/" + current.directory );
+            sink.text( "<dist-area>/" + current.directory );
             sink.link_();
             sink.rawText( ": " + String.valueOf( current.artifactsCount - current.distError ) );
             iconSuccess( sink );
@@ -396,7 +399,10 @@ public class DistCheckSourceReleaseMojo
         }
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "central: " + String.valueOf( current.artifactsCount - current.centralMissing ) );
+        sink.link( repoBaseUrl + current.groupId.replace( '.', '/' ) );
+        sink.text( "<central>/" + current.groupId.replace( '.', '/' ).replace( "org/apache/maven", "o/a/m" ) );
+        sink.link_();
+        sink.rawText( ": " + String.valueOf( current.artifactsCount - current.centralMissing ) );
         iconSuccess( sink );
         if ( current.centralMissing > 0 )
         {
