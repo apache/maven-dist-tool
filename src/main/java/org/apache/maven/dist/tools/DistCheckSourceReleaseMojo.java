@@ -243,7 +243,7 @@ public class DistCheckSourceReleaseMojo
         sink.link( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) );
         sink.text( csrr.getVersion() );
         sink.link_();
-        sink.text( "/" );
+        sink.text( "/(source-release)" );
         if ( csrr.central.isEmpty() )
         {
             iconSuccess( sink );
