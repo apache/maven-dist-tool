@@ -162,46 +162,44 @@ public class DistCheckIndexPageMojo
         sink.rawText( cipr.getConfigurationLine().getArtifactId() );
         sink.tableCell_();
 
-        // LATEST column
+        // maven-metadata.xml column
         sink.tableCell();
         sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
-        sink.rawText( cipr.getVersion() );
+        sink.rawText( "maven-metadata.xml" );
         sink.link_();
-        if ( cipr.getVersion().equals( cipr.indexVersion ) )
-        {
-            iconSuccess( sink );
-        }
-        else
-        {
-            sink.lineBreak();
-            sink.rawText( cipr.indexVersion );
-            iconError( sink );
-            sink.rawText( " in index page" );
-            addErrorLine( cli, null, null,
-                          cli.getArtifactId() + ": found " + cipr.indexVersion + " instead of " + cipr.getVersion()
-                              + " in " + cli.getIndexPageUrl() );
-        }
+        sink.rawText( ": " + cipr.getConfigurationLine().getReleaseDateFromMetadata() + " - " + cipr.indexVersion );
         sink.tableCell_();
 
-        // DATE column
+        // index page column
+        sink.tableCell();
         if ( displayDate )
         {
-            sink.tableCell();
-            sink.rawText( cipr.getConfigurationLine().getReleaseDateFromMetadata() );
+            sink.rawText( cipr.indexDate );
             if ( cipr.getConfigurationLine().getReleaseDateFromMetadata().equals( cipr.indexDate ) )
             {
                 iconSuccess( sink );
             }
             else
             {
-                sink.lineBreak();
-                sink.rawText( cipr.indexDate );
-                iconError( sink );
-                sink.rawText( " in index page" );
+                iconWarning( sink );
             }
-            sink.tableCell_();
+            sink.rawText( " - " );
         }
-        // central column
+
+        sink.rawText( cipr.indexVersion );
+        if ( cipr.getVersion().equals( cipr.indexVersion ) )
+        {
+            iconSuccess( sink );
+        }
+        else
+        {
+            iconError( sink );
+
+            addErrorLine( cli, null, null,
+                          cli.getArtifactId() + ": found " + cipr.indexVersion + " instead of " + cipr.getVersion()
+                              + " in " + cli.getIndexPageUrl() );
+        }
+        sink.tableCell_();
         
         sink.tableRow_();
     }
@@ -233,7 +231,8 @@ public class DistCheckIndexPageMojo
         sink.body();
         sink.section1();
         sink.paragraph();
-        sink.text( "Check that index pages have been updated with latest release info." );
+        sink.rawText( "Check that index pages have been updated with latest release info available in central repository"
+            + " <code>maven-metadata.xml</code>." );
         sink.paragraph_();
         sink.section1_();
 
@@ -258,14 +257,18 @@ public class DistCheckIndexPageMojo
             sink.rawText( "Component" );
             sink.tableHeaderCell_();
             sink.tableHeaderCell();
-            sink.rawText( "VERSION" );
-            sink.tableHeaderCell_();
+            sink.rawText( "maven-metadata.xml " );
             if ( indexPage.containsDate )
             {
-                sink.tableHeaderCell();
-                sink.rawText( "DATE" );
-                sink.tableHeaderCell_();
+                sink.rawText( "lastUpdated - " );
             }
+            sink.rawText( "latest" );
+            sink.tableHeaderCell_();
+            sink.tableHeaderCell();
+            sink.link( indexPage.url );
+            sink.rawText( "index page" );
+            sink.link_();
+            sink.tableHeaderCell_();
             sink.tableRow_();
 
             for ( CheckIndexPageResult csr : indexPageResults )
