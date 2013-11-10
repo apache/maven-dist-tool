@@ -423,11 +423,7 @@ public class DistCheckSiteMojo
 
     private String getSimplifiedUrl( String url )
     {
-        if ( url.startsWith( MAVEN_SITE ) )
-        {
-            return url.substring( MAVEN_SITE.length() );
-        }
-        return url;
+        return url.replace( MAVEN_SITE, "http://m.a.o" );
     }
 
     private void checkSite( ConfigurationLineInfo cli, String version )
