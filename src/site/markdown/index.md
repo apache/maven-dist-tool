@@ -1,7 +1,7 @@
 About dist-tool-plugin
 =====
 
-The dist-tool-plugin checks that Maven release rules are well applied across every artifact, as listed in [configuration file][4].
+The dist-tool-plugin checks that Maven release process has been fully applied across every artifact, as listed in [configuration file][4].
 
 Results are displayed in 3 reports:
 
