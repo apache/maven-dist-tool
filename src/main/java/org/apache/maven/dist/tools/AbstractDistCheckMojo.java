@@ -30,8 +30,10 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
@@ -101,6 +103,13 @@ public abstract class AbstractDistCheckMojo
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
 
     protected String distributionAreaUrl;
+
+    /**
+     * Path in index page mapping, when path is not the classical /artifact-id/ 
+     * The configuration in <code>dist-tool.conf</code> looks like this:
+     * <pre>artifact-id index-path = /directory/</pre>
+     */
+    protected Map<String, String> paths = new HashMap<String, String>();
 
     /**
      * is it index page check mojo?
@@ -203,6 +212,26 @@ public abstract class AbstractDistCheckMojo
                 if ( "dist-area".equals( param ) )
                 {
                     distributionAreaUrl = value;
+                }
+                else if ( param.contains( " " ) )
+                {
+                    index = param.indexOf( ' ' );
+                    String artifactId = param.substring( 0, index );
+                    param = param.substring( index ).trim();
+
+                    if ( "index-path".equals( param ) )
+                    {
+                        paths.put( artifactId, value );
+                    }
+                    else
+                    {
+                        throw new MojoExecutionException( "unknown parameter '" + param + "' in configuration line: "
+                            + line );
+                    }
+                }
+                else
+                {
+                    throw new MojoExecutionException( "unparseable configuration line: " + line );
                 }
 
                 continue;

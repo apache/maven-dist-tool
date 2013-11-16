@@ -58,18 +58,6 @@ public class DistCheckIndexPageMojo
 
     private static final Map<String, IndexPage> INDEX_PAGES_REF;
 
-    /**
-     * Path in index page mapping, when path is not the classical /artifact-id/ 
-     * The configuration looks like this:
-     * <pre>
-     *   &lt;paths&gt;
-     *     &lt;artifact-id&gt;/directory/&lt;/artifact-id&gt;
-     *   &lt;/paths&gt;
-     * </pre>
-     */
-    @Parameter
-    private Map<String, String> paths;
-
     private static class IndexPage
     {
         final String url;

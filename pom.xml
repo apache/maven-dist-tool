@@ -293,11 +293,6 @@
               <value>http://maven.apache.org/ref/2.2.1/</value>
             </property>
           </sites>
-          <paths>
-            <apache>/asf/</apache>
-            <maven-parent>/maven/</maven-parent>
-            <maven-skins>/skins/</maven-skins>
-          </paths>
         </configuration>
         <reportSets>
           <reportSet>
