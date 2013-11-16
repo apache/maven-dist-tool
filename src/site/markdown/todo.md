@@ -3,6 +3,8 @@ Todo
 
 ### Index Pages
 
+* consider date found in artifact metadata and in index page to be consistent if different only from a few days (date chosen by the release manager between the vote start and announce)
+
 # Done
 
 * See where to publish the result on Maven site
@@ -18,8 +20,7 @@ Todo
 
 ### Source Release
 
-* add date of release (from artifact)
-  * date from metadata is ok ?
+* add date of release (from artifact metadata)
 
 * Check older artifact in dist (only latest should be present, previous version removed)
 
