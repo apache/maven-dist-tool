@@ -262,7 +262,6 @@
         <version>${project.version}</version>
         <configuration>
           <ignoreSiteFailures>
-            <ignoreSiteFailure>file-management:1.2.1</ignoreSiteFailure>
             <ignoreSiteFailure>apache-incubator-disclaimer-resource-bundle:1.1</ignoreSiteFailure>
           </ignoreSiteFailures>
           <ignoreDistFailures>
