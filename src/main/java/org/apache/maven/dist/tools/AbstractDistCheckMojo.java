@@ -194,9 +194,17 @@ public abstract class AbstractDistCheckMojo
             {
                 continue;
             }
-            else if ( distributionAreaUrl == null )
+            else if ( line.contains( "=" ) )
             {
-                distributionAreaUrl = line.trim();
+                int index = line.indexOf( '=' );
+                String param = line.substring( 0, index ).trim();
+                String value = line.substring( index + 1 ).trim();
+
+                if ( "dist-area".equals( param ) )
+                {
+                    distributionAreaUrl = value;
+                }
+
                 continue;
             }
             else if ( line.startsWith( "/" ) )
