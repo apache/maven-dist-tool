@@ -25,7 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
@@ -100,25 +99,6 @@ public class DistCheckSiteMojo
      * Http status ok code.
      */
     protected static final int HTTP_OK = 200;
-
-    /**
-     * Site url mapping, when site url read in pom doesn't get the expected value 
-     * The configuration looks like this:
-     * <pre>
-     *   &lt;sites&gt;
-     *     &lt;property&gt;
-     *       &lt;name&gt;artifact-id&lt;/name&gt;
-     *       &lt;value&gt;site url&lt;/value&gt;
-     *     &lt;/property&gt;
-     *     &lt;property&gt;
-     *       &lt;name&gt;artifact-id:version&lt;/name&gt;
-     *       &lt;value&gt;site url&lt;/value&gt;
-     *     &lt;/property&gt;
-     *   &lt;/sites&gt;
-     * </pre>
-     */
-    @Parameter
-    private Properties sites;
 
     @Override
     boolean isIndexPageCheck()
@@ -437,10 +417,10 @@ public class DistCheckSiteMojo
             MavenProject artifactProject =
                 mavenProjectBuilder.buildFromRepository( artifact, artifactRepositories, localRepository, false );
 
-            String siteUrl = sites.getProperty( cli.getArtifactId() );
+            String siteUrl = sites.get( cli.getArtifactId() );
             if ( siteUrl == null )
             {
-                siteUrl = sites.getProperty( cli.getArtifactId() + ':' + version );
+                siteUrl = sites.get( cli.getArtifactId() + ':' + version );
                 if ( siteUrl == null )
                 {
                     siteUrl = artifactProject.getUrl();

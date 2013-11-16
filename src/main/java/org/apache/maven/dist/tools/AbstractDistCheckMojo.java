@@ -112,6 +112,14 @@ public abstract class AbstractDistCheckMojo
     protected Map<String, String> paths = new HashMap<String, String>();
 
     /**
+     * Site url mapping, when site url read in pom doesn't get the expected value 
+     * The configuration in <code>dist-tool.conf</code> looks like this:
+     * <pre>artifact-id site = site url
+     *artifact-id:version site = site url</pre>
+     */
+    protected Map<String, String> sites = new HashMap<String, String>();
+
+    /**
      * is it index page check mojo?
      * necessary to only check index page information for plugins marked with asterisk * in db,
      * because they are released as part of a global component (archetype, scm, release, ...)
@@ -222,6 +230,10 @@ public abstract class AbstractDistCheckMojo
                     if ( "index-path".equals( param ) )
                     {
                         paths.put( artifactId, value );
+                    }
+                    else if ( "site".equals( param ) )
+                    {
+                        sites.put( artifactId, value );
                     }
                     else
                     {

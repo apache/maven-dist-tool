@@ -275,24 +275,6 @@
             <ignoreDistFailure>apache-jar-resource-bundle:1.4</ignoreDistFailure>
             <ignoreDistFailure>apache-license-header-resource-bundle:1.1</ignoreDistFailure>
           </ignoreDistFailures>
-          <sites>
-            <property>
-              <name>apache</name>
-              <value>http://maven.apache.org/pom/asf/</value>
-            </property>
-            <property>
-              <name>maven-parent</name>
-              <value>http://maven.apache.org/pom/maven/</value>
-            </property>
-            <property>
-              <name>apache-maven:2.0.11</name>
-              <value>http://maven.apache.org/ref/2.0.11/</value>
-            </property>
-            <property>
-              <name>apache-maven:2.2.1</name>
-              <value>http://maven.apache.org/ref/2.2.1/</value>
-            </property>
-          </sites>
         </configuration>
         <reportSets>
           <reportSet>
