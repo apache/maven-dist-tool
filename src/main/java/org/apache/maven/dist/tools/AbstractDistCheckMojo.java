@@ -207,14 +207,23 @@ public abstract class AbstractDistCheckMojo
         {
             ConfigurationLineInfo aLine = null;
 
+            line = line.trim();
+
             if ( "".equals( line ) || line.startsWith( "##" ) )
             {
+                // empty line or comment: ignore
                 continue;
             }
-            else if ( line.contains( "=" ) )
+            else if ( line.startsWith( ">" ) )
             {
+                // parameter
                 int index = line.indexOf( '=' );
-                String param = line.substring( 0, index ).trim();
+                if ( index < 0 )
+                {
+                    throw new MojoExecutionException( "unparseable configuration line, missing '=': " + line );
+                }
+
+                String param = line.substring( 1, index ).trim();
                 String value = line.substring( index + 1 ).trim();
 
                 if ( "dist-area".equals( param ) )
@@ -223,6 +232,7 @@ public abstract class AbstractDistCheckMojo
                 }
                 else if ( param.contains( " " ) )
                 {
+                    // parameter for an artifactId
                     index = param.indexOf( ' ' );
                     String artifactId = param.substring( 0, index );
                     param = param.substring( index ).trim();
@@ -237,7 +247,7 @@ public abstract class AbstractDistCheckMojo
                     }
                     else
                     {
-                        throw new MojoExecutionException( "unknown parameter '" + param + "' in configuration line: "
+                        throw new MojoExecutionException( "unknown artifact parameter '" + param + "' in configuration line: "
                             + line );
                     }
                 }
@@ -250,6 +260,7 @@ public abstract class AbstractDistCheckMojo
             }
             else if ( line.startsWith( "/" ) )
             {
+                // definition of a group, in a dist-area directory
                 currentGroup = new ConfigurationLineInfo( line.split( " " ) );
                 if ( currentGroup.getArtifactId() == null )
                 {
@@ -260,8 +271,7 @@ public abstract class AbstractDistCheckMojo
             }
             else
             {
-                line = line.trim();
-
+                // artifact definition
                 if ( line.startsWith( "*" ) )
                 {
                     // special artifact
@@ -278,7 +288,6 @@ public abstract class AbstractDistCheckMojo
                 try
                 {
                     aLine = new ConfigurationLineInfo( currentGroup, line.split( " " ) );
-
                 }
                 catch ( InvalidVersionSpecificationException e )
                 {
