@@ -22,7 +22,7 @@
 
   <groupId>org.apache.maven.dist.tools</groupId>
   <artifactId>dist-tool-plugin</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <description>Dist tool plugin: check content of Maven distribution area. 
