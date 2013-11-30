@@ -482,7 +482,7 @@ public class DistCheckSourceReleaseMojo
         {
             // write the following output in red so it's more readable in jenkins console
             addErrorLine( cli, version, ignoreDistFailures,
-                          "Older version than " + version + " for " + cli.getArtifactId() + " still available in "
+                          "Different version than " + version + " for " + cli.getArtifactId() + " available in "
                               + url );
             for ( String sourceItem : retrievedFile )
             {
