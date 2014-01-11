@@ -3,7 +3,8 @@ Todo
 
 ### Index Pages
 
-* consider date found in artifact metadata and in index page to be consistent if different only from a few days (date chosen by the release manager between the vote start and announce)
+* support different dates in artifact metadata and in index page: it's consistent if difference is only a few days
+(date in index page is chosen by the release manager between the vote start and announce)
 
 # Done
 
