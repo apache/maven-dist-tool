@@ -6,6 +6,8 @@ Todo
 * support different dates in artifact metadata and in index page: it's consistent if difference is only a few days
 (date in index page is chosen by the release manager between the vote start and announce)
 
+* check consistency between team information in [Maven parent pom][1] and in Apache LDAP [maven][2] and [maven-pmc][3] groups
+
 # Done
 
 * See where to publish the result on Maven site
@@ -45,4 +47,7 @@ Todo
     * http://maven.apache.org/shared/
     * http://maven.apache.org/pom/
     * http://maven.apache.org/skins/
-    
+
+[1]: http://svn.apache.org/repos/asf/maven/pom/trunk/maven/pom.xml
+[2]: http://people.apache.org/committers-by-project.html#maven
+[3]: http://people.apache.org/committers-by-project.html#maven-pmc
