@@ -17,7 +17,8 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>23</version>
+    <version>25-SNAPSHOT</version>
+    <relativePath>../../../pom/maven/pom.xml</relativePath>
   </parent>
 
   <groupId>org.apache.maven.dist.tools</groupId>
@@ -36,6 +37,8 @@
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mvnversion>3.0.4</mvnversion>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>    
   </properties>
 
   <dependencies>
@@ -179,15 +182,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <target>1.7</target>
-          <source>1.7</source>
-        </configuration>
-      </plugin>
       <!-- copy data from fluido skin to make generated site usable even if failure -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -223,7 +217,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <configuration>
           <aggregate>true</aggregate>
         </configuration>
@@ -231,7 +225,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.7</version>
         <reportSets>
           <reportSet>
             <reports>
@@ -242,19 +235,8 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-          <version>3.0.1</version>
-          <configuration>
-            <targetJdk>1.7</targetJdk>
-          </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.10</version>
-        <configuration><!-- help for netbeans -->
-          <configLocation>config/maven_checks.xml</configLocation>
-        </configuration>
+        <version>2.12</version>
       </plugin>
       <plugin>
         <groupId>${project.groupId}</groupId>
@@ -311,7 +293,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>1.8</version>
             <configuration>
               <projectsDirectory>src/it</projectsDirectory>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
