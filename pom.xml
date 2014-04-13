@@ -35,7 +35,6 @@
 
   <properties>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mvnversion>3.0.4</mvnversion>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>    
@@ -137,7 +136,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.3</version>
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.doxia</groupId>
@@ -193,7 +191,6 @@
               <goal>descriptor</goal>
             </goals>
           </execution>
-          <!-- if you want to generate help goal -->
           <execution>
             <id>help-goal</id>
             <goals>
@@ -237,7 +234,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>2.4</version>
         <configuration>
           <aggregate>true</aggregate>
         </configuration>
@@ -252,11 +248,6 @@
             </reports>
           </reportSet>
         </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.12</version>
       </plugin>
       <plugin>
         <groupId>${project.groupId}</groupId>
