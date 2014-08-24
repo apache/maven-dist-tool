@@ -91,7 +91,7 @@ public abstract class AbstractDistCheckMojo
     /**
      * Maven project.
      */
-    @Component
+    @Parameter( defaultValue = "${project}", readonly = true, required = true )
     protected MavenProject project;
 
     @Parameter( defaultValue = "${project.build.directory}/dist-tool" )

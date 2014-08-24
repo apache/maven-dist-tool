@@ -59,7 +59,7 @@ public class DummyFailureMojo
     /**
      * Maven project.
      */
-    @Component
+    @Parameter( defaultValue = "${project}", readonly = true, required = true )
     protected MavenProject project;
 
     @Override
