@@ -47,7 +47,7 @@ import org.jsoup.select.Elements;
 public class DistCheckSourceReleaseMojo
         extends AbstractDistCheckMojo
 {
-    private final static String NOT_IN_DISTRIBUTION_AREA = "_not_in_distribution_area_";
+    private static final String NOT_IN_DISTRIBUTION_AREA = "_not_in_distribution_area_";
 
     static final String FAILURES_FILENAME = "check-source-release.log";
 
@@ -203,7 +203,9 @@ public class DistCheckSourceReleaseMojo
                 if ( !csrr.central.contains( missing ) )
                 {
                     // if the release distribution is in central repository, we can get it from there...
-                    cliMissing.append( "\nwget " ).append( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) ).append( "/" ).append( missing );
+                    cliMissing.append( "\nwget " );
+                    cliMissing.append( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) );
+                    cliMissing.append( "/" ).append( missing );
                     cliMissing.append( "\nsvn add " ).append( missing );
                 }
             }
@@ -551,7 +553,8 @@ public class DistCheckSourceReleaseMojo
 
             // dist
             String distUrl =
-                distributionAreaUrl + configLine.getDirectory() + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
+                distributionAreaUrl + configLine.getDirectory()
+                    + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
             result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version, true ) );
             result.setDistOlderSourceRelease( checkContainsOld( distUrl, configLine, version ) );
         }

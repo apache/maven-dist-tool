@@ -173,18 +173,19 @@ public abstract class AbstractDistCheckMojo
         }
     }
 
+    private ArtifactRepositoryPolicy newArtifactRepositoryPolicy( boolean enabled )
+    {
+        return new ArtifactRepositoryPolicy( enabled, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
+                                             ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN );
+    }
+
     @Override
     public void execute()
         throws MojoExecutionException
     {
         ArtifactRepository aa =
             new MavenArtifactRepository( "central", repoBaseUrl, new DefaultRepositoryLayout(),
-                                         new ArtifactRepositoryPolicy( false,
-                                                                       ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
-                                                                       ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ),
-                                         new ArtifactRepositoryPolicy( true,
-                                                                       ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
-                                                                       ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN ) );
+                                         newArtifactRepositoryPolicy( false ), newArtifactRepositoryPolicy( true ) );
         artifactRepositories.add( aa );
 
         if ( configurationLines.isEmpty() )
@@ -247,8 +248,8 @@ public abstract class AbstractDistCheckMojo
                     }
                     else
                     {
-                        throw new MojoExecutionException( "unknown artifact parameter '" + param + "' in configuration line: "
-                            + line );
+                        throw new MojoExecutionException( "unknown artifact parameter '" + param
+                            + "' in configuration line: " + line );
                     }
                 }
                 else

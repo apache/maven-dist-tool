@@ -219,8 +219,8 @@ public class DistCheckIndexPageMojo
         sink.body();
         sink.section1();
         sink.paragraph();
-        sink.rawText( "Check that index pages have been updated with latest release info available in central repository"
-            + " <code>maven-metadata.xml</code>." );
+        sink.rawText( "Check that index pages have been updated with latest release info available in central"
+            + " repository <code>maven-metadata.xml</code>." );
         sink.paragraph_();
         sink.section1_();
 

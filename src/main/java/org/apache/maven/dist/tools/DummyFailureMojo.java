@@ -40,7 +40,7 @@ import org.codehaus.plexus.util.FileUtils;
 public class DummyFailureMojo
     extends AbstractDistCheckMojo
 {
-    private final static String[] FAILURES_FILENAMES = { DistCheckSourceReleaseMojo.FAILURES_FILENAME,
+    private static final String[] FAILURES_FILENAMES = { DistCheckSourceReleaseMojo.FAILURES_FILENAME,
         DistCheckSiteMojo.FAILURES_FILENAME, DistCheckIndexPageMojo.FAILURES_FILENAME };
 
     private static final String EOL = System.getProperty( "line.separator" );
