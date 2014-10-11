@@ -29,6 +29,8 @@
   <description>Dist tool plugin: check content of Maven distribution area. 
         Not to be released.</description>
 
+  <url>https://builds.apache.org/view/M-R/view/Maven/job/dist-tool-plugin/site/</url>
+
   <prerequisites>
     <maven>3.0.4</maven>
   </prerequisites>
