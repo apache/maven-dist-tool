@@ -236,6 +236,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.4</version>
         <configuration>
           <aggregate>true</aggregate>
         </configuration>
@@ -278,6 +279,7 @@
               <report>check-site</report>
               <report>check-source-release</report>
               <report>check-index-page</report>
+              <report>check-prerequisites-site</report>
             </reports>
           </reportSet>
           <reportSet>

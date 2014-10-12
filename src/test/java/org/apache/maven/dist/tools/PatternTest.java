@@ -16,9 +16,10 @@ package org.apache.maven.dist.tools;
  * limitations under the License.
  */
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
