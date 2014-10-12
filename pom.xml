@@ -35,6 +35,12 @@
     <maven>3.0.4</maven>
   </prerequisites>
 
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/dist-tools/dist-tool-plugin/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/dist-tools/dist-tool-plugin/</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/sandbox/trunk/dist-tools/dist-tool-plugin/</url>
+  </scm>
+
   <properties>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
     <mvnversion>3.0.4</mvnversion>
