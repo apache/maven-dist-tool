@@ -30,13 +30,16 @@ public class MavenJDKInformation
 {
     private String pluginName;
 
+    private String pluginVersion;
+
     private ArtifactVersion mavenVersion;
 
     private String jdkVersion;
 
-    public MavenJDKInformation( String pluginName, String mavenVersion, String jdkVersion )
+    public MavenJDKInformation( String pluginName, String pluginVersion, String mavenVersion, String jdkVersion )
     {
         this.pluginName = pluginName;
+        this.pluginVersion = pluginVersion;
         this.mavenVersion = new DefaultArtifactVersion( mavenVersion );
         this.jdkVersion = jdkVersion;
     }
@@ -64,6 +67,11 @@ public class MavenJDKInformation
     public String getPluginName()
     {
         return pluginName;
+    }
+
+    public String getPluginVersion()
+    {
+        return pluginVersion;
     }
 
     public void setPluginName( String pluginName )

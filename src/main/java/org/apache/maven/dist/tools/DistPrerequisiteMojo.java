@@ -125,6 +125,8 @@ public class DistPrerequisiteMojo
                 sink.tableRow();
                 sink.tableCell();
                 sink.text( mavenJDKInformation.getPluginName() );
+                sink.text( " " );
+                sink.text( mavenJDKInformation.getPluginVersion() );
                 sink.tableCell_();
                 sink.tableCell();
                 sink.text( mavenJDKInformation.getMavenVersion().toString() );

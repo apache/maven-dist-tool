@@ -109,7 +109,19 @@ public class GetPrerequisites
         mavenVersion = mavenVersion.replace( "Maven ", "" );
         jdkVersion = jdkVersion.replace( "JDK ", "" );
 
-        MavenJDKInformation mjdk = new MavenJDKInformation( pluginName, mavenVersion, jdkVersion );
+        String pluginVersion = doc.select( "pre" ).text();
+        int index = pluginVersion.indexOf( "<version>" );
+        if ( index < 0 )
+        {
+            pluginVersion = "";
+        }
+        else
+        {
+            pluginVersion = pluginVersion.substring( index + "<version>".length() );
+            pluginVersion = pluginVersion.substring( 0, pluginVersion.indexOf( "</version>" ) );
+        }
+
+        MavenJDKInformation mjdk = new MavenJDKInformation( pluginName, pluginVersion, mavenVersion, jdkVersion );
         return mjdk;
     }
 
