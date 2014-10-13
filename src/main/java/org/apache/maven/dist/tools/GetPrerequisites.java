@@ -80,7 +80,6 @@ public class GetPrerequisites
         "maven-toolchains-plugin",
         "maven-verifier-plugin",
         "maven-war-plugin",
-        
     };
 
     public String BASEURL = "http://maven.apache.org/plugins/";
@@ -99,7 +98,8 @@ public class GetPrerequisites
         String jdkVersion = elementsByAttribute_b.first().text();
         
         //FIXME: Sometimes it happens that the indexes are swapped (I don't know why...I have to find out why...)
-        if (mavenVersion.startsWith( "JDK" )) {
+        if ( mavenVersion.startsWith( "JDK" ) )
+        {
             String tmp = jdkVersion;
             jdkVersion = mavenVersion;
             mavenVersion = tmp;
@@ -113,14 +113,15 @@ public class GetPrerequisites
         return mjdk;
     }
 
-    public List<MavenJDKInformation> getPrequisites() {
+    public List<MavenJDKInformation> getPrequisites()
+    {
         List<MavenJDKInformation> result = new ArrayList<MavenJDKInformation>();
-        
-        for ( int i = 0; i < pluginNames.length; i++ )
+
+        for ( String pluginName : pluginNames )
         {
             try
             {
-                result.add( getMavenJdkInformation( BASEURL, pluginNames[i] ));
+                result.add( getMavenJdkInformation( BASEURL, pluginName ) );
             }
             catch ( IOException e )
             {
@@ -131,19 +132,21 @@ public class GetPrerequisites
         return result;
     }
 
+    public Map<ArtifactVersion, List<MavenJDKInformation>> getGroupedPrequisites()
+    {
+        Map<ArtifactVersion, List<MavenJDKInformation>> result =
+            new HashMap<ArtifactVersion, List<MavenJDKInformation>>();
 
-    public Map<ArtifactVersion, List<MavenJDKInformation>> getGroupedPrequisites() {
-        Map<ArtifactVersion, List<MavenJDKInformation>> result = new HashMap<ArtifactVersion, List<MavenJDKInformation>>();
-        
         List<MavenJDKInformation> prequisites = getPrequisites();
         for ( MavenJDKInformation mavenJDKInformation : prequisites )
         {
-            if (!result.containsKey( mavenJDKInformation.getMavenVersion() )) {
-                result.put( mavenJDKInformation.getMavenVersion(), new ArrayList<MavenJDKInformation>());
+            if ( !result.containsKey( mavenJDKInformation.getMavenVersion() ) )
+            {
+                result.put( mavenJDKInformation.getMavenVersion(), new ArrayList<MavenJDKInformation>() );
             }
-            result.get( mavenJDKInformation.getMavenVersion()).add( mavenJDKInformation );
+            result.get( mavenJDKInformation.getMavenVersion() ).add( mavenJDKInformation );
         }
-        
+
         return result;
     }
 }
