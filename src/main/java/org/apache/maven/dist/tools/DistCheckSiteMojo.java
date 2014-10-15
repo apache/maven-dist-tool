@@ -114,7 +114,7 @@ public class DistCheckSiteMojo
     @Override
     public String getName( Locale locale )
     {
-        return "Dist Tool> Sites";
+        return "Dist Tool> Check Sites";
     }
 
     @Override

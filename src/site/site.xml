@@ -32,12 +32,16 @@ under the License.
     <body>
         <menu name="Overwiev">
             <item name="Introduction" href="index.html" />
-            <item name="Dist Tool> Source Release" href="dist-tool-check-source-release.html" />
-            <item name="Dist Tool> Sites" href="dist-tool-check-site.html" />
-            <item name="Dist Tool> Index Pages" href="dist-tool-check-index-page.html" />
-            <item name="Dist Tool> Prerequisites" href="dist-tool-prerequisites.html" />
             <item name="Configuration" href="dist-tool.conf.html" />
         </menu>        
+        <menu name="Dist Tool Checks">
+            <item name="Check Source Release" href="dist-tool-check-source-release.html" />
+            <item name="Check Sites" href="dist-tool-check-site.html" />
+            <item name="Check Index Pages" href="dist-tool-check-index-page.html" />
+        </menu>
+        <menu name="Dist Tool Informations">
+            <item name="Plugins Prerequisites" href="dist-tool-prerequisites.html" />
+        </menu>
         <menu name="for dev">
             <item name="TODO" href="todo.html" />
         </menu>

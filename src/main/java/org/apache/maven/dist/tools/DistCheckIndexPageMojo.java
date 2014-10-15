@@ -100,7 +100,7 @@ public class DistCheckIndexPageMojo
     @Override
     public String getName( Locale locale )
     {
-        return "Dist Tool> Index Pages";
+        return "Dist Tool> Check Index Pages";
     }
 
     @Override

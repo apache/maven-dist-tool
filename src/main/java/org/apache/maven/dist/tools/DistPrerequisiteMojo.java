@@ -65,13 +65,13 @@ public class DistPrerequisiteMojo
     @Override
     public String getName( Locale locale )
     {
-        return "Dist Tool> Prerequisites";
+        return "Dist Tool> Plugins Prerequisites";
     }
 
     @Override
     public String getDescription( Locale locale )
     {
-        return "Maven version prerequisites and JDK Version";
+        return "Maven version prerequisites and JDK Version for plugins";
     }
 
     @Override

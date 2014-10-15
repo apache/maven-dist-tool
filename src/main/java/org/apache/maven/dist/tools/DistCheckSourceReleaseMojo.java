@@ -71,7 +71,7 @@ public class DistCheckSourceReleaseMojo
     @Override
     public String getName( Locale locale )
     {
-        return "Dist Tool> Source Release";
+        return "Dist Tool> Check Source Release";
     }
 
     @Override

@@ -24,15 +24,15 @@ The dist-tool-plugin checks that [Maven release process][6] has been fully appli
 
 Results are displayed in 3 reports:
 
-* [Dist Tool> Source Release][2] report, for checks about artifacts [source release publication][5],
+* [Check Source Release][2] report, for checks about artifacts [source release publication][5],
 
-* [Dist Tool> Sites][1] report, for checks about documentation sites associated to artifacts,
+* [Check Sites][1] report, for checks about documentation sites associated to artifacts,
 
-* [Dist Tool> Index page][3] report, for checks about index pages.
+* [Check Index page][3] report, for checks about index pages.
 
 In addition, dist-tool-plugin provides report for some interesting information about Maven artifacts:
 
-* [Dist Tool> Prerequisites][7] report, displaying plugins' Maven and JDK version prerequisites.
+* [Plugins Prerequisites][7] report, displaying plugins' Maven and JDK version prerequisites.
 
 Notice that this plugin is actually intended for Maven itself only: if interest is expressed to use it
 in other context, it would require more configurations.
