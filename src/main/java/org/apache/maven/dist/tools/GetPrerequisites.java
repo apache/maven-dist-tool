@@ -93,10 +93,15 @@ public class GetPrerequisites
 
     public String BASEURL = "http://maven.eu.apache.org/plugins/";
 
-    public MavenJDKInformation getMavenJdkInformation( String baseURL, String pluginName )
+    public String getPluginInfoUrl( String pluginName )
+    {
+        return BASEURL + pluginName + "/plugin-info.html";
+    }
+
+    public MavenJDKInformation getMavenJdkInformation( String pluginName )
         throws IOException
     {
-        String url = baseURL + "/" + pluginName + "/plugin-info.html";
+        String url = getPluginInfoUrl( pluginName );
 
         Document doc = Jsoup.connect( url ).get();
 
@@ -150,7 +155,7 @@ public class GetPrerequisites
         {
             try
             {
-                result.add( getMavenJdkInformation( BASEURL, pluginName ) );
+                result.add( getMavenJdkInformation( pluginName ) );
             }
             catch ( IOException e )
             {
