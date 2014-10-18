@@ -26,9 +26,6 @@ Todo
 
 # Done
 
-* support different dates in artifact metadata and in index page: it's consistent if difference is only a few days
-(date in index page is chosen by the release manager between the vote start and announce)
-
 * See where to publish the result on Maven site
     * jenkins site URL https://builds.apache.org/view/M-R/view/Maven/job/dist-tool-plugin/site
 
@@ -66,6 +63,9 @@ Todo
     * http://maven.apache.org/shared/
     * http://maven.apache.org/pom/
     * http://maven.apache.org/skins/
+
+* support different dates in artifact metadata and in index page: it's consistent if difference is only a few days
+(date in index page is chosen by the release manager between the vote start and announce)
 
 [1]: http://svn.apache.org/repos/asf/maven/pom/trunk/maven/pom.xml
 [2]: http://people.apache.org/committers-by-project.html#maven
