@@ -109,7 +109,8 @@ public class DistPrerequisiteMojo
 
             sink.tableRow();
             sink.tableHeaderCell();
-            sink.rawText( "Maven Version Prerequisite " + mavenVersion + ": " + info.size() );
+            sink.rawText( "Maven Version Prerequisite " + mavenVersion + ": " + info.size() + " / "
+                + prerequisites.pluginNames.length );
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
