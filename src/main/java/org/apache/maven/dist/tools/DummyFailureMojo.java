@@ -99,13 +99,13 @@ public class DummyFailureMojo
     @Override
     public String getName( Locale locale )
     {
-        return "Failure Hack";
+        return "Dist Tool> Failure Hack";
     }
 
     @Override
     public String getDescription( Locale locale )
     {
-        return "Failure Hack";
+        return "Dist Tool report to fail the build in case of inconsistency found by any check reports";
     }
 
     @Override
