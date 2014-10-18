@@ -105,11 +105,16 @@ public class GetPrerequisites
 
         Document doc = Jsoup.connect( url ).get();
 
-        Elements select = doc.select( "table.bodyTable" );
+        Elements select = doc.select( "table.bodyTable" ); // Stylus skin
 
         if ( select.size() < 1 )
         {
-            System.err.println( "Could not find explected plugin info for " + url );
+            select = doc.select( "table.table-striped" ); // Fluido skin
+        }
+
+        if ( select.size() < 1 )
+        {
+            System.err.println( "Could not find expected plugin info for " + url );
             return new MavenJDKInformation( pluginName, "?", "?", "?" );
         }
 
