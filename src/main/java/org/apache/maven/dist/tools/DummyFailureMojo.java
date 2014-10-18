@@ -44,6 +44,7 @@ public class DummyFailureMojo
         DistCheckSiteMojo.FAILURES_FILENAME, DistCheckIndexPageMojo.FAILURES_FILENAME };
 
     private static final String EOL = System.getProperty( "line.separator" );
+
     /**
      * Site renderer.
      */
@@ -81,8 +82,8 @@ public class DummyFailureMojo
 
         if ( failure )
         {
-            throw new MojoExecutionException( "Dist tools report non empty please check: "
-                + "https://builds.apache.org/job/dist-tool-plugin/site/" );
+            throw new MojoExecutionException( "Dist tools check reports found inconsistencies in some released "
+                + "artifacts, see https://builds.apache.org/job/dist-tool-plugin/site/ for more information" );
         }
     }
 
