@@ -32,7 +32,7 @@ Results are displayed in 3 reports:
 
 In addition, dist-tool-plugin provides report for some interesting information about Maven artifacts:
 
-* [Plugins Prerequisites][7] report, displaying plugins' Maven and JDK version prerequisites.
+* [List Plugins Prerequisites][7] report, displaying plugins' Maven and JDK version prerequisites.
 
 Notice that this plugin is actually intended for Maven itself only: if interest is expressed to use it
 in other context, it would require more configurations.

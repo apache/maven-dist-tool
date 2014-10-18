@@ -39,8 +39,8 @@ import org.apache.maven.reporting.MavenReportException;
 /**
  * @author Karl Heinz Marbaise
  */
-@Mojo( name = "check-prerequisites-site", requiresProject = false )
-public class DistPrerequisiteMojo
+@Mojo( name = "list-plugins-prerequisites", requiresProject = false )
+public class ListPluginsPrerequisitesMojo
     extends AbstractMavenReport
 {
 
@@ -65,13 +65,13 @@ public class DistPrerequisiteMojo
     @Override
     public String getName( Locale locale )
     {
-        return "Dist Tool> Plugins Prerequisites";
+        return "Dist Tool> List Plugins Prerequisites";
     }
 
     @Override
     public String getDescription( Locale locale )
     {
-        return "Maven version prerequisites and JDK Version for plugins";
+        return "Maven and JDK version prerequisites for plugins";
     }
 
     @Override
@@ -94,7 +94,7 @@ public class DistPrerequisiteMojo
         sink.head_();
         sink.body();
 
-        Map<ArtifactVersion, List<MavenJDKInformation>> groupedPrequisites = prerequisites.getGroupedPrequisites();
+        Map<ArtifactVersion, List<PluginPrerequisites>> groupedPrequisites = prerequisites.getGroupedPrequisites();
 
         sink.table();
 
@@ -105,11 +105,11 @@ public class DistPrerequisiteMojo
 
         for ( ArtifactVersion mavenVersion : sortedVersion)
         {
-            List<MavenJDKInformation> info = groupedPrequisites.get( mavenVersion );
+            List<PluginPrerequisites> pluginsPrerequisites = groupedPrequisites.get( mavenVersion );
 
             sink.tableRow();
             sink.tableHeaderCell();
-            sink.rawText( "Maven Version Prerequisite " + mavenVersion + ": " + info.size() + " / "
+            sink.rawText( "Maven Version Prerequisite " + mavenVersion + ": " + pluginsPrerequisites.size() + " / "
                 + prerequisites.pluginNames.length );
             sink.tableHeaderCell_();
 
@@ -123,22 +123,22 @@ public class DistPrerequisiteMojo
 
             sink.tableRow_();
 
-            for ( MavenJDKInformation mavenJDKInformation : info )
+            for ( PluginPrerequisites pluginPrerequisites : pluginsPrerequisites )
             {
                 sink.tableRow();
                 sink.tableCell();
-                sink.link( prerequisites.getPluginInfoUrl( mavenJDKInformation.getPluginName() ) );
-                sink.text( mavenJDKInformation.getPluginName() );
+                sink.link( prerequisites.getPluginInfoUrl( pluginPrerequisites.getPluginName() ) );
+                sink.text( pluginPrerequisites.getPluginName() );
                 sink.link_();
                 sink.text( " " );
-                sink.text( mavenJDKInformation.getPluginVersion() );
+                sink.text( pluginPrerequisites.getPluginVersion() );
                 sink.tableCell_();
                 sink.tableCell();
-                sink.text( mavenJDKInformation.getMavenVersion().toString() );
+                sink.text( pluginPrerequisites.getMavenVersion().toString() );
                 sink.tableCell_();
 
                 sink.tableCell();
-                sink.text( mavenJDKInformation.getJdkVersion() );
+                sink.text( pluginPrerequisites.getJdkVersion() );
                 sink.tableCell_();
                 sink.tableRow_();
             }

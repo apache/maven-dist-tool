@@ -40,7 +40,7 @@ under the License.
             <item name="Check Index Pages" href="dist-tool-check-index-page.html" />
         </menu>
         <menu name="Dist Tool Informations">
-            <item name="Plugins Prerequisites" href="dist-tool-prerequisites.html" />
+            <item name="List Plugins Prerequisites" href="dist-tool-prerequisites.html" />
         </menu>
         <menu name="for dev">
             <item name="TODO" href="todo.html" />

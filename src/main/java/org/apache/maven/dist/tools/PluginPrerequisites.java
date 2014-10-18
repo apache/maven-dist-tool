@@ -26,7 +26,7 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
  * @author Karl Heinz Marbaise
  *
  */
-public class MavenJDKInformation
+public class PluginPrerequisites
 {
     private String pluginName;
 
@@ -36,7 +36,7 @@ public class MavenJDKInformation
 
     private String jdkVersion;
 
-    public MavenJDKInformation( String pluginName, String pluginVersion, String mavenVersion, String jdkVersion )
+    public PluginPrerequisites( String pluginName, String pluginVersion, String mavenVersion, String jdkVersion )
     {
         this.pluginName = pluginName;
         this.pluginVersion = pluginVersion;

@@ -279,7 +279,7 @@
               <report>check-site</report>
               <report>check-source-release</report>
               <report>check-index-page</report>
-              <report>check-prerequisites-site</report>
+              <report>list-plugins-prerequisites</report>
             </reports>
           </reportSet>
           <reportSet>

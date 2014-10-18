@@ -98,7 +98,7 @@ public class GetPrerequisites
         return BASEURL + pluginName + "/plugin-info.html";
     }
 
-    public MavenJDKInformation getMavenJdkInformation( String pluginName )
+    public PluginPrerequisites getPluginPrerequisites( String pluginName )
         throws IOException
     {
         String url = getPluginInfoUrl( pluginName );
@@ -115,7 +115,7 @@ public class GetPrerequisites
         if ( select.size() < 1 )
         {
             System.err.println( "Could not find expected plugin info for " + url );
-            return new MavenJDKInformation( pluginName, "?", "?", "?" );
+            return new PluginPrerequisites( pluginName, "?", "?", "?" );
         }
 
         Element tableInfo = select.get( 1 );
@@ -148,19 +148,18 @@ public class GetPrerequisites
             pluginVersion = pluginVersion.substring( 0, pluginVersion.indexOf( "</version>" ) );
         }
 
-        MavenJDKInformation mjdk = new MavenJDKInformation( pluginName, pluginVersion, mavenVersion, jdkVersion );
-        return mjdk;
+        return new PluginPrerequisites( pluginName, pluginVersion, mavenVersion, jdkVersion );
     }
 
-    public List<MavenJDKInformation> getPrequisites()
+    public List<PluginPrerequisites> getPrequisites()
     {
-        List<MavenJDKInformation> result = new ArrayList<MavenJDKInformation>();
+        List<PluginPrerequisites> result = new ArrayList<PluginPrerequisites>();
 
         for ( String pluginName : pluginNames )
         {
             try
             {
-                result.add( getMavenJdkInformation( pluginName ) );
+                result.add( getPluginPrerequisites( pluginName ) );
             }
             catch ( IOException e )
             {
@@ -171,19 +170,18 @@ public class GetPrerequisites
         return result;
     }
 
-    public Map<ArtifactVersion, List<MavenJDKInformation>> getGroupedPrequisites()
+    public Map<ArtifactVersion, List<PluginPrerequisites>> getGroupedPrequisites()
     {
-        Map<ArtifactVersion, List<MavenJDKInformation>> result =
-            new HashMap<ArtifactVersion, List<MavenJDKInformation>>();
+        Map<ArtifactVersion, List<PluginPrerequisites>> result =
+            new HashMap<ArtifactVersion, List<PluginPrerequisites>>();
 
-        List<MavenJDKInformation> prequisites = getPrequisites();
-        for ( MavenJDKInformation mavenJDKInformation : prequisites )
+        for ( PluginPrerequisites pluginPrerequisites : getPrequisites() )
         {
-            if ( !result.containsKey( mavenJDKInformation.getMavenVersion() ) )
+            if ( !result.containsKey( pluginPrerequisites.getMavenVersion() ) )
             {
-                result.put( mavenJDKInformation.getMavenVersion(), new ArrayList<MavenJDKInformation>() );
+                result.put( pluginPrerequisites.getMavenVersion(), new ArrayList<PluginPrerequisites>() );
             }
-            result.get( mavenJDKInformation.getMavenVersion() ).add( mavenJDKInformation );
+            result.get( pluginPrerequisites.getMavenVersion() ).add( pluginPrerequisites );
         }
 
         return result;
