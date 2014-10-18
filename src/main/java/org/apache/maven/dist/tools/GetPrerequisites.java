@@ -78,6 +78,7 @@ public class GetPrerequisites
         "maven-release-plugin",
         "maven-remote-resources-plugin",
         "maven-repository-plugin",
+        "maven-resources-plugin",
         "maven-scm-plugin",
         "maven-scm-publish-plugin",
         "maven-shade-plugin",
