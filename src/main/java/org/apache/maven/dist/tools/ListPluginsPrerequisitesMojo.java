@@ -109,8 +109,8 @@ public class ListPluginsPrerequisitesMojo
 
             sink.tableRow();
             sink.tableHeaderCell();
-            sink.rawText( "Maven Version Prerequisite " + mavenVersion + ": " + pluginsPrerequisites.size() + " / "
-                + prerequisites.pluginNames.length );
+            sink.rawText( "Maven Version Prerequisite " + mavenVersion + " (" + pluginsPrerequisites.size() + " / "
+                + prerequisites.pluginNames.length + ")" );
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
