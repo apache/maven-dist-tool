@@ -89,7 +89,7 @@ public class DistPrerequisiteMojo
 
         sink.head();
         sink.title();
-        sink.text( "Check Prerequisites" );
+        sink.text( "Display Plugins Prerequisites" );
         sink.title_();
         sink.head_();
         sink.body();
@@ -105,9 +105,11 @@ public class DistPrerequisiteMojo
 
         for ( ArtifactVersion mavenVersion : sortedVersion)
         {
+            List<MavenJDKInformation> info = groupedPrequisites.get( mavenVersion );
+
             sink.tableRow();
             sink.tableHeaderCell();
-            sink.rawText( "Maven Version Prerequisite " + mavenVersion );
+            sink.rawText( "Maven Version Prerequisite " + mavenVersion + ": " + info.size() );
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
@@ -120,7 +122,7 @@ public class DistPrerequisiteMojo
 
             sink.tableRow_();
 
-            for ( MavenJDKInformation mavenJDKInformation : groupedPrequisites.get( mavenVersion ) )
+            for ( MavenJDKInformation mavenJDKInformation : info )
             {
                 sink.tableRow();
                 sink.tableCell();
