@@ -23,12 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -45,50 +41,14 @@ public class DummyFailureMojo
 
     private static final String EOL = System.getProperty( "line.separator" );
 
-    /**
-     * Site renderer.
-     */
-    @Component
-    protected Renderer siteRenderer;
-
-    /**
-     * Reporting directory.
-     */
-    @Parameter( defaultValue = "${project.reporting.outputDirectory}", required = true )
-    protected File outputDirectory;
-
-    /**
-     * Maven project.
-     */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
-    protected MavenProject project;
-
     @Override
     boolean isIndexPageCheck()
     {
         return false;
     }
 
-    @Override
-    public void execute()
-        throws MojoExecutionException
-    {
-        boolean failure = false;
-        // if failures log file is present, throw exception to fail build
-        for ( String failuresFilename : FAILURES_FILENAMES )
-        {
-            failure |= checkFailure( failuresFilename );
-        }
-
-        if ( failure )
-        {
-            throw new MojoExecutionException( "Dist tools check reports found inconsistencies in some released "
-                + "artifacts, see https://builds.apache.org/job/dist-tool-plugin/site/ for more information" );
-        }
-    }
-
     private boolean checkFailure( String failuresFilename )
-        throws MojoExecutionException
+        throws MavenReportException
     {
         File failureFile = new File( failuresDirectory, failuresFilename );
 
@@ -103,7 +63,7 @@ public class DummyFailureMojo
         }
         catch ( IOException ioe )
         {
-            throw new MojoExecutionException( "Cannot read " + failureFile, ioe );
+            throw new MavenReportException( "Cannot read " + failureFile, ioe );
         }
     }
 
@@ -111,17 +71,17 @@ public class DummyFailureMojo
     protected void executeReport( Locale locale )
         throws MavenReportException
     {
-        if ( !outputDirectory.exists() )
+        boolean failure = false;
+        // if failures log file is present, throw exception to fail build
+        for ( String failuresFilename : FAILURES_FILENAMES )
         {
-            outputDirectory.mkdirs();
+            failure |= checkFailure( failuresFilename );
         }
-        try
+
+        if ( failure )
         {
-            this.execute();
-        }
-        catch ( MojoExecutionException ex )
-        {
-            throw new MavenReportException( ex.getMessage() );
+            throw new MavenReportException( "Dist tools check reports found inconsistencies in some released "
+                + "artifacts, see https://builds.apache.org/job/dist-tool-plugin/site/ for more information" );
         }
     }
 

@@ -45,11 +45,8 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
@@ -75,24 +72,6 @@ public abstract class AbstractDistCheckMojo
      */
     @Parameter( property = "configurationLines", defaultValue = "" )
     private List<String> configurationLines;
-
-    /**
-     * Site renderer.
-     */
-    @Component
-    protected Renderer siteRenderer;
-
-    /**
-     * Reporting directory.
-     */
-    @Parameter( defaultValue = "${project.reporting.outputDirectory}", required = true )
-    protected File outputDirectory;
-
-    /**
-     * Maven project.
-     */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
-    protected MavenProject project;
 
     @Parameter( defaultValue = "${project.build.directory}/dist-tool" )
     protected File failuresDirectory;
@@ -135,24 +114,6 @@ public abstract class AbstractDistCheckMojo
     public String getOutputName()
     {
         return "dist-tool-" + getFailuresFilename().replace( ".old", "" );
-    }
-
-    @Override
-    protected String getOutputDirectory()
-    {
-        return outputDirectory.getAbsolutePath();
-    }
-
-    @Override
-    protected Renderer getSiteRenderer()
-    {
-        return siteRenderer;
-    }
-
-    @Override
-    protected MavenProject getProject()
-    {
-        return project;
     }
 
     private void loadConfiguration()
