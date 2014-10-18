@@ -91,7 +91,7 @@ public class GetPrerequisites
         "maven-war-plugin",
     };
 
-    public String BASEURL = "http://maven.apache.org/plugins/";
+    public String BASEURL = "http://maven.eu.apache.org/plugins/";
 
     public MavenJDKInformation getMavenJdkInformation( String baseURL, String pluginName )
         throws IOException
