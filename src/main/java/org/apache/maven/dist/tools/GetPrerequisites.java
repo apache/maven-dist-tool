@@ -44,6 +44,7 @@ public class GetPrerequisites
         "maven-acr-plugin", 
         "maven-ant-plugin", 
         "maven-antrun-plugin",
+        "maven-archetype-plugin",
         "maven-assembly-plugin",
         "maven-changelog-plugin",
         "maven-changes-plugin",
@@ -57,6 +58,8 @@ public class GetPrerequisites
         "maven-ear-plugin",
         "maven-eclipse-plugin",
         "maven-ejb-plugin",
+        "maven-enforcer-plugin",
+        "maven-failsafe-plugin",
         "maven-gpg-plugin",
         "maven-help-plugin",
         "maven-install-plugin",
@@ -64,19 +67,25 @@ public class GetPrerequisites
         "maven-jar-plugin",
         "maven-jarsigner-plugin",
         "maven-javadoc-plugin",
+        "maven-jxr-plugin",
         "maven-linkcheck-plugin",
         "maven-patch-plugin",
         "maven-pdf-plugin",
+        "maven-plugin-plugin",
         "maven-pmd-plugin",
         "maven-project-info-reports-plugin",
         "maven-rar-plugin",
+        "maven-release-plugin",
         "maven-remote-resources-plugin",
         "maven-repository-plugin",
+        "maven-scm-plugin",
         "maven-scm-publish-plugin",
         "maven-shade-plugin",
         "maven-site-plugin",
         "maven-source-plugin",
         "maven-stage-plugin",
+        "maven-surefire-plugin",
+        "maven-surefire-report-plugin",
         "maven-toolchains-plugin",
         "maven-verifier-plugin",
         "maven-war-plugin",
@@ -87,9 +96,17 @@ public class GetPrerequisites
     public MavenJDKInformation getMavenJdkInformation( String baseURL, String pluginName )
         throws IOException
     {
-        Document doc = Jsoup.connect( baseURL + "/" + pluginName + "/plugin-info.html" ).get();
+        String url = baseURL + "/" + pluginName + "/plugin-info.html";
+
+        Document doc = Jsoup.connect( url ).get();
 
         Elements select = doc.select( "table.bodyTable" );
+
+        if ( select.size() < 1 )
+        {
+            System.err.println( "Could not find explected plugin info for " + url );
+            return new MavenJDKInformation( pluginName, "?", "?", "?" );
+        }
 
         Element tableInfo = select.get( 1 );
         Elements elementsByAttribute_a = tableInfo.getElementsByAttributeValue( "class", "a" );
