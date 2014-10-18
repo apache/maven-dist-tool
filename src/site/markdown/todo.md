@@ -22,12 +22,12 @@ Todo
 
 ### Index Pages
 
-* support different dates in artifact metadata and in index page: it's consistent if difference is only a few days
-(date in index page is chosen by the release manager between the vote start and announce)
-
 * check consistency between team information in [Maven parent pom][1] and in Apache LDAP [maven][2] and [maven-pmc][3] groups
 
 # Done
+
+* support different dates in artifact metadata and in index page: it's consistent if difference is only a few days
+(date in index page is chosen by the release manager between the vote start and announce)
 
 * See where to publish the result on Maven site
     * jenkins site URL https://builds.apache.org/view/M-R/view/Maven/job/dist-tool-plugin/site

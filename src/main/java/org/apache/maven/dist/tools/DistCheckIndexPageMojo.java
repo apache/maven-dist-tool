@@ -20,7 +20,12 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -194,7 +199,19 @@ public class DistCheckIndexPageMojo
 
     private boolean isDateSimilar( String date1, String date2 )
     {
-        return date1.equals( date2 );
+        try
+        {
+            DateFormat df = new SimpleDateFormat( "yyyy-MM-dd" );
+            Date d1 = df.parse( date1 );
+            Date d2 = df.parse( date2 );
+
+            long daysDifference = ( d1.getTime() - d2.getTime() ) / ( 24 * 60 * 60 * 1000 );
+            return Math.abs( daysDifference ) < 7; // ok for 7 days difference
+        }
+        catch ( ParseException e )
+        {
+            return false;
+        }
     }
 
     @Override
