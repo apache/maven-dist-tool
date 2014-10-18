@@ -163,7 +163,7 @@ public class DistCheckIndexPageMojo
         if ( displayDate )
         {
             sink.rawText( cipr.indexDate );
-            if ( cipr.getConfigurationLine().getReleaseDateFromMetadata().equals( cipr.indexDate ) )
+            if ( isDateSimilar( cipr.getConfigurationLine().getReleaseDateFromMetadata(), cipr.indexDate ) )
             {
                 iconSuccess( sink );
             }
@@ -190,6 +190,11 @@ public class DistCheckIndexPageMojo
         sink.tableCell_();
         
         sink.tableRow_();
+    }
+
+    private boolean isDateSimilar( String date1, String date2 )
+    {
+        return date1.equals( date2 );
     }
 
     @Override
