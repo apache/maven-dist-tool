@@ -242,7 +242,7 @@ public class DistCheckIndexPageMojo
             sink.table();
             sink.tableRow();
             sink.tableHeaderCell();
-            sink.rawText( "Component" );
+            sink.rawText( "Component (" + indexPageResults.size() + ")" );
             sink.tableHeaderCell_();
             sink.tableHeaderCell();
             sink.rawText( "maven-metadata.xml " );
