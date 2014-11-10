@@ -113,7 +113,7 @@ public abstract class AbstractDistCheckMojo
     @Override
     public String getOutputName()
     {
-        return "dist-tool-" + getFailuresFilename().replace( ".old", "" );
+        return "dist-tool-" + getFailuresFilename().replace( ".log", "" );
     }
 
     private void loadConfiguration()
