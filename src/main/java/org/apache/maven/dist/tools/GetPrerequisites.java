@@ -40,7 +40,7 @@ public class GetPrerequisites
     /**
      * Currently hard code should be somehow extracted from the configuration file....
      */
-    public String[] pluginNames = { 
+    public static final String[] PLUGIN_NAMES = { 
         "maven-acr-plugin", 
         "maven-ant-plugin", 
         "maven-antrun-plugin",
@@ -92,7 +92,7 @@ public class GetPrerequisites
         "maven-war-plugin",
     };
 
-    public String BASEURL = "http://maven.eu.apache.org/plugins/";
+    private static final String BASEURL = "http://maven.apache.org/plugins/";
 
     public String getPluginInfoUrl( String pluginName )
     {
@@ -120,10 +120,10 @@ public class GetPrerequisites
         }
 
         Element tableInfo = select.get( 1 );
-        Elements elementsByAttribute_a = tableInfo.getElementsByAttributeValue( "class", "a" );
-        Elements elementsByAttribute_b = tableInfo.getElementsByAttributeValue( "class", "b" );
-        String mavenVersion = elementsByAttribute_a.first().text();
-        String jdkVersion = elementsByAttribute_b.first().text();
+        Elements elementsByAttributeA = tableInfo.getElementsByAttributeValue( "class", "a" );
+        Elements elementsByAttributeB = tableInfo.getElementsByAttributeValue( "class", "b" );
+        String mavenVersion = elementsByAttributeA.first().text();
+        String jdkVersion = elementsByAttributeB.first().text();
         
         //FIXME: Sometimes it happens that the indexes are swapped (I don't know why...I have to find out why...)
         if ( mavenVersion.startsWith( "JDK" ) )
@@ -156,7 +156,7 @@ public class GetPrerequisites
     {
         List<PluginPrerequisites> result = new ArrayList<PluginPrerequisites>();
 
-        for ( String pluginName : pluginNames )
+        for ( String pluginName : PLUGIN_NAMES )
         {
             try
             {

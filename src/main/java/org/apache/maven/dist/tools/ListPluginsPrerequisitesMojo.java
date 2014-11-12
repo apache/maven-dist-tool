@@ -103,22 +103,22 @@ public class ListPluginsPrerequisitesMojo
         
         Collections.<ArtifactVersion>sort( sortedVersion );
 
-        for ( ArtifactVersion mavenVersion : sortedVersion)
+        for ( ArtifactVersion mavenVersion : sortedVersion )
         {
             List<PluginPrerequisites> pluginsPrerequisites = groupedPrequisites.get( mavenVersion );
 
             sink.tableRow();
             sink.tableHeaderCell();
             sink.rawText( "Maven Version Prerequisite " + mavenVersion + " (" + pluginsPrerequisites.size() + " / "
-                + prerequisites.pluginNames.length + ")" );
+                + prerequisites.PLUGIN_NAMES.length + ")" );
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
-            sink.rawText( "Maven Version");
+            sink.rawText( "Maven Version" );
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
-            sink.rawText( "JDK Version");
+            sink.rawText( "JDK Version" );
             sink.tableHeaderCell_();
 
             sink.tableRow_();

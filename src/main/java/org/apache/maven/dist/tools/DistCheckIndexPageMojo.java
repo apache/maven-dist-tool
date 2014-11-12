@@ -204,6 +204,7 @@ public class DistCheckIndexPageMojo
             Date d1 = df.parse( date1 );
             Date d2 = df.parse( date2 );
 
+            @SuppressWarnings( "checkstyle:magicnumber" )
             long daysDifference = ( d1.getTime() - d2.getTime() ) / ( 24 * 60 * 60 * 1000 );
             return Math.abs( daysDifference ) < 7; // ok for 7 days difference
         }
