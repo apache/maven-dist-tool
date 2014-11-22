@@ -64,7 +64,7 @@ public abstract class AbstractDistCheckMojo
     /**
      * URL of repository where artifacts are stored. 
      */
-    @Parameter( property = "repositoryUrl", defaultValue = "http://repo.maven.apache.org/maven2/" )
+    @Parameter( property = "repositoryUrl", defaultValue = "https://repo.maven.apache.org/maven2/" )
     protected String repoBaseUrl;
 
     /**
