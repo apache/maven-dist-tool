@@ -205,7 +205,7 @@ public class DistCheckSourceReleaseMojo
                     // if the release distribution is in central repository, we can get it from there...
                     cliMissing.append( "\nwget " );
                     cliMissing.append( cli.getVersionnedFolderURL( repoBaseUrl, csrr.getVersion() ) );
-                    cliMissing.append( "/" ).append( missing );
+                    cliMissing.append( missing );
                     cliMissing.append( "\nsvn add " ).append( missing );
                 }
             }

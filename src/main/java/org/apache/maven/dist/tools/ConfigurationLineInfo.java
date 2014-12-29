@@ -137,7 +137,7 @@ class ConfigurationLineInfo
 
     String getVersionnedFolderURL( String repoBaseUrl, String version )
     {
-        return getBaseURL( repoBaseUrl, version );
+        return getBaseURL( repoBaseUrl, version ) + '/';
     }
 
     String getVersionnedPomFileURL( String repoBaseUrl, String version )
