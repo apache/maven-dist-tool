@@ -19,14 +19,9 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.reporting.MavenReportException;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  *
@@ -34,55 +29,12 @@ import org.codehaus.plexus.util.FileUtils;
  */
 @Mojo( name = "failure-report", requiresProject = false )
 public class DummyFailureMojo
-    extends AbstractDistCheckMojo
+    extends DistCheckErrorsMojo
 {
-    private static final String[] FAILURES_FILENAMES = { DistCheckSourceReleaseMojo.FAILURES_FILENAME,
-        DistCheckSiteMojo.FAILURES_FILENAME, DistCheckIndexPageMojo.FAILURES_FILENAME };
-
-    private static final String EOL = System.getProperty( "line.separator" );
-
     @Override
-    boolean isIndexPageCheck()
+    boolean isDummyFailure()
     {
-        return false;
-    }
-
-    private boolean checkFailure( String failuresFilename )
-        throws MavenReportException
-    {
-        File failureFile = new File( failuresDirectory, failuresFilename );
-
-        try
-        {
-            if ( failureFile.exists() )
-            {
-                getLog().error( failuresFilename + " error log not empty:" + EOL + FileUtils.fileRead( failureFile ) );
-            }
-
-            return failureFile.exists();
-        }
-        catch ( IOException ioe )
-        {
-            throw new MavenReportException( "Cannot read " + failureFile, ioe );
-        }
-    }
-
-    @Override
-    protected void executeReport( Locale locale )
-        throws MavenReportException
-    {
-        boolean failure = false;
-        // if failures log file is present, throw exception to fail build
-        for ( String failuresFilename : FAILURES_FILENAMES )
-        {
-            failure |= checkFailure( failuresFilename );
-        }
-
-        if ( failure )
-        {
-            throw new MavenReportException( "Dist tools check reports found inconsistencies in some released "
-                + "artifacts, see https://builds.apache.org/job/dist-tool-plugin/site/ for more information" );
-        }
+        return true;
     }
 
     protected String getFailuresFilename()
@@ -106,11 +58,5 @@ public class DummyFailureMojo
     public String getDescription( Locale locale )
     {
         return "Dist Tool report to fail the build in case of inconsistency found by any check reports";
-    }
-
-    @Override
-    protected void checkArtifact( ConfigurationLineInfo request, String repoBase )
-        throws MojoExecutionException
-    {
     }
 }

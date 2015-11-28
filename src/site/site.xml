@@ -32,6 +32,7 @@ under the License.
             <item name="Check Source Release" href="dist-tool-check-source-release.html" />
             <item name="Check Sites" href="dist-tool-check-site.html" />
             <item name="Check Index Pages" href="dist-tool-check-index-page.html" />
+            <item name="Check Errors" href="dist-tool-check-errors.html" />
         </menu>
         <menu name="Dist Tool Informations">
             <item name="List Plugins Prerequisites" href="dist-tool-prerequisites.html" />

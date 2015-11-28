@@ -233,6 +233,7 @@
               <report>check-site</report>
               <report>check-source-release</report>
               <report>check-index-page</report>
+              <report>check-errors</report>
               <report>list-plugins-prerequisites</report>
             </reports>
           </reportSet>
