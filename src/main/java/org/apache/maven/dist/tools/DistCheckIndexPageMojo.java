@@ -151,7 +151,9 @@ public class DistCheckIndexPageMojo
 
         sink.tableRow();
         sink.tableCell();
-        sink.rawText( cipr.getConfigurationLine().getArtifactId() );
+        sink.anchor( cli.getArtifactId() );
+        sink.rawText( cli.getArtifactId() );
+        sink.anchor_();
         sink.tableCell_();
 
         // maven-metadata.xml column
@@ -159,7 +161,7 @@ public class DistCheckIndexPageMojo
         sink.link( cli.getMetadataFileURL( repoBaseUrl ) );
         sink.rawText( "maven-metadata.xml" );
         sink.link_();
-        sink.rawText( ": " + cipr.getConfigurationLine().getReleaseDateFromMetadata() + " - " + cipr.indexVersion );
+        sink.rawText( ": " + cli.getReleaseDateFromMetadata() + " - " + cipr.indexVersion );
         sink.tableCell_();
 
         // index page column
@@ -167,7 +169,7 @@ public class DistCheckIndexPageMojo
         if ( displayDate )
         {
             sink.rawText( cipr.indexDate );
-            if ( isDateSimilar( cipr.getConfigurationLine().getReleaseDateFromMetadata(), cipr.indexDate ) )
+            if ( isDateSimilar( cli.getReleaseDateFromMetadata(), cipr.indexDate ) )
             {
                 iconSuccess( sink );
             }

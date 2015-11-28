@@ -335,13 +335,15 @@ public class DistCheckSiteMojo
         String directory = null;
         for ( CheckSiteResult csr : results )
         {
-            if ( !csr.getConfigurationLine().getDirectory().equals( directory ) )
+            ConfigurationLineInfo cli = csr.getConfigurationLine();
+
+            if ( !cli.getDirectory().equals( directory ) )
             {
-                directory = csr.getConfigurationLine().getDirectory();
+                directory = cli.getDirectory();
                 sink.tableRow();
                 sink.tableHeaderCell();
                 // shorten groupid
-                sink.rawText( csr.getConfigurationLine().getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
+                sink.rawText( cli.getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
                 sink.tableHeaderCell_();
                 for ( int i = 0; i < 5 ; i++ )
                 {
@@ -354,7 +356,9 @@ public class DistCheckSiteMojo
 
             sink.tableRow();
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getArtifactId() );
+            sink.anchor( cli.getArtifactId() );
+            sink.rawText( cli.getArtifactId() );
+            sink.anchor_();
             sink.tableCell_();
 
             sink.tableCell();
@@ -362,7 +366,7 @@ public class DistCheckSiteMojo
             sink.tableCell_();
             
             sink.tableCell();
-            sink.rawText( csr.getConfigurationLine().getReleaseDateFromMetadata() );
+            sink.rawText( cli.getReleaseDateFromMetadata() );
             sink.tableCell_();
             sink.tableCell();
             if ( csr.getStatusCode() != HTTP_OK )

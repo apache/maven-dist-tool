@@ -163,7 +163,9 @@ public class DistCheckSourceReleaseMojo
 
         sink.tableRow();
         sink.tableCell();
-        sink.rawText( csrr.getConfigurationLine().getArtifactId() );
+        sink.anchor( cli.getArtifactId() );
+        sink.rawText( cli.getArtifactId() );
+        sink.anchor_();
         sink.tableCell_();
 
         // LATEST column
@@ -175,7 +177,7 @@ public class DistCheckSourceReleaseMojo
 
         // DATE column
         sink.tableCell();
-        sink.rawText( csrr.getConfigurationLine().getReleaseDateFromMetadata() );
+        sink.rawText( cli.getReleaseDateFromMetadata() );
         sink.tableCell_();
 
         // dist column

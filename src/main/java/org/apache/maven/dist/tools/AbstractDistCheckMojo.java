@@ -386,22 +386,22 @@ public abstract class AbstractDistCheckMojo
      * @param cli
      * @param version
      * @param ignore
-     * @param error 
+     * @param message 
      */
-    protected void addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String error ) 
+    protected void addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String message ) 
     {
         if ( ( ignore != null )
             && ( ignore.contains( cli.getArtifactId() + ':' + version ) || ignore.contains( cli.getArtifactId() ) ) )
         {
-            getLog().warn( error );
+            getLog().warn( message );
         }
         else
         {
-            getLog().error( error );
+            getLog().error( message );
 
             try ( PrintWriter output = new PrintWriter( new FileWriter( getFailuresFile(), true ) ) )
             {
-                output.printf( "%s%s", error, EOL );
+                output.printf( "%s%s", message, EOL );
             }
             catch ( Exception e )
             {
