@@ -19,7 +19,6 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,11 +27,7 @@ import java.util.Map;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.siterenderer.Renderer;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 
@@ -43,25 +38,6 @@ import org.apache.maven.reporting.MavenReportException;
 public class ListPluginsPrerequisitesMojo
     extends AbstractMavenReport
 {
-
-    /**
-     * Site renderer.
-     */
-    @Component
-    protected Renderer siteRenderer;
-
-    /**
-     * Reporting directory.
-     */
-    @Parameter( defaultValue = "${project.reporting.outputDirectory}", required = true )
-    protected File outputDirectory;
-
-    /**
-     * Maven project.
-     */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
-    protected MavenProject project;
-
     @Override
     public String getName( Locale locale )
     {
@@ -154,23 +130,4 @@ public class ListPluginsPrerequisitesMojo
     {
         return "dist-tool-prerequisites";
     }
-
-    @Override
-    protected Renderer getSiteRenderer()
-    {
-        return siteRenderer;
-    }
-
-    @Override
-    protected String getOutputDirectory()
-    {
-        return outputDirectory.getAbsolutePath();
-    }
-
-    @Override
-    protected MavenProject getProject()
-    {
-        return project;
-    }
-
 }
