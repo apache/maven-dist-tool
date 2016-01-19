@@ -23,6 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import org.apache.maven.dist.tools.index.DistCheckIndexPageMojo;
+import org.apache.maven.dist.tools.site.DistCheckSiteMojo;
+import org.apache.maven.dist.tools.source.DistCheckSourceReleaseMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
@@ -42,7 +45,7 @@ public class DistCheckErrorsMojo
     private static final String EOL = System.getProperty( "line.separator" );
 
     @Override
-    boolean isIndexPageCheck()
+    protected boolean isIndexPageCheck()
     {
         return false;
     }

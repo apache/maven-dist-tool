@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools.checkers;
+package org.apache.maven.dist.tools.site.checkers;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,6 +19,7 @@ package org.apache.maven.dist.tools.checkers;
  * under the License.
  */
 
+import org.apache.maven.dist.tools.site.HTMLChecker;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 

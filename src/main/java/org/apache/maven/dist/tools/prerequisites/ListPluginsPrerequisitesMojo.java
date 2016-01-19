@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.prerequisites;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

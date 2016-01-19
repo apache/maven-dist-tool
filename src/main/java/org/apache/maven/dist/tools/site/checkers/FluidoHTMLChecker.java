@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.site.checkers;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,35 +19,34 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
+import org.apache.maven.dist.tools.site.HTMLChecker;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 /**
- *
+ * Check if artifact version is present in fluido skin.
+ * 
  * @author skygo
  */
-public class AbstractCheckResult
+public class FluidoHTMLChecker implements HTMLChecker
 {
 
-    private final ConfigurationLineInfo configLine;
-    private final String version;
-
-    public AbstractCheckResult( ConfigurationLineInfo r, String version )
+    @Override
+    public String getName()
     {
-        this.configLine = r;
-        this.version = version;
+        return "Fluido";
     }
 
-    /**
-     * @return the request
-     */
-    public ConfigurationLineInfo getConfigurationLine()
+    @Override
+    public String getSkin()
     {
-        return configLine;
+        return "Fluido";
     }
 
-    /**
-     * @return the version
-     */
-    public String getVersion()
+    @Override
+    public boolean isOk( Document doc, String version )
     {
-        return version;
+        Element links = doc.select( "li#projectVersion" ).first();
+        return ( links != null ) && links.text().contains( version );
     }
 }

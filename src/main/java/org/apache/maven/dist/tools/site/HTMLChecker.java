@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools.checkers;
+package org.apache.maven.dist.tools.site;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,32 +20,35 @@ package org.apache.maven.dist.tools.checkers;
  */
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 /**
- * Check if artifact version is present in fluido skin.
- * 
+ *
  * @author skygo
  */
-public class FluidoHTMLChecker implements HTMLChecker
+public interface HTMLChecker
 {
 
-    @Override
-    public String getName()
-    {
-        return "Fluido";
-    }
+    /**
+     * name of the checker.
+     *
+     * @return name
+     */
+    String getName();
 
-    @Override
-    public String getSkin()
-    {
-        return "Fluido";
-    }
+    /**
+     * Get an id representing sink.
+     * 
+     * @return string for skin
+     */
+    String getSkin();
 
-    @Override
-    public boolean isOk( Document doc, String version )
-    {
-        Element links = doc.select( "li#projectVersion" ).first();
-        return ( links != null ) && links.text().contains( version );
-    }
+    /**
+     * true if checker find pattern in document
+     *
+     * @param doc html document
+     * @param version version to check against
+     * @return true if version is found
+     */
+    boolean isOk( Document doc, String version );
+    
 }

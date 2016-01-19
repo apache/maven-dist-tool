@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools.checkers;
+package org.apache.maven.dist.tools.site.checkers;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,36 +19,35 @@ package org.apache.maven.dist.tools.checkers;
  * under the License.
  */
 
+import org.apache.maven.dist.tools.site.HTMLChecker;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
- *
+ * Check if artifact version is present on left side in stylus skin.
+ * 
  * @author skygo
  */
-public interface HTMLChecker
+public class StylusLeftHTMLChecker implements HTMLChecker
 {
 
-    /**
-     * name of the checker.
-     *
-     * @return name
-     */
-    String getName();
+    @Override
+    public String getName()
+    {
+        return "Stylus left side";
+    }
 
-    /**
-     * Get an id representing sink.
-     * 
-     * @return string for skin
-     */
-    String getSkin();
+    @Override
+    public String getSkin()
+    {
+        return "Stylus";
+    }
 
-    /**
-     * true if checker find pattern in document
-     *
-     * @param doc html document
-     * @param version version to check against
-     * @return true if version is found
-     */
-    boolean isOk( Document doc, String version );
-    
+    @Override
+    public boolean isOk( Document doc, String version )
+    {
+        Element links = doc.select( "div.xleft" ).first();
+
+        return ( links != null ) && links.text().contains( version );
+    }
 }

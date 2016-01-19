@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.prerequisites;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -38,7 +38,7 @@ import org.jsoup.select.Elements;
 public class GetPrerequisites
 {
     /**
-     * Currently hard code should be somehow extracted from the configuration file....
+     * TODO Currently hard code should be somehow extracted from the configuration file....
      */
     public static final String[] PLUGIN_NAMES = { 
         "maven-acr-plugin", 

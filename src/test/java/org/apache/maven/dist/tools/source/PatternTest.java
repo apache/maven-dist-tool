@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.source;
 
 /*
  * Copyright 2013 The Apache Software Foundation.
@@ -19,6 +19,7 @@ package org.apache.maven.dist.tools;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.maven.dist.tools.source.DistCheckSourceReleaseMojo;
 import org.junit.Test;
 
 /**

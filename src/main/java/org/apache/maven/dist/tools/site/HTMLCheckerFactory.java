@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.site;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,35 +19,35 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.maven.dist.tools.site.checkers.FluidoHTMLChecker;
+import org.apache.maven.dist.tools.site.checkers.StylusLeftHTMLChecker;
+import org.apache.maven.dist.tools.site.checkers.StylusRightHTMLChecker;
+
 /**
  *
  * @author skygo
  */
-public class AbstractCheckResult
+public final class HTMLCheckerFactory
 {
 
-    private final ConfigurationLineInfo configLine;
-    private final String version;
-
-    public AbstractCheckResult( ConfigurationLineInfo r, String version )
+    private HTMLCheckerFactory()
     {
-        this.configLine = r;
-        this.version = version;
     }
 
     /**
-     * @return the request
+     * get all checker
+     * @return list of checker
      */
-    public ConfigurationLineInfo getConfigurationLine()
+    public static List<HTMLChecker> getCheckers()
     {
-        return configLine;
+        List<HTMLChecker> tmp = new LinkedList<>();
+        tmp.add( new FluidoHTMLChecker() );
+        tmp.add( new StylusRightHTMLChecker() );
+        tmp.add( new StylusLeftHTMLChecker() );
+        return tmp;
     }
 
-    /**
-     * @return the version
-     */
-    public String getVersion()
-    {
-        return version;
-    }
 }

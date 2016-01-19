@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.index;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.maven.dist.tools.AbstractCheckResult;
+import org.apache.maven.dist.tools.AbstractDistCheckMojo;
+import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -50,9 +53,9 @@ import org.jsoup.select.Elements;
 public class DistCheckIndexPageMojo
         extends AbstractDistCheckMojo
 {
-    static final String FAILURES_FILENAME = "check-index-page.log";
+    public static final String FAILURES_FILENAME = "check-index-page.log";
 
-    static final String POMS_INDEX_URL = "http://maven.apache.org/pom/";
+    public static final String POMS_INDEX_URL = "http://maven.apache.org/pom/";
 
     private static final IndexPage[] INDEX_PAGES = new IndexPage[] {
         new IndexPage( "http://maven.apache.org/plugins/", "Plugins", 3, true ),
@@ -61,23 +64,6 @@ public class DistCheckIndexPageMojo
         new IndexPage( POMS_INDEX_URL, "Poms", 2, true ) };
 
     private static final Map<String, IndexPage> INDEX_PAGES_REF;
-
-    private static class IndexPage
-    {
-        final String url;
-        final String name;
-        final int versionColumn;
-        final boolean containsDate;
-        Document document;
-        
-        IndexPage( String url, String name, int versionColumn, boolean containsDate )
-        {
-            this.url = url;
-            this.name = name;
-            this.versionColumn = versionColumn;
-            this.containsDate = containsDate;
-        }
-    }
 
     static
     {
@@ -114,7 +100,7 @@ public class DistCheckIndexPageMojo
     }
 
     @Override
-    boolean isIndexPageCheck()
+    protected boolean isIndexPageCheck()
     {
         return true;
     }

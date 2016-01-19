@@ -103,7 +103,7 @@ public abstract class AbstractDistCheckMojo
      * necessary to only check index page information for plugins marked with asterisk * in db,
      * because they are released as part of a global component (archetype, scm, release, ...)
      */
-    abstract boolean isIndexPageCheck();
+    protected abstract boolean isIndexPageCheck();
     
     protected abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
         throws MojoExecutionException;
@@ -335,7 +335,7 @@ public abstract class AbstractDistCheckMojo
      *
      * @param sink doxiasink
      */
-    protected void iconError( Sink sink )
+    public void iconError( Sink sink )
     {
         icon( sink, "icon_error_sml" );
     }
@@ -345,7 +345,7 @@ public abstract class AbstractDistCheckMojo
      *
      * @param sink doxiasink
      */
-    protected void iconWarning( Sink sink )
+    public void iconWarning( Sink sink )
     {
         icon( sink, "icon_warning_sml" );
     }
@@ -355,7 +355,7 @@ public abstract class AbstractDistCheckMojo
      *
      * @param sink doxiasink
      */
-    protected void iconSuccess( Sink sink )
+    public void iconSuccess( Sink sink )
     {
         icon( sink, "icon_success_sml" );
     }

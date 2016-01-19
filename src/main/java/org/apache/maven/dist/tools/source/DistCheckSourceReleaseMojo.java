@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.source;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.maven.dist.tools.AbstractDistCheckMojo;
+import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
@@ -49,10 +51,10 @@ public class DistCheckSourceReleaseMojo
 {
     private static final String NOT_IN_DISTRIBUTION_AREA = "_not_in_distribution_area_";
 
-    static final String FAILURES_FILENAME = "check-source-release.log";
+    public static final String FAILURES_FILENAME = "check-source-release.log";
 
     @Override
-    boolean isIndexPageCheck()
+    protected boolean isIndexPageCheck()
     {
         return false;
     }
@@ -80,34 +82,6 @@ public class DistCheckSourceReleaseMojo
         return "Verification of source release";
     }
 
-    private static class CheckSourceReleaseResult
-        extends AbstractCheckResult
-    {
-
-        private List<String> central;
-        private List<String> dist;
-        private List<String> distOlder;
-
-        public CheckSourceReleaseResult( ConfigurationLineInfo r, String version )
-        {
-            super( r, version );
-        }
-
-        private void setMissingDistSourceRelease( List<String> checkRepos )
-        {
-            dist = checkRepos;
-        }
-
-        private void setMissingCentralSourceRelease( List<String> checkRepos )
-        {
-            central = checkRepos;
-        }
-
-        private void setDistOlderSourceRelease( List<String> checkRepos )
-        {
-            distOlder = checkRepos;
-        }
-    }
     private final List<CheckSourceReleaseResult> results = new LinkedList<>();
 
     private static class DirectoryStatistics

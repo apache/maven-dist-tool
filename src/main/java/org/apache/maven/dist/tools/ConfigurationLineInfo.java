@@ -28,12 +28,13 @@ import java.util.List;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.artifact.versioning.VersionRange;
+import org.apache.maven.dist.tools.index.DistCheckIndexPageMojo;
 
 /**
  *
  * @author skygo
  */
-class ConfigurationLineInfo
+public class ConfigurationLineInfo
 {
     private static final String URLSEP = "/";
 
@@ -125,17 +126,17 @@ class ConfigurationLineInfo
         return srcBin;
     }
 
-    String getBaseURL( String repoBaseUrl, String folder )
+    public String getBaseURL( String repoBaseUrl, String folder )
     {
         return repoBaseUrl + groupId.replaceAll( "\\.", URLSEP ) + URLSEP + artifactId + URLSEP + folder;
     }
 
-    String getMetadataFileURL( String repoBaseUrl )
+    public String getMetadataFileURL( String repoBaseUrl )
     {
         return getBaseURL( repoBaseUrl, "maven-metadata.xml" );
     }
 
-    String getVersionnedFolderURL( String repoBaseUrl, String version )
+    public String getVersionnedFolderURL( String repoBaseUrl, String version )
     {
         return getBaseURL( repoBaseUrl, version ) + '/';
     }
@@ -150,7 +151,7 @@ class ConfigurationLineInfo
         this.metadata = aMetadata;
     }
 
-    String getReleaseDateFromMetadata()
+    public String getReleaseDateFromMetadata()
     {
         try
         {
@@ -173,7 +174,7 @@ class ConfigurationLineInfo
             + ( srcBin && ( dist || !"maven-ant-tasks".equals( artifactId ) ) ? "-src" : "-source-release" ) + ".zip";
     }
 
-    List<String> getExpectedFilenames( String version, boolean dist )
+    public List<String> getExpectedFilenames( String version, boolean dist )
     {
         String sourceReleaseFilename = getSourceReleaseFilename( version, dist );
 

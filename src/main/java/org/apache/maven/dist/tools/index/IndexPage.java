@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools.checkers;
+package org.apache.maven.dist.tools.index;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,31 +19,21 @@ package org.apache.maven.dist.tools.checkers;
  * under the License.
  */
 
-import java.util.LinkedList;
-import java.util.List;
+import org.jsoup.nodes.Document;
 
-/**
- *
- * @author skygo
- */
-public final class HTMLCheckerFactory
+class IndexPage
 {
-
-    private HTMLCheckerFactory()
+    final String url;
+    final String name;
+    final int versionColumn;
+    final boolean containsDate;
+    Document document;
+    
+    IndexPage( String url, String name, int versionColumn, boolean containsDate )
     {
+        this.url = url;
+        this.name = name;
+        this.versionColumn = versionColumn;
+        this.containsDate = containsDate;
     }
-
-    /**
-     * get all checker
-     * @return list of checker
-     */
-    public static List<HTMLChecker> getCheckers()
-    {
-        List<HTMLChecker> tmp = new LinkedList<>();
-        tmp.add( new FluidoHTMLChecker() );
-        tmp.add( new StylusRightHTMLChecker() );
-        tmp.add( new StylusLeftHTMLChecker() );
-        return tmp;
-    }
-
 }

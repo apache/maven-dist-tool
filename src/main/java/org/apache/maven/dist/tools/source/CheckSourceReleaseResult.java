@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools.checkers;
+package org.apache.maven.dist.tools.source;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,34 +19,36 @@ package org.apache.maven.dist.tools.checkers;
  * under the License.
  */
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import java.util.List;
 
-/**
- * Check if artifact version is present on left side in stylus skin.
- * 
- * @author skygo
- */
-public class StylusLeftHTMLChecker implements HTMLChecker
+import org.apache.maven.dist.tools.AbstractCheckResult;
+import org.apache.maven.dist.tools.ConfigurationLineInfo;
+
+class CheckSourceReleaseResult
+    extends AbstractCheckResult
 {
 
-    @Override
-    public String getName()
+    List<String> central;
+    List<String> dist;
+    List<String> distOlder;
+
+    public CheckSourceReleaseResult( ConfigurationLineInfo r, String version )
     {
-        return "Stylus left side";
+        super( r, version );
     }
 
-    @Override
-    public String getSkin()
+    void setMissingDistSourceRelease( List<String> checkRepos )
     {
-        return "Stylus";
+        dist = checkRepos;
     }
 
-    @Override
-    public boolean isOk( Document doc, String version )
+    void setMissingCentralSourceRelease( List<String> checkRepos )
     {
-        Element links = doc.select( "div.xleft" ).first();
+        central = checkRepos;
+    }
 
-        return ( links != null ) && links.text().contains( version );
+    void setDistOlderSourceRelease( List<String> checkRepos )
+    {
+        distOlder = checkRepos;
     }
 }

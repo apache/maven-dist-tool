@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools;
+package org.apache.maven.dist.tools.site;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,18 +20,16 @@ package org.apache.maven.dist.tools;
  */
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.dist.tools.checkers.HTMLChecker;
-import org.apache.maven.dist.tools.checkers.HTMLCheckerFactory;
+import org.apache.maven.dist.tools.AbstractDistCheckMojo;
+import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -43,11 +41,7 @@ import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -61,7 +55,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class DistCheckSiteMojo
     extends AbstractDistCheckMojo
 {
-    static final String FAILURES_FILENAME = "check-site.log";
+    public static final String FAILURES_FILENAME = "check-site.log";
 
     /**
      * Ignore site failure for <code>artifactId</code> or <code>artifactId:version</code>
@@ -101,7 +95,7 @@ public class DistCheckSiteMojo
     protected static final int HTTP_OK = 200;
 
     @Override
-    boolean isIndexPageCheck()
+    protected boolean isIndexPageCheck()
     {
         return false;
     }
@@ -121,151 +115,6 @@ public class DistCheckSiteMojo
     public String getDescription( Locale locale )
     {
         return "Verification of documentation site corresponding to artifact";
-    }
-
-    class CheckSiteResult
-        extends AbstractCheckResult
-    {
-
-        private String url;
-        private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
-        private int statusCode = HTTP_OK;
-        private Document document;
-        private String screenshotName;
-
-        public CheckSiteResult( ConfigurationLineInfo r, String version )
-        {
-            super( r, version );
-        }
-
-        void setUrl( String url )
-        {
-            this.url = url;
-        }
-
-        /**
-         * @return the url
-         */
-        public String getUrl()
-        {
-            return url;
-        }
-
-        /**
-         * @return the checkMap
-         */
-        public Map<HTMLChecker, Boolean> getCheckMap()
-        {
-            return checkMap;
-        }
-
-        private void setHTTPErrorUrl( int status )
-        {
-            this.statusCode = status;
-        }
-
-        /**
-         * @return the statusCode
-         */
-        public int getStatusCode()
-        {
-            return statusCode;
-        }
-
-        private void getSkins( Sink sink )
-        {
-            if ( statusCode != HTTP_OK )
-            {
-                sink.text( "None" );
-            }
-            else 
-            {
-                String text = "";
-                Elements htmlTag = document.select( "html " );
-                for ( Element htmlTa : htmlTag )
-                {
-                    Node n = htmlTa.previousSibling();
-                    if ( n instanceof Comment )
-                    {
-                        text += ( ( Comment ) n ).getData();
-                    }
-                    else
-                    {
-                        text += " ";
-                    }
-                }
-
-                sink.text( "skin: " );
-                if ( isSkin( "Fluido" ) )
-                {
-                    sink.text( "Fluido" );
-                }
-                else if ( isSkin( "Stylus" ) )
-                {
-                    sink.text( "Stylus" );
-                }
-                else 
-                {
-                    sink.text( "Not determined" );
-                }
-                sink.verbatim( null );
-                sink.text( text.trim().replace( " |", "|" ).replace( "| ", "" ) );
-                sink.verbatim_();
-            }
-        }
-
-        private void getOverall( Sink sink )
-        {
-            if ( statusCode != HTTP_OK )
-            {
-                iconError( sink );
-            }
-            else
-            {
-                boolean found = false;
-                for ( Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet() )
-                {
-                    if ( e.getValue() )
-                    {
-                        iconSuccess( sink );
-                        sink.text( ": " + e.getKey().getName() );
-                        found = true;
-                    }
-                }
-                if ( !found )
-                {
-                    iconWarning( sink );
-                    sink.text( ": artifact version not found" );
-                }
-            }
-        }
-
-        private boolean isSkin( String skinName )
-        {
-            boolean tmp = false;
-            for ( Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet() )
-            {
-                if ( e.getKey().getSkin().equals( skinName ) )
-                {
-                    tmp = tmp || e.getValue();
-                }
-            }
-            return tmp;
-        }
-
-        private void setDocument( Document doc )
-        {
-            this.document = doc ;
-        }
-
-        private void setScreenShot( String fileName )
-        {
-            this.screenshotName = fileName;
-        }
-        private String getScreenShot()
-        {
-            return screenshotName;
-        }
     }
 
     // keep result
@@ -412,7 +261,7 @@ public class DistCheckSiteMojo
 
     private void checkSite( ConfigurationLineInfo cli, String version )
     {
-        CheckSiteResult result = new CheckSiteResult( cli, version );
+        CheckSiteResult result = new CheckSiteResult( this, cli, version );
         results.add( result );
         try
         {
