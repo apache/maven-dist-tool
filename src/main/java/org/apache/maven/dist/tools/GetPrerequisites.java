@@ -56,7 +56,7 @@ public class GetPrerequisites
         "maven-doap-plugin",
         "maven-docck-plugin",
         "maven-ear-plugin",
-        "maven-eclipse-plugin",
+        // "maven-eclipse-plugin", retired
         "maven-ejb-plugin",
         "maven-enforcer-plugin",
         "maven-failsafe-plugin",
