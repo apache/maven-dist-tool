@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
-import org.jsoup.Jsoup;
+import org.apache.maven.dist.tools.JsoupRetry;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -104,7 +104,7 @@ public class GetPrerequisites
     {
         String url = getPluginInfoUrl( pluginName );
 
-        Document doc = Jsoup.connect( url ).get();
+        Document doc = JsoupRetry.get( url );
 
         Elements select = doc.select( "table.bodyTable" ); // Stylus skin
 

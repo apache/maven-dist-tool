@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import org.apache.maven.dist.tools.AbstractDistCheckMojo;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
+import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
@@ -35,7 +36,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.MavenReportException;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -414,13 +414,13 @@ public class DistCheckSourceReleaseMojo
             if ( !url.equals( cachedUrl ) )
             {
                 cachedUrl = url;
-                cachedDocument = Jsoup.connect( url ).get();
+                cachedDocument = JsoupRetry.get( url );
             }
             return cachedDocument;
         }
         else
         {
-            return Jsoup.connect( url ).get();
+            return JsoupRetry.get( url );
         }
     }
 

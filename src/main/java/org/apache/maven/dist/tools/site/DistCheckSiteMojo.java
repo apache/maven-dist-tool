@@ -30,6 +30,7 @@ import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.dist.tools.AbstractDistCheckMojo;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
+import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -40,7 +41,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -281,7 +281,7 @@ public class DistCheckSiteMojo
             }
 
             result.setUrl( siteUrl );
-            Document doc = Jsoup.connect( siteUrl ).get();
+            Document doc = JsoupRetry.get( siteUrl );
             if ( screenShot )
             {
                 driver.get( artifactProject.getUrl() );

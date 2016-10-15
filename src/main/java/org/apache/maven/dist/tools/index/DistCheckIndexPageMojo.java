@@ -34,12 +34,12 @@ import java.util.Map;
 import org.apache.maven.dist.tools.AbstractCheckResult;
 import org.apache.maven.dist.tools.AbstractDistCheckMojo;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
+import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.MavenReportException;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -288,14 +288,7 @@ public class DistCheckIndexPageMojo
         if ( doc == null )
         {
             // document not yet downloaded: download and cache
-            try
-            {
-                doc = Jsoup.connect( indexPage.url ).get();
-            }
-            catch ( IOException ioe )
-            {
-                throw new IOException( "IOException while reading " + indexPage.url, ioe );
-            }
+            doc = JsoupRetry.get( indexPage.url );
             indexPage.document = doc;
         }
 
