@@ -169,14 +169,19 @@ public abstract class AbstractDistCheckMojo
         {
             ConfigurationLineInfo aLine = null;
 
-            line = line.trim();
+            String trim = line.trim();
 
-            if ( "".equals( line ) || line.startsWith( "##" ) )
+            if ( "".equals( trim ) || trim.startsWith( "##" ) )
             {
                 // empty line or comment: ignore
                 continue;
             }
-            else if ( line.startsWith( ">" ) )
+
+            getLog().info( line );
+
+            line = trim;
+
+            if ( line.startsWith( ">" ) )
             {
                 // parameter
                 int index = line.indexOf( '=' );
@@ -224,10 +229,12 @@ public abstract class AbstractDistCheckMojo
             {
                 // definition of a group, in a dist-area directory
                 currentGroup = new ConfigurationLineInfo( line.split( " " ) );
+
                 if ( currentGroup.getArtifactId() == null )
                 {
                     continue;
                 }
+
                 // check group's parent pom artifact
                 aLine = currentGroup;
             }
@@ -259,6 +266,8 @@ public abstract class AbstractDistCheckMojo
 
             checkArtifact( aLine, getVersion( aLine ) );
         }
+
+        getLog().info( "" );
     }
 
     private String getVersion( ConfigurationLineInfo aLine )
@@ -297,12 +306,11 @@ public abstract class AbstractDistCheckMojo
             
             if ( getLog().isDebugEnabled() )
             {
-                getLog().debug( "Checking information for artifact: " + aLine.getGroupId() + ":"
-                                    + aLine.getArtifactId() + ":" + version );
+                getLog().debug( "  available versions in repository " + repoBaseUrl );
                 // revert sort versions (not handling alpha and
                 // complex version schemes but more useful versions are displayed left side)
                 Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
-                getLog().debug( metadata.getVersioning().getVersions() + " version(s) detected " + repoBaseUrl );
+                getLog().debug( "    " + metadata.getVersioning().getVersions() );
             }
 
             if ( aLine.getForcedVersion() != null )
