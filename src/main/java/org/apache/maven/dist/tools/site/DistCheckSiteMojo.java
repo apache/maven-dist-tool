@@ -87,8 +87,6 @@ public class DistCheckSiteMojo
     @Parameter( property = "screenshot", defaultValue = "false" )
     protected boolean screenShot;
     
-    private static final String MAVEN_SITE = "http://maven.apache.org";
-
     /**
      * Http status ok code.
      */
@@ -256,7 +254,7 @@ public class DistCheckSiteMojo
 
     private String getSimplifiedUrl( String url )
     {
-        return url.replace( MAVEN_SITE, "http://m.a.o" );
+        return url.replace( "://maven.apache.org", "://m.a.o" );
     }
 
     private void checkSite( ConfigurationLineInfo cli, String version )
