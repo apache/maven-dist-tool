@@ -169,6 +169,7 @@ class CheckSiteResult
     void setDocument( Document doc )
     {
         this.document = doc ;
+        statusCode = ( doc == null ) ? -1 : DistCheckSiteMojo.HTTP_OK;
     }
 
     void setScreenShot( String fileName )
