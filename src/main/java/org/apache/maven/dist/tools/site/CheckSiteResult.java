@@ -41,7 +41,7 @@ class CheckSiteResult
     private final DistCheckSiteMojo distCheckSiteMojo;
     private String url;
     private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
-    private int statusCode = DistCheckSiteMojo.HTTP_OK;
+    private int statusCode = -1;
     private Document document;
     private String screenshotName;
 
