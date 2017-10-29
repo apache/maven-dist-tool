@@ -36,10 +36,19 @@
   </prerequisites>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/dist-tools/dist-tool-plugin/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/dist-tools/dist-tool-plugin/</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/sandbox/trunk/dist-tools/dist-tool-plugin/</url>
+    <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-dist-tool.git</connection>
+    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-dist-tool.git</developerConnection>
+    <url>https://github.com/apache/maven-dist-tool/tree/${project.scm.tag}</url>
+    <tag>HEAD</tag>
   </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>https://issues.apache.org/jira/browse/MNGSITE</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://builds.apache.org/view/M-R/view/Maven/job/dist-tool-plugin/</url>
+  </ciManagement>
 
   <properties>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
