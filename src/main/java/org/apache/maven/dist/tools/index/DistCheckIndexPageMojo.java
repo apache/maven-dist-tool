@@ -292,17 +292,25 @@ public class DistCheckIndexPageMojo
             indexPage.document = doc;
         }
 
-        Elements a = doc.select( "tr > td > a[href]:not(.externalLink)" );
+        // Maven parent POM is now a special case in http://maven.apache.org/pom/
+        boolean isMavenParentPoms = ( "maven-parent".equals( cli.getArtifactId() ) );
+
+        Elements a = isMavenParentPoms ? doc.select( "tr > th > b" )
+                        : doc.select( "tr > td > a[href]:not(.externalLink)" );
 
         String path = paths.get( cli.getArtifactId() );
-        if ( path == null )
+        if ( isMavenParentPoms )
+        {
+            path = "Maven Parent POMs"; // looking for this <th><b> content
+        }
+        else if ( path == null )
         {
             path = '/' + cli.getArtifactId() + '/';
         }
 
         for ( Element e : a )
         {
-            String href = e.attr( "href" );
+            String href = isMavenParentPoms ? e.text() : e.attr( "href" );
 
             if ( href.contains( path ) )
             {
