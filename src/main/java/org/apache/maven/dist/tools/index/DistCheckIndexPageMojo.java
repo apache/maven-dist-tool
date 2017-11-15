@@ -155,7 +155,7 @@ public class DistCheckIndexPageMojo
         if ( displayDate )
         {
             sink.rawText( cipr.indexDate );
-            if ( isDateSimilar( cli.getReleaseDateFromMetadata(), cipr.indexDate ) )
+            if ( ( cipr.indexDate != null ) && isDateSimilar( cli.getReleaseDateFromMetadata(), cipr.indexDate ) )
             {
                 iconSuccess( sink );
             }
