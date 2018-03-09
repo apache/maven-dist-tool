@@ -100,7 +100,7 @@ public class DistCheckSourceReleaseMojo
 
         int distOlder = 0;
 
-        public DirectoryStatistics( String directory, String groupId )
+        private DirectoryStatistics( String directory, String groupId )
         {
             this.directory = directory;
             this.groupId = groupId;

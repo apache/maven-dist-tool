@@ -32,7 +32,7 @@ class CheckSourceReleaseResult
     List<String> dist;
     List<String> distOlder;
 
-    public CheckSourceReleaseResult( ConfigurationLineInfo r, String version )
+    CheckSourceReleaseResult( ConfigurationLineInfo r, String version )
     {
         super( r, version );
     }

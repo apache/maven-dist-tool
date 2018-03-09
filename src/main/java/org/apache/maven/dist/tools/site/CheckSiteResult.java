@@ -45,7 +45,7 @@ class CheckSiteResult
     private Document document;
     private String screenshotName;
 
-    public CheckSiteResult( DistCheckSiteMojo distCheckSiteMojo, ConfigurationLineInfo r, String version )
+    CheckSiteResult( DistCheckSiteMojo distCheckSiteMojo, ConfigurationLineInfo r, String version )
     {
         super( r, version );
         this.distCheckSiteMojo = distCheckSiteMojo;

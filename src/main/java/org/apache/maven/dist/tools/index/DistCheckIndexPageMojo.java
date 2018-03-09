@@ -113,7 +113,7 @@ public class DistCheckIndexPageMojo
         private String indexVersion;
         private String indexDate;
         
-        public CheckIndexPageResult( ConfigurationLineInfo r, String version )
+        private CheckIndexPageResult( ConfigurationLineInfo r, String version )
         {
             super( r, version );
         }
