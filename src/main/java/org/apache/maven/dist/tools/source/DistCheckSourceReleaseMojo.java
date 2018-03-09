@@ -47,7 +47,7 @@ import org.jsoup.select.Elements;
  */
 @Mojo( name = "check-source-release", requiresProject = false )
 public class DistCheckSourceReleaseMojo
-        extends AbstractDistCheckMojo
+    extends AbstractDistCheckMojo
 {
     private static final String NOT_IN_DISTRIBUTION_AREA = "_not_in_distribution_area_";
 
@@ -87,11 +87,17 @@ public class DistCheckSourceReleaseMojo
     private static class DirectoryStatistics
     {
         final String directory;
+
         final String groupId;
+
         int artifactsCount = 0;
+
         int centralMissing = 0;
+
         int distError = 0;
+
         int distMissing = 0;
+
         int distOlder = 0;
 
         public DirectoryStatistics( String directory, String groupId )
@@ -244,7 +250,7 @@ public class DistCheckSourceReleaseMojo
 
     @Override
     protected void executeReport( Locale locale )
-            throws MavenReportException
+        throws MavenReportException
     {
         if ( !outputDirectory.exists() )
         {
@@ -267,9 +273,8 @@ public class DistCheckSourceReleaseMojo
         {
             if ( ( current == null ) || !current.contains( csrr ) )
             {
-                current =
-                    new DirectoryStatistics( csrr.getConfigurationLine().getDirectory(),
-                                             csrr.getConfigurationLine().getGroupId() );
+                current = new DirectoryStatistics( csrr.getConfigurationLine().getDirectory(),
+                                                   csrr.getConfigurationLine().getGroupId() );
                 statistics.add( current );
             }
             current.addArtifact( csrr );
@@ -287,7 +292,7 @@ public class DistCheckSourceReleaseMojo
         sink.section1();
         sink.paragraph();
         sink.text( "Check Source Release"
-                + " (= <artifactId>-<version>-source-release.zip + .asc + .md5) availability in:" );
+            + " (= <artifactId>-<version>-source-release.zip + .asc + .md5 or .sha*) availability in:" );
         sink.paragraph_();
         sink.list();
         sink.listItem();
@@ -403,6 +408,7 @@ public class DistCheckSourceReleaseMojo
     }
 
     private String cachedUrl;
+
     private Document cachedDocument;
 
     private Document read( String url )
@@ -425,7 +431,7 @@ public class DistCheckSourceReleaseMojo
     }
 
     private Elements selectLinks( String repourl )
-            throws IOException
+        throws IOException
     {
         try
         {
@@ -438,41 +444,43 @@ public class DistCheckSourceReleaseMojo
     }
 
     private List<String> checkContainsOld( String url, ConfigurationLineInfo cli, String version )
-            throws IOException
+        throws IOException
     {
         Elements links = selectLinks( url );
 
-        List<String> retrievedFile = new LinkedList<>();
+        String sourceReleaseFilename = cli.getSourceReleaseFilename( version, true );
+
+        List<String> retrievedOldFiles = new LinkedList<>();
         for ( Element e : links )
         {
             String art = e.attr( "href" );
             if ( art.matches( getSourceReleasePattern( cli.getArtifactId() ) ) )
             {
-                retrievedFile.add( e.attr( "href" ) );
+                String retrievedFile = e.attr( "href" );
+                if ( ! retrievedFile.startsWith( sourceReleaseFilename ) )
+                {
+                    retrievedOldFiles.add( retrievedFile );
+                }
             }
         }
 
-        List<String> expectedFiles = cli.getExpectedFilenames( version, true );
-
-        retrievedFile.removeAll( expectedFiles );
-
-        if ( !retrievedFile.isEmpty() )
+        if ( !retrievedOldFiles.isEmpty() )
         {
             // write the following output in red so it's more readable in jenkins console
-            addErrorLine( cli, version, ignoreDistFailures,
-                          "Different version than " + version + " for " + cli.getArtifactId() + " available in "
-                              + url );
-            for ( String sourceItem : retrievedFile )
+            addErrorLine( cli, version, ignoreDistFailures, "Different version than " + version + " for "
+                + cli.getArtifactId() + " available in " + url );
+            for ( String sourceItem : retrievedOldFiles )
             {
                 addErrorLine( cli, version, ignoreDistFailures, " > " + sourceItem + " <" );
             }
         }
 
-        return retrievedFile;
+        return retrievedOldFiles;
     }
 
     /**
      * Check that url points to a directory index containing expected release files
+     * 
      * @param url
      * @param cli
      * @param version
@@ -480,7 +488,7 @@ public class DistCheckSourceReleaseMojo
      * @throws IOException
      */
     private List<String> checkDirectoryIndex( String url, ConfigurationLineInfo cli, String version, boolean dist )
-            throws IOException
+        throws IOException
     {
         List<String> retrievedFile = new LinkedList<>();
         Elements links = selectLinks( url );
@@ -510,7 +518,7 @@ public class DistCheckSourceReleaseMojo
 
     @Override
     protected void checkArtifact( ConfigurationLineInfo configLine, String version )
-            throws MojoExecutionException
+        throws MojoExecutionException
     {
         try
         {
@@ -528,9 +536,8 @@ public class DistCheckSourceReleaseMojo
             }
 
             // dist
-            String distUrl =
-                distributionAreaUrl + configLine.getDirectory()
-                    + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
+            String distUrl = distributionAreaUrl + configLine.getDirectory()
+                + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
             result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version, true ) );
             result.setDistOlderSourceRelease( checkContainsOld( distUrl, configLine, version ) );
         }
