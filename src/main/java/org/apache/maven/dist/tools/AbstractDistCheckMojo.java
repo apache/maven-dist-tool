@@ -102,6 +102,7 @@ public abstract class AbstractDistCheckMojo
      * is it index page check mojo?
      * necessary to only check index page information for plugins marked with asterisk * in db,
      * because they are released as part of a global component (archetype, scm, release, ...)
+     * @return if it is a index page check.
      */
     protected abstract boolean isIndexPageCheck();
     
@@ -391,10 +392,10 @@ public abstract class AbstractDistCheckMojo
     /**
      * Log and add Error line to logs.txt if not configured to ignore the artifact+version
      * 
-     * @param cli
-     * @param version
-     * @param ignore
-     * @param message 
+     * @param cli {@link ConfigurationLineInfo}
+     * @param version The version.
+     * @param ignore the list of ignores.
+     * @param message  The message.
      */
     protected void addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String message ) 
     {
