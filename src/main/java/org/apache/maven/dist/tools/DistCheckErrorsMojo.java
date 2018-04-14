@@ -26,6 +26,7 @@ import java.util.Locale;
 import org.apache.maven.dist.tools.index.DistCheckIndexPageMojo;
 import org.apache.maven.dist.tools.site.DistCheckSiteMojo;
 import org.apache.maven.dist.tools.source.DistCheckSourceReleaseMojo;
+import org.apache.maven.doxia.sink.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
@@ -79,7 +80,7 @@ public class DistCheckErrorsMojo
                     getSink().text( failure );
                     getSink().link_();
                     getSink().sectionTitle2_();
-                    getSink().verbatim( true );
+                    getSink().verbatim(SinkEventAttributeSet.BOXED);
                     getSink().rawText( content );
                     getSink().verbatim_();
                     getSink().section2_();
