@@ -80,7 +80,7 @@ public class DistCheckErrorsMojo
                     getSink().text( failure );
                     getSink().link_();
                     getSink().sectionTitle2_();
-                    getSink().verbatim(SinkEventAttributeSet.BOXED);
+                    getSink().verbatim( SinkEventAttributeSet.BOXED );
                     getSink().rawText( content );
                     getSink().verbatim_();
                     getSink().section2_();
