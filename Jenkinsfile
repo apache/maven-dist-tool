@@ -17,4 +17,39 @@
  * under the License.
  */
 
-asfMavenTlpStdBuild()
+pipeline {
+    agent {
+        label 'ubuntu'
+    }
+    triggers {
+        cron('H H * * *')
+    }
+    stages {
+        stage('Check') {
+            when {
+                branch 'master'
+            }
+            steps {
+                withMaven(jdk:'JDK 1.8 (latest)', maven:'Maven 3 (latest)', mavenLocalRepo:'.repository', options: [
+                  artifactsPublisher(disabled: true),
+                  findbugsPublisher(disabled: true),
+                ]) {
+                    sh "mvn -B -e -Preporting -Papache.snapshots -Dscreenshot=false clean install site"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            jenkinsNotify()
+        }
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'15'))
+        timeout(time: 10, unit: 'MINUTES')
+        skipStagesAfterUnstable()
+        timestamps()
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+    }
+}
