@@ -181,7 +181,7 @@ public class ConfigurationLineInfo
         List<String> expectedFiles = new LinkedList<>();
         expectedFiles.add( sourceReleaseFilename );
         expectedFiles.add( sourceReleaseFilename + ".asc" );
-        expectedFiles.add( sourceReleaseFilename + ".md5" );
+        expectedFiles.add( sourceReleaseFilename + ".sha1" );
 
         return expectedFiles;
     }

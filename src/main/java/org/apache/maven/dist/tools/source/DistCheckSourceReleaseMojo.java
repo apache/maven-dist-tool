@@ -292,7 +292,7 @@ public class DistCheckSourceReleaseMojo
         sink.section1();
         sink.paragraph();
         sink.text( "Check Source Release"
-            + " (= <artifactId>-<version>-source-release.zip + .asc + .md5 or .sha*) availability in:" );
+            + " (= <artifactId>-<version>-source-release.zip + .asc + .sha1) availability in:" );
         sink.paragraph_();
         sink.list();
         sink.listItem();
