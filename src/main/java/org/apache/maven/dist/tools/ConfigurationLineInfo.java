@@ -22,8 +22,6 @@ package org.apache.maven.dist.tools;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
@@ -172,17 +170,5 @@ public class ConfigurationLineInfo
     {
         return artifactId + "-" + version
             + ( srcBin && ( dist || !"maven-ant-tasks".equals( artifactId ) ) ? "-src" : "-source-release" ) + ".zip";
-    }
-
-    public List<String> getExpectedFilenames( String version, boolean dist )
-    {
-        String sourceReleaseFilename = getSourceReleaseFilename( version, dist );
-
-        List<String> expectedFiles = new LinkedList<>();
-        expectedFiles.add( sourceReleaseFilename );
-        expectedFiles.add( sourceReleaseFilename + ".asc" );
-        expectedFiles.add( sourceReleaseFilename + ".sha1" );
-
-        return expectedFiles;
     }
 }

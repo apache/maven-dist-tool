@@ -21,10 +21,12 @@ package org.apache.maven.dist.tools.source;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.maven.dist.tools.AbstractDistCheckMojo;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
@@ -292,7 +294,7 @@ public class DistCheckSourceReleaseMojo
         sink.section1();
         sink.paragraph();
         sink.text( "Check Source Release"
-            + " (= <artifactId>-<version>-source-release.zip + .asc + .sha1) availability in:" );
+            + " (= <artifactId>-<version>-source-release.zip + .asc + .sha1 or .sha512) availability in:" );
         sink.paragraph_();
         sink.list();
         sink.listItem();
@@ -490,19 +492,33 @@ public class DistCheckSourceReleaseMojo
     private List<String> checkDirectoryIndex( String url, ConfigurationLineInfo cli, String version, boolean dist )
         throws IOException
     {
-        List<String> retrievedFile = new LinkedList<>();
+        Set<String> retrievedFiles = new HashSet<>();
         Elements links = selectLinks( url );
         for ( Element e : links )
         {
-            retrievedFile.add( e.attr( "href" ) );
+            retrievedFiles.add( e.attr( "href" ) );
         }
 
-        List<String> missingFiles;
-        // initialize missing files with expected release file names
-        missingFiles = cli.getExpectedFilenames( version, dist );
+        String sourceReleaseFilename = cli.getSourceReleaseFilename( version, dist );
 
-        // removed retrieved files
-        missingFiles.removeAll( retrievedFile );
+        List<String> missingFiles = new ArrayList<>();
+
+        // require source release file
+        if ( !retrievedFiles.contains( sourceReleaseFilename ) )
+        {
+            missingFiles.add( sourceReleaseFilename );
+        }
+        // require source release file signature (.asc)
+        if ( !retrievedFiles.contains( sourceReleaseFilename + ".asc" ) )
+        {
+            missingFiles.add( sourceReleaseFilename + ".asc" );
+        }
+        // require source release file checksum (.sha1 or .sha512)
+        if ( !( retrievedFiles.contains( sourceReleaseFilename + ".sha1" )
+            || retrievedFiles.contains( sourceReleaseFilename + ".sha512" ) ) )
+        {
+            missingFiles.add( sourceReleaseFilename + ".sha1 or .sha512" );
+        }
 
         if ( !missingFiles.isEmpty() )
         {
