@@ -148,6 +148,8 @@ public class ListMasterJobsMojo extends AbstractMavenReport
         sink.head_();
         
         sink.body();
+        sink.text( "Jenkins jobs for master branch sorted by status of last build:" );
+        sink.list();
         
         Map<String, List<Result>> groupedResults = repoStatus.stream()
                                                              .collect( Collectors.groupingBy( Result::getStatus ) );
@@ -157,7 +159,9 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                       .sorted( Map.Entry.comparingByKey( resultComparator() ) )
                       .forEach( e -> 
             {
-                sink.text( "Jenkins jobs for master branch with status " + e.getKey() );
+                sink.listItem();
+                int size = e.getValue().size();
+                sink.text( size + " job" + ( size > 1 ? "s" : "" ) + " with status " + e.getKey() + ":" );
                 sink.list();
                 e.getValue().forEach( r -> 
                 {
@@ -170,9 +174,10 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                 } );
                 sink.list_();
                 
-                sink.table_();
+                sink.listItem_();
             } );
         
+        sink.list_();
         sink.body_();
     }
     
