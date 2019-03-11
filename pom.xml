@@ -249,7 +249,7 @@
               <report>check-index-page</report>
               <report>check-errors</report>
               <report>list-plugins-prerequisites</report>
-              <report>check-primary-branch</report>
+              <report>list-master-jobs</report>
             </reports>
           </reportSet>
           <reportSet>

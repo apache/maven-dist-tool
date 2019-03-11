@@ -34,7 +34,11 @@ Results are displayed in 4 reports:
 
 In addition, dist-tool-plugin provides report for some interesting information about Maven artifacts:
 
-* [List Plugins Prerequisites][7] report, displaying plugins' Maven and JDK version prerequisites.
+* [List Plugins Prerequisites][7] report, displaying plugins' Maven and JDK version prerequisites,
+
+or [MavenBox Jenkins Jobs](https://builds.apache.org/job/maven-box/):
+
+* [List Master Jobs][9] report, displaying the status of Jenkins jobs for the master branch of every Git repository on one page.
 
 Notice that this plugin is actually intended for Maven itself only: if interest is expressed to use it
 in other context, it would require more configurations.
@@ -47,3 +51,4 @@ in other context, it would require more configurations.
 [6]: http://maven.apache.org/developers/release/releasing.html
 [7]: ./dist-tool-prerequisites.html
 [8]: ./dist-tool-check-errors.html
+[9]: ./dist-tool-master-jobs.html

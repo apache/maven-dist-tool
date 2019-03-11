@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools.scmrepo;
+package org.apache.maven.dist.tools.masterjobs;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -39,14 +39,16 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- * Generate report with build status of the master for every repository 
+ * Generate report with build status of the Jenkins job for the master branch of every Git repository in
+ * <a href="https://builds.apache.org/job/maven-box/">{@code maven-box} Apache Hosted Git Folder job</a>.
+ *
  * @author Robert Scholte
  */
-@Mojo( name = "check-primary-branch", requiresProject = false )
-public class CheckPrimaryBranchMojo extends AbstractMavenReport
+@Mojo( name = "list-master-jobs", requiresProject = false )
+public class ListMasterJobsMojo extends AbstractMavenReport
 {
     private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
-    private String baseUrl = "https://builds.apache.org/job/maven-box/job/";
+    private String mavenboxJobsBaseUrl = "https://builds.apache.org/job/maven-box/job/";
     
     private Collection<String> excluded = Arrays.asList( "maven-integration-testing", // runs with maven
                                                          "maven-jenkins-env",
@@ -57,19 +59,19 @@ public class CheckPrimaryBranchMojo extends AbstractMavenReport
     @Override
     public String getOutputName()
     {
-        return "check-primary-branch";
+        return "dist-tool-master-jobs";
     }
 
     @Override
     public String getName( Locale locale )
     {
-        return "Check Primary Branch";
+        return "Dist Tool> List Master Jobs";
     }
 
     @Override
     public String getDescription( Locale locale )
     {
-        return "Shows the statuses of all Maven repositories on one page";
+        return "Shows the status of Jenkins job for the master branch of every Git repository on one page";
     }
 
     @Override
@@ -83,7 +85,7 @@ public class CheckPrimaryBranchMojo extends AbstractMavenReport
         }
         catch ( IOException e )
         {
-            throw new MavenReportException( "Failed to extract repositorynames", e );
+            throw new MavenReportException( "Failed to extract repositorynames from Gitbox", e );
         }
         
         List<Result> repoStatus = new ArrayList<>( repositoryNames.size() );
@@ -94,18 +96,18 @@ public class CheckPrimaryBranchMojo extends AbstractMavenReport
         
         for ( String repository : included )
         {
-            Document doc;
+            final String repositoryJobUrl = mavenboxJobsBaseUrl + repository;
+
             try
             {
-                final String buildUrl = baseUrl + repository;
-                doc = JsoupRetry.get( buildUrl );
+                Document doc = JsoupRetry.get( repositoryJobUrl );
                 
-                Result result = new Result( repository, buildUrl );
+                Result result = new Result( repository, repositoryJobUrl );
                 
                 Element masterRow = doc.getElementById( "job_master" );
                 if ( masterRow == null )
                 {
-                    getLog().warn( baseUrl + repository + " is missing id job_master" );
+                    getLog().warn( mavenboxJobsBaseUrl + repository + " is missing id job_master" );
                 }
                 else if ( masterRow.hasClass( "job-status-red" ) )
                 {
@@ -129,7 +131,7 @@ public class CheckPrimaryBranchMojo extends AbstractMavenReport
             }
             catch ( IOException e )
             {
-                getLog().warn( "Failed to read status for " + repository  );
+                getLog().warn( "Failed to read status for " + repository + " Jenkins job " + repositoryJobUrl  );
             }
         }
         
@@ -150,9 +152,12 @@ public class CheckPrimaryBranchMojo extends AbstractMavenReport
         Map<String, List<Result>> groupedResults = repoStatus.stream()
                                                              .collect( Collectors.groupingBy( Result::getStatus ) );
         
-        groupedResults.entrySet().stream().sorted( Map.Entry.comparingByKey( resultComparator() ) ).forEach( e -> 
+        groupedResults.entrySet()
+                      .stream()
+                      .sorted( Map.Entry.comparingByKey( resultComparator() ) )
+                      .forEach( e -> 
             {
-                sink.text( "Repository " + e.getKey() );
+                sink.text( "Jenkins jobs for master branch with status " + e.getKey() );
                 sink.list();
                 e.getValue().forEach( r -> 
                 {
@@ -180,6 +185,13 @@ public class CheckPrimaryBranchMojo extends AbstractMavenReport
             };
     }
 
+    /**
+     * Extract Git repository names for Apache Maven from
+     * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
+     *
+     * @return the list of repository names (without ".git")
+     * @throws IOException
+     */
     protected Collection<String> repositoryNames()
         throws IOException
     {
@@ -194,6 +206,7 @@ public class CheckPrimaryBranchMojo extends AbstractMavenReport
         {
             names.add( element.text().split( "\\.git" )[0] );
         }
+
         return names;
     }
 }

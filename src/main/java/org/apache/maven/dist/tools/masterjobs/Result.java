@@ -1,4 +1,4 @@
-package org.apache.maven.dist.tools.scmrepo;
+package org.apache.maven.dist.tools.masterjobs;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,21 +19,19 @@ package org.apache.maven.dist.tools.scmrepo;
  * under the License.
  */
 
-
 /**
- * Represent build result of a repository  
+ * Represent build result of a Jenkins job for a Git master branch.
  * 
  * @author Robert Scholte
- * 
  */
 public class Result
 {
     private String repositoryName;
-    
+
     private String status;
-    
+
     private String buildUrl;
-    
+
     private String icon;
 
     public Result( String repositoryName, String buildUrl )
@@ -51,22 +49,22 @@ public class Result
     {
         this.icon = icon;
     }
-    
+
     public String getRepositoryName()
     {
         return repositoryName;
     }
-    
+
     public String getStatus()
     {
         return status;
     }
-    
+
     public String getBuildUrl()
     {
         return buildUrl;
     }
-    
+
     public String getIcon()
     {
         return icon;

@@ -36,9 +36,7 @@ under the License.
         </menu>
         <menu name="Dist Tool Informations">
             <item name="List Plugins Prerequisites" href="dist-tool-prerequisites.html" />
-        </menu>
-        <menu name="Build Information">
-            <item name="Primary Branch" href="check-primary-branch.html" />
+            <item name="List Master Jobs" href="dist-tool-master-jobs.html" />
         </menu>
         <menu name="for dev">
             <item name="TODO" href="todo.html" />
