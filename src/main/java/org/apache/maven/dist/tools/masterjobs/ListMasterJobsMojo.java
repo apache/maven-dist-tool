@@ -144,6 +144,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
         
         sink.head();
         sink.title();
+        sink.text( "List Master Jobs" );
         sink.title_();
         sink.head_();
         
