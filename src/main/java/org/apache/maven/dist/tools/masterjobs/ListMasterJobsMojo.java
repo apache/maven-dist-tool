@@ -109,15 +109,15 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                 {
                     getLog().warn( mavenboxJobsBaseUrl + repository + " is missing id job_master" );
                 }
-                else if ( masterRow.hasClass( "job-status-red" ) )
+                else if ( masterRow.hasClass( "job-status-red" ) || masterRow.hasClass( "job-status-red-anime" ) )
                 {
                     result.setStatus( "FAILURE" );
                 }
-                else if ( masterRow.hasClass( "job-status-yellow" ) )
+                else if ( masterRow.hasClass( "job-status-yellow" ) || masterRow.hasClass( "job-status-yellow-anime" ) )
                 {
                     result.setStatus( "UNSTABLE" );
                 }
-                else if ( masterRow.hasClass( "job-status-blue" ) )
+                else if ( masterRow.hasClass( "job-status-blue" ) || masterRow.hasClass( "job-status-blue-anime" ) )
                 {
                     result.setStatus( "SUCCESS" );
                 }
