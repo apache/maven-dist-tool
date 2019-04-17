@@ -168,7 +168,7 @@ public class DistCheckSourceReleaseMojo
         {
             if ( cli.isSrcBin() )
             {
-                String directory = csrr.getVersion() + "/source/";
+                String directory = csrr.getVersion() + "/sources/";
                 sink.link( distributionAreaUrl + cli.getDirectory() + '/' + directory );
                 sink.text( directory );
                 sink.link_();
