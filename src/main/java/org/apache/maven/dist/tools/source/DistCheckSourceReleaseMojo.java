@@ -553,7 +553,7 @@ public class DistCheckSourceReleaseMojo
 
             // dist
             String distUrl = distributionAreaUrl + configLine.getDirectory()
-                + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
+                + ( configLine.isSrcBin() ? ( "/" + version + "/sources" ) : "" );
             result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version, true ) );
             result.setDistOlderSourceRelease( checkContainsOld( distUrl, configLine, version ) );
         }
