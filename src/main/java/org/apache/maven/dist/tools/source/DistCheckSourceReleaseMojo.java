@@ -168,7 +168,7 @@ public class DistCheckSourceReleaseMojo
         {
             if ( cli.isSrcBin() )
             {
-                String directory = csrr.getVersion() + "/sources/";
+                String directory = csrr.getVersion() + "/source/";
                 sink.link( distributionAreaUrl + cli.getDirectory() + '/' + directory );
                 sink.text( directory );
                 sink.link_();
@@ -553,7 +553,7 @@ public class DistCheckSourceReleaseMojo
 
             // dist
             String distUrl = distributionAreaUrl + configLine.getDirectory()
-                + ( configLine.isSrcBin() ? ( "/" + version + "/sources" ) : "" );
+                + ( configLine.isSrcBin() ? ( "/" + version + "/source" ) : "" );
             result.setMissingDistSourceRelease( checkDirectoryIndex( distUrl, configLine, version, true ) );
             result.setDistOlderSourceRelease( checkContainsOld( distUrl, configLine, version ) );
         }
