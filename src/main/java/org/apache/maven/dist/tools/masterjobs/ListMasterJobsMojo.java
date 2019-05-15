@@ -108,6 +108,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                 if ( masterRow == null )
                 {
                     getLog().warn( mavenboxJobsBaseUrl + repository + " is missing id job_master" );
+                    continue;
                 }
                 else if ( masterRow.hasClass( "job-status-red" ) || masterRow.hasClass( "job-status-red-anime" ) )
                 {
