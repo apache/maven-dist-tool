@@ -50,11 +50,16 @@ public class ListMasterJobsMojo extends AbstractMavenReport
     private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
     private String mavenboxJobsBaseUrl = "https://builds.apache.org/job/maven-box/job/";
     
-    private Collection<String> excluded = Arrays.asList( "maven-integration-testing", // runs with maven
+    private Collection<String> excluded = Arrays.asList( "maven-integration-testing", // runs with Maven core job
                                                          "maven-jenkins-env",
                                                          "maven-jenkins-lib",
                                                          "maven-sources",
-                                                         "maven-studies" );
+                                                         "maven-studies",
+                                                         // retired
+                                                         "maven-ant-plugin",
+                                                         "maven-artifact-resolver",
+                                                         "maven-repository-plugin",
+                                                         "maven-runtime" );
 
     @Override
     public String getOutputName()
