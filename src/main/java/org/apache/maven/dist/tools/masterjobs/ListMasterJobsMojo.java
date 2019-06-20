@@ -58,6 +58,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                                                          // retired
                                                          "maven-ant-plugin",
                                                          "maven-artifact-resolver",
+                                                         "maven-downloader",
                                                          "maven-repository-plugin",
                                                          "maven-runtime" );
 
