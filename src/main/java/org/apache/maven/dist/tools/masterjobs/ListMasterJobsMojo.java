@@ -54,15 +54,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                                                          "maven-jenkins-env",
                                                          "maven-jenkins-lib",
                                                          "maven-sources",
-                                                         "maven-studies",
-                                                         // retired
-                                                         "maven-ant-plugin",
-                                                         "maven-artifact-resolver",
-                                                         "maven-downloader",
-                                                         "maven-osgi",
-                                                         "maven-repository-builder",
-                                                         "maven-repository-plugin",
-                                                         "maven-runtime" );
+                                                         "maven-studies" );
 
     @Override
     public String getOutputName()
@@ -215,7 +207,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
         // find Apache Maven table
         Element apacheMavenTable = doc.getElementsMatchingText( "^Apache Maven$" ).parents().get( 0 );
 
-        Elements gitRepo = apacheMavenTable.select( "tbody td:first-child a" );
+        Elements gitRepo = apacheMavenTable.select( "tbody tr" ).not( "tr.disabled" ).select( "td:first-child a" );
 
         for ( Element element : gitRepo )
         {
