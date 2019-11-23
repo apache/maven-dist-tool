@@ -20,11 +20,9 @@ package org.apache.maven.dist.tools.index;
  */
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,12 +53,12 @@ public class DistCheckIndexPageMojo
 {
     public static final String FAILURES_FILENAME = "check-index-page.log";
 
-    public static final String POMS_INDEX_URL = "http://maven.apache.org/pom/";
+    public static final String POMS_INDEX_URL = "https://maven.apache.org/pom/";
 
     private static final IndexPage[] INDEX_PAGES = new IndexPage[] {
-        new IndexPage( "http://maven.apache.org/plugins/", "Plugins", 3, true ),
-        new IndexPage( "http://maven.apache.org/shared/", "Shared", 2, true ),
-        new IndexPage( "http://maven.apache.org/skins/", "Skins", 2, false ),
+        new IndexPage( "https://maven.apache.org/plugins/", "Plugins", 3, true ),
+        new IndexPage( "https://maven.apache.org/shared/", "Shared", 2, true ),
+        new IndexPage( "https://maven.apache.org/skins/", "Skins", 2, false ),
         new IndexPage( POMS_INDEX_URL, "Poms", 2, true ) };
 
     private static final Map<String, IndexPage> INDEX_PAGES_REF;
@@ -186,20 +184,11 @@ public class DistCheckIndexPageMojo
 
     private boolean isDateSimilar( String date1, String date2 )
     {
-        try
-        {
-            DateFormat df = new SimpleDateFormat( "yyyy-MM-dd" );
-            Date d1 = df.parse( date1 );
-            Date d2 = df.parse( date2 );
+        LocalDate d1 = LocalDate.parse( date1 );
+        LocalDate d2 = LocalDate.parse( date2 );
 
-            @SuppressWarnings( "checkstyle:magicnumber" )
-            long daysDifference = ( d1.getTime() - d2.getTime() ) / ( 24 * 60 * 60 * 1000 );
-            return Math.abs( daysDifference ) < 7; // ok for 7 days difference
-        }
-        catch ( ParseException e )
-        {
-            return false;
-        }
+        long daysDifference = Period.between( d1, d2 ).getDays();
+        return Math.abs( daysDifference ) < 7; // ok for 7 days difference
     }
 
     @Override
@@ -292,7 +281,7 @@ public class DistCheckIndexPageMojo
             indexPage.document = doc;
         }
 
-        // Maven parent POM is now a special case in http://maven.apache.org/pom/
+        // Maven parent POM is now a special case in https://maven.apache.org/pom/
         boolean isMavenParentPoms = ( "maven-parent".equals( cli.getArtifactId() ) );
 
         Elements a = isMavenParentPoms ? doc.select( "tr > th > b" )

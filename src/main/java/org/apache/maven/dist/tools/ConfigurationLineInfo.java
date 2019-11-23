@@ -19,9 +19,8 @@ package org.apache.maven.dist.tools;
  * under the License.
  */
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
@@ -151,19 +150,11 @@ public class ConfigurationLineInfo
 
     public String getReleaseDateFromMetadata()
     {
-        try
-        {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMddkkmmss" );
-            Date f = dateFormatter.parse( metadata.getVersioning().getLastUpdated() );
-            // inverted for index page check
-            SimpleDateFormat dateFormattertarget = new SimpleDateFormat( "yyyy-MM-dd" );
-            return dateFormattertarget.format( f );
-        }
-        catch ( ParseException ex )
-        {
-            return "Cannot parse";
-        }
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern( "yyyyMMddkkmmss" );
+        TemporalAccessor ta = dateFormatter.parse( metadata.getVersioning().getLastUpdated() );
 
+        // inverted for index page check
+        return DateTimeFormatter.ISO_LOCAL_DATE.format( ta );
     }
 
     public String getSourceReleaseFilename( String version, boolean dist )

@@ -92,7 +92,7 @@ public class GetPrerequisites
         "maven-war-plugin",
     };
 
-    private static final String BASEURL = "http://maven.apache.org/plugins/";
+    private static final String BASEURL = "https://maven.apache.org/plugins/";
 
     public String getPluginInfoUrl( String pluginName )
     {
