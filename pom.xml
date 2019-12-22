@@ -32,7 +32,7 @@
   <url>https://builds.apache.org/view/M-R/view/Maven/job/dist-tool-plugin/site/</url>
 
   <prerequisites>
-    <maven>3.0.4</maven>
+    <maven>${mvnversion}</maven>
   </prerequisites>
 
   <scm>
@@ -52,7 +52,7 @@
 
   <properties>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
-    <mvnversion>3.0.4</mvnversion>
+    <mvnversion>3.0.5</mvnversion>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>    
   </properties>
