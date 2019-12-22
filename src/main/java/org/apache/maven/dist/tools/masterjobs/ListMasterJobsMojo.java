@@ -197,7 +197,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
      * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
      *
      * @return the list of repository names (without ".git")
-     * @throws IOException
+     * @throws IOException problem with reading repository index
      */
     protected Collection<String> repositoryNames()
         throws IOException
