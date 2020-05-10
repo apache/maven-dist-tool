@@ -528,6 +528,7 @@ public class DistCheckSourceReleaseMojo
                 addErrorLine( cli, version, ignoreDistFailures, " > " + sourceItem + " <" );
             }
             getLog().warn( "==> when reading " + url + " got following hrefs: " + retrievedFiles );
+            getLog().warn( url + " = " + read( url ) );
         }
 
         return missingFiles;
