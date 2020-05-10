@@ -234,7 +234,7 @@
           </ignoreSiteFailures>
           <ignoreDistFailures>
             <ignoreDistFailure>doxia-linkcheck:1.2</ignoreDistFailure>
-            <ignoreDistFailure>apache-maven:2.0.11</ignoreDistFailure><!-- this one is in distribution area but not in central -->
+            <ignoreDistFailure>apache-maven:3.0.5</ignoreDistFailure><!-- unexpected missing sha1 on 1 CDN node used by ASF Jenkins -->
             <ignoreDistFailure>maven-docck-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>maven-reactor-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>file-management:1.2.1</ignoreDistFailure>
