@@ -522,13 +522,17 @@ public class DistCheckSourceReleaseMojo
 
         if ( !missingFiles.isEmpty() )
         {
-            addErrorLine( cli, version, ignoreDistFailures, "Missing file for " + cli.getArtifactId() + " in " + url );
+            boolean error = addErrorLine( cli, version, ignoreDistFailures,
+                                          "Missing file for " + cli.getArtifactId() + " in " + url );
             for ( String sourceItem : missingFiles )
             {
                 addErrorLine( cli, version, ignoreDistFailures, " > " + sourceItem + " <" );
             }
-            getLog().warn( "==> when reading " + url + " got following hrefs: " + retrievedFiles );
-            getLog().warn( url + " = " + read( url ) );
+            if ( error )
+            {
+                getLog().warn( "==> when reading " + url + " got following hrefs: " + retrievedFiles );
+                getLog().warn( url + " = " + read( url ) );
+            }
         }
 
         return missingFiles;

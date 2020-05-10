@@ -396,27 +396,28 @@ public abstract class AbstractDistCheckMojo
      * @param version The version.
      * @param ignore the list of ignores.
      * @param message  The message.
+     * @return true if real error, or false if ignored
      */
-    protected void addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String message ) 
+    protected boolean addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String message ) 
     {
         if ( ( ignore != null )
             && ( ignore.contains( cli.getArtifactId() + ':' + version ) || ignore.contains( cli.getArtifactId() ) ) )
         {
             getLog().warn( message );
+            return false;
         }
-        else
-        {
-            getLog().error( message );
 
-            try ( PrintWriter output = new PrintWriter( new FileWriter( getFailuresFile(), true ) ) )
-            {
-                output.printf( "%s%s", message, EOL );
-            }
-            catch ( Exception e )
-            {
-                getLog().error( "Cannot append to " + getFailuresFilename() );
-            }
+        getLog().error( message );
+
+        try ( PrintWriter output = new PrintWriter( new FileWriter( getFailuresFile(), true ) ) )
+        {
+            output.printf( "%s%s", message, EOL );
         }
+        catch ( Exception e )
+        {
+            getLog().error( "Cannot append to " + getFailuresFilename() );
+        }
+        return true;
     }
 
     private File getFailuresFile()
