@@ -61,10 +61,6 @@ public class PluginPrerequisites
 
     public void setJdkVersion( String jdkVersion )
     {
-        if ( jdkVersion.startsWith( "1." ) )
-        {
-            jdkVersion = jdkVersion.substring( 2 );
-        }
         this.jdkVersion = jdkVersion;
     }
 

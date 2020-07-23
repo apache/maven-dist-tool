@@ -135,7 +135,7 @@ public class GetPrerequisites
 
         //Leave only version part...
         mavenVersion = mavenVersion.replace( "Maven ", "" );
-        jdkVersion = jdkVersion.replace( "JDK ", "" );
+        jdkVersion = jdkVersion.replace( "JDK ", "" ).replace( "1.", "" );
 
         String pluginVersion = doc.select( "pre" ).text();
         int index = pluginVersion.indexOf( "<version>" );
