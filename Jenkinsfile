@@ -44,7 +44,7 @@ pipeline {
             // not sure what is this
             //jenkinsNotify()
             archiveArtifacts artifacts: "**/site/*.*",allowEmptyArchive: true
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'Dist Tool', reportTitles: ''])
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'site', reportTitles: ''])
         }
     }
     options {
