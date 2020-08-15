@@ -41,7 +41,9 @@ pipeline {
     }
     post {
         always {
-            jenkinsNotify()
+            // not sure what is this
+            //jenkinsNotify()
+            archiveArtifacts artifacts: "**/site/*.*",allowEmptyArchive: true
         }
     }
     options {

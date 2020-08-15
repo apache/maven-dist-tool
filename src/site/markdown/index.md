@@ -36,7 +36,7 @@ In addition, dist-tool-plugin provides report for some interesting information a
 
 * [List Plugins Prerequisites][7] report, displaying plugins' Maven and JDK version prerequisites,
 
-or [MavenBox Jenkins Jobs](https://builds.apache.org/job/maven-box/):
+or [MavenBox Jenkins Jobs](https://ci-builds.apache.org/job/Maven/job/maven-box/):
 
 * [List Master Jobs][9] report, displaying the status of Jenkins jobs for the master branch of every Git repository on one page.
 

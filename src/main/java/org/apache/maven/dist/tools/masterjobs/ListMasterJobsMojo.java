@@ -40,7 +40,7 @@ import org.jsoup.select.Elements;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
- * <a href="https://builds.apache.org/job/maven-box/">{@code maven-box} Apache Hosted Git Folder job</a>.
+ * <a href="https://ci-builds.apache.org/job/Maven/job/maven-box/">{@code maven-box} Apache Hosted Git Folder job</a>.
  *
  * @author Robert Scholte
  */
@@ -48,7 +48,7 @@ import org.jsoup.select.Elements;
 public class ListMasterJobsMojo extends AbstractMavenReport
 {
     private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
-    private String mavenboxJobsBaseUrl = "https://builds.apache.org/job/maven-box/job/";
+    private String mavenboxJobsBaseUrl = "https://ci-builds.apache.org/job/Maven/job/maven-box/";
     
     private Collection<String> excluded = Arrays.asList( "maven-integration-testing", // runs with Maven core job
                                                          "maven-jenkins-env",
