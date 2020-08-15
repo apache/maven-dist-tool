@@ -96,7 +96,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
         
         for ( String repository : included )
         {
-            final String repositoryJobUrl = mavenboxJobsBaseUrl + repository;
+            final String repositoryJobUrl = mavenboxJobsBaseUrl + "job/" + repository;
 
             try
             {
