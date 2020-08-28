@@ -20,7 +20,7 @@ Apache [Maven Distribution Tool][report] Plugin
 
 [![ASF Jira](https://img.shields.io/endpoint?url=https%3A%2F%2Fmaven.apache.org%2Fbadges%2Fasf_jira-MNGSITE.json)][jira]
 [![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
-[![Jenkins Status](https://img.shields.io/jenkins/s/https/builds.apache.org/job/maven-box/job/maven/job/master.svg)][build]
+[![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-builds.apache.org/job/Maven/job/maven-box/job/maven/job/master.svg)][build]
 
 
 Maven Distribution Tool plugin is a tool executed daily on Maven CI server to produce [a report][report]
@@ -32,8 +32,8 @@ Quick Build
 mvn clean install site
 ```
 
-[report]: https://builds.apache.org/view/M-R/view/Maven/job/dist-tool-plugin/site/
+[report]: https://ci-builds.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/
 [jira]: https://issues.apache.org/jira/projects/MNGSITE/
 [license]: https://www.apache.org/licenses/LICENSE-2.0
-[build]: https://builds.apache.org/job/dist-tool-plugin/
+[build]: https://ci-builds.apache.org/job/Maven/job/dist-tool-plugin/
 
