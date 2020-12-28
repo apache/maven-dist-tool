@@ -43,7 +43,7 @@ public class GetPrerequisites
     public static final String[] PLUGIN_NAMES = { 
         "maven-acr-plugin", 
         "maven-ant-plugin", 
-        "maven-antrun-plugin",
+//        "maven-antrun-plugin", retired
         "maven-archetype-plugin",
         "maven-assembly-plugin",
         "maven-changelog-plugin",
