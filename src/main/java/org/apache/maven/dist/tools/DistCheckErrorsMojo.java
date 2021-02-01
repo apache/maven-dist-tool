@@ -111,9 +111,9 @@ public class DistCheckErrorsMojo
             if ( isDummyFailure() )
             {
                 throw new MavenReportException(
-                        "Dist Tool> Checks found inconsistencies in some released artifacts, see " +
-                        "https://ci-builds.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/dist-tool-check-errors.html " +
-                        "for more information" );
+                        "Dist Tool> Checks found inconsistencies in some released artifacts, see "
+                        + "https://ci-builds.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/"
+                        + "dist-tool-check-errors.html for more information" );
             }
         }
         else
