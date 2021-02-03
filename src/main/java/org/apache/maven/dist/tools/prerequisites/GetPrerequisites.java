@@ -42,8 +42,8 @@ public class GetPrerequisites
      */
     public static final String[] PLUGIN_NAMES = { 
         "maven-acr-plugin", 
-        "maven-ant-plugin", 
-//        "maven-antrun-plugin", retired
+//        "maven-ant-plugin", // retired
+        "maven-antrun-plugin",
         "maven-archetype-plugin",
         "maven-assembly-plugin",
         "maven-changelog-plugin",
@@ -173,14 +173,13 @@ public class GetPrerequisites
 
     public Map<ArtifactVersion, List<PluginPrerequisites>> getGroupedPrequisites()
     {
-        Map<ArtifactVersion, List<PluginPrerequisites>> result =
-            new HashMap<ArtifactVersion, List<PluginPrerequisites>>();
+        Map<ArtifactVersion, List<PluginPrerequisites>> result = new HashMap<>();
 
         for ( PluginPrerequisites pluginPrerequisites : getPrequisites() )
         {
             if ( !result.containsKey( pluginPrerequisites.getMavenVersion() ) )
             {
-                result.put( pluginPrerequisites.getMavenVersion(), new ArrayList<PluginPrerequisites>() );
+                result.put( pluginPrerequisites.getMavenVersion(), new ArrayList<>() );
             }
             result.get( pluginPrerequisites.getMavenVersion() ).add( pluginPrerequisites );
         }
