@@ -342,9 +342,13 @@ public class ListBranchesMojo extends AbstractMavenReport
 
                 // Jira
                 sink.tableCell();
-                sink.link( JIRA_BASE_URL + r.getRepositoryName() );
-                sink.rawText( JIRAPROJECTS.get( r.getRepositoryName() ) );
-                sink.link_();
+                String jiraId = JIRAPROJECTS.get( r.getRepositoryName() );
+                if ( jiraId != null )
+                {
+                    sink.link( JIRA_BASE_URL + jiraId );
+                    sink.rawText( jiraId );
+                    sink.link_();
+                }
                 sink.tableCell_();
 
                 // Jenkins job
