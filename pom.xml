@@ -263,6 +263,7 @@
               <report>check-errors</report>
               <report>list-plugins-prerequisites</report>
               <report>list-master-jobs</report>
+              <report>list-branches</report>
             </reports>
           </reportSet>
           <reportSet>
