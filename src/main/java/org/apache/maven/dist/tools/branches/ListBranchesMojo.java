@@ -49,14 +49,14 @@ import org.jsoup.select.Elements;
 @Mojo( name = "list-branches", requiresProject = false )
 public class ListBranchesMojo extends AbstractMavenReport
 {
-    private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
-    private String mavenboxJobsBaseUrl = "https://ci-builds.apache.org/job/Maven/job/maven-box/";
-    
-    private Collection<String> excluded = Arrays.asList( "maven-integration-testing", // runs with Maven core job
-                                                         "maven-jenkins-env",
-                                                         "maven-jenkins-lib",
-                                                         "maven-sources",
-                                                         "maven-studies" );
+    private static final String GITBOX_URL = "https://gitbox.apache.org/repos/asf";
+
+    private static final String MAVENBOX_JOBS_BASE_URL = "https://ci-builds.apache.org/job/Maven/job/maven-box/job/";
+
+    private static final Collection<String> EXCLUDED = Arrays.asList( "maven-integration-testing", // runs with Maven
+                                                                                                   // core job
+                                                                      "maven-jenkins-env", "maven-jenkins-lib",
+                                                                      "maven-sources", "maven-studies" );
     
     private static final Map<String, String> JIRAPROJECTS = new HashMap<>();
     
@@ -190,13 +190,13 @@ public class ListBranchesMojo extends AbstractMavenReport
         List<Result> repoStatus = new ArrayList<>( repositoryNames.size() );
         
         Collection<String> included = repositoryNames.stream()
-                                                     .filter( s -> !excluded.contains( s ) )
+                                                     .filter( s -> !EXCLUDED.contains( s ) )
                                                      .collect( Collectors.toList() );
         
         for ( String repository : included )
         {
-            final String gitboxHeadsUrl = gitboxUrl + "?p=" + repository + ".git;a=heads";
-            final String repositoryJobUrl = mavenboxJobsBaseUrl + "job/" + repository;
+            final String gitboxHeadsUrl = GITBOX_URL + "?p=" + repository + ".git;a=heads";
+            final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
 
             try
             {
@@ -405,7 +405,7 @@ public class ListBranchesMojo extends AbstractMavenReport
         throws IOException
     {
         List<String> names = new ArrayList<>( 100 );
-        Document doc = JsoupRetry.get( gitboxUrl );
+        Document doc = JsoupRetry.get( GITBOX_URL );
         // find Apache Maven table
         Element apacheMavenTable = doc.getElementsMatchingText( "^Apache Maven$" ).parents().get( 0 );
 
