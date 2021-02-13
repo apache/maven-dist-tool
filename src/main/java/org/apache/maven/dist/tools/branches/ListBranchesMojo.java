@@ -344,7 +344,7 @@ public class ListBranchesMojo extends AbstractMavenReport
                 sink.tableCell();
                 if ( r.getJiraBranchesGit() == 0 ) 
                 {
-                    sink.text( "0 / 0" );
+                    sink.text( "-" );
                 }
                 else
                 {
@@ -358,7 +358,7 @@ public class ListBranchesMojo extends AbstractMavenReport
                 sink.tableCell();
                 if ( r.getDependabotBranchesGit() == 0 ) 
                 {
-                    sink.text( "0 / 0" );
+                    sink.text( "-" );
                 }
                 else
                 {
@@ -372,7 +372,7 @@ public class ListBranchesMojo extends AbstractMavenReport
                 sink.tableCell();
                 if ( r.getRestGit() == 0 ) 
                 {
-                    sink.text( "0 / 0" );
+                    sink.text( "-" );
                 }
                 else
                 {
