@@ -300,7 +300,7 @@ public class ListBranchesMojo extends AbstractMavenReport
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.text( "repository" );
+        sink.text( "Jenkins job / GitHub" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text( "master" );
@@ -327,6 +327,10 @@ public class ListBranchesMojo extends AbstractMavenReport
                 
                 sink.tableCell();
                 sink.link( r.getBuildUrl() );
+                sink.rawText( r.getRepositoryName() );
+                sink.link_();
+                sink.rawText( " / " );
+                sink.link( "https://github.com/apache/" + r.getRepositoryName() );
                 sink.rawText( r.getRepositoryName() );
                 sink.link_();
                 sink.tableCell_();
