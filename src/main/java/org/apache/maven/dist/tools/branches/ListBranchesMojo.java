@@ -302,7 +302,13 @@ public class ListBranchesMojo extends AbstractMavenReport
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.text( "Jenkins job / GitHub" );
+        sink.text( "GitHub" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text( "JIRA" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text( "Jenkins job" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text( "master" );
@@ -326,13 +332,24 @@ public class ListBranchesMojo extends AbstractMavenReport
             .forEach( r -> 
             {
                 sink.tableRow();
-                
+
+                // GitHub
                 sink.tableCell();
-                sink.link( r.getBuildUrl() );
+                sink.link( "https://github.com/apache/" + r.getRepositoryName() );
                 sink.rawText( r.getRepositoryName() );
                 sink.link_();
-                sink.rawText( " / " );
-                sink.link( "https://github.com/apache/" + r.getRepositoryName() );
+                sink.tableCell_();
+
+                // Jira
+                sink.tableCell();
+                sink.link( JIRA_BASE_URL + r.getRepositoryName() );
+                sink.rawText( JIRAPROJECTS.get( r.getRepositoryName() ) );
+                sink.link_();
+                sink.tableCell_();
+
+                // Jenkins job
+                sink.tableCell();
+                sink.link( r.getBuildUrl() );
                 sink.rawText( r.getRepositoryName() );
                 sink.link_();
                 sink.tableCell_();
@@ -344,10 +361,6 @@ public class ListBranchesMojo extends AbstractMavenReport
 
                 //jira branches
                 sink.tableCell();
-                sink.link( JIRA_BASE_URL + r.getRepositoryName() );
-                sink.rawText( JIRAPROJECTS.get( r.getRepositoryName() ) );
-                sink.link_();
-                sink.rawText( ": " );
                 if ( r.getJiraBranchesGit() == 0 ) 
                 {
                     sink.text( "-" );
