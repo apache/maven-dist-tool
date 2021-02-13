@@ -49,6 +49,8 @@ import org.jsoup.select.Elements;
 @Mojo( name = "list-branches", requiresProject = false )
 public class ListBranchesMojo extends AbstractMavenReport
 {
+    private static final String JIRA_BASE_URL = "https://issues.apache.org/jira/projects/";
+
     private static final String GITBOX_URL = "https://gitbox.apache.org/repos/asf";
 
     private static final String MAVENBOX_JOBS_BASE_URL = "https://ci-builds.apache.org/job/Maven/job/maven-box/job/";
@@ -342,6 +344,10 @@ public class ListBranchesMojo extends AbstractMavenReport
 
                 //jira branches
                 sink.tableCell();
+                sink.link( JIRA_BASE_URL + r.getRepositoryName() );
+                sink.rawText( JIRAPROJECTS.get( r.getRepositoryName() ) );
+                sink.link_();
+                sink.rawText( ": " );
                 if ( r.getJiraBranchesGit() == 0 ) 
                 {
                     sink.text( "-" );
