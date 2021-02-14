@@ -19,6 +19,8 @@ package org.apache.maven.dist.tools.branches;
  * under the License.
  */
 
+import java.util.Collection;
+
 /**
  * Represent build result of a Jenkins job for a Git master branch.
  * 
@@ -33,14 +35,14 @@ public class Result
     private int masterBranchesGit;
     private int masterBranchesJenkins;
     
-    private int jiraBranchesGit;
-    private int jiraBranchesJenkins;
+    private Collection<String> jiraBranchesGit;
+    private Collection<String> jiraBranchesJenkins;
     
-    private int dependabotBranchesGit;
-    private int dependabotBranchesJenkins;
+    private Collection<String> dependabotBranchesGit;
+    private Collection<String> dependabotBranchesJenkins;
     
-    private int restGit;
-    private int restJenkins;
+    private Collection<String> restGit;
+    private Collection<String> restJenkins;
     
     public Result( String repositoryName, String buildUrl )
     {
@@ -68,62 +70,62 @@ public class Result
         this.masterBranchesJenkins = masterBranchesJenkins;
     }
 
-    public int getJiraBranchesGit()
+    public Collection<String> getJiraBranchesGit()
     {
         return jiraBranchesGit;
     }
 
-    public void setJiraBranchesGit( int jiraBranches )
+    public void setJiraBranchesGit( Collection<String> jiraBranches )
     {
         this.jiraBranchesGit = jiraBranches;
     }
 
-    public int getJiraBranchesJenkins()
+    public Collection<String> getJiraBranchesJenkins()
     {
         return jiraBranchesJenkins;
     }
     
-    public void setJiraBranchesJenkins( int jiraBranchesJenkins )
+    public void setJiraBranchesJenkins( Collection<String> jiraBranchesJenkins )
     {
         this.jiraBranchesJenkins = jiraBranchesJenkins;
     }
     
-    public int getDependabotBranchesGit()
+    public Collection<String> getDependabotBranchesGit()
     {
         return dependabotBranchesGit;
     }
 
-    public void setDependabotBranchesGit( int dependabotBranches )
+    public void setDependabotBranchesGit( Collection<String> dependabotBranches )
     {
         this.dependabotBranchesGit = dependabotBranches;
     }
     
-    public int getDependabotBranchesJenkins()
+    public Collection<String> getDependabotBranchesJenkins()
     {
         return dependabotBranchesJenkins;
     }
     
-    public void setDependabotBranchesJenkins( int dependabotBranchesJenkins )
+    public void setDependabotBranchesJenkins( Collection<String> dependabotBranchesJenkins )
     {
         this.dependabotBranchesJenkins = dependabotBranchesJenkins;
     }
 
-    public int getRestGit()
+    public Collection<String> getRestGit()
     {
         return restGit;
     }
 
-    public void setRestGit( int rest )
+    public void setRestGit( Collection<String> rest )
     {
         this.restGit = rest;
     }
     
-    public int getRestJenkins()
+    public Collection<String> getRestJenkins()
     {
         return restJenkins;
     }
     
-    public void setRestJenkins( int restJenkins )
+    public void setRestJenkins( Collection<String> restJenkins )
     {
         this.restJenkins = restJenkins;
     }
@@ -140,12 +142,13 @@ public class Result
     
     public final int getTotalGit()
     {
-        return masterBranchesGit + jiraBranchesGit + dependabotBranchesGit + restGit;
+        return masterBranchesGit + jiraBranchesGit.size() + dependabotBranchesGit.size() + restGit.size();
     }
     
     public final int getTotalJenkins()
     {
-        return masterBranchesJenkins + jiraBranchesJenkins + dependabotBranchesJenkins + restJenkins;
+        return masterBranchesJenkins + jiraBranchesJenkins.size() + dependabotBranchesJenkins.size()
+            + restJenkins.size();
     }
  
 }

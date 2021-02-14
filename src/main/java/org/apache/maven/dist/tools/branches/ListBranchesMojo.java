@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.SinkEventAttributes;
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
@@ -217,12 +219,12 @@ public class ListBranchesMojo extends AbstractMavenReport
                 Result result = new Result( repository, repositoryJobUrl );
                 int masterBranchesGit = 0;
                 int masterBranchesJenkins = 0;
-                int jiraBranchesGit = 0;
-                int jiraBranchesJenkins = 0;
-                int dependabotBranchesGit = 0;
-                int dependabotBranchesJenkins = 0;
-                int restGit = 0;
-                int restJenkins = 0;
+                Collection<String> jiraBranchesGit = new ArrayList<>();
+                Collection<String> jiraBranchesJenkins = new ArrayList<>();
+                Collection<String> dependabotBranchesGit = new ArrayList<>();
+                Collection<String> dependabotBranchesJenkins = new ArrayList<>();
+                Collection<String> restGit = new ArrayList<>();
+                Collection<String> restJenkins = new ArrayList<>();
                 
                 for ( Element tableRow : headsTable.select( "tr" ) )
                 {
@@ -240,26 +242,26 @@ public class ListBranchesMojo extends AbstractMavenReport
                     else if ( JIRAPROJECTS.containsKey( repository )
                         && name.toUpperCase().startsWith( JIRAPROJECTS.get( repository ) + '-' ) )
                     {
-                        jiraBranchesGit++;
+                        jiraBranchesGit.add( name );
                         if ( jenkinsBranchesDoc.getElementById( URLEncoder.encode( "job_" + name, "UTF-8" ) ) != null )
                         {
-                            jiraBranchesJenkins++;
+                            jiraBranchesJenkins.add( name );
                         }
                     }
                     else if ( name.startsWith( "dependabot/" ) )
                     {
-                        dependabotBranchesGit++;
+                        dependabotBranchesGit.add( name );
                         if ( jenkinsBranchesDoc.getElementById( URLEncoder.encode( "job_" + name, "UTF-8" ) ) != null )
                         {
-                            dependabotBranchesJenkins++;
+                            dependabotBranchesJenkins.add( name );
                         }
                     }
                     else
                     {
-                        restGit++;
+                        restGit.add( name );
                         if ( jenkinsBranchesDoc.getElementById( URLEncoder.encode( "job_" + name, "UTF-8" ) ) != null )
                         {
-                            restJenkins++;
+                            restJenkins.add( name );
                         }
                     }
                 }
@@ -302,13 +304,10 @@ public class ListBranchesMojo extends AbstractMavenReport
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.text( "GitHub" );
+        sink.text( "Repository" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text( "JIRA" );
-        sink.tableHeaderCell_();
-        sink.tableHeaderCell();
-        sink.text( "Jenkins job" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text( "master" );
@@ -335,9 +334,7 @@ public class ListBranchesMojo extends AbstractMavenReport
 
                 // GitHub
                 sink.tableCell();
-                sink.link( "https://github.com/apache/" + r.getRepositoryName() );
-                sink.rawText( r.getRepositoryName() );
-                sink.link_();
+                sink.text( r.getRepositoryName() );
                 sink.tableCell_();
 
                 // Jira
@@ -351,13 +348,6 @@ public class ListBranchesMojo extends AbstractMavenReport
                 }
                 sink.tableCell_();
 
-                // Jenkins job
-                sink.tableCell();
-                sink.link( r.getBuildUrl() );
-                sink.rawText( r.getRepositoryName() );
-                sink.link_();
-                sink.tableCell_();
-
                 // master
                 sink.tableCell();
                 sink.text( r.getMasterBranchesJenkins() + " / " + r.getMasterBranchesGit()  );
@@ -365,43 +355,92 @@ public class ListBranchesMojo extends AbstractMavenReport
 
                 //jira branches
                 sink.tableCell();
-                if ( r.getJiraBranchesGit() == 0 ) 
+                if ( r.getJiraBranchesGit().isEmpty() ) 
                 {
                     sink.text( "-" );
                 }
                 else
                 {
+                    SinkEventAttributes jenkinsLinkAttributes = new SinkEventAttributeSet();
+                    jenkinsLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                         r.getJiraBranchesJenkins().stream().collect( Collectors.joining( "\n" ) ) );
+
+                    SinkEventAttributes gitLinkAttributes = new SinkEventAttributeSet();
+                    r.getJiraBranchesGit().stream()
+                        .filter( n -> !r.getJiraBranchesJenkins().contains( n ) )
+                        .reduce( ( n1, n2 ) -> n1 + "\n" + n2 )
+                        .ifPresent( t -> gitLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                                                         "-- non-Jenkins branches --\n" + t ) );
+                    
                     sink.bold();
-                    sink.text( r.getJiraBranchesJenkins() + " / " + r.getJiraBranchesGit() );
+                    sink.link( r.getBuildUrl(), jenkinsLinkAttributes );
+                    sink.rawText( String.valueOf( r.getJiraBranchesJenkins().size() ) );
+                    sink.link_();
+                    sink.text( " / " );
+                    sink.link( r.getBuildUrl(), gitLinkAttributes );
+                    sink.rawText( String.valueOf( r.getJiraBranchesGit().size() ) );
+                    sink.link_();
                     sink.bold_();
                 }
                 sink.tableCell_();
 
                 // dependabot branches
                 sink.tableCell();
-                if ( r.getDependabotBranchesGit() == 0 ) 
+                if ( r.getDependabotBranchesGit().isEmpty() ) 
                 {
                     sink.text( "-" );
                 }
                 else
                 {
+                    SinkEventAttributes jenkinsLinkAttributes = new SinkEventAttributeSet();
+                    jenkinsLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                     r.getDependabotBranchesJenkins().stream().collect( Collectors.joining( "\n" ) ) );
+
+                    SinkEventAttributes gitLinkAttributes = new SinkEventAttributeSet();
+                    r.getDependabotBranchesGit().stream()
+                        .filter( n -> !r.getDependabotBranchesJenkins().contains( n ) )
+                        .reduce( ( n1, n2 ) -> n1 + "\n" + n2 )
+                        .ifPresent( t -> gitLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                                                         "-- non-Jenkins branches --\n" + t ) );
+                    
                     sink.bold();
-                    sink.text( r.getDependabotBranchesJenkins() + " / " + r.getDependabotBranchesGit() );
-                    sink.bold_();
+                    sink.link( r.getBuildUrl(), jenkinsLinkAttributes );
+                    sink.rawText( String.valueOf( r.getDependabotBranchesJenkins().size() ) );
+                    sink.link_();
+                    sink.text( " / " );
+                    sink.link( r.getBuildUrl(), gitLinkAttributes );
+                    sink.rawText( String.valueOf( r.getDependabotBranchesGit().size() ) );
+                    sink.link_();
                 }
                 sink.tableCell_();
 
                 // rest
                 sink.tableCell();
-                if ( r.getRestGit() == 0 ) 
+                if ( r.getRestGit().isEmpty() ) 
                 {
                     sink.text( "-" );
                 }
                 else
                 {
+                    SinkEventAttributes jenkinsLinkAttributes = new SinkEventAttributeSet();
+                    jenkinsLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                         r.getRestJenkins().stream().collect( Collectors.joining( "\n" ) ) );
+
+                    SinkEventAttributes gitLinkAttributes = new SinkEventAttributeSet();
+                    r.getRestGit().stream()
+                        .filter( n -> !r.getRestJenkins().contains( n ) )
+                        .reduce( ( n1, n2 ) -> n1 + "\n" + n2 )
+                        .ifPresent( t -> gitLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                                                         "-- non-Jenkins branches --\n" + t ) );
+                    
                     sink.bold();
-                    sink.text( r.getRestJenkins() + " / " + r.getRestGit() );
-                    sink.bold_();
+                    sink.link( r.getBuildUrl(), jenkinsLinkAttributes );
+                    sink.rawText( String.valueOf( r.getRestJenkins().size() ) );
+                    sink.link_();
+                    sink.text( " / " );
+                    sink.link( r.getBuildUrl(), gitLinkAttributes );
+                    sink.rawText( String.valueOf( r.getRestGit().size() ) );
+                    sink.link_();
                 }
                 sink.tableCell_();
                 
