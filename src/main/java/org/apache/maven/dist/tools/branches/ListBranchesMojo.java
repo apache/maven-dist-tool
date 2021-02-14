@@ -199,7 +199,7 @@ public class ListBranchesMojo extends AbstractMavenReport
         
         for ( String repository : included )
         {
-            final String gitboxHeadsUrl = GITBOX_URL + "?p=" + repository + ".git;a=heads";
+            final String gitboxHeadsUrl = getGitboxHeadsUrl( repository );
             final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
 
             try
@@ -284,6 +284,11 @@ public class ListBranchesMojo extends AbstractMavenReport
         
         generateReport( repoStatus );
     }
+
+    private String getGitboxHeadsUrl( String repository )
+    {
+        return GITBOX_URL + "?p=" + repository + ".git;a=heads";
+    }
     
     private void generateReport( List<Result> repoStatus )
     {
@@ -361,9 +366,9 @@ public class ListBranchesMojo extends AbstractMavenReport
                 }
                 else
                 {
-                    SinkEventAttributes jenkinsLinkAttributes = new SinkEventAttributeSet();
-                    jenkinsLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
-                                         r.getJiraBranchesJenkins().stream().collect( Collectors.joining( "\n" ) ) );
+                    SinkEventAttributes jiraLinkAttributes = new SinkEventAttributeSet();
+                    jiraLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                       r.getJiraBranchesJenkins().stream().collect( Collectors.joining( "\n" ) ) );
 
                     SinkEventAttributes gitLinkAttributes = new SinkEventAttributeSet();
                     r.getJiraBranchesGit().stream()
@@ -373,11 +378,11 @@ public class ListBranchesMojo extends AbstractMavenReport
                                                                          "-- non-Jenkins branches --\n" + t ) );
                     
                     sink.bold();
-                    sink.link( r.getBuildUrl(), jenkinsLinkAttributes );
+                    sink.link( r.getBuildUrl(), jiraLinkAttributes );
                     sink.rawText( String.valueOf( r.getJiraBranchesJenkins().size() ) );
                     sink.link_();
                     sink.text( " / " );
-                    sink.link( r.getBuildUrl(), gitLinkAttributes );
+                    sink.link( getGitboxHeadsUrl( r.getRepositoryName() ), gitLinkAttributes );
                     sink.rawText( String.valueOf( r.getJiraBranchesGit().size() ) );
                     sink.link_();
                     sink.bold_();
@@ -408,7 +413,7 @@ public class ListBranchesMojo extends AbstractMavenReport
                     sink.rawText( String.valueOf( r.getDependabotBranchesJenkins().size() ) );
                     sink.link_();
                     sink.text( " / " );
-                    sink.link( r.getBuildUrl(), gitLinkAttributes );
+                    sink.link( getGitboxHeadsUrl( r.getRepositoryName() ), gitLinkAttributes );
                     sink.rawText( String.valueOf( r.getDependabotBranchesGit().size() ) );
                     sink.link_();
                 }
@@ -422,9 +427,9 @@ public class ListBranchesMojo extends AbstractMavenReport
                 }
                 else
                 {
-                    SinkEventAttributes jenkinsLinkAttributes = new SinkEventAttributeSet();
-                    jenkinsLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
-                                         r.getRestJenkins().stream().collect( Collectors.joining( "\n" ) ) );
+                    SinkEventAttributes restLinkAttributes = new SinkEventAttributeSet();
+                    restLinkAttributes.addAttribute( SinkEventAttributes.TITLE,
+                                       r.getRestJenkins().stream().collect( Collectors.joining( "\n" ) ) );
 
                     SinkEventAttributes gitLinkAttributes = new SinkEventAttributeSet();
                     r.getRestGit().stream()
@@ -434,11 +439,11 @@ public class ListBranchesMojo extends AbstractMavenReport
                                                                          "-- non-Jenkins branches --\n" + t ) );
                     
                     sink.bold();
-                    sink.link( r.getBuildUrl(), jenkinsLinkAttributes );
+                    sink.link( r.getBuildUrl(), restLinkAttributes );
                     sink.rawText( String.valueOf( r.getRestJenkins().size() ) );
                     sink.link_();
                     sink.text( " / " );
-                    sink.link( r.getBuildUrl(), gitLinkAttributes );
+                    sink.link( getGitboxHeadsUrl( r.getRepositoryName() ), gitLinkAttributes );
                     sink.rawText( String.valueOf( r.getRestGit().size() ) );
                     sink.link_();
                 }
