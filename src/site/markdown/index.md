@@ -38,7 +38,9 @@ In addition, dist-tool-plugin provides report for some interesting information a
 
 or [MavenBox Jenkins Jobs](https://ci-builds.apache.org/job/Maven/job/maven-box/):
 
-* [List Master Jobs][9] report, displaying the status of Jenkins jobs for the master branch of every Git repository on one page.
+* [List Master Jobs][9] report, displaying the status of Jenkins jobs for the master branch of every Git repository on one page,
+
+* [List Branches][10] report, displaying Jenkins branches vs Git branches by types of branches (master, Jira, dependabot, other).
 
 Notice that this plugin is actually intended for Maven itself only: if interest is expressed to use it
 in other context, it would require more configurations.
@@ -52,3 +54,4 @@ in other context, it would require more configurations.
 [7]: ./dist-tool-prerequisites.html
 [8]: ./dist-tool-check-errors.html
 [9]: ./dist-tool-master-jobs.html
+[10]: ./dist-tool-branches.html
