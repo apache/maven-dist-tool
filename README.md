@@ -29,7 +29,7 @@ of the different checks done on our releases.
 Quick Build
 -------
 ```
-mvn clean install site
+mvn verify site
 ```
 
 [report]: https://ci-builds.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/

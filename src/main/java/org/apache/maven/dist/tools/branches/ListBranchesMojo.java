@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.maven.dist.tools.JsoupRetry;
@@ -292,6 +293,15 @@ public class ListBranchesMojo extends AbstractMavenReport
     
     private void generateReport( List<Result> repoStatus )
     {
+        AtomicInteger masterJenkinsTotal = new AtomicInteger();
+        AtomicInteger masterGitTotal = new AtomicInteger();
+        AtomicInteger jiraJenkinsTotal = new AtomicInteger();
+        AtomicInteger jiraGitTotal = new AtomicInteger();
+        AtomicInteger dependabotJenkinsTotal = new AtomicInteger();
+        AtomicInteger dependabotGitTotal = new AtomicInteger();
+        AtomicInteger restJenkinsTotal = new AtomicInteger();
+        AtomicInteger restGitTotal = new AtomicInteger();
+        
         Sink sink = getSink();
         
         sink.head();
@@ -315,13 +325,16 @@ public class ListBranchesMojo extends AbstractMavenReport
         sink.text( "JIRA" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
+        sink.text( "Branches:" );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
         sink.text( "master" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.text( "JIRA branches" );
+        sink.text( "JIRA" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.text( "Dependabot Branches" );
+        sink.text( "Dependabot" );
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text( "Rest" );
@@ -353,10 +366,16 @@ public class ListBranchesMojo extends AbstractMavenReport
                 }
                 sink.tableCell_();
 
+                // branches:
+                sink.tableCell();
+                sink.tableCell_();
+
                 // master
                 sink.tableCell();
                 sink.text( r.getMasterBranchesJenkins() + " / " + r.getMasterBranchesGit()  );
                 sink.tableCell_();
+                masterJenkinsTotal.addAndGet( r.getMasterBranchesJenkins() );
+                masterGitTotal.addAndGet( r.getMasterBranchesGit() );
 
                 //jira branches
                 sink.tableCell();
@@ -386,6 +405,9 @@ public class ListBranchesMojo extends AbstractMavenReport
                     sink.rawText( String.valueOf( r.getJiraBranchesGit().size() ) );
                     sink.link_();
                     sink.bold_();
+                    
+                    jiraJenkinsTotal.addAndGet( r.getJiraBranchesJenkins().size() );
+                    jiraGitTotal.addAndGet( r.getJiraBranchesGit().size() );
                 }
                 sink.tableCell_();
 
@@ -416,6 +438,9 @@ public class ListBranchesMojo extends AbstractMavenReport
                     sink.link( getGitboxHeadsUrl( r.getRepositoryName() ), gitLinkAttributes );
                     sink.rawText( String.valueOf( r.getDependabotBranchesGit().size() ) );
                     sink.link_();
+                    
+                    dependabotJenkinsTotal.addAndGet( r.getDependabotBranchesJenkins().size() );
+                    dependabotGitTotal.addAndGet( r.getDependabotBranchesGit().size() );
                 }
                 sink.tableCell_();
 
@@ -446,6 +471,9 @@ public class ListBranchesMojo extends AbstractMavenReport
                     sink.link( getGitboxHeadsUrl( r.getRepositoryName() ), gitLinkAttributes );
                     sink.rawText( String.valueOf( r.getRestGit().size() ) );
                     sink.link_();
+                    
+                    restJenkinsTotal.addAndGet( r.getRestJenkins().size() );
+                    restGitTotal.addAndGet( r.getRestGit().size() );
                 }
                 sink.tableCell_();
                 
@@ -456,6 +484,35 @@ public class ListBranchesMojo extends AbstractMavenReport
                 
                 sink.tableRow_();
             } );
+        
+        sink.tableRow();
+        sink.tableHeaderCell();
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.tableHeaderCell_();
+        // branches:
+        sink.tableCell();
+        sink.text( "Total"  );
+        sink.tableCell_();
+        sink.tableHeaderCell();
+        sink.text( masterJenkinsTotal.get() + " / " + masterGitTotal.get()  );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text( jiraJenkinsTotal.get() + " / " + jiraGitTotal.get() );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text( dependabotJenkinsTotal.get() + " / " + dependabotGitTotal.get() );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text( restJenkinsTotal.get() +  " / " + restGitTotal.get() );
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text( 
+           ( masterJenkinsTotal.get() + jiraJenkinsTotal.get() + dependabotJenkinsTotal.get() + restJenkinsTotal.get() )
+            + " / "
+            + ( masterGitTotal.get() + jiraGitTotal.get() + dependabotGitTotal.get() + restGitTotal.get() ) );
+        sink.tableHeaderCell_();
+        sink.tableRow_();
         
         sink.table_();
         sink.body_();
@@ -474,7 +531,7 @@ public class ListBranchesMojo extends AbstractMavenReport
         List<String> names = new ArrayList<>( 100 );
         Document doc = JsoupRetry.get( GITBOX_URL );
         // find Apache Maven table
-        Element apacheMavenTable = doc.getElementsMatchingText( "^Apache Maven$" ).parents().get( 0 );
+        Element apacheMavenTable = doc.getElementById( "maven" );
 
         Elements gitRepo = apacheMavenTable.select( "tbody tr" ).not( "tr.disabled" ).select( "td:first-child a" );
 
