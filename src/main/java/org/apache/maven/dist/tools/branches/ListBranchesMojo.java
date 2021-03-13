@@ -58,9 +58,7 @@ public class ListBranchesMojo extends AbstractMavenReport
 
     private static final String MAVENBOX_JOBS_BASE_URL = "https://ci-builds.apache.org/job/Maven/job/maven-box/job/";
 
-    private static final Collection<String> EXCLUDED = Arrays.asList( "maven-integration-testing", // runs with Maven
-                                                                                                   // core job
-                                                                      "maven-jenkins-env", "maven-jenkins-lib",
+    private static final Collection<String> EXCLUDED = Arrays.asList( "maven-jenkins-env", "maven-jenkins-lib",
                                                                       "maven-sources", "maven-studies" );
     
     private static final Map<String, String> JIRAPROJECTS = new HashMap<>();
@@ -107,13 +105,14 @@ public class ListBranchesMojo extends AbstractMavenReport
         JIRAPROJECTS.put( "maven-help-plugin", "MHELP" );
         JIRAPROJECTS.put( "maven-indexer", "MINDEXER" );
         JIRAPROJECTS.put( "maven-install-plugin", "MINSTALL" );
+        JIRAPROJECTS.put( "maven-integration-testing", "MNG" );
         JIRAPROJECTS.put( "maven-invoker", "MSHARED" );
         JIRAPROJECTS.put( "maven-invoker-plugin", "MINVOKER" );
         JIRAPROJECTS.put( "maven-jar-plugin", "MJAR" );
         JIRAPROJECTS.put( "maven-jarsigner", "MSHARED" );
         JIRAPROJECTS.put( "maven-jarsigner-plugin", "MJARSIGNER" );
         JIRAPROJECTS.put( "maven-javadoc-plugin", "MJAVADOC" );
-        JIRAPROJECTS.put( "maven-jdeprscan-plugin", "MJDEPSCAN" );
+        JIRAPROJECTS.put( "maven-jdeprscan-plugin", "MJDEPRSCAN" );
         JIRAPROJECTS.put( "maven-jdeps-plugin", "MJDEPS" );
         JIRAPROJECTS.put( "maven-jlink-plugin", "MJLINK" );
         JIRAPROJECTS.put( "maven-jmod-plugin", "MJMOD" );
