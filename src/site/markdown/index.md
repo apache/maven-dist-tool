@@ -45,6 +45,13 @@ or [MavenBox Jenkins Jobs](https://ci-builds.apache.org/job/Maven/job/maven-box/
 Notice that this plugin is actually intended for Maven itself only: if interest is expressed to use it
 in other context, it would require more configurations.
 
+## Maven Core Performance Checks 
+
+* [Memory Check](https://github.com/quick-perf/maven-test-bench/) [![Daily Memory Check](https://github.com/quick-perf/maven-test-bench/actions/workflows/memorycheck.yml/badge.svg)](https://github.com/quick-perf/maven-test-bench/actions/workflows/memorycheck.yml), 
+running `mvn validate` on a massive multi module project, and we make sure that [memory allocation stay under a certain threshold](https://github.com/quick-perf/maven-test-bench/blob/master/maven-perf/src/test/java/org/quickperf/maven/bench/head/MvnValidateMaxAllocation.java#L52). 
+
+_Powered by [QuickPerf](https://github.com/quick-perf/)_
+
 [1]: ./dist-tool-check-site.html
 [2]: ./dist-tool-check-source-release.html
 [3]: ./dist-tool-check-index-page.html
