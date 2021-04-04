@@ -19,12 +19,10 @@ package org.apache.maven.dist.tools.site;
  * under the License.
  */
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -32,7 +30,6 @@ import org.apache.maven.dist.tools.AbstractDistCheckMojo;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -42,11 +39,6 @@ import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
 /**
  *
  * @author skygo
@@ -80,13 +72,7 @@ public class DistCheckSiteMojo
      */
     @Component
     protected MavenProjectBuilder mavenProjectBuilder;
-    
-    /**
-     * Take screenshot with web browser
-     */
-    @Parameter( property = "screenshot", defaultValue = "false" )
-    protected boolean screenShot;
-    
+
     /**
      * Http status ok code.
      */
@@ -118,7 +104,6 @@ public class DistCheckSiteMojo
     // keep result
     private List<CheckSiteResult> results = new LinkedList<>();
     private final List<HTMLChecker> checker = HTMLCheckerFactory.getCheckers();
-    private WebDriver driver;
 
     @Override
     protected void executeReport( Locale locale )
@@ -168,12 +153,6 @@ public class DistCheckSiteMojo
         sink.lineBreak();
         sink.rawText( "Comments on top of html" );
         sink.tableHeaderCell_();
-        if ( screenShot )
-        {
-            sink.tableHeaderCell();
-            sink.rawText( "Screen" );
-            sink.tableHeaderCell_();
-        }
         sink.tableHeaderCell();
         sink.rawText( "Artifact version displayed" );
         sink.tableHeaderCell_();
@@ -211,7 +190,7 @@ public class DistCheckSiteMojo
             sink.tableCell();
             sink.rawText( csr.getVersion() );
             sink.tableCell_();
-            
+
             sink.tableCell();
             sink.rawText( cli.getReleaseDateFromMetadata() );
             sink.tableCell_();
@@ -227,19 +206,7 @@ public class DistCheckSiteMojo
             sink.lineBreak();
             csr.getSkins( sink );
             sink.tableCell_();
-            if ( screenShot )
-            {
-                sink.tableCell();
-                sink.figure( null );
-                SinkEventAttributeSet atts = new SinkEventAttributeSet();
-                // no direct attribute, override style only
-                atts.addAttribute( "style", "height:200px;width:200px" );
-                atts.addAttribute( "alt", getSimplifiedUrl( csr.getUrl() ) );
-                sink.figureGraphics( csr.getScreenShot(), atts );
-                sink.figure_();
-                sink.tableCell_();
-            }
-            
+
             sink.tableCell();
             csr.getOverall( sink );
             sink.tableCell_();
@@ -280,21 +247,12 @@ public class DistCheckSiteMojo
 
             result.setUrl( siteUrl );
             Document doc = JsoupRetry.get( siteUrl );
-            if ( screenShot )
-            {
-                driver.get( artifactProject.getUrl() );
-                File scrFile = ( ( TakesScreenshot ) driver ).getScreenshotAs( OutputType.FILE );
-                String fileName = "images" + File.separator
-                        + cli.getGroupId() + "_" + cli.getArtifactId() + ".png";
-                result.setScreenShot( fileName );
-                FileUtils.copyFile( scrFile, new File( getReportOutputDirectory(), fileName ) );
-            }
             for ( HTMLChecker c : checker )
             {
                 result.getCheckMap().put( c, c.isOk( doc, version ) );
             }
             result.setDocument( doc );
-            
+
         }
         catch ( HttpStatusException hes )
         {
@@ -318,28 +276,5 @@ public class DistCheckSiteMojo
         throws MojoExecutionException
     {
         checkSite( configLine, latestVersion );
-    }
-
-    @Override
-    public void execute()
-        throws MojoExecutionException
-    {
-        try
-        {
-            //resolve only to what we set
-            if ( screenShot )
-            {
-                // create driver once reduce time to complete mojo
-                driver = new FirefoxDriver();
-            }
-            super.execute();
-        }
-        finally
-        {
-            if ( screenShot )
-            {
-                driver.close();
-            }
-        }
     }
 }
