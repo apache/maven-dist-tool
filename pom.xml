@@ -113,6 +113,12 @@
       <artifactId>maven-aether-provider</artifactId>
       <version>${mvnversion}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.kohsuke/github-api -->
+    <dependency>
+      <groupId>org.kohsuke</groupId>
+      <artifactId>github-api</artifactId>
+      <version>1.129</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -247,6 +253,7 @@
               <report>list-plugins-prerequisites</report>
               <report>list-master-jobs</report>
               <report>list-branches</report>
+              <report>memory-check</report>
             </reports>
           </reportSet>
           <reportSet>
