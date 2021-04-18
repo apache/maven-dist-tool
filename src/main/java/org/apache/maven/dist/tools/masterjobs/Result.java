@@ -19,6 +19,8 @@ package org.apache.maven.dist.tools.masterjobs;
  * under the License.
  */
 
+import java.time.ZonedDateTime;
+
 /**
  * Represent build result of a Jenkins job for a Git master branch.
  * 
@@ -33,6 +35,8 @@ public class Result
     private String buildUrl;
 
     private String icon;
+    
+    private ZonedDateTime lastBuild;
 
     public Result( String repositoryName, String buildUrl )
     {
@@ -50,6 +54,16 @@ public class Result
         this.icon = icon;
     }
 
+    public void setLastBuild( ZonedDateTime lastBuild )
+    {
+        this.lastBuild = lastBuild;
+    }
+    
+    public ZonedDateTime getLastBuild()
+    {
+        return lastBuild;
+    }
+    
     public String getRepositoryName()
     {
         return repositoryName;

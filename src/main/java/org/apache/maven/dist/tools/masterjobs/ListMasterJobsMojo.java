@@ -20,6 +20,8 @@ package org.apache.maven.dist.tools.masterjobs;
  */
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -128,6 +130,9 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                 }
                 result.setIcon( masterRow.select( "img" ).first().outerHtml() );
                 
+                result.setLastBuild( getLastBuild( masterRow.child( 3 ).attr( "data" ),
+                                                   masterRow.child( 4 ).attr( "data" ) ) );
+                
                 repoStatus.add( result );
             }
             catch ( IOException e )
@@ -155,7 +160,7 @@ public class ListMasterJobsMojo extends AbstractMavenReport
         
         Map<String, List<Result>> groupedResults = repoStatus.stream()
                                                              .collect( Collectors.groupingBy( Result::getStatus ) );
-        
+
         groupedResults.entrySet()
                       .stream()
                       .sorted( Map.Entry.comparingByKey( resultComparator() ) )
@@ -169,6 +174,17 @@ public class ListMasterJobsMojo extends AbstractMavenReport
                 {
                     sink.listItem();
                     sink.rawText( r.getIcon() );
+                    
+                    if ( r.getLastBuild().isBefore( ZonedDateTime.now().minusMonths( 1 ) ) )
+                    {
+                                  sink.rawText( "<span style=\"color:red\">("
+                                      + r.getLastBuild().format( DateTimeFormatter.ISO_DATE ) + ")</span> " );
+                              }
+                    else
+                    {
+                                  sink.rawText( "<span>(" + r.getLastBuild().format( DateTimeFormatter.ISO_DATE )
+                                      + ")</span> " );
+                              }
                     sink.link( r.getBuildUrl() );
                     sink.rawText( r.getRepositoryName() );
                     sink.link_();
@@ -192,6 +208,37 @@ public class ListMasterJobsMojo extends AbstractMavenReport
             };
     }
 
+    private ZonedDateTime getLastBuild( String lastSuccess, String lastFailure )
+    {
+        ZonedDateTime success = null;
+        if ( !"-".equals( lastSuccess ) )
+        {
+            success = ZonedDateTime.parse( lastSuccess );
+        }
+        ZonedDateTime failure = null;
+        if ( !"-".equals( lastFailure ) )
+        {
+            failure = ZonedDateTime.parse( lastFailure );
+        }
+        
+        if ( success == null )
+        {
+            return failure;
+        }
+        else if ( failure == null )
+        {
+            return success;
+        }
+        else if ( success.compareTo( failure ) >= 0 ) 
+        {
+            return success;
+        }
+        else
+        {
+            return failure;
+        }
+    }
+    
     /**
      * Extract Git repository names for Apache Maven from
      * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
