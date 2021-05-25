@@ -54,7 +54,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  *
  * @author skygo
  */
-public abstract class AbstractDistCheckMojo
+public abstract class AbstractDistCheckReport
     extends AbstractMavenReport
 {
     private static final String CONF = "dist-tool.conf";

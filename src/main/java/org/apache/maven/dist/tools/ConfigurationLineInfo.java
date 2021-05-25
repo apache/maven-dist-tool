@@ -25,7 +25,7 @@ import java.time.temporal.TemporalAccessor;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.artifact.versioning.VersionRange;
-import org.apache.maven.dist.tools.index.DistCheckIndexPageMojo;
+import org.apache.maven.dist.tools.index.DistCheckIndexPageReport;
 
 /**
  *
@@ -58,7 +58,7 @@ public class ConfigurationLineInfo
 
         this.artifactId = ( index < 0 ) ? null : g.substring( index + 1 );
         this.versionRange = null;
-        this.indexPageUrl = DistCheckIndexPageMojo.POMS_INDEX_URL; // in case of group parent pom artifact
+        this.indexPageUrl = DistCheckIndexPageReport.POMS_INDEX_URL; // in case of group parent pom artifact
     }
 
     public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos )

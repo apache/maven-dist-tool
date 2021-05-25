@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.maven.dist.tools.AbstractDistCheckMojo;
+import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.markup.HtmlMarkup;
@@ -48,8 +48,8 @@ import org.jsoup.select.Elements;
  * @author skygo
  */
 @Mojo( name = "check-source-release", requiresProject = false )
-public class DistCheckSourceReleaseMojo
-    extends AbstractDistCheckMojo
+public class DistCheckSourceReleaseReport
+    extends AbstractDistCheckReport
 {
     private static final String NOT_IN_DISTRIBUTION_AREA = "_not_in_distribution_area_";
 

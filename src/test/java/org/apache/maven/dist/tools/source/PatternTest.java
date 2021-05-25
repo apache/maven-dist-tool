@@ -19,7 +19,7 @@ package org.apache.maven.dist.tools.source;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.maven.dist.tools.source.DistCheckSourceReleaseMojo;
+import org.apache.maven.dist.tools.source.DistCheckSourceReleaseReport;
 import org.junit.Test;
 
 /**
@@ -35,7 +35,7 @@ public class PatternTest
     @Test
     public void testGetGroupId()
     {
-        String q = DistCheckSourceReleaseMojo.getSourceReleasePattern( "doxia" );
+        String q = DistCheckSourceReleaseReport.getSourceReleasePattern( "doxia" );
 
         assertTrue( "doxia-1.4-source-release.zip.asc".matches( q ) );
         assertTrue( "doxia-1.4-source-release.zip.md5".matches( q ) );
@@ -44,7 +44,7 @@ public class PatternTest
         assertFalse( "doxia-sitetools-1.4-source-release.zip.md5".matches( q ) );
         assertFalse( "doxia-sitetools-1.4-source-release.zip".matches( q ) );
 
-        String r = DistCheckSourceReleaseMojo.getSourceReleasePattern( "doxia-sitetools" );
+        String r = DistCheckSourceReleaseReport.getSourceReleasePattern( "doxia-sitetools" );
 
         assertFalse( "doxia-1.4-source-release.zip.asc".matches( r ) );
         assertFalse( "doxia-1.4-source-release.zip.md5".matches( r ) );

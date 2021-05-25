@@ -35,7 +35,7 @@ import org.apache.maven.reporting.MavenReportException;
  * @author Karl Heinz Marbaise
  */
 @Mojo( name = "list-plugins-prerequisites", requiresProject = false )
-public class ListPluginsPrerequisitesMojo
+public class ListPluginsPrerequisitesReport
     extends AbstractMavenReport
 {
     @Override

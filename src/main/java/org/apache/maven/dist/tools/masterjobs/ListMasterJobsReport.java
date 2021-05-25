@@ -47,7 +47,7 @@ import org.jsoup.select.Elements;
  * @author Robert Scholte
  */
 @Mojo( name = "list-master-jobs", requiresProject = false )
-public class ListMasterJobsMojo extends AbstractMavenReport
+public class ListMasterJobsReport extends AbstractMavenReport
 {
     private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
     private String mavenboxJobsBaseUrl = "https://ci-builds.apache.org/job/Maven/job/maven-box/";

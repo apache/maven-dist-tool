@@ -50,7 +50,7 @@ import org.jsoup.select.Elements;
  * @author Robert Scholte
  */
 @Mojo( name = "list-branches", requiresProject = false )
-public class ListBranchesMojo extends AbstractMavenReport
+public class ListBranchesReport extends AbstractMavenReport
 {
     private static final String JIRA_BASE_URL = "https://issues.apache.org/jira/projects/";
 

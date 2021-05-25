@@ -30,7 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.maven.dist.tools.AbstractCheckResult;
-import org.apache.maven.dist.tools.AbstractDistCheckMojo;
+import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
@@ -48,8 +48,8 @@ import org.jsoup.select.Elements;
  * @author skygo
  */
 @Mojo( name = "check-index-page", requiresProject = false )
-public class DistCheckIndexPageMojo
-        extends AbstractDistCheckMojo
+public class DistCheckIndexPageReport
+        extends AbstractDistCheckReport
 {
     public static final String FAILURES_FILENAME = "check-index-page.log";
 

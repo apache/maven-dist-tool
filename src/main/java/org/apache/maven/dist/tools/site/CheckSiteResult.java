@@ -38,14 +38,14 @@ class CheckSiteResult
     /**
      * 
      */
-    private final DistCheckSiteMojo distCheckSiteMojo;
+    private final DistCheckSiteReport distCheckSiteMojo;
     private String url;
     private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
     private int statusCode = -1;
     private Document document;
     private String screenshotName;
 
-    CheckSiteResult( DistCheckSiteMojo distCheckSiteMojo, ConfigurationLineInfo r, String version )
+    CheckSiteResult( DistCheckSiteReport distCheckSiteMojo, ConfigurationLineInfo r, String version )
     {
         super( r, version );
         this.distCheckSiteMojo = distCheckSiteMojo;
@@ -87,7 +87,7 @@ class CheckSiteResult
 
     void getSkins( Sink sink )
     {
-        if ( statusCode != DistCheckSiteMojo.HTTP_OK )
+        if ( statusCode != DistCheckSiteReport.HTTP_OK )
         {
             sink.text( "None" );
         }
@@ -129,7 +129,7 @@ class CheckSiteResult
 
     void getOverall( Sink sink )
     {
-        if ( statusCode != DistCheckSiteMojo.HTTP_OK )
+        if ( statusCode != DistCheckSiteReport.HTTP_OK )
         {
             this.distCheckSiteMojo.iconError( sink );
         }
@@ -169,7 +169,7 @@ class CheckSiteResult
     void setDocument( Document doc )
     {
         this.document = doc ;
-        statusCode = ( doc == null ) ? -1 : DistCheckSiteMojo.HTTP_OK;
+        statusCode = ( doc == null ) ? -1 : DistCheckSiteReport.HTTP_OK;
     }
 
     void setScreenShot( String fileName )

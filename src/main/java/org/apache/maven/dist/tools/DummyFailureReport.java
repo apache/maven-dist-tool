@@ -28,8 +28,8 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @author skygo
  */
 @Mojo( name = "failure-report", requiresProject = false )
-public class DummyFailureMojo
-    extends DistCheckErrorsMojo
+public class DummyFailureReport
+    extends DistCheckErrorsReport
 {
     @Override
     boolean isDummyFailure()

@@ -26,7 +26,7 @@ import java.util.Locale;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.dist.tools.AbstractDistCheckMojo;
+import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
@@ -44,8 +44,8 @@ import org.jsoup.nodes.Document;
  * @author skygo
  */
 @Mojo( name = "check-site", requiresProject = false )
-public class DistCheckSiteMojo
-    extends AbstractDistCheckMojo
+public class DistCheckSiteReport
+    extends AbstractDistCheckReport
 {
     public static final String FAILURES_FILENAME = "check-site.log";
 
