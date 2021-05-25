@@ -19,7 +19,7 @@ package org.apache.maven.dist.tools.memorycheck;
  * under the License.
  */
 
-import org.apache.maven.dist.tools.AbstractDistCheckMojo;
+import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
@@ -27,7 +27,6 @@ import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
-import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHWorkflowJob;
 import org.kohsuke.github.GHWorkflowRun;
 import org.kohsuke.github.GitHub;
@@ -36,8 +35,12 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Generate from now a single page with a badge from
@@ -48,10 +51,11 @@ import java.util.Locale;
  */
 
 @Mojo( name = "memory-check", requiresProject = false )
-public class MemoryCheckReport extends AbstractDistCheckMojo
+public class MemoryCheckReport extends AbstractDistCheckReport
 {
 
     private static final String GITHUB_REPOSITORY = "quick-perf/maven-test-bench";
+    public static final String GITHUB_REPOSITORY_URL = "https://github.com/" + GITHUB_REPOSITORY;
     public static final String MEMORY_CHECK_GITHUB_ACTION_WORKFLOW_NAME = "Daily Memory Check";
     private static final int BUILD_HISTORY_SIZE = 10;
     private static final int GITHUB_ACTION_JOB_PAGE_SIZE = 10;
@@ -86,7 +90,7 @@ public class MemoryCheckReport extends AbstractDistCheckMojo
         mavenQuickPerfLinkAttributes.addAttribute( SinkEventAttributes.TITLE, "Memory Check" );
         // open in new tab to avoid being blocked by iframe
         mavenQuickPerfLinkAttributes.addAttribute( SinkEventAttributes.TARGET , "_blank" );
-        sink.link( "https://github.com/quick-perf/maven-test-bench/", mavenQuickPerfLinkAttributes );
+        sink.link( GITHUB_REPOSITORY_URL, mavenQuickPerfLinkAttributes );
         sink.text( "Memory Check" );
         sink.link_( );
         sink.text( "is running " );
@@ -97,7 +101,7 @@ public class MemoryCheckReport extends AbstractDistCheckMojo
         // open in new tab to avoid being blocked by iframe
         sampleLinkAttributes.addAttribute( SinkEventAttributes.TARGET , "_blank" );
         sink.link(
-                "https://github.com/quick-perf/maven-test-bench/blob/master/maven-perf/src/test/java/org/quickperf/"
+                GITHUB_REPOSITORY_URL + "/blob/master/maven-perf/src/test/java/org/quickperf/"
                         + "maven/bench/head/MvnValidateMaxAllocation.java#L52",
                 sampleLinkAttributes
         );
@@ -169,32 +173,34 @@ public class MemoryCheckReport extends AbstractDistCheckMojo
 
     private List<GHWorkflowJob> getLatestBuildStatus()
     {
-        final List<GHWorkflowJob> result = new ArrayList<>();
         try
         {
-            GitHub github = GitHub.connect();
-            GHRepository repo = github.getRepository( GITHUB_REPOSITORY );
-            int index = 0;
-            for ( GHWorkflowRun workflowRun : repo.queryWorkflowRuns().list()
-                    .withPageSize( GITHUB_ACTION_JOB_PAGE_SIZE ) )
-            {
-                if ( index > BUILD_HISTORY_SIZE )
+            return StreamSupport.stream(
+                        GitHub.connect()
+                            .getRepository( GITHUB_REPOSITORY )
+                            .queryWorkflowRuns().list().withPageSize( GITHUB_ACTION_JOB_PAGE_SIZE )
+                            .spliterator(),
+                    false )
+                .limit( BUILD_HISTORY_SIZE )
+                .filter( ghWorkflowRun -> ghWorkflowRun.getName().equals( MEMORY_CHECK_GITHUB_ACTION_WORKFLOW_NAME ) )
+                .flatMap( ghWorkflowRun ->
                 {
-                    break;
-                }
-
-                if ( workflowRun.getName().equals( MEMORY_CHECK_GITHUB_ACTION_WORKFLOW_NAME ) )
-                {
-                    result.addAll( workflowRun.listJobs().toList() );
-                }
-                index++;
-            }
+                    try
+                    {
+                        return Arrays.stream( ghWorkflowRun.listJobs().toArray() );
+                    }
+                    catch ( IOException e )
+                    {
+                        getLog().warn( e );
+                        return Stream.empty();
+                    }
+                } )
+                .collect( Collectors.toList() );
         }
         catch ( IOException e )
         {
-            e.printStackTrace();
+            getLog().warn( e );
+            return new ArrayList<>();
         }
-
-        return result;
     }
 }
