@@ -43,9 +43,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Generate from now a single page with a badge from
+ * Generate from now a single page with an history of build status from
  * <a href="https://github.com/quick-perf/maven-test-bench">Maven Test Bench</a> project, which runs a daily
- * memory check based on running `mvn validate` on a third party project.
+ * memory check based on running `mvn validate` on a third party project using Github Action platform.
  *
  * @author Patrice Cavezzan
  */
