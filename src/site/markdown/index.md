@@ -47,8 +47,7 @@ in other context, it would require more configurations.
 
 ## Maven Core Performance Checks 
 
-* [Memory Check](https://github.com/quick-perf/maven-test-bench/) [![Daily Memory Check](https://github.com/quick-perf/maven-test-bench/actions/workflows/memorycheck.yml/badge.svg)](https://github.com/quick-perf/maven-test-bench/actions/workflows/memorycheck.yml), 
-running `mvn validate` on a massive multi module project, and we make sure that [memory allocation stay under a certain threshold](https://github.com/quick-perf/maven-test-bench/blob/master/maven-perf/src/test/java/org/quickperf/maven/bench/head/MvnValidateMaxAllocation.java#L52). 
+* [Memory Check][11] report, displaying daily memory check result. 
 
 _Powered by [QuickPerf](https://github.com/quick-perf/)_
 
@@ -62,3 +61,4 @@ _Powered by [QuickPerf](https://github.com/quick-perf/)_
 [8]: ./dist-tool-check-errors.html
 [9]: ./dist-tool-master-jobs.html
 [10]: ./dist-tool-branches.html
+[11]: ./dist-tool-memory-check.html
