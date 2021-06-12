@@ -51,7 +51,7 @@ public class ListMasterJobsReport extends AbstractMavenReport
 {
     private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
     private String mavenboxJobsBaseUrl = "https://ci-builds.apache.org/job/Maven/job/maven-box/";
-    
+
     private Collection<String> excluded = Arrays.asList( "maven-integration-testing", // runs with Maven core job
                                                          "maven-jenkins-env",
                                                          "maven-jenkins-lib",
@@ -89,13 +89,13 @@ public class ListMasterJobsReport extends AbstractMavenReport
         {
             throw new MavenReportException( "Failed to extract repositorynames from Gitbox", e );
         }
-        
+
         List<Result> repoStatus = new ArrayList<>( repositoryNames.size() );
-        
+
         Collection<String> included = repositoryNames.stream()
                                                      .filter( s -> !excluded.contains( s ) )
                                                      .collect( Collectors.toList() );
-        
+
         for ( String repository : included )
         {
             final String repositoryJobUrl = mavenboxJobsBaseUrl + "job/" + repository;
@@ -103,9 +103,9 @@ public class ListMasterJobsReport extends AbstractMavenReport
             try
             {
                 Document doc = JsoupRetry.get( repositoryJobUrl );
-                
+
                 Result result = new Result( repository, repositoryJobUrl );
-                
+
                 Element masterRow = doc.getElementById( "job_master" );
                 if ( masterRow == null )
                 {
@@ -129,10 +129,10 @@ public class ListMasterJobsReport extends AbstractMavenReport
                     result.setStatus( "UNKNOWN" );
                 }
                 result.setIcon( masterRow.select( "img" ).first().outerHtml() );
-                
+
                 result.setLastBuild( getLastBuild( masterRow.child( 3 ).attr( "data" ),
                                                    masterRow.child( 4 ).attr( "data" ) ) );
-                
+
                 repoStatus.add( result );
             }
             catch ( IOException e )
@@ -140,24 +140,24 @@ public class ListMasterJobsReport extends AbstractMavenReport
                 getLog().warn( "Failed to read status for " + repository + " Jenkins job " + repositoryJobUrl  );
             }
         }
-        
+
         generateReport( repoStatus );
     }
     
     private void generateReport( List<Result> repoStatus )
     {
         Sink sink = getSink();
-        
+
         sink.head();
         sink.title();
         sink.text( "List Master Jobs" );
         sink.title_();
         sink.head_();
-        
+
         sink.body();
         sink.text( "Jenkins jobs for master branch sorted by status of last build:" );
         sink.list();
-        
+
         Map<String, List<Result>> groupedResults = repoStatus.stream()
                                                              .collect( Collectors.groupingBy( Result::getStatus ) );
 
@@ -174,27 +174,24 @@ public class ListMasterJobsReport extends AbstractMavenReport
                 {
                     sink.listItem();
                     sink.rawText( r.getIcon() );
-                    
+
+                    sink.rawText( "<span" );
                     if ( r.getLastBuild().isBefore( ZonedDateTime.now().minusMonths( 1 ) ) )
                     {
-                                  sink.rawText( "<span style=\"color:red\">("
-                                      + r.getLastBuild().format( DateTimeFormatter.ISO_DATE ) + ")</span> " );
-                              }
-                    else
-                    {
-                                  sink.rawText( "<span>(" + r.getLastBuild().format( DateTimeFormatter.ISO_DATE )
-                                      + ")</span> " );
-                              }
+                        sink.rawText( " style=\"color:red\"" );
+                    }
+                    sink.rawText( ">(" + r.getLastBuild().format( DateTimeFormatter.ISO_LOCAL_DATE ) + ")</span> " );
+
                     sink.link( r.getBuildUrl() );
                     sink.rawText( r.getRepositoryName() );
                     sink.link_();
                     sink.listItem_();
                 } );
                 sink.list_();
-                
+
                 sink.listItem_();
             } );
-        
+
         sink.list_();
         sink.body_();
     }
@@ -220,7 +217,7 @@ public class ListMasterJobsReport extends AbstractMavenReport
         {
             failure = ZonedDateTime.parse( lastFailure );
         }
-        
+
         if ( success == null )
         {
             return failure;
