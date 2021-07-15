@@ -29,7 +29,7 @@
   <description>Dist tool plugin: check content of Maven distribution area. 
         Not to be released.</description>
 
-  <url>https://ci-builds.apache.org/job/Maven/job/maven-box/job/dist-tool-plugin/site/</url>
+  <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/dist-tool-plugin/site/</url>
 
   <prerequisites>
     <maven>${mvnversion}</maven>
@@ -47,7 +47,7 @@
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
-    <url>https://ci-builds.apache.org/job/Maven/job/maven-box/job/dist-tool-plugin/</url>
+    <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/dist-tool-plugin/</url>
   </ciManagement>
 
   <properties>

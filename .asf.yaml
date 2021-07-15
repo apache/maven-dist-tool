@@ -17,7 +17,7 @@
 # see https://s.apache.org/asfyaml
 github:
   description: "Apache Maven Distribution Tools"
-  homepage: https://ci-builds.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/
+  homepage: https://ci-maven.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/
   labels:
     - java
     - build-management

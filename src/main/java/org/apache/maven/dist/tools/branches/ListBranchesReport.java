@@ -45,7 +45,7 @@ import org.jsoup.select.Elements;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
- * <a href="https://ci-builds.apache.org/job/Maven/job/maven-box/">{@code maven-box} Apache Hosted Git Folder job</a>.
+ * <a href="https://ci-maven.apache.org/job/Maven/job/maven-box/">{@code maven-box} Apache Hosted Git Folder job</a>.
  *
  * @author Robert Scholte
  */
@@ -56,7 +56,7 @@ public class ListBranchesReport extends AbstractMavenReport
 
     private static final String GITBOX_URL = "https://gitbox.apache.org/repos/asf";
 
-    private static final String MAVENBOX_JOBS_BASE_URL = "https://ci-builds.apache.org/job/Maven/job/maven-box/job/";
+    private static final String MAVENBOX_JOBS_BASE_URL = "https://ci-maven.apache.org/job/Maven/job/maven-box/job/";
 
     private static final Collection<String> EXCLUDED = Arrays.asList( "maven-jenkins-env", "maven-jenkins-lib",
                                                                       "maven-sources", "maven-studies" );
