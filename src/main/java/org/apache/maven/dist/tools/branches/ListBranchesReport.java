@@ -20,6 +20,8 @@ package org.apache.maven.dist.tools.branches;
  */
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,6 +59,10 @@ public class ListBranchesReport extends AbstractMavenReport
     private static final String GITBOX_URL = "https://gitbox.apache.org/repos/asf";
 
     private static final String MAVENBOX_JOBS_BASE_URL = "https://ci-maven.apache.org/job/Maven/job/maven-box/job/";
+    
+    private static final String GITHUB_URL = "https://github.com/apache/";
+    
+    private static final String DEPENDABOT_CONFIG = ".github/dependabot.yml";
 
     private static final Collection<String> EXCLUDED = Arrays.asList( "maven-jenkins-env", "maven-jenkins-lib",
                                                                       "maven-sources", "maven-studies" );
@@ -312,7 +318,10 @@ public class ListBranchesReport extends AbstractMavenReport
         sink.body();
         sink.paragraph();
         sink.rawText( "Values are shown as <code>jenkinsBranches / gitBranches</code>, "
-            + "because not all branches end up in Jenkins, this depends on the existence of the JenkinsFile." );
+            + "because not all branches end up in Jenkins, this depends on the existence of the JenkinsFile.<br>" );
+        sink.rawText( "Hover over the values to see branch names, values link to its URL to Jenkins or Gitbox</br>" );
+        sink.rawText( "For Dependabot an empty field means there's no <code>" + DEPENDABOT_CONFIG + "</code>" );
+        
         sink.paragraph();
 
         sink.table();
@@ -414,7 +423,17 @@ public class ListBranchesReport extends AbstractMavenReport
                 sink.tableCell();
                 if ( r.getDependabotBranchesGit().isEmpty() ) 
                 {
-                    sink.text( "-" );
+                    try
+                    {
+                        if ( hasDependabotYml( r.getRepositoryName() ) )
+                        {
+                            sink.text( "-" );
+                        }
+                    }
+                    catch ( IOException e )
+                    {
+                        sink.text( "_" );
+                    }
                 }
                 else
                 {
@@ -540,5 +559,16 @@ public class ListBranchesReport extends AbstractMavenReport
         }
 
         return names;
+    }
+    
+    protected static boolean hasDependabotYml( String repositoryName )
+        throws IOException
+    {
+        URL url = new URL( GITHUB_URL + repositoryName + "/blob/master/" + DEPENDABOT_CONFIG );
+
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod( "HEAD" );
+
+        return con.getResponseCode() == HttpURLConnection.HTTP_OK;
     }
 }
