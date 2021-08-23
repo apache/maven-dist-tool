@@ -128,7 +128,7 @@ public class ListMasterJobsReport extends AbstractMavenReport
                 {
                     result.setStatus( "UNKNOWN" );
                 }
-                result.setIcon( masterRow.select( "img" ).first().outerHtml() );
+                result.setIcon( masterRow.select( "span.build-status-icon__wrapper" ).first().outerHtml() );
 
                 result.setLastBuild( getLastBuild( masterRow.child( 3 ).attr( "data" ),
                                                    masterRow.child( 4 ).attr( "data" ) ) );
