@@ -30,11 +30,11 @@ pipeline {
                 branch 'master'
             }
             steps {
-                withMaven(jdk:'jdk_1.8_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
+                withMaven(jdk:'jdk_17_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
                   artifactsPublisher(disabled: true),
                   findbugsPublisher(disabled: true),
                 ]) {
-                    sh "mvn -B -V -e -Preporting -Papache.snapshots -Dscreenshot=false clean install site"
+                    sh "mvn -ntp -V -e -Preporting -Papache.snapshots -Dscreenshot=false clean install site"
                 }
             }
         }
