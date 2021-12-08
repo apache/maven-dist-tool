@@ -30,7 +30,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                withMaven(jdk:'jdk_17_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
+                withMaven(jdk:'jdk_17_latest', maven:'maven_3.6.3', mavenLocalRepo:'.repository', options: [
                   artifactsPublisher(disabled: true),
                   findbugsPublisher(disabled: true),
                 ]) {
