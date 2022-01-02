@@ -44,7 +44,7 @@ public class FluidoHTMLChecker implements HTMLChecker
     }
 
     @Override
-    public boolean isOk( Document doc, String version )
+    public boolean isDisplayedArtifactVersionOk( Document doc, String version )
     {
         Element links = doc.select( "li#projectVersion" ).first();
         return ( links != null ) && links.text().contains( version );

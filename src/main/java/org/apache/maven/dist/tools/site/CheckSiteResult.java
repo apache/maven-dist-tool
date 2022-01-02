@@ -85,7 +85,7 @@ class CheckSiteResult
         return statusCode;
     }
 
-    void getSkins( Sink sink )
+    void renderDetectedSkin( Sink sink )
     {
         if ( statusCode != DistCheckSiteReport.HTTP_OK )
         {
@@ -94,10 +94,10 @@ class CheckSiteResult
         else 
         {
             String text = "";
-            Elements htmlTag = document.select( "html " );
-            for ( Element htmlTa : htmlTag )
+            Elements htmlTags = document.select( "html " );
+            for ( Element htmlTag : htmlTags )
             {
-                Node n = htmlTa.previousSibling();
+                Node n = htmlTag.previousSibling();
                 if ( n instanceof Comment )
                 {
                     text += ( ( Comment ) n ).getData();
@@ -127,7 +127,7 @@ class CheckSiteResult
         }
     }
 
-    void getOverall( Sink sink )
+    void renderDisplayedArtifactVersion( Sink sink )
     {
         if ( statusCode != DistCheckSiteReport.HTTP_OK )
         {

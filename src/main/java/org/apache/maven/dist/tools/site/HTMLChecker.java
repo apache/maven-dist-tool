@@ -36,19 +36,19 @@ public interface HTMLChecker
     String getName();
 
     /**
-     * Get an id representing sink.
+     * Get an id representing skin.
      * 
      * @return string for skin
      */
     String getSkin();
 
     /**
-     * true if checker find pattern in document
+     * Checks if the documents represents the provided artifact version.
      *
      * @param doc html document
      * @param version version to check against
      * @return true if version is found
      */
-    boolean isOk( Document doc, String version );
+    boolean isDisplayedArtifactVersionOk( Document doc, String version );
     
 }

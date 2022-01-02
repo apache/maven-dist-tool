@@ -44,7 +44,7 @@ public class StylusRightHTMLChecker implements HTMLChecker
     }
 
     @Override
-    public boolean isOk( Document doc, String version )
+    public boolean isDisplayedArtifactVersionOk( Document doc, String version )
     {
         Element links = doc.select( "div.xright" ).first();
 

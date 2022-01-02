@@ -39,6 +39,7 @@ import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
+
 /**
  *
  * @author skygo
@@ -204,11 +205,11 @@ public class DistCheckSiteReport
             sink.rawText( getSimplifiedUrl( csr.getUrl() ) );
             sink.link_();
             sink.lineBreak();
-            csr.getSkins( sink );
+            csr.renderDetectedSkin( sink );
             sink.tableCell_();
 
             sink.tableCell();
-            csr.getOverall( sink );
+            csr.renderDisplayedArtifactVersion( sink );
             sink.tableCell_();
 
             sink.tableRow_();
@@ -249,7 +250,7 @@ public class DistCheckSiteReport
             Document doc = JsoupRetry.get( siteUrl );
             for ( HTMLChecker c : checker )
             {
-                result.getCheckMap().put( c, c.isOk( doc, version ) );
+                result.getCheckMap().put( c, c.isDisplayedArtifactVersionOk( doc, version ) );
             }
             result.setDocument( doc );
 
