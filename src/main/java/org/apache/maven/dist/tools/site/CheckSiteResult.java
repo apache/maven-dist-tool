@@ -139,15 +139,7 @@ class CheckSiteResult
 
     private boolean isSkin( String skinName )
     {
-        boolean tmp = false;
-        for ( Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet() )
-        {
-            if ( e.getKey().getSkin().equals( skinName ) )
-            {
-                tmp = tmp || e.getValue();
-            }
-        }
-        return tmp;
+        return comment.contains( skinName );
     }
 
     void setDocument( Document doc )
@@ -158,21 +150,15 @@ class CheckSiteResult
 
     static String extractComment( Document document )
     {
-        String text = "";
-        Elements htmlTags = document.select( "html " );
-        for ( Element htmlTag : htmlTags )
+        for ( Node node : document.childNodes() )
         {
-            Node n = htmlTag.previousSibling();
-            if ( n instanceof Comment )
+            if ( node instanceof Comment )
             {
-                text += ( ( Comment ) n ).getData();
-            }
-            else
-            {
-                text += " ";
+                return ( ( Comment ) node ).getData();
             }
         }
-        return text;
+
+        return "";
     }
 
     void setScreenShot( String fileName )
