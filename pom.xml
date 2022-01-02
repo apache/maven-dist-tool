@@ -195,6 +195,7 @@
         <configuration>
           <excludes combine.children="append">
             <exclude>.repository/**</exclude> <!-- jenkins with local maven repository -->
+            <exclude>src/test/resources/**/*.html</exclude> <!-- sample HTML -->
           </excludes>
         </configuration>
       </plugin>
