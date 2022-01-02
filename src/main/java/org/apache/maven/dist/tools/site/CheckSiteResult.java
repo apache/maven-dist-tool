@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.maven.dist.tools.AbstractCheckResult;
+import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.sink.Sink;
 import org.jsoup.nodes.Comment;
@@ -34,21 +35,19 @@ import org.jsoup.select.Elements;
 class CheckSiteResult
     extends AbstractCheckResult
 {
-
-    /**
-     * 
-     */
-    private final DistCheckSiteReport distCheckSiteMojo;
     private String url;
+
     private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
+
     private int statusCode = -1;
-    private Document document;
+
+    private String comment;
+
     private String screenshotName;
 
-    CheckSiteResult( DistCheckSiteReport distCheckSiteMojo, ConfigurationLineInfo r, String version )
+    CheckSiteResult( ConfigurationLineInfo r, String version )
     {
         super( r, version );
-        this.distCheckSiteMojo = distCheckSiteMojo;
     }
 
     void setUrl( String url )
@@ -93,21 +92,6 @@ class CheckSiteResult
         }
         else 
         {
-            String text = "";
-            Elements htmlTags = document.select( "html " );
-            for ( Element htmlTag : htmlTags )
-            {
-                Node n = htmlTag.previousSibling();
-                if ( n instanceof Comment )
-                {
-                    text += ( ( Comment ) n ).getData();
-                }
-                else
-                {
-                    text += " ";
-                }
-            }
-
             sink.text( "skin: " );
             if ( isSkin( "Fluido" ) )
             {
@@ -122,7 +106,7 @@ class CheckSiteResult
                 sink.text( "Not determined" );
             }
             sink.verbatim( null );
-            sink.text( text.trim().replace( " |", "|" ).replace( "| ", "" ) );
+            sink.text( comment.trim().replace( " |", "|" ).replace( "| ", "" ) );
             sink.verbatim_();
         }
     }
@@ -131,7 +115,7 @@ class CheckSiteResult
     {
         if ( statusCode != DistCheckSiteReport.HTTP_OK )
         {
-            this.distCheckSiteMojo.iconError( sink );
+            AbstractDistCheckReport.iconError( sink );
         }
         else
         {
@@ -140,14 +124,14 @@ class CheckSiteResult
             {
                 if ( e.getValue() )
                 {
-                    this.distCheckSiteMojo.iconSuccess( sink );
+                    AbstractDistCheckReport.iconSuccess( sink );
                     sink.text( ": " + e.getKey().getName() );
                     found = true;
                 }
             }
             if ( !found )
             {
-                this.distCheckSiteMojo.iconWarning( sink );
+                AbstractDistCheckReport.iconWarning( sink );
                 sink.text( ": artifact version not found" );
             }
         }
@@ -168,8 +152,27 @@ class CheckSiteResult
 
     void setDocument( Document doc )
     {
-        this.document = doc ;
+        comment = extractComment( doc );
         statusCode = ( doc == null ) ? -1 : DistCheckSiteReport.HTTP_OK;
+    }
+
+    static String extractComment( Document document )
+    {
+        String text = "";
+        Elements htmlTags = document.select( "html " );
+        for ( Element htmlTag : htmlTags )
+        {
+            Node n = htmlTag.previousSibling();
+            if ( n instanceof Comment )
+            {
+                text += ( ( Comment ) n ).getData();
+            }
+            else
+            {
+                text += " ";
+            }
+        }
+        return text;
     }
 
     void setScreenShot( String fileName )

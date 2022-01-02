@@ -344,7 +344,7 @@ public abstract class AbstractDistCheckReport
      *
      * @param sink doxiasink
      */
-    public void iconError( Sink sink )
+    public static void iconError( Sink sink )
     {
         icon( sink, "icon_error_sml" );
     }
@@ -354,7 +354,7 @@ public abstract class AbstractDistCheckReport
      *
      * @param sink doxiasink
      */
-    public void iconWarning( Sink sink )
+    public static void iconWarning( Sink sink )
     {
         icon( sink, "icon_warning_sml" );
     }
@@ -364,7 +364,7 @@ public abstract class AbstractDistCheckReport
      *
      * @param sink doxiasink
      */
-    public void iconSuccess( Sink sink )
+    public static void iconSuccess( Sink sink )
     {
         icon( sink, "icon_success_sml" );
     }
@@ -374,12 +374,12 @@ public abstract class AbstractDistCheckReport
      *
      * @param sink doxiasink
      */
-    protected void iconRemove( Sink sink )
+    protected static void iconRemove( Sink sink )
     {
         icon( sink, "remove" );
     }
 
-    private void icon( Sink sink, String level )
+    private static void icon( Sink sink, String level )
     {
         sink.figure();
         sink.figureCaption();

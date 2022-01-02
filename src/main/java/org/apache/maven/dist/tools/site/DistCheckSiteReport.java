@@ -104,7 +104,7 @@ public class DistCheckSiteReport
 
     // keep result
     private List<CheckSiteResult> results = new LinkedList<>();
-    private final List<HTMLChecker> checker = HTMLCheckerFactory.getCheckers();
+    private final List<HTMLChecker> checkers = HTMLCheckerFactory.getCheckers();
 
     @Override
     protected void executeReport( Locale locale )
@@ -227,7 +227,7 @@ public class DistCheckSiteReport
 
     private void checkSite( ConfigurationLineInfo cli, String version )
     {
-        CheckSiteResult result = new CheckSiteResult( this, cli, version );
+        CheckSiteResult result = new CheckSiteResult( cli, version );
         results.add( result );
         try
         {
@@ -248,7 +248,7 @@ public class DistCheckSiteReport
 
             result.setUrl( siteUrl );
             Document doc = JsoupRetry.get( siteUrl );
-            for ( HTMLChecker c : checker )
+            for ( HTMLChecker c : checkers )
             {
                 result.getCheckMap().put( c, c.isDisplayedArtifactVersionOk( doc, version ) );
             }
