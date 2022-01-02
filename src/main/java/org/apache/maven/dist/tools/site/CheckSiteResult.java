@@ -28,9 +28,7 @@ import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.sink.Sink;
 import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
-import org.jsoup.select.Elements;
 
 class CheckSiteResult
     extends AbstractCheckResult
