@@ -21,9 +21,9 @@ package org.apache.maven.dist.tools.prerequisites;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.dist.tools.JsoupRetry;
@@ -154,7 +154,7 @@ public class GetPrerequisites
 
     public List<PluginPrerequisites> getPrequisites()
     {
-        List<PluginPrerequisites> result = new ArrayList<PluginPrerequisites>();
+        List<PluginPrerequisites> result = new ArrayList<>();
 
         for ( String pluginName : PLUGIN_NAMES )
         {
@@ -173,17 +173,7 @@ public class GetPrerequisites
 
     public Map<ArtifactVersion, List<PluginPrerequisites>> getGroupedPrequisites()
     {
-        Map<ArtifactVersion, List<PluginPrerequisites>> result = new HashMap<>();
-
-        for ( PluginPrerequisites pluginPrerequisites : getPrequisites() )
-        {
-            if ( !result.containsKey( pluginPrerequisites.getMavenVersion() ) )
-            {
-                result.put( pluginPrerequisites.getMavenVersion(), new ArrayList<>() );
-            }
-            result.get( pluginPrerequisites.getMavenVersion() ).add( pluginPrerequisites );
-        }
-
-        return result;
+        return getPrequisites().stream()
+                .collect( Collectors.groupingBy( PluginPrerequisites::getMavenVersion ) );
     }
 }
