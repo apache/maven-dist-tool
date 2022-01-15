@@ -64,7 +64,7 @@ public class ListBranchesReport extends AbstractMavenReport
     
     private static final String DEPENDABOT_CONFIG = ".github/dependabot.yml";
 
-    private static final Collection<String> EXCLUDED = Arrays.asList( "maven-integration-testing", // runs with Maven core job
+    private static final Collection<String> EXCLUDED = Arrays.asList( "maven-integration-testing",
             "maven-jenkins-env",
             "maven-jenkins-lib",
             "maven-sources",
