@@ -56,7 +56,12 @@ public class ListMasterJobsReport extends AbstractMavenReport
                                                          "maven-jenkins-env",
                                                          "maven-jenkins-lib",
                                                          "maven-sources",
-                                                         "maven-studies" );
+                                                         "maven-studies",
+                                                         "maven-build-cache-extension",
+                                                         "maven-mvnd",
+                                                         "maven-metric-extension",
+                                                         "maven-gh-actions-shared" );
+
 
     @Override
     public String getOutputName()
