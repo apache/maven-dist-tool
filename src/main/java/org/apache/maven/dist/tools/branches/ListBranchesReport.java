@@ -64,9 +64,16 @@ public class ListBranchesReport extends AbstractMavenReport
     
     private static final String DEPENDABOT_CONFIG = ".github/dependabot.yml";
 
-    private static final Collection<String> EXCLUDED = Arrays.asList( "maven-jenkins-env", "maven-jenkins-lib",
-                                                                      "maven-sources", "maven-studies" );
-    
+    private Collection<String> EXCLUDED = Arrays.asList( "maven-integration-testing", // runs with Maven core job
+            "maven-jenkins-env",
+            "maven-jenkins-lib",
+            "maven-sources",
+            "maven-studies",
+            "maven-build-cache-extension",
+            "maven-mvnd",
+            "maven-metric-extension",
+            "maven-gh-actions-shared" );
+
     private static final Map<String, String> JIRAPROJECTS = new HashMap<>();
     
     static
