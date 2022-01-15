@@ -19,13 +19,10 @@ package org.apache.maven.dist.tools.prerequisites;
  * under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.AbstractMavenReport;
@@ -70,56 +67,56 @@ public class ListPluginsPrerequisitesReport
         sink.head_();
         sink.body();
 
-        Map<ArtifactVersion, List<PluginPrerequisites>> groupedPrequisites = prerequisites.getGroupedPrequisites();
-
         sink.table();
+        prerequisites.getGroupedPrequisites()
+                .entrySet()
+                .stream()
+                .sorted( Map.Entry.comparingByKey() )
+                .forEachOrdered( plugin ->
+                    {
+                        List<PluginPrerequisites> pluginsPrerequisites = plugin.getValue();
 
-        ArrayList<ArtifactVersion> sortedVersion = new ArrayList<ArtifactVersion>();
-        sortedVersion.addAll( groupedPrequisites.keySet() );
-        
-        Collections.<ArtifactVersion>sort( sortedVersion );
+                        sink.tableRow();
+                        sink.tableHeaderCell();
+                        sink.rawText(
+                                "Maven Version Prerequisite " + plugin.getKey()
+                                        + " (" + pluginsPrerequisites.size()
+                                        + " / "
+                                        + GetPrerequisites.PLUGIN_NAMES.length + ")" );
+                        sink.tableHeaderCell_();
 
-        for ( ArtifactVersion mavenVersion : sortedVersion )
-        {
-            List<PluginPrerequisites> pluginsPrerequisites = groupedPrequisites.get( mavenVersion );
+                        sink.tableHeaderCell();
+                        sink.rawText( "Maven Version" );
+                        sink.tableHeaderCell_();
 
-            sink.tableRow();
-            sink.tableHeaderCell();
-            sink.rawText( "Maven Version Prerequisite " + mavenVersion + " (" + pluginsPrerequisites.size() + " / "
-                + GetPrerequisites.PLUGIN_NAMES.length + ")" );
-            sink.tableHeaderCell_();
+                        sink.tableHeaderCell();
+                        sink.rawText( "JDK Version" );
+                        sink.tableHeaderCell_();
 
-            sink.tableHeaderCell();
-            sink.rawText( "Maven Version" );
-            sink.tableHeaderCell_();
+                        sink.tableRow_();
 
-            sink.tableHeaderCell();
-            sink.rawText( "JDK Version" );
-            sink.tableHeaderCell_();
+                        for ( PluginPrerequisites pluginPrerequisites : pluginsPrerequisites )
+                        {
+                            sink.tableRow();
+                            sink.tableCell();
+                            sink.link( prerequisites.getPluginInfoUrl( pluginPrerequisites.getPluginName() ) );
+                            sink.text( pluginPrerequisites.getPluginName() );
+                            sink.link_();
+                            sink.text( " " );
+                            sink.text( pluginPrerequisites.getPluginVersion() );
+                            sink.tableCell_();
+                            sink.tableCell();
+                            sink.text( pluginPrerequisites.getMavenVersion().toString() );
+                            sink.tableCell_();
 
-            sink.tableRow_();
+                            sink.tableCell();
+                            sink.text( pluginPrerequisites.getJdkVersion() );
+                            sink.tableCell_();
+                            sink.tableRow_();
+                        }
 
-            for ( PluginPrerequisites pluginPrerequisites : pluginsPrerequisites )
-            {
-                sink.tableRow();
-                sink.tableCell();
-                sink.link( prerequisites.getPluginInfoUrl( pluginPrerequisites.getPluginName() ) );
-                sink.text( pluginPrerequisites.getPluginName() );
-                sink.link_();
-                sink.text( " " );
-                sink.text( pluginPrerequisites.getPluginVersion() );
-                sink.tableCell_();
-                sink.tableCell();
-                sink.text( pluginPrerequisites.getMavenVersion().toString() );
-                sink.tableCell_();
-
-                sink.tableCell();
-                sink.text( pluginPrerequisites.getJdkVersion() );
-                sink.tableCell_();
-                sink.tableRow_();
-            }
-
-        }
+                    }
+                );
 
         sink.table_();
         sink.body_();
