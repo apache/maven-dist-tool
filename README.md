@@ -32,7 +32,7 @@ Quick Build
 mvn verify site
 ```
 
-[report]: https://ci-maven.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/
+[report]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master/site/
 [jira]: https://issues.apache.org/jira/projects/MNGSITE/
 [license]: https://www.apache.org/licenses/LICENSE-2.0
 [build]: https://ci-maven.apache.org/job/Maven/job/dist-tool-plugin/
