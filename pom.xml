@@ -17,7 +17,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>34</version>
+    <version>35-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
@@ -52,7 +52,7 @@
 
   <properties>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
-    <mvnversion>3.0.5</mvnversion>
+    <mvnversion>4.0.0-alpha-1-SNAPSHOT</mvnversion>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>    
   </properties>
@@ -100,12 +100,12 @@
     <dependency>
       <groupId>org.eclipse.aether</groupId>
       <artifactId>aether-api</artifactId>
-      <version>0.9.0.M2</version>
+      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.aether</groupId>
       <artifactId>aether-util</artifactId>
-      <version>0.9.0.M2</version>
+      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
@@ -114,7 +114,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-aether-provider</artifactId>
+      <artifactId>maven-resolver-provider</artifactId>
       <version>${mvnversion}</version>
       <scope>provided</scope>
     </dependency>
