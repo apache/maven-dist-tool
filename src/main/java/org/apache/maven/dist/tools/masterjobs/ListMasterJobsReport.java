@@ -186,7 +186,9 @@ public class ListMasterJobsReport extends AbstractMavenReport
                     {
                         sink.rawText( " style=\"color:red\"" );
                     }
-                    sink.rawText( ">(" + r.getLastBuild().format( DateTimeFormatter.ISO_LOCAL_DATE ) + ")</span> " );
+                    sink.rawText( ">(" + ( ( r.getLastBuild() == null ) ? "-" :
+                                             r.getLastBuild().format( DateTimeFormatter.ISO_LOCAL_DATE ) )
+                                  + ")</span> " );
 
                     sink.link( r.getBuildUrl() );
                     sink.rawText( r.getRepositoryName() );
