@@ -181,7 +181,8 @@ public class ListMasterJobsReport extends AbstractMavenReport
                     sink.rawText( r.getIcon() );
 
                     sink.rawText( "<span" );
-                    if ( r.getLastBuild().isBefore( ZonedDateTime.now().minusMonths( 1 ) ) )
+                    if ( ( r.getLastBuild() == null )
+                         || r.getLastBuild().isBefore( ZonedDateTime.now().minusMonths( 1 ) ) )
                     {
                         sink.rawText( " style=\"color:red\"" );
                     }
