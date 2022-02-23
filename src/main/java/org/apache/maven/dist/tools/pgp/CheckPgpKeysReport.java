@@ -105,10 +105,24 @@ public class CheckPgpKeysReport
         sink.body();
         sink.section1();
         sink.paragraph();
-        sink.rawText( "Check that official Maven PGP KEYS file from distribution area " + DIST_KEYS_URL
-            + " matches intermediate one in Maven Subvefrsion tree " + PROJECT_KEYS_URL );
+        sink.rawText( "Check that:" );
         sink.paragraph_();
+        sink.list();
+        sink.listItem();
+        sink.rawText( "official Maven PGP KEYS file from distribution area " );
+        sink.link( DIST_KEYS_URL );
+        sink.rawText( DIST_KEYS_URL );
+        sink.link_();
+        sink.listItem_();
+        sink.listItem();
+        sink.rawText( "intermediate one in Maven Subvefrsion tree " );
+        sink.link( PROJECT_KEYS_URL );
+        sink.rawText( PROJECT_KEYS_URL );
+        sink.link_();
+        sink.listItem_();
+        sink.list_();
         sink.paragraph();
+        sink.rawText( "match: " );
         if ( projectKeys.equals( distKeys ) )
         {
             iconSuccess( sink );

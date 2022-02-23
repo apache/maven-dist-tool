@@ -256,12 +256,12 @@
               <report>check-site</report>
               <report>check-source-release</report>
               <report>check-index-page</report>
+              <report>check-pgp-keys</report>
               <report>check-errors</report>
               <report>list-plugins-prerequisites</report>
               <report>list-master-jobs</report>
               <report>list-branches</report>
               <report>memory-check</report>
-              <report>check-pgp-keys</report>
             </reports>
           </reportSet>
           <reportSet>
