@@ -261,6 +261,7 @@
               <report>list-master-jobs</report>
               <report>list-branches</report>
               <report>memory-check</report>
+              <report>check-pgp-keys</report>
             </reports>
           </reportSet>
           <reportSet>

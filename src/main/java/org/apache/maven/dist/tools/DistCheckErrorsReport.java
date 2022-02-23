@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.maven.dist.tools.index.DistCheckIndexPageReport;
+import org.apache.maven.dist.tools.pgp.CheckPgpKeysReport;
 import org.apache.maven.dist.tools.site.DistCheckSiteReport;
 import org.apache.maven.dist.tools.source.DistCheckSourceReleaseReport;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
@@ -41,7 +42,8 @@ public class DistCheckErrorsReport
     extends AbstractDistCheckReport
 {
     private static final String[] FAILURES_FILENAMES = { DistCheckSourceReleaseReport.FAILURES_FILENAME,
-        DistCheckSiteReport.FAILURES_FILENAME, DistCheckIndexPageReport.FAILURES_FILENAME };
+        DistCheckSiteReport.FAILURES_FILENAME, DistCheckIndexPageReport.FAILURES_FILENAME,
+        CheckPgpKeysReport.FAILURES_FILENAME };
 
     private static final String EOL = System.getProperty( "line.separator" );
 
