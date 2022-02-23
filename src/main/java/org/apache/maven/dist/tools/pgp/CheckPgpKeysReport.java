@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
@@ -115,7 +116,7 @@ public class CheckPgpKeysReport
         sink.link_();
         sink.listItem_();
         sink.listItem();
-        sink.rawText( "intermediate one in Maven Subvefrsion tree " );
+        sink.rawText( "intermediate one in Maven Subversion tree " );
         sink.link( PROJECT_KEYS_URL );
         sink.rawText( PROJECT_KEYS_URL );
         sink.link_();
@@ -132,9 +133,19 @@ public class CheckPgpKeysReport
             iconError( sink );
         }
         sink.paragraph_();
-        sink.verbatim( true );
-        sink.rawText( distKeys );
-        sink.verbatim_();
+
+        sink.numberedList( 0 );
+        KeysIterator distIterator = new KeysIterator( distKeys );
+        while ( distIterator.hasNext() )
+        {
+            sink.numberedListItem();
+            sink.verbatim( true );
+            sink.rawText( distIterator.next() );
+            sink.verbatim_();
+            sink.numberedListItem_();
+        }
+        sink.numberedList_();
+
         sink.section1_();
         sink.body_();
         sink.close();
@@ -159,6 +170,34 @@ public class CheckPgpKeysReport
         catch ( IOException ioe )
         {
             throw new MavenReportException( "cannot fetch " + url, ioe );
+        }
+    }
+
+    private static class KeysIterator
+        implements Iterator<String>
+    {
+        private static final String BEGIN = "-----BEGIN PGP PUBLIC KEY BLOCK-----";
+        private static final String END = "-----END PGP PUBLIC KEY BLOCK-----";
+
+        private String content;
+
+        KeysIterator( String content )
+        {
+            this.content = content.substring( content.indexOf( "---" ) + 3 );
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return content.length() > 0;
+        }
+
+        @Override
+        public String next()
+        {
+            String id = content.substring( 0, content.indexOf( BEGIN ) ).trim();
+            content = content.substring( content.indexOf( END ) + END.length() ).trim();
+            return id;
         }
     }
 }
