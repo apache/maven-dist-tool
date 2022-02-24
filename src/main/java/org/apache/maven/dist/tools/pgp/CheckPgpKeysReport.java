@@ -85,7 +85,7 @@ public class CheckPgpKeysReport
 
         if ( !projectKeys.equals( distKeys ) )
         {
-            File failure = new File( outputDirectory, FAILURES_FILENAME );
+            File failure = new File( failuresDirectory, FAILURES_FILENAME );
             try ( PrintWriter output = new PrintWriter( new FileWriter( failure ) ) )
             {
                 output.println( "PGP KEYS files content is different: " + DIST_KEYS_URL + " vs " + PROJECT_KEYS_URL );
