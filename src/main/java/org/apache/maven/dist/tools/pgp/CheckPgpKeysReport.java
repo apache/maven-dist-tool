@@ -136,12 +136,23 @@ public class CheckPgpKeysReport
 
         sink.numberedList( 0 );
         KeysIterator distIterator = new KeysIterator( distKeys );
-        while ( distIterator.hasNext() )
+        KeysIterator projectIterator = new KeysIterator( projectKeys );
+        while ( distIterator.hasNext() || projectIterator.hasNext() )
         {
+            String distKey = distIterator.hasNext() ? distIterator.next() : "";
+            String projectKey = projectIterator.hasNext() ? projectIterator.next() : "";
+
             sink.numberedListItem();
             sink.verbatim( true );
-            sink.rawText( distIterator.next() );
+            sink.rawText( distKey );
             sink.verbatim_();
+            if ( !projectKey.equals( distKey ) )
+            {
+                iconError( sink );
+                sink.verbatim( true );
+                sink.rawText( projectKey );
+                sink.verbatim_();
+            }
             sink.numberedListItem_();
         }
         sink.numberedList_();
