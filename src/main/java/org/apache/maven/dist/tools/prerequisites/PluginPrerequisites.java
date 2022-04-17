@@ -32,14 +32,18 @@ public class PluginPrerequisites
 
     private String pluginVersion;
 
+    private String releaseDate;
+
     private ArtifactVersion mavenVersion;
 
     private String jdkVersion;
 
-    public PluginPrerequisites( String pluginName, String pluginVersion, String mavenVersion, String jdkVersion )
+    public PluginPrerequisites( String pluginName, String pluginVersion, String releaseDate, String mavenVersion,
+                                String jdkVersion )
     {
         this.pluginName = pluginName;
         this.pluginVersion = pluginVersion;
+        this.releaseDate = releaseDate;
         this.mavenVersion = new DefaultArtifactVersion( mavenVersion );
         this.jdkVersion = jdkVersion;
     }
@@ -72,6 +76,11 @@ public class PluginPrerequisites
     public String getPluginVersion()
     {
         return pluginVersion;
+    }
+
+    public String getReleaseDate()
+    {
+        return releaseDate;
     }
 
     public void setPluginName( String pluginName )

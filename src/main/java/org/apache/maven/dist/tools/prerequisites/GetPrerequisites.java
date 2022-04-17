@@ -106,6 +106,15 @@ public class GetPrerequisites
 
         Document doc = JsoupRetry.get( url );
 
+        String releaseDate = "?";
+        Elements breadcrumbs = doc.select( "div[id=breadcrumbs]" ); // breadcrumbs
+        if ( breadcrumbs.size() >= 0 )
+        {
+            String text = breadcrumbs.get( 0 ).text();
+            int index = text.indexOf( "Last Published: " );
+            releaseDate = text.substring( index + 16 ).substring( 0, 10 );
+        }
+
         Elements select = doc.select( "table.bodyTable" ); // Stylus skin
 
         if ( select.size() < 1 )
@@ -116,7 +125,7 @@ public class GetPrerequisites
         if ( select.size() < 1 )
         {
             System.err.println( "Could not find expected plugin info for " + url );
-            return new PluginPrerequisites( pluginName, "?", "?", "?" );
+            return new PluginPrerequisites( pluginName, "?", "?", "?", "?" );
         }
 
         Element tableInfo = select.get( 1 );
@@ -149,7 +158,7 @@ public class GetPrerequisites
             pluginVersion = pluginVersion.substring( 0, pluginVersion.indexOf( "</version>" ) );
         }
 
-        return new PluginPrerequisites( pluginName, pluginVersion, mavenVersion, jdkVersion );
+        return new PluginPrerequisites( pluginName, pluginVersion, releaseDate, mavenVersion, jdkVersion );
     }
 
     public List<PluginPrerequisites> getPrequisites()

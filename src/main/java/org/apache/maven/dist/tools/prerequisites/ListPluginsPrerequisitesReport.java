@@ -93,6 +93,10 @@ public class ListPluginsPrerequisitesReport
                         sink.rawText( "JDK Version" );
                         sink.tableHeaderCell_();
 
+                        sink.tableHeaderCell();
+                        sink.rawText( "Release Date" );
+                        sink.tableHeaderCell_();
+
                         sink.tableRow_();
 
                         for ( PluginPrerequisites pluginPrerequisites : pluginsPrerequisites )
@@ -105,12 +109,17 @@ public class ListPluginsPrerequisitesReport
                             sink.text( " " );
                             sink.text( pluginPrerequisites.getPluginVersion() );
                             sink.tableCell_();
+
                             sink.tableCell();
                             sink.text( pluginPrerequisites.getMavenVersion().toString() );
                             sink.tableCell_();
 
                             sink.tableCell();
                             sink.text( pluginPrerequisites.getJdkVersion() );
+                            sink.tableCell_();
+
+                            sink.tableCell();
+                            sink.text( pluginPrerequisites.getReleaseDate() );
                             sink.tableCell_();
                             sink.tableRow_();
                         }
