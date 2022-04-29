@@ -110,18 +110,22 @@ public class CheckPgpKeysReport
         sink.paragraph_();
         sink.list();
         sink.listItem();
-        sink.rawText( "official Maven PGP KEYS file from distribution area " );
+        sink.rawText( "official Maven PGP KEYS file from distribution area (<b>PMC write only</b>) " );
         sink.link( DIST_KEYS_URL );
         sink.rawText( DIST_KEYS_URL );
         sink.link_();
         sink.listItem_();
         sink.listItem();
-        sink.rawText( "intermediate one in Maven Subversion tree " );
+        sink.rawText( "intermediate <b>committer write</b> one in Maven Subversion tree " );
         sink.link( PROJECT_KEYS_URL );
         sink.rawText( PROJECT_KEYS_URL );
         sink.link_();
         sink.listItem_();
         sink.list_();
+        sink.paragraph();
+        sink.rawText( "Committers are supposed to write to project's KEYS then ask PMC for sync, but sometimes PMC"
+            + " members directly add in distribution area, then future sync is not trivial any more." );
+        sink.paragraph_();
         sink.paragraph();
         sink.rawText( "match: " );
         if ( projectKeys.equals( distKeys ) )
