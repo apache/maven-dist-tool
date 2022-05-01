@@ -152,7 +152,10 @@ public class CheckPgpKeysReport
             sink.verbatim_();
             if ( !projectKey.equals( distKey ) )
             {
+                sink.rawText( "dist target (PMC) " );
                 iconError( sink );
+                sink.rawText( " project (committers)" );
+
                 sink.verbatim( true );
                 sink.rawText( projectKey );
                 sink.verbatim_();
