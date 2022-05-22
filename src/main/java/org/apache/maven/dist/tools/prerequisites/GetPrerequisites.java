@@ -67,6 +67,10 @@ public class GetPrerequisites
         "maven-jar-plugin",
         "maven-jarsigner-plugin",
         "maven-javadoc-plugin",
+        "maven-jdeprscan-plugin",
+        "maven-jdeps-plugin",
+        "maven-jlink-plugin",
+        "maven-jmod-plugin",
         "maven-jxr-plugin",
         "maven-linkcheck-plugin",
         "maven-patch-plugin",
@@ -77,10 +81,11 @@ public class GetPrerequisites
         "maven-rar-plugin",
         "maven-release-plugin",
         "maven-remote-resources-plugin",
-        "maven-repository-plugin",
+        // "maven-repository-plugin", retired
         "maven-resources-plugin",
         "maven-scm-plugin",
         "maven-scm-publish-plugin",
+        "maven-scripting-plugin",
         "maven-shade-plugin",
         "maven-site-plugin",
         "maven-source-plugin",
@@ -90,6 +95,7 @@ public class GetPrerequisites
         "maven-toolchains-plugin",
         "maven-verifier-plugin",
         "maven-war-plugin",
+        "maven-wrapper-plugin",
     };
 
     private static final String BASEURL = "https://maven.apache.org/plugins/";

@@ -131,6 +131,7 @@ public class ListBranchesReport extends AbstractMavenReport
         JIRAPROJECTS.put( "maven-jmod-plugin", "MJMOD" );
         JIRAPROJECTS.put( "maven-jxr", "JXR" );
         JIRAPROJECTS.put( "maven-linkcheck-plugin", "MLINKCHECK" );
+        JIRAPROJECTS.put( "maven-mapping", "MSHARED" );
         JIRAPROJECTS.put( "maven-parent", "MPOM" );
         JIRAPROJECTS.put( "maven-patch-plugin", "MPATCH" );
         JIRAPROJECTS.put( "maven-pdf-plugin", "MPDF" );
@@ -168,7 +169,7 @@ public class ListBranchesReport extends AbstractMavenReport
         JIRAPROJECTS.put( "maven-verifier-plugin", "MVERIFIER" );
         JIRAPROJECTS.put( "maven-wagon", "WAGON" );
         JIRAPROJECTS.put( "maven-war-plugin", "MWAR" );
-        JIRAPROJECTS.put( "maven-wrapper-plugin", "MWRAPPER" );
+        JIRAPROJECTS.put( "maven-wrapper", "MWRAPPER" );
     }
 
 
