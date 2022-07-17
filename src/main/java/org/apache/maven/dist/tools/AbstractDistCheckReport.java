@@ -382,9 +382,6 @@ public abstract class AbstractDistCheckReport
     private static void icon( Sink sink, String level )
     {
         sink.figure();
-        sink.figureCaption();
-        sink.text( level );
-        sink.figureCaption_();
         sink.figureGraphics( "images/" + level + ".gif" );
         sink.figure_();
     }
