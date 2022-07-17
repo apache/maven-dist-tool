@@ -39,6 +39,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
 
+import static org.apache.maven.doxia.sink.impl.SinkEventAttributeSet.Semantics.BOLD;
+
 /**
  * Check PGP KEYS files.
  */
@@ -147,7 +149,7 @@ public class CheckPgpKeysReport
             String projectKey = projectIterator.hasNext() ? projectIterator.next() : "";
 
             sink.numberedListItem();
-            sink.verbatim( true );
+            sink.verbatim( BOLD );
             sink.rawText( distKey );
             sink.verbatim_();
             if ( !projectKey.equals( distKey ) )
@@ -156,7 +158,7 @@ public class CheckPgpKeysReport
                 iconError( sink );
                 sink.rawText( " project (committers)" );
 
-                sink.verbatim( true );
+                sink.verbatim( BOLD );
                 sink.rawText( projectKey );
                 sink.verbatim_();
             }
