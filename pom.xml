@@ -52,7 +52,7 @@
 
   <properties>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
-    <mvnversion>3.0.5</mvnversion>
+    <mvnversion>3.3.9</mvnversion>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>    
   </properties>
