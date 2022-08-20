@@ -17,7 +17,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>36</version>
+    <version>37</version>
     <relativePath/>
   </parent>
 
@@ -52,9 +52,9 @@
 
   <properties>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
-    <mvnversion>3.0.5</mvnversion>
+    <mvnversion>3.3.9</mvnversion>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>    
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -83,6 +83,24 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
+      <version>${mvnversion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <version>${mvnversion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <version>${mvnversion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings-builder</artifactId>
       <version>${mvnversion}</version>
       <scope>provided</scope>
     </dependency>
@@ -160,7 +178,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>4.0.0-M2</version>
+          <version>4.0.0-M3</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -168,7 +186,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.20</version>
+        <version>1.21</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -203,7 +221,7 @@
                 <artifactItem>
                   <groupId>org.apache.maven.skins</groupId>
                   <artifactId>maven-fluido-skin</artifactId>
-                  <version>1.10.0</version>
+                  <version>1.11.1</version>
                   <outputDirectory>${project.build.directory}/site</outputDirectory>
                   <includes>**\/*.css, **\/*.png, **\/*.gif</includes>
                 </artifactItem>
