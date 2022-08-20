@@ -62,25 +62,35 @@ public class ListMasterJobsReport extends AbstractMavenReport
                                                          "maven-metric-extension",
                                                          "maven-gh-actions-shared" );
 
+    /**
+     * <p>Constructor for DistCheckSiteReport.</p>
+     */
+    public ListMasterJobsReport()
+    {
+    }
 
+    /** {@inheritDoc} */
     @Override
     public String getOutputName()
     {
         return "dist-tool-master-jobs";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> List Master Jobs";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
         return "Shows the status of Jenkins job for the master branch of every Git repository on one page";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
         throws MavenReportException
@@ -250,7 +260,7 @@ public class ListMasterJobsReport extends AbstractMavenReport
      * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
      *
      * @return the list of repository names (without ".git")
-     * @throws IOException problem with reading repository index
+     * @throws java.io.IOException problem with reading repository index
      */
     protected Collection<String> repositoryNames()
         throws IOException

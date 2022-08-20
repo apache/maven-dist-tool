@@ -22,6 +22,7 @@ package org.apache.maven.dist.tools.site;
 import org.jsoup.nodes.Document;
 
 /**
+ * <p>HTMLChecker interface.</p>
  *
  * @author skygo
  */
@@ -37,7 +38,7 @@ public interface HTMLChecker
 
     /**
      * Get an id representing skin.
-     * 
+     *
      * @return string for skin
      */
     String getSkin();

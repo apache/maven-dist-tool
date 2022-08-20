@@ -25,24 +25,33 @@ import org.jsoup.nodes.Element;
 
 /**
  * Check if artifact version is present in fluido skin.
- * 
+ *
  * @author skygo
  */
 public class FluidoHTMLChecker implements HTMLChecker
 {
+    /**
+     * Fluido Html Checker
+     */
+    public FluidoHTMLChecker()
+    {
+    }
 
+    /** {@inheritDoc} */
     @Override
     public String getName()
     {
         return "Fluido";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getSkin()
     {
         return "Fluido";
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isDisplayedArtifactVersionOk( Document doc, String version )
     {

@@ -53,8 +53,17 @@ public class DistCheckSourceReleaseReport
 {
     private static final String NOT_IN_DISTRIBUTION_AREA = "_not_in_distribution_area_";
 
+    /** Constant <code>FAILURES_FILENAME="check-source-release.log"</code> */
     public static final String FAILURES_FILENAME = "check-source-release.log";
 
+    /**
+     * Dist Check Source Release Report
+     */
+    public DistCheckSourceReleaseReport()
+    {
+    }
+
+    /** {@inheritDoc} */
     @Override
     protected boolean isIndexPageCheck()
     {
@@ -67,17 +76,24 @@ public class DistCheckSourceReleaseReport
     @Parameter
     protected List<String> ignoreDistFailures;
 
+    /**
+     * <p>getFailuresFilename.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     protected String getFailuresFilename()
     {
         return FAILURES_FILENAME;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> Check Source Release";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
@@ -250,6 +266,7 @@ public class DistCheckSourceReleaseReport
         sink.tableRow_();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
         throws MavenReportException
@@ -538,6 +555,7 @@ public class DistCheckSourceReleaseReport
         return missingFiles;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void checkArtifact( ConfigurationLineInfo configLine, String version )
         throws MojoExecutionException

@@ -20,6 +20,7 @@ package org.apache.maven.dist.tools;
  */
 
 /**
+ * <p>AbstractCheckResult class.</p>
  *
  * @author skygo
  */
@@ -29,6 +30,12 @@ public class AbstractCheckResult
     private final ConfigurationLineInfo configLine;
     private final String version;
 
+    /**
+     * <p>Constructor for AbstractCheckResult.</p>
+     *
+     * @param r a {@link org.apache.maven.dist.tools.ConfigurationLineInfo} object
+     * @param version a {@link java.lang.String} object
+     */
     public AbstractCheckResult( ConfigurationLineInfo r, String version )
     {
         this.configLine = r;
@@ -36,6 +43,8 @@ public class AbstractCheckResult
     }
 
     /**
+     * <p>getConfigurationLine.</p>
+     *
      * @return the request
      */
     public ConfigurationLineInfo getConfigurationLine()
@@ -44,6 +53,8 @@ public class AbstractCheckResult
     }
 
     /**
+     * <p>Getter for the field <code>version</code>.</p>
+     *
      * @return the version
      */
     public String getVersion()

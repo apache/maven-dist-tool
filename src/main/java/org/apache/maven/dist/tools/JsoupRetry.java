@@ -29,10 +29,26 @@ import org.jsoup.nodes.Document;
  */
 public class JsoupRetry
 {
+    /** Constant <code>MAX_RETRY=3</code> */
     public static final int MAX_RETRY = 3;
 
+    /** Constant <code>WAIT_RETRY_SECONDS=10</code> */
     public static final int WAIT_RETRY_SECONDS = 10;
 
+    /**
+     * JsoupRetry constructor.
+     */
+    public JsoupRetry()
+    {
+    }
+
+    /**
+     * <p>get.</p>
+     *
+     * @param url a {@link java.lang.String} object
+     * @return a {@link org.jsoup.nodes.Document} object
+     * @throws java.io.IOException if any.
+     */
     public static Document get( String url )
         throws IOException
     {

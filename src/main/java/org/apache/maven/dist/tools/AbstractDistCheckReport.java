@@ -51,6 +51,7 @@ import org.apache.maven.reporting.AbstractMavenReport;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
+ * Abstract AbstractDistCheckReport class.
  *
  * @author skygo
  */
@@ -60,6 +61,13 @@ public abstract class AbstractDistCheckReport
     private static final String CONF = "dist-tool.conf";
 
     private static final String EOL = System.getProperty( "line.separator" );
+
+    /**
+     * Abstract Dist Check Report.
+     */
+    public AbstractDistCheckReport()
+    {
+    }
 
     /**
      * URL of repository where artifacts are stored. 
@@ -73,6 +81,9 @@ public abstract class AbstractDistCheckReport
     @Parameter( property = "configurationLines", defaultValue = "" )
     private List<String> configurationLines;
 
+    /**
+     * Failures directory.
+     */
     @Parameter( defaultValue = "${project.build.directory}/dist-tool" )
     protected File failuresDirectory;
 
@@ -81,6 +92,9 @@ public abstract class AbstractDistCheckReport
      */
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
 
+    /**
+     * Location of distribution area
+     */
     protected String distributionAreaUrl;
 
     /**
@@ -102,15 +116,29 @@ public abstract class AbstractDistCheckReport
      * is it index page check mojo?
      * necessary to only check index page information for plugins marked with asterisk * in db,
      * because they are released as part of a global component (archetype, scm, release, ...)
+     *
      * @return if it is a index page check.
      */
     protected abstract boolean isIndexPageCheck();
     
+    /**
+     * <p>checkArtifact.</p>
+     *
+     * @param request a {@link org.apache.maven.dist.tools.ConfigurationLineInfo} object
+     * @param repoBase a {@link java.lang.String} object
+     * @throws org.apache.maven.plugin.MojoExecutionException if any.
+     */
     protected abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
         throws MojoExecutionException;
 
+    /**
+     * <p>getFailuresFilename.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     protected abstract String getFailuresFilename();
 
+    /** {@inheritDoc} */
     @Override
     public String getOutputName()
     {
@@ -141,6 +169,7 @@ public abstract class AbstractDistCheckReport
                                              ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN );
     }
 
+    /** {@inheritDoc} */
     @Override
     public void execute()
         throws MojoExecutionException
@@ -386,8 +415,8 @@ public abstract class AbstractDistCheckReport
     
     /**
      * Log and add Error line to logs.txt if not configured to ignore the artifact+version
-     * 
-     * @param cli {@link ConfigurationLineInfo}
+     *
+     * @param cli {@link org.apache.maven.dist.tools.ConfigurationLineInfo}
      * @param version The version.
      * @param ignore the list of ignores.
      * @param message  The message.

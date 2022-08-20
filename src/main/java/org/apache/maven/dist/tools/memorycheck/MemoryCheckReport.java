@@ -55,11 +55,21 @@ public class MemoryCheckReport extends AbstractDistCheckReport
 {
 
     private static final String GITHUB_REPOSITORY = "quick-perf/maven-test-bench";
+    /** Constant <code>GITHUB_REPOSITORY_URL="<a href="https://github.com/">...</a> + GITHUB_REPOSITORY"</code> */
     public static final String GITHUB_REPOSITORY_URL = "https://github.com/" + GITHUB_REPOSITORY;
+    /** Constant <code>MEMORY_CHECK_GITHUB_ACTION_WORKFLOW_NAME="Daily Memory Check"</code> */
     public static final String MEMORY_CHECK_GITHUB_ACTION_WORKFLOW_NAME = "Daily Memory Check";
     private static final int BUILD_HISTORY_SIZE = 10;
     private static final int GITHUB_ACTION_JOB_PAGE_SIZE = 10;
 
+    /**
+     * Memory Check Report constructor.
+     */
+    public MemoryCheckReport()
+    {
+    }
+
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale ) throws MavenReportException
     {
@@ -136,35 +146,41 @@ public class MemoryCheckReport extends AbstractDistCheckReport
         sink.list_();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean isIndexPageCheck()
     {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void checkArtifact( ConfigurationLineInfo request, String repoBase ) throws MojoExecutionException
     {
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getFailuresFilename()
     {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getOutputName()
     {
         return "dist-tool-memory-check";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> Memory Check";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {

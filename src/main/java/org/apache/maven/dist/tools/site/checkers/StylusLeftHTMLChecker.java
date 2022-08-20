@@ -25,24 +25,33 @@ import org.jsoup.nodes.Element;
 
 /**
  * Check if artifact version is present on left side in stylus skin.
- * 
+ *
  * @author skygo
  */
 public class StylusLeftHTMLChecker implements HTMLChecker
 {
+    /**
+     * Stylus Left Html Checker
+     */
+    public StylusLeftHTMLChecker()
+    {
+    }
 
+    /** {@inheritDoc} */
     @Override
     public String getName()
     {
         return "Stylus left side";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getSkin()
     {
         return "Stylus";
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isDisplayedArtifactVersionOk( Document doc, String version )
     {

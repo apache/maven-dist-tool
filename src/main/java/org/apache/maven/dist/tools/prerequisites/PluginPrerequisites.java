@@ -23,8 +23,9 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 
 /**
- * @author Karl Heinz Marbaise
+ * <p>PluginPrerequisites class.</p>
  *
+ * @author Karl Heinz Marbaise
  */
 public class PluginPrerequisites
 {
@@ -38,6 +39,15 @@ public class PluginPrerequisites
 
     private String jdkVersion;
 
+    /**
+     * <p>Constructor for PluginPrerequisites.</p>
+     *
+     * @param pluginName a {@link java.lang.String} object
+     * @param pluginVersion a {@link java.lang.String} object
+     * @param releaseDate a {@link java.lang.String} object
+     * @param mavenVersion a {@link java.lang.String} object
+     * @param jdkVersion a {@link java.lang.String} object
+     */
     public PluginPrerequisites( String pluginName, String pluginVersion, String releaseDate, String mavenVersion,
                                 String jdkVersion )
     {
@@ -48,41 +58,81 @@ public class PluginPrerequisites
         this.jdkVersion = jdkVersion;
     }
 
+    /**
+     * <p>Getter for the field <code>mavenVersion</code>.</p>
+     *
+     * @return a {@link org.apache.maven.artifact.versioning.ArtifactVersion} object
+     */
     public ArtifactVersion getMavenVersion()
     {
         return mavenVersion;
     }
 
+    /**
+     * <p>Setter for the field <code>mavenVersion</code>.</p>
+     *
+     * @param mavenVersion a {@link java.lang.String} object
+     */
     public void setMavenVersion( String mavenVersion )
     {
         this.mavenVersion = new DefaultArtifactVersion( mavenVersion );
     }
 
+    /**
+     * <p>Getter for the field <code>jdkVersion</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getJdkVersion()
     {
         return jdkVersion;
     }
 
+    /**
+     * <p>Setter for the field <code>jdkVersion</code>.</p>
+     *
+     * @param jdkVersion a {@link java.lang.String} object
+     */
     public void setJdkVersion( String jdkVersion )
     {
         this.jdkVersion = jdkVersion;
     }
 
+    /**
+     * <p>Getter for the field <code>pluginName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getPluginName()
     {
         return pluginName;
     }
 
+    /**
+     * <p>Getter for the field <code>pluginVersion</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getPluginVersion()
     {
         return pluginVersion;
     }
 
+    /**
+     * <p>Getter for the field <code>releaseDate</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getReleaseDate()
     {
         return releaseDate;
     }
 
+    /**
+     * <p>Setter for the field <code>pluginName</code>.</p>
+     *
+     * @param pluginName a {@link java.lang.String} object
+     */
     public void setPluginName( String pluginName )
     {
         this.pluginName = pluginName;

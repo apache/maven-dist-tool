@@ -48,36 +48,51 @@ import static org.apache.maven.doxia.sink.impl.SinkEventAttributeSet.Semantics.B
 public class CheckPgpKeysReport
         extends AbstractDistCheckReport
 {
+    /** Constant <code>FAILURES_FILENAME="check-pgp-keys.log"</code> */
     public static final String FAILURES_FILENAME = "check-pgp-keys.log";
 
+    /** Constant <code>PROJECT_KEYS_URL="<a href="https://svn.apache.org/repos/asf/maven/">...</a>"{trunked}</code> */
     public static final String PROJECT_KEYS_URL = "https://svn.apache.org/repos/asf/maven/project/KEYS";
 
+    /** Constant <code>DIST_KEYS_URL="<a href="https://dist.apache.org/repos/dist/rele">...</a>"{trunked}</code> */
     public static final String DIST_KEYS_URL = "https://dist.apache.org/repos/dist/release/maven/KEYS";
 
+    /**
+     * Check PGP Keys report.
+     */
+    public CheckPgpKeysReport()
+    {
+    }
+
+    /** {@inheritDoc} */
     @Override
     protected String getFailuresFilename()
     {
         return FAILURES_FILENAME;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> Check PGP KEYS";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
         return "Verification of PGP KEYS files";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean isIndexPageCheck()
     {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
             throws MavenReportException
@@ -171,6 +186,7 @@ public class CheckPgpKeysReport
         sink.close();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void checkArtifact( ConfigurationLineInfo request, String repoBase )
         throws MojoExecutionException

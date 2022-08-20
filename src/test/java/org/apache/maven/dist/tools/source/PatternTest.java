@@ -23,12 +23,19 @@ import org.apache.maven.dist.tools.source.DistCheckSourceReleaseReport;
 import org.junit.Test;
 
 /**
+ * PatternTest
  *
  * @author skygo
  */
 public class PatternTest
 {
-    
+    /**
+     * Test Pattern
+     */
+    public PatternTest()
+    {
+    }
+
     /**
      * Test of getGroupId method, of class ConfigurationLineInfo.
      */

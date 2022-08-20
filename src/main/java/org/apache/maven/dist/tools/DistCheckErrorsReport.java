@@ -34,6 +34,7 @@ import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
+ * <p>DistCheckErrorsReport class.</p>
  *
  * @author skygo
  */
@@ -47,6 +48,14 @@ public class DistCheckErrorsReport
 
     private static final String EOL = System.getProperty( "line.separator" );
 
+    /**
+     * Dist Check Errors Report.
+     */
+    public DistCheckErrorsReport()
+    {
+    }
+
+    /** {@inheritDoc} */
     @Override
     protected boolean isIndexPageCheck()
     {
@@ -97,6 +106,7 @@ public class DistCheckErrorsReport
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
         throws MavenReportException
@@ -126,29 +136,38 @@ public class DistCheckErrorsReport
         }
     }
 
+    /**
+     * <p>getFailuresFilename.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     protected String getFailuresFilename()
     {
         return "dummy";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getOutputName()
     {
         return "dist-tool-check-errors";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> Check Errors";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
         return "Dist Tool report to display inconsistencies found by any check report";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void checkArtifact( ConfigurationLineInfo request, String repoBase )
         throws MojoExecutionException

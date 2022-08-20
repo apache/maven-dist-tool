@@ -23,7 +23,7 @@ import java.time.ZonedDateTime;
 
 /**
  * Represent build result of a Jenkins job for a Git master branch.
- * 
+ *
  * @author Robert Scholte
  */
 public class Result
@@ -38,47 +38,93 @@ public class Result
     
     private ZonedDateTime lastBuild;
 
+    /**
+     * <p>Constructor for Result.</p>
+     *
+     * @param repositoryName a {@link java.lang.String} object
+     * @param buildUrl a {@link java.lang.String} object
+     */
     public Result( String repositoryName, String buildUrl )
     {
         this.repositoryName = repositoryName;
         this.buildUrl = buildUrl;
     }
 
+    /**
+     * <p>Setter for the field <code>status</code>.</p>
+     *
+     * @param status a {@link java.lang.String} object
+     */
     public void setStatus( String status )
     {
         this.status = status;
     }
 
+    /**
+     * <p>Setter for the field <code>icon</code>.</p>
+     *
+     * @param icon a {@link java.lang.String} object
+     */
     public void setIcon( String icon )
     {
         this.icon = icon;
     }
 
+    /**
+     * <p>Setter for the field <code>lastBuild</code>.</p>
+     *
+     * @param lastBuild a {@link java.time.ZonedDateTime} object
+     */
     public void setLastBuild( ZonedDateTime lastBuild )
     {
         this.lastBuild = lastBuild;
     }
     
+    /**
+     * <p>Getter for the field <code>lastBuild</code>.</p>
+     *
+     * @return a {@link java.time.ZonedDateTime} object
+     */
     public ZonedDateTime getLastBuild()
     {
         return lastBuild;
     }
     
+    /**
+     * <p>Getter for the field <code>repositoryName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getRepositoryName()
     {
         return repositoryName;
     }
 
+    /**
+     * <p>Getter for the field <code>status</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getStatus()
     {
         return status;
     }
 
+    /**
+     * <p>Getter for the field <code>buildUrl</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getBuildUrl()
     {
         return buildUrl;
     }
 
+    /**
+     * <p>Getter for the field <code>icon</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getIcon()
     {
         return icon;

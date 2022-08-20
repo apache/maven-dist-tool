@@ -54,6 +54,8 @@ class CheckSiteResult
     }
 
     /**
+     * <p>Getter for the field <code>url</code>.</p>
+     *
      * @return the url
      */
     public String getUrl()
@@ -62,6 +64,8 @@ class CheckSiteResult
     }
 
     /**
+     * <p>Getter for the field <code>checkMap</code>.</p>
+     *
      * @return the checkMap
      */
     public Map<HTMLChecker, Boolean> getCheckMap()
@@ -75,6 +79,8 @@ class CheckSiteResult
     }
 
     /**
+     * <p>Getter for the field <code>statusCode</code>.</p>
+     *
      * @return the statusCode
      */
     public int getStatusCode()

@@ -27,6 +27,7 @@ import org.apache.maven.dist.tools.site.checkers.StylusLeftHTMLChecker;
 import org.apache.maven.dist.tools.site.checkers.StylusRightHTMLChecker;
 
 /**
+ * <p>HTMLCheckerFactory class.</p>
  *
  * @author skygo
  */
@@ -39,6 +40,7 @@ public final class HTMLCheckerFactory
 
     /**
      * get all checker
+     *
      * @return list of checker
      */
     public static List<HTMLChecker> getCheckers()

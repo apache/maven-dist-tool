@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
+ * <p>DummyFailureReport class.</p>
  *
  * @author skygo
  */
@@ -31,29 +32,44 @@ import org.apache.maven.plugins.annotations.Mojo;
 public class DummyFailureReport
     extends DistCheckErrorsReport
 {
+    /**
+     * Dummy
+     */
+    public DummyFailureReport()
+    {
+    }
+
     @Override
     boolean isDummyFailure()
     {
         return true;
     }
 
+    /**
+     * <p>getFailuresFilename.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     protected String getFailuresFilename()
     {
         return "dummy";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getOutputName()
     {
         return "dist-tool-failure";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> Failure Hack";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {

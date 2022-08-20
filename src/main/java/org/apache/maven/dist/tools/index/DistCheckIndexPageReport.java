@@ -51,8 +51,10 @@ import org.jsoup.select.Elements;
 public class DistCheckIndexPageReport
         extends AbstractDistCheckReport
 {
+    /** Constant <code>FAILURES_FILENAME="check-index-page.log"</code> */
     public static final String FAILURES_FILENAME = "check-index-page.log";
 
+    /** Constant <code>POMS_INDEX_URL="<a href="https://maven.apache.org/pom/">...</a>"</code> */
     public static final String POMS_INDEX_URL = "https://maven.apache.org/pom/";
 
     private static final IndexPage[] INDEX_PAGES = new IndexPage[] {
@@ -74,29 +76,40 @@ public class DistCheckIndexPageReport
     }
 
     /**
+     * Dist Check Index Page Report.
+     */
+    public DistCheckIndexPageReport()
+    {
+    }
+
+    /**
      * Ignore dist failure for <code>artifactId</code> or <code>artifactId:version</code>
      */
     @Parameter
     protected List<String> ignoreDistFailures;
 
+    /** {@inheritDoc} */
     @Override
     protected String getFailuresFilename()
     {
         return FAILURES_FILENAME;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> Check Index Pages";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
         return "Verification of index pages";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean isIndexPageCheck()
     {
@@ -191,6 +204,7 @@ public class DistCheckIndexPageReport
         return Math.abs( daysDifference ) < 7; // ok for 7 days difference
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
             throws MavenReportException
@@ -314,6 +328,7 @@ public class DistCheckIndexPageReport
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void checkArtifact( ConfigurationLineInfo configLine, String version )
             throws MojoExecutionException

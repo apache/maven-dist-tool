@@ -26,10 +26,17 @@ import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 /**
- *
+ * SiteReportTest
  */
 public class SiteReportTest
 {
+    /**
+     * SiteReportTest
+     */
+    public SiteReportTest()
+    {
+    }
+
     private String readDocument( String resource )
         throws IOException
     {
@@ -40,14 +47,24 @@ public class SiteReportTest
         }
     }
 
+    /**
+     * Test Fluido skin
+     *
+     * @throws IOException if the resource cannot be read
+     */
     @Test
     public void testFluidoSkin()
         throws IOException
     {
         String comment = readDocument( "fluido.html" );
         assertTrue( comment.contains( "Fluido" ) );
-    } 
+    }
 
+    /**
+     * test Stylus Right skin
+     * *
+     * @throws IOException if the resource cannot be read
+     */
     @Test
     public void testStylusRightSkin()
         throws IOException

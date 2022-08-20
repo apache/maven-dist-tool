@@ -29,24 +29,36 @@ import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 
 /**
+ * <p>ListPluginsPrerequisitesReport class.</p>
+ *
  * @author Karl Heinz Marbaise
  */
 @Mojo( name = "list-plugins-prerequisites", requiresProject = false )
 public class ListPluginsPrerequisitesReport
     extends AbstractMavenReport
 {
+    /**
+     * List Plugins Prerequisites Report
+     */
+    public ListPluginsPrerequisitesReport()
+    {
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> List Plugins Prerequisites";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
         return "Maven and JDK version prerequisites for plugins";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
         throws MavenReportException
@@ -131,6 +143,7 @@ public class ListPluginsPrerequisitesReport
         sink.body_();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getOutputName()
     {

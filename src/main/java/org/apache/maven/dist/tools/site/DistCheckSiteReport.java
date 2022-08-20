@@ -41,6 +41,7 @@ import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 
 /**
+ * <p>DistCheckSiteReport class.</p>
  *
  * @author skygo
  */
@@ -48,7 +49,15 @@ import org.jsoup.nodes.Document;
 public class DistCheckSiteReport
     extends AbstractDistCheckReport
 {
+    /** Constant <code>FAILURES_FILENAME="check-site.log"</code> */
     public static final String FAILURES_FILENAME = "check-site.log";
+
+    /**
+     * <p>Constructor for DistCheckSiteReport.</p>
+     */
+    public DistCheckSiteReport()
+    {
+    }
 
     /**
      * Ignore site failure for <code>artifactId</code> or <code>artifactId:version</code>
@@ -79,23 +88,31 @@ public class DistCheckSiteReport
      */
     protected static final int HTTP_OK = 200;
 
+    /** {@inheritDoc} */
     @Override
     protected boolean isIndexPageCheck()
     {
         return false;
     }
 
+    /**
+     * <p>getFailuresFilename.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     protected String getFailuresFilename()
     {
         return FAILURES_FILENAME;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> Check Sites";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
@@ -106,6 +123,7 @@ public class DistCheckSiteReport
     private List<CheckSiteResult> results = new LinkedList<>();
     private final List<HTMLChecker> checkers = HTMLCheckerFactory.getCheckers();
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
         throws MavenReportException
@@ -272,6 +290,7 @@ public class DistCheckSiteReport
 
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void checkArtifact( ConfigurationLineInfo configLine, String latestVersion )
         throws MojoExecutionException

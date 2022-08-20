@@ -172,25 +172,35 @@ public class ListBranchesReport extends AbstractMavenReport
         JIRAPROJECTS.put( "maven-wrapper", "MWRAPPER" );
     }
 
+    /**
+     * List Branches Constructor.
+     */
+    public ListBranchesReport()
+    {
+    }
 
+    /** {@inheritDoc} */
     @Override
     public String getOutputName()
     {
         return "dist-tool-branches";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName( Locale locale )
     {
         return "Dist Tool> List Branches";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getDescription( Locale locale )
     {
         return "Shows the list of branches of every Git repository on one page";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void executeReport( Locale locale )
         throws MavenReportException
@@ -549,7 +559,7 @@ public class ListBranchesReport extends AbstractMavenReport
      * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
      *
      * @return the list of repository names (without ".git")
-     * @throws IOException problem with reading repository index
+     * @throws java.io.IOException problem with reading repository index
      */
     protected Collection<String> repositoryNames()
         throws IOException
@@ -569,6 +579,13 @@ public class ListBranchesReport extends AbstractMavenReport
         return names;
     }
     
+    /**
+     * <p>hasDependabotYml.</p>
+     *
+     * @param repositoryName a {@link java.lang.String} object
+     * @return a boolean
+     * @throws java.io.IOException if any.
+     */
     protected static boolean hasDependabotYml( String repositoryName )
         throws IOException
     {

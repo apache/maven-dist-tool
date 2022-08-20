@@ -32,8 +32,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- * @author Karl Heinz Marbaiase
+ * <p>GetPrerequisites class.</p>
  *
+ * @author Karl Heinz Marbaiase
  */
 public class GetPrerequisites
 {
@@ -100,11 +101,31 @@ public class GetPrerequisites
 
     private static final String BASEURL = "https://maven.apache.org/plugins/";
 
+    /**
+     * Get Prerequisites for the given plugin name.
+     */
+    public GetPrerequisites()
+    {
+    }
+
+    /**
+     * <p>getPluginInfoUrl.</p>
+     *
+     * @param pluginName a {@link java.lang.String} object
+     * @return a {@link java.lang.String} object
+     */
     public String getPluginInfoUrl( String pluginName )
     {
         return BASEURL + pluginName + "/plugin-info.html";
     }
 
+    /**
+     * <p>getPluginPrerequisites.</p>
+     *
+     * @param pluginName a {@link java.lang.String} object
+     * @return a {@link org.apache.maven.dist.tools.prerequisites.PluginPrerequisites} object
+     * @throws java.io.IOException if any.
+     */
     public PluginPrerequisites getPluginPrerequisites( String pluginName )
         throws IOException
     {
@@ -167,6 +188,11 @@ public class GetPrerequisites
         return new PluginPrerequisites( pluginName, pluginVersion, releaseDate, mavenVersion, jdkVersion );
     }
 
+    /**
+     * <p>getPrequisites.</p>
+     *
+     * @return a {@link java.util.List} object
+     */
     public List<PluginPrerequisites> getPrequisites()
     {
         List<PluginPrerequisites> result = new ArrayList<>();
@@ -186,6 +212,11 @@ public class GetPrerequisites
         return result;
     }
 
+    /**
+     * <p>getGroupedPrequisites.</p>
+     *
+     * @return a {@link java.util.Map} object
+     */
     public Map<ArtifactVersion, List<PluginPrerequisites>> getGroupedPrequisites()
     {
         return getPrequisites().stream()
