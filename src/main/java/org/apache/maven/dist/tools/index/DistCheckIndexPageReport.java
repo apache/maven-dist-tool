@@ -208,7 +208,9 @@ public class DistCheckIndexPageReport
         }
         catch ( DateTimeParseException pe )
         {
-            getLog().warn( "Unable to parse dates for fields from metadata:\"" + metadataDate + "\" and index:\"" + indexDate + "\"" );
+            getLog().warn(
+                    "Unable to parse dates for fields from metadata:\"" + metadataDate
+                            + "\" and index:\"" + indexDate + "\"" );
             return false;
         }
     }
