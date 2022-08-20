@@ -145,7 +145,7 @@
     <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
-      <version>1.4.01</version>
+      <version>2.0.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -289,7 +289,10 @@
             <ignoreDistFailure>apache-jar-resource-bundle:1.4</ignoreDistFailure>
             <ignoreDistFailure>apache-license-header-resource-bundle:1.1</ignoreDistFailure>
             <!-- temp ignore, wait for final release -->
+            <ignoreDistFailure>maven-reporting-api:4.0.0-M2</ignoreDistFailure>
+            <ignoreDistFailure>maven-reporting-impl:4.0.0-M2</ignoreDistFailure>
             <ignoreDistFailure>maven-scm:2.0.0-M1</ignoreDistFailure>
+            <ignoreDistFailure>maven-site-plugin:4.0.0-M3</ignoreDistFailure>
           </ignoreDistFailures>
         </configuration>
         <reportSets>
