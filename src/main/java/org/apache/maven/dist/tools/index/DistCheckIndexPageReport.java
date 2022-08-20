@@ -22,6 +22,7 @@ package org.apache.maven.dist.tools.index;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -195,13 +196,21 @@ public class DistCheckIndexPageReport
         sink.tableRow_();
     }
 
-    private boolean isDateSimilar( String date1, String date2 )
+    private boolean isDateSimilar( String metadataDate, String indexDate )
     {
-        LocalDate d1 = LocalDate.parse( date1 );
-        LocalDate d2 = LocalDate.parse( date2 );
+        try
+        {
+            LocalDate d1 = LocalDate.parse( metadataDate );
+            LocalDate d2 = LocalDate.parse( indexDate );
 
-        long daysDifference = Period.between( d1, d2 ).getDays();
-        return Math.abs( daysDifference ) < 7; // ok for 7 days difference
+            long daysDifference = Period.between( d1, d2 ).getDays();
+            return Math.abs( daysDifference ) < 7; // ok for 7 days difference
+        }
+        catch ( DateTimeParseException pe )
+        {
+            getLog().warn( "Unable to parse dates for fields from metadata:\"" + metadataDate + "\" and index:\"" + indexDate + "\"" );
+            return false;
+        }
     }
 
     /** {@inheritDoc} */
