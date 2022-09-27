@@ -157,7 +157,7 @@
     <dependency>
       <groupId>org.kohsuke</groupId>
       <artifactId>github-api</artifactId>
-      <version>1.129</version>
+      <version>1.313</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
