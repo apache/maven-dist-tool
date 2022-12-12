@@ -25,6 +25,14 @@ pipeline {
         cron('H H * * *')
     }
     stages {
+        stage('Checkout') {
+            steps {
+                // Clean before build
+                cleanWs()
+                // We need to explicitly checkout from SCM here
+                checkout scm
+            }
+        }
         stage('Check') {
             when {
                 branch 'master'
@@ -54,5 +62,7 @@ pipeline {
         timestamps()
         disableConcurrentBuilds()
         ansiColor('xterm')
+        // This is required if you want to clean before build
+        skipDefaultCheckout(true)
     }
 }
