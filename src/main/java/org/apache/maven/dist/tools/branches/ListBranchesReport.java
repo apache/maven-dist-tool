@@ -69,7 +69,6 @@ public class ListBranchesReport extends AbstractMavenReport
             "maven-jenkins-lib",
             "maven-sources",
             "maven-studies",
-            "maven-build-cache-extension",
             "maven-mvnd",
             "maven-metric-extension",
             "maven-gh-actions-shared" );
@@ -88,6 +87,7 @@ public class ListBranchesReport extends AbstractMavenReport
         JIRAPROJECTS.put( "maven-artifact-plugin", "MARTIFACT" );
         JIRAPROJECTS.put( "maven-artifact-transfer", "MSHARED" );
         JIRAPROJECTS.put( "maven-assembly-plugin", "MASSEMBLY" );
+        JIRAPROJECTS.put( "maven-build-cache-extension", "MBUILDCACHE" );
         JIRAPROJECTS.put( "maven-changelog-plugin", "MCHANGELOG" );
         JIRAPROJECTS.put( "maven-changes-plugin", "MCHANGES" );
         JIRAPROJECTS.put( "maven-checkstyle-plugin", "MCHECKSTYLE" );
