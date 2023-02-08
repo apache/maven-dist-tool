@@ -57,7 +57,6 @@ public class ListMasterJobsReport extends AbstractMavenReport
                                                          "maven-jenkins-lib",
                                                          "maven-sources",
                                                          "maven-studies",
-                                                         "maven-build-cache-extension",
                                                          "maven-mvnd",
                                                          "maven-metric-extension",
                                                          "maven-gh-actions-shared" );
