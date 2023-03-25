@@ -28,12 +28,12 @@ under the License.
 
     <bannerLeft>
       <name>${project.name}</name>
-      <src>https://maven.apache.org/images/apache-maven-project.png</src>
+      <src>/images/apache-maven-project.png</src>
       <href>https://www.apache.org/</href>
     </bannerLeft>
 
     <bannerRight>
-      <src>https://maven.apache.org/images/maven-logo-black-on-white.png</src>
+      <src>/images/maven-logo-black-on-white.png</src>
       <href>https://maven.apache.org/</href>
     </bannerRight>
 
