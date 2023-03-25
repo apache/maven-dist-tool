@@ -23,7 +23,7 @@ under the License.
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
   name="dist-tool">
-    <publishDate>yyyy-MM-dd HH:mm z</publishDate>
+    <publishDate format="yyyy-MM-dd HH:mm z" position="right" />
     <version position="none" />
 
     <bannerLeft>
