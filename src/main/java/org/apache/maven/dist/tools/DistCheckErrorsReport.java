@@ -124,7 +124,7 @@ public class DistCheckErrorsReport
             {
                 throw new MavenReportException(
                         "Dist Tool> Checks found inconsistencies in some released artifacts, see "
-                        + "https://ci-maven.apache.org/job/Maven/job/dist-tool-plugin/job/master/site/"
+                        + "https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master/site/"
                         + "dist-tool-check-errors.html for more information" );
             }
         }
