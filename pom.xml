@@ -10,15 +10,14 @@
   WARRANTIES OR CONDITIONS OF ANY ~ KIND, either express or implied. See the 
   License for the ~ specific language governing permissions and limitations 
   ~ under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
     <version>39</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <groupId>org.apache.maven.dist.tools</groupId>
@@ -38,8 +37,8 @@
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-dist-tool.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-dist-tool.git</developerConnection>
-    <url>https://github.com/apache/maven-dist-tool/tree/${project.scm.tag}</url>
     <tag>HEAD</tag>
+    <url>https://github.com/apache/maven-dist-tool/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -207,10 +206,10 @@
         <executions>
           <execution>
             <id>unpack</id>
-            <phase>pre-site</phase>
             <goals>
               <goal>unpack</goal>
             </goals>
+            <phase>pre-site</phase>
             <configuration>
               <artifactItems>
                 <artifactItem>
@@ -230,8 +229,10 @@
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
           <excludes combine.children="append">
-            <exclude>.repository/**</exclude> <!-- jenkins with local maven repository -->
-            <exclude>src/test/resources/**/*.html</exclude> <!-- sample HTML -->
+            <exclude>.repository/**</exclude>
+            <!-- jenkins with local maven repository -->
+            <exclude>src/test/resources/**/*.html</exclude>
+            <!-- sample HTML -->
           </excludes>
         </configuration>
       </plugin>
@@ -267,7 +268,8 @@
           </ignoreSiteFailures>
           <ignoreDistFailures>
             <ignoreDistFailure>doxia-linkcheck:1.2</ignoreDistFailure>
-            <ignoreDistFailure>apache-maven:3.0.5</ignoreDistFailure><!-- unexpected missing sha1 on 1 CDN node used by ASF Jenkins -->
+            <ignoreDistFailure>apache-maven:3.0.5</ignoreDistFailure>
+            <!-- unexpected missing sha1 on 1 CDN node used by ASF Jenkins -->
             <ignoreDistFailure>maven-docck-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>maven-reactor-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>file-management:1.2.1</ignoreDistFailure>

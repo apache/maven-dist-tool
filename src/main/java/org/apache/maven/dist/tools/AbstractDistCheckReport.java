@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -55,36 +54,32 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  *
  * @author skygo
  */
-public abstract class AbstractDistCheckReport
-    extends AbstractMavenReport
-{
+public abstract class AbstractDistCheckReport extends AbstractMavenReport {
     private static final String CONF = "dist-tool.conf";
 
-    private static final String EOL = System.getProperty( "line.separator" );
+    private static final String EOL = System.getProperty("line.separator");
 
     /**
      * Abstract Dist Check Report.
      */
-    public AbstractDistCheckReport()
-    {
-    }
+    public AbstractDistCheckReport() {}
 
     /**
-     * URL of repository where artifacts are stored. 
+     * URL of repository where artifacts are stored.
      */
-    @Parameter( property = "repositoryUrl", defaultValue = "https://repo.maven.apache.org/maven2/" )
+    @Parameter(property = "repositoryUrl", defaultValue = "https://repo.maven.apache.org/maven2/")
     protected String repoBaseUrl;
 
     /**
      * List of configuration line for specific inspection.
      */
-    @Parameter( property = "configurationLines", defaultValue = "" )
+    @Parameter(property = "configurationLines", defaultValue = "")
     private List<String> configurationLines;
 
     /**
      * Failures directory.
      */
-    @Parameter( defaultValue = "${project.build.directory}/dist-tool" )
+    @Parameter(defaultValue = "${project.build.directory}/dist-tool")
     protected File failuresDirectory;
 
     /**
@@ -98,14 +93,14 @@ public abstract class AbstractDistCheckReport
     protected String distributionAreaUrl;
 
     /**
-     * Path in index page mapping, when path is not the classical /artifact-id/ 
+     * Path in index page mapping, when path is not the classical /artifact-id/
      * The configuration in <code>dist-tool.conf</code> looks like this:
      * <pre>artifact-id index-path = /directory/</pre>
      */
     protected Map<String, String> paths = new HashMap<String, String>();
 
     /**
-     * Site url mapping, when site url read in pom doesn't get the expected value 
+     * Site url mapping, when site url read in pom doesn't get the expected value
      * The configuration in <code>dist-tool.conf</code> looks like this:
      * <pre>artifact-id site = site url
      *artifact-id:version site = site url</pre>
@@ -120,7 +115,7 @@ public abstract class AbstractDistCheckReport
      * @return if it is a index page check.
      */
     protected abstract boolean isIndexPageCheck();
-    
+
     /**
      * <p>checkArtifact.</p>
      *
@@ -128,8 +123,7 @@ public abstract class AbstractDistCheckReport
      * @param repoBase a {@link java.lang.String} object
      * @throws org.apache.maven.plugin.MojoExecutionException if any.
      */
-    protected abstract void checkArtifact( ConfigurationLineInfo request, String repoBase )
-        throws MojoExecutionException;
+    protected abstract void checkArtifact(ConfigurationLineInfo request, String repoBase) throws MojoExecutionException;
 
     /**
      * <p>getFailuresFilename.</p>
@@ -140,231 +134,183 @@ public abstract class AbstractDistCheckReport
 
     /** {@inheritDoc} */
     @Override
-    public String getOutputName()
-    {
-        return "dist-tool-" + getFailuresFilename().replace( ".log", "" );
+    public String getOutputName() {
+        return "dist-tool-" + getFailuresFilename().replace(".log", "");
     }
 
-    private void loadConfiguration()
-        throws MojoExecutionException
-    {
-        URL configuration = Thread.currentThread().getContextClassLoader().getResource( CONF );
-        try ( BufferedReader in = new BufferedReader( new InputStreamReader( configuration.openStream() ) ) )
-        {
+    private void loadConfiguration() throws MojoExecutionException {
+        URL configuration = Thread.currentThread().getContextClassLoader().getResource(CONF);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(configuration.openStream()))) {
             String text;
-            while ( ( text = in.readLine() ) != null )
-            {
-                configurationLines.add( text );
+            while ((text = in.readLine()) != null) {
+                configurationLines.add(text);
             }
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "error while reading " + configuration, e );
+        } catch (IOException e) {
+            throw new MojoExecutionException("error while reading " + configuration, e);
         }
     }
 
-    private ArtifactRepositoryPolicy newArtifactRepositoryPolicy( boolean enabled )
-    {
-        return new ArtifactRepositoryPolicy( enabled, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
-                                             ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN );
+    private ArtifactRepositoryPolicy newArtifactRepositoryPolicy(boolean enabled) {
+        return new ArtifactRepositoryPolicy(
+                enabled, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void execute()
-        throws MojoExecutionException
-    {
-        ArtifactRepository aa =
-            new MavenArtifactRepository( "central", repoBaseUrl, new DefaultRepositoryLayout(),
-                                         newArtifactRepositoryPolicy( false ), newArtifactRepositoryPolicy( true ) );
-        artifactRepositories.add( aa );
+    public void execute() throws MojoExecutionException {
+        ArtifactRepository aa = new MavenArtifactRepository(
+                "central",
+                repoBaseUrl,
+                new DefaultRepositoryLayout(),
+                newArtifactRepositoryPolicy(false),
+                newArtifactRepositoryPolicy(true));
+        artifactRepositories.add(aa);
 
-        if ( configurationLines.isEmpty() )
-        {
+        if (configurationLines.isEmpty()) {
             loadConfiguration();
         }
 
         File failures = getFailuresFile();
-        if ( failures.exists() )
-        {
+        if (failures.exists()) {
             failures.delete();
-        }
-        else
-        {
+        } else {
             failuresDirectory.mkdirs();
         }
 
         ConfigurationLineInfo currentGroup = null;
-        for ( String line : configurationLines )
-        {
+        for (String line : configurationLines) {
             ConfigurationLineInfo aLine = null;
 
             String trim = line.trim();
 
-            if ( "".equals( trim ) || trim.startsWith( "##" ) )
-            {
+            if ("".equals(trim) || trim.startsWith("##")) {
                 // empty line or comment: ignore
                 continue;
             }
 
-            getLog().info( line );
+            getLog().info(line);
 
             line = trim;
 
-            if ( line.startsWith( ">" ) )
-            {
+            if (line.startsWith(">")) {
                 // parameter
-                int index = line.indexOf( '=' );
-                if ( index < 0 )
-                {
-                    throw new MojoExecutionException( "unparseable configuration line, missing '=': " + line );
+                int index = line.indexOf('=');
+                if (index < 0) {
+                    throw new MojoExecutionException("unparseable configuration line, missing '=': " + line);
                 }
 
-                String param = line.substring( 1, index ).trim();
-                String value = line.substring( index + 1 ).trim();
+                String param = line.substring(1, index).trim();
+                String value = line.substring(index + 1).trim();
 
-                if ( "dist-area".equals( param ) )
-                {
+                if ("dist-area".equals(param)) {
                     distributionAreaUrl = value;
-                }
-                else if ( param.contains( " " ) )
-                {
+                } else if (param.contains(" ")) {
                     // parameter for an artifactId
-                    index = param.indexOf( ' ' );
-                    String artifactId = param.substring( 0, index );
-                    param = param.substring( index ).trim();
+                    index = param.indexOf(' ');
+                    String artifactId = param.substring(0, index);
+                    param = param.substring(index).trim();
 
-                    if ( "index-path".equals( param ) )
-                    {
-                        paths.put( artifactId, value );
+                    if ("index-path".equals(param)) {
+                        paths.put(artifactId, value);
+                    } else if ("site".equals(param)) {
+                        sites.put(artifactId, value);
+                    } else {
+                        throw new MojoExecutionException(
+                                "unknown artifact parameter '" + param + "' in configuration line: " + line);
                     }
-                    else if ( "site".equals( param ) )
-                    {
-                        sites.put( artifactId, value );
-                    }
-                    else
-                    {
-                        throw new MojoExecutionException( "unknown artifact parameter '" + param
-                            + "' in configuration line: " + line );
-                    }
-                }
-                else
-                {
-                    throw new MojoExecutionException( "unparseable configuration line: " + line );
+                } else {
+                    throw new MojoExecutionException("unparseable configuration line: " + line);
                 }
 
                 continue;
-            }
-            else if ( line.startsWith( "/" ) )
-            {
+            } else if (line.startsWith("/")) {
                 // definition of a group, in a dist-area directory
-                currentGroup = new ConfigurationLineInfo( line.split( " " ) );
+                currentGroup = new ConfigurationLineInfo(line.split(" "));
 
-                if ( currentGroup.getArtifactId() == null )
-                {
+                if (currentGroup.getArtifactId() == null) {
                     continue;
                 }
 
                 // check group's parent pom artifact
                 aLine = currentGroup;
-            }
-            else
-            {
+            } else {
                 // artifact definition
-                if ( line.startsWith( "*" ) )
-                {
+                if (line.startsWith("*")) {
                     // special artifact
-                    if ( !isIndexPageCheck() )
-                    {
+                    if (!isIndexPageCheck()) {
                         // not check-index-page mojo, so ignore this artifact
                         continue;
                     }
 
                     // remove the asterisk before running the check
-                    line = line.substring( 1 ).trim();
+                    line = line.substring(1).trim();
                 }
 
-                try
-                {
-                    aLine = new ConfigurationLineInfo( currentGroup, line.split( " " ) );
-                }
-                catch ( InvalidVersionSpecificationException e )
-                {
-                    throw new MojoExecutionException( e.getMessage() );
+                try {
+                    aLine = new ConfigurationLineInfo(currentGroup, line.split(" "));
+                } catch (InvalidVersionSpecificationException e) {
+                    throw new MojoExecutionException(e.getMessage());
                 }
             }
 
-            checkArtifact( aLine, getVersion( aLine ) );
+            checkArtifact(aLine, getVersion(aLine));
         }
 
-        getLog().info( "" );
+        getLog().info("");
     }
 
-    private String getVersion( ConfigurationLineInfo aLine )
-        throws MojoExecutionException
-    {
-        String metadataUrl = aLine.getMetadataFileURL( repoBaseUrl );
-        try ( InputStream input = new BufferedInputStream( new URL( metadataUrl ).openStream() ) )
-        {
+    private String getVersion(ConfigurationLineInfo aLine) throws MojoExecutionException {
+        String metadataUrl = aLine.getMetadataFileURL(repoBaseUrl);
+        try (InputStream input = new BufferedInputStream(new URL(metadataUrl).openStream())) {
             MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
-            Metadata metadata = metadataReader.read( input );
+            Metadata metadata = metadataReader.read(input);
 
-            aLine.setMetadata( metadata );
+            aLine.setMetadata(metadata);
 
             String version;
-            if ( aLine.getVersionRange() != null )
-            {
-                if ( aLine.getVersionRange().hasRestrictions() )
-                {
+            if (aLine.getVersionRange() != null) {
+                if (aLine.getVersionRange().hasRestrictions()) {
                     List<ArtifactVersion> artifactVersions = new ArrayList<>();
-                    for ( String versioningVersion : metadata.getVersioning().getVersions() )
-                    {
-                        artifactVersions.add( new DefaultArtifactVersion( versioningVersion ) );
+                    for (String versioningVersion : metadata.getVersioning().getVersions()) {
+                        artifactVersions.add(new DefaultArtifactVersion(versioningVersion));
                     }
-                    version = aLine.getVersionRange().matchVersion( artifactVersions ).toString();
-                }
-                else
-                {
+                    version = aLine.getVersionRange()
+                            .matchVersion(artifactVersions)
+                            .toString();
+                } else {
                     version = aLine.getVersionRange().getRecommendedVersion().toString();
                 }
-                aLine.setForceVersion( version );
-            }
-            else
-            {
+                aLine.setForceVersion(version);
+            } else {
                 version = metadata.getVersioning().getLatest();
             }
-            
-            if ( getLog().isDebugEnabled() )
-            {
-                getLog().debug( "  available versions in repository " + repoBaseUrl );
+
+            if (getLog().isDebugEnabled()) {
+                getLog().debug("  available versions in repository " + repoBaseUrl);
                 // revert sort versions (not handling alpha and
                 // complex version schemes but more useful versions are displayed left side)
-                Collections.sort( metadata.getVersioning().getVersions(), Collections.reverseOrder() );
-                getLog().debug( "    " + metadata.getVersioning().getVersions() );
+                Collections.sort(metadata.getVersioning().getVersions(), Collections.reverseOrder());
+                getLog().debug("    " + metadata.getVersioning().getVersions());
             }
 
-            if ( aLine.getForcedVersion() != null )
-            {
-                if ( aLine.getVersionRange().hasRestrictions() )
-                {
-                    getLog().debug( aLine.getGroupId() + ":" + aLine.getArtifactId()
-                                        + " metadata latest version value is " + metadata.getVersioning().getLatest()
-                                        + " but check was restricted to " + aLine.getVersionRange()
-                                        + " which selected " + aLine.getForcedVersion() );
-                }
-                else
-                {
-                    getLog().info( aLine.getGroupId() + ":" + aLine.getArtifactId()
-                                   + " metadata latest version value is " + metadata.getVersioning().getLatest()
-                                   + " but check was manually set to " + aLine.getForcedVersion() );
+            if (aLine.getForcedVersion() != null) {
+                if (aLine.getVersionRange().hasRestrictions()) {
+                    getLog().debug(aLine.getGroupId() + ":" + aLine.getArtifactId()
+                            + " metadata latest version value is "
+                            + metadata.getVersioning().getLatest()
+                            + " but check was restricted to " + aLine.getVersionRange()
+                            + " which selected " + aLine.getForcedVersion());
+                } else {
+                    getLog().info(aLine.getGroupId() + ":" + aLine.getArtifactId()
+                            + " metadata latest version value is "
+                            + metadata.getVersioning().getLatest()
+                            + " but check was manually set to " + aLine.getForcedVersion());
                 }
             }
-           
+
             return version;
-        }
-        catch ( IOException | XmlPullParserException ex )
-        {
-            throw new MojoExecutionException( "error while reading " + metadataUrl, ex );
+        } catch (IOException | XmlPullParserException ex) {
+            throw new MojoExecutionException("error while reading " + metadataUrl, ex);
         }
     }
 
@@ -373,29 +319,26 @@ public abstract class AbstractDistCheckReport
      *
      * @param sink doxiasink
      */
-    public static void iconError( Sink sink )
-    {
-        icon( sink, "icon_error_sml" );
+    public static void iconError(Sink sink) {
+        icon(sink, "icon_error_sml");
     }
-    
+
     /**
      * add a warning icon.
      *
      * @param sink doxiasink
      */
-    public static void iconWarning( Sink sink )
-    {
-        icon( sink, "icon_warning_sml" );
+    public static void iconWarning(Sink sink) {
+        icon(sink, "icon_warning_sml");
     }
-    
+
     /**
      * add an success icon.
      *
      * @param sink doxiasink
      */
-    public static void iconSuccess( Sink sink )
-    {
-        icon( sink, "icon_success_sml" );
+    public static void iconSuccess(Sink sink) {
+        icon(sink, "icon_success_sml");
     }
 
     /**
@@ -403,16 +346,14 @@ public abstract class AbstractDistCheckReport
      *
      * @param sink doxiasink
      */
-    protected static void iconRemove( Sink sink )
-    {
-        icon( sink, "remove" );
+    protected static void iconRemove(Sink sink) {
+        icon(sink, "remove");
     }
 
-    private static void icon( Sink sink, String level )
-    {
-        sink.figureGraphics( "images/" + level + ".gif" );
+    private static void icon(Sink sink, String level) {
+        sink.figureGraphics("images/" + level + ".gif");
     }
-    
+
     /**
      * Log and add Error line to logs.txt if not configured to ignore the artifact+version
      *
@@ -422,30 +363,24 @@ public abstract class AbstractDistCheckReport
      * @param message  The message.
      * @return true if real error, or false if ignored
      */
-    protected boolean addErrorLine( ConfigurationLineInfo cli, String version, List<String> ignore, String message ) 
-    {
-        if ( ( ignore != null )
-            && ( ignore.contains( cli.getArtifactId() + ':' + version ) || ignore.contains( cli.getArtifactId() ) ) )
-        {
-            getLog().warn( message );
+    protected boolean addErrorLine(ConfigurationLineInfo cli, String version, List<String> ignore, String message) {
+        if ((ignore != null)
+                && (ignore.contains(cli.getArtifactId() + ':' + version) || ignore.contains(cli.getArtifactId()))) {
+            getLog().warn(message);
             return false;
         }
 
-        getLog().error( message );
+        getLog().error(message);
 
-        try ( PrintWriter output = new PrintWriter( new FileWriter( getFailuresFile(), true ) ) )
-        {
-            output.printf( "%s%s", message, EOL );
-        }
-        catch ( Exception e )
-        {
-            getLog().error( "Cannot append to " + getFailuresFilename() );
+        try (PrintWriter output = new PrintWriter(new FileWriter(getFailuresFile(), true))) {
+            output.printf("%s%s", message, EOL);
+        } catch (Exception e) {
+            getLog().error("Cannot append to " + getFailuresFilename());
         }
         return true;
     }
 
-    private File getFailuresFile()
-    {
-        return new File( failuresDirectory, getFailuresFilename() );
+    private File getFailuresFile() {
+        return new File(failuresDirectory, getFailuresFilename());
     }
 }

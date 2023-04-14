@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.masterjobs;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.masterjobs;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.masterjobs;
 
 import java.time.ZonedDateTime;
 
@@ -26,8 +25,7 @@ import java.time.ZonedDateTime;
  *
  * @author Robert Scholte
  */
-public class Result
-{
+public class Result {
     private String repositoryName;
 
     private String status;
@@ -35,7 +33,7 @@ public class Result
     private String buildUrl;
 
     private String icon;
-    
+
     private ZonedDateTime lastBuild;
 
     /**
@@ -44,8 +42,7 @@ public class Result
      * @param repositoryName a {@link java.lang.String} object
      * @param buildUrl a {@link java.lang.String} object
      */
-    public Result( String repositoryName, String buildUrl )
-    {
+    public Result(String repositoryName, String buildUrl) {
         this.repositoryName = repositoryName;
         this.buildUrl = buildUrl;
     }
@@ -55,8 +52,7 @@ public class Result
      *
      * @param status a {@link java.lang.String} object
      */
-    public void setStatus( String status )
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -65,8 +61,7 @@ public class Result
      *
      * @param icon a {@link java.lang.String} object
      */
-    public void setIcon( String icon )
-    {
+    public void setIcon(String icon) {
         this.icon = icon;
     }
 
@@ -75,28 +70,25 @@ public class Result
      *
      * @param lastBuild a {@link java.time.ZonedDateTime} object
      */
-    public void setLastBuild( ZonedDateTime lastBuild )
-    {
+    public void setLastBuild(ZonedDateTime lastBuild) {
         this.lastBuild = lastBuild;
     }
-    
+
     /**
      * <p>Getter for the field <code>lastBuild</code>.</p>
      *
      * @return a {@link java.time.ZonedDateTime} object
      */
-    public ZonedDateTime getLastBuild()
-    {
+    public ZonedDateTime getLastBuild() {
         return lastBuild;
     }
-    
+
     /**
      * <p>Getter for the field <code>repositoryName</code>.</p>
      *
      * @return a {@link java.lang.String} object
      */
-    public String getRepositoryName()
-    {
+    public String getRepositoryName() {
         return repositoryName;
     }
 
@@ -105,8 +97,7 @@ public class Result
      *
      * @return a {@link java.lang.String} object
      */
-    public String getStatus()
-    {
+    public String getStatus() {
         return status;
     }
 
@@ -115,8 +106,7 @@ public class Result
      *
      * @return a {@link java.lang.String} object
      */
-    public String getBuildUrl()
-    {
+    public String getBuildUrl() {
         return buildUrl;
     }
 
@@ -125,8 +115,7 @@ public class Result
      *
      * @return a {@link java.lang.String} object
      */
-    public String getIcon()
-    {
+    public String getIcon() {
         return icon;
-    } 
+    }
 }

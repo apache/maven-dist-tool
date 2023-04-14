@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +16,14 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools;
 
 /**
  * <p>AbstractCheckResult class.</p>
  *
  * @author skygo
  */
-public class AbstractCheckResult
-{
+public class AbstractCheckResult {
 
     private final ConfigurationLineInfo configLine;
     private final String version;
@@ -36,8 +34,7 @@ public class AbstractCheckResult
      * @param r a {@link org.apache.maven.dist.tools.ConfigurationLineInfo} object
      * @param version a {@link java.lang.String} object
      */
-    public AbstractCheckResult( ConfigurationLineInfo r, String version )
-    {
+    public AbstractCheckResult(ConfigurationLineInfo r, String version) {
         this.configLine = r;
         this.version = version;
     }
@@ -47,8 +44,7 @@ public class AbstractCheckResult
      *
      * @return the request
      */
-    public ConfigurationLineInfo getConfigurationLine()
-    {
+    public ConfigurationLineInfo getConfigurationLine() {
         return configLine;
     }
 
@@ -57,8 +53,7 @@ public class AbstractCheckResult
      *
      * @return the version
      */
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 }

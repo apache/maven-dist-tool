@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.branches;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.branches;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.branches;
 
 import java.util.Collection;
 
@@ -26,32 +25,30 @@ import java.util.Collection;
  *
  * @author Robert Scholte
  */
-public class Result
-{
+public class Result {
     private final String repositoryName;
 
     private final String buildUrl;
-    
+
     private int masterBranchesGit;
     private int masterBranchesJenkins;
-    
+
     private Collection<String> jiraBranchesGit;
     private Collection<String> jiraBranchesJenkins;
-    
+
     private Collection<String> dependabotBranchesGit;
     private Collection<String> dependabotBranchesJenkins;
-    
+
     private Collection<String> restGit;
     private Collection<String> restJenkins;
-    
+
     /**
      * <p>Constructor for Result.</p>
      *
      * @param repositoryName a {@link java.lang.String} object
      * @param buildUrl a {@link java.lang.String} object
      */
-    public Result( String repositoryName, String buildUrl )
-    {
+    public Result(String repositoryName, String buildUrl) {
         this.repositoryName = repositoryName;
         this.buildUrl = buildUrl;
     }
@@ -61,8 +58,7 @@ public class Result
      *
      * @return a int
      */
-    public int getMasterBranchesGit()
-    {
+    public int getMasterBranchesGit() {
         return masterBranchesGit;
     }
 
@@ -71,8 +67,7 @@ public class Result
      *
      * @param masterBranches a int
      */
-    public void setMasterBranchesGit( int masterBranches )
-    {
+    public void setMasterBranchesGit(int masterBranches) {
         this.masterBranchesGit = masterBranches;
     }
 
@@ -81,18 +76,16 @@ public class Result
      *
      * @return a int
      */
-    public int getMasterBranchesJenkins()
-    {
+    public int getMasterBranchesJenkins() {
         return masterBranchesJenkins;
     }
-    
+
     /**
      * <p>Setter for the field <code>masterBranchesJenkins</code>.</p>
      *
      * @param masterBranchesJenkins a int
      */
-    public void setMasterBranchesJenkins( int masterBranchesJenkins )
-    {
+    public void setMasterBranchesJenkins(int masterBranchesJenkins) {
         this.masterBranchesJenkins = masterBranchesJenkins;
     }
 
@@ -101,8 +94,7 @@ public class Result
      *
      * @return a {@link java.util.Collection} object
      */
-    public Collection<String> getJiraBranchesGit()
-    {
+    public Collection<String> getJiraBranchesGit() {
         return jiraBranchesGit;
     }
 
@@ -111,8 +103,7 @@ public class Result
      *
      * @param jiraBranches a {@link java.util.Collection} object
      */
-    public void setJiraBranchesGit( Collection<String> jiraBranches )
-    {
+    public void setJiraBranchesGit(Collection<String> jiraBranches) {
         this.jiraBranchesGit = jiraBranches;
     }
 
@@ -121,28 +112,25 @@ public class Result
      *
      * @return a {@link java.util.Collection} object
      */
-    public Collection<String> getJiraBranchesJenkins()
-    {
+    public Collection<String> getJiraBranchesJenkins() {
         return jiraBranchesJenkins;
     }
-    
+
     /**
      * <p>Setter for the field <code>jiraBranchesJenkins</code>.</p>
      *
      * @param jiraBranchesJenkins a {@link java.util.Collection} object
      */
-    public void setJiraBranchesJenkins( Collection<String> jiraBranchesJenkins )
-    {
+    public void setJiraBranchesJenkins(Collection<String> jiraBranchesJenkins) {
         this.jiraBranchesJenkins = jiraBranchesJenkins;
     }
-    
+
     /**
      * <p>Getter for the field <code>dependabotBranchesGit</code>.</p>
      *
      * @return a {@link java.util.Collection} object
      */
-    public Collection<String> getDependabotBranchesGit()
-    {
+    public Collection<String> getDependabotBranchesGit() {
         return dependabotBranchesGit;
     }
 
@@ -151,28 +139,25 @@ public class Result
      *
      * @param dependabotBranches a {@link java.util.Collection} object
      */
-    public void setDependabotBranchesGit( Collection<String> dependabotBranches )
-    {
+    public void setDependabotBranchesGit(Collection<String> dependabotBranches) {
         this.dependabotBranchesGit = dependabotBranches;
     }
-    
+
     /**
      * <p>Getter for the field <code>dependabotBranchesJenkins</code>.</p>
      *
      * @return a {@link java.util.Collection} object
      */
-    public Collection<String> getDependabotBranchesJenkins()
-    {
+    public Collection<String> getDependabotBranchesJenkins() {
         return dependabotBranchesJenkins;
     }
-    
+
     /**
      * <p>Setter for the field <code>dependabotBranchesJenkins</code>.</p>
      *
      * @param dependabotBranchesJenkins a {@link java.util.Collection} object
      */
-    public void setDependabotBranchesJenkins( Collection<String> dependabotBranchesJenkins )
-    {
+    public void setDependabotBranchesJenkins(Collection<String> dependabotBranchesJenkins) {
         this.dependabotBranchesJenkins = dependabotBranchesJenkins;
     }
 
@@ -181,8 +166,7 @@ public class Result
      *
      * @return a {@link java.util.Collection} object
      */
-    public Collection<String> getRestGit()
-    {
+    public Collection<String> getRestGit() {
         return restGit;
     }
 
@@ -191,28 +175,25 @@ public class Result
      *
      * @param rest a {@link java.util.Collection} object
      */
-    public void setRestGit( Collection<String> rest )
-    {
+    public void setRestGit(Collection<String> rest) {
         this.restGit = rest;
     }
-    
+
     /**
      * <p>Getter for the field <code>restJenkins</code>.</p>
      *
      * @return a {@link java.util.Collection} object
      */
-    public Collection<String> getRestJenkins()
-    {
+    public Collection<String> getRestJenkins() {
         return restJenkins;
     }
-    
+
     /**
      * <p>Setter for the field <code>restJenkins</code>.</p>
      *
      * @param restJenkins a {@link java.util.Collection} object
      */
-    public void setRestJenkins( Collection<String> restJenkins )
-    {
+    public void setRestJenkins(Collection<String> restJenkins) {
         this.restJenkins = restJenkins;
     }
 
@@ -221,8 +202,7 @@ public class Result
      *
      * @return a {@link java.lang.String} object
      */
-    public String getRepositoryName()
-    {
+    public String getRepositoryName() {
         return repositoryName;
     }
 
@@ -231,30 +211,28 @@ public class Result
      *
      * @return a {@link java.lang.String} object
      */
-    public String getBuildUrl()
-    {
+    public String getBuildUrl() {
         return buildUrl;
     }
-    
+
     /**
      * <p>getTotalGit.</p>
      *
      * @return a int
      */
-    public final int getTotalGit()
-    {
+    public final int getTotalGit() {
         return masterBranchesGit + jiraBranchesGit.size() + dependabotBranchesGit.size() + restGit.size();
     }
-    
+
     /**
      * <p>getTotalJenkins.</p>
      *
      * @return a int
      */
-    public final int getTotalJenkins()
-    {
-        return masterBranchesJenkins + jiraBranchesJenkins.size() + dependabotBranchesJenkins.size()
-            + restJenkins.size();
+    public final int getTotalJenkins() {
+        return masterBranchesJenkins
+                + jiraBranchesJenkins.size()
+                + dependabotBranchesJenkins.size()
+                + restJenkins.size();
     }
- 
 }

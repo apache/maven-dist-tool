@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.prerequisites;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.prerequisites;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.prerequisites;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
@@ -27,8 +26,7 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
  *
  * @author Karl Heinz Marbaise
  */
-public class PluginPrerequisites
-{
+public class PluginPrerequisites {
     private String pluginName;
 
     private String pluginVersion;
@@ -48,13 +46,12 @@ public class PluginPrerequisites
      * @param mavenVersion a {@link java.lang.String} object
      * @param jdkVersion a {@link java.lang.String} object
      */
-    public PluginPrerequisites( String pluginName, String pluginVersion, String releaseDate, String mavenVersion,
-                                String jdkVersion )
-    {
+    public PluginPrerequisites(
+            String pluginName, String pluginVersion, String releaseDate, String mavenVersion, String jdkVersion) {
         this.pluginName = pluginName;
         this.pluginVersion = pluginVersion;
         this.releaseDate = releaseDate;
-        this.mavenVersion = new DefaultArtifactVersion( mavenVersion );
+        this.mavenVersion = new DefaultArtifactVersion(mavenVersion);
         this.jdkVersion = jdkVersion;
     }
 
@@ -63,8 +60,7 @@ public class PluginPrerequisites
      *
      * @return a {@link org.apache.maven.artifact.versioning.ArtifactVersion} object
      */
-    public ArtifactVersion getMavenVersion()
-    {
+    public ArtifactVersion getMavenVersion() {
         return mavenVersion;
     }
 
@@ -73,9 +69,8 @@ public class PluginPrerequisites
      *
      * @param mavenVersion a {@link java.lang.String} object
      */
-    public void setMavenVersion( String mavenVersion )
-    {
-        this.mavenVersion = new DefaultArtifactVersion( mavenVersion );
+    public void setMavenVersion(String mavenVersion) {
+        this.mavenVersion = new DefaultArtifactVersion(mavenVersion);
     }
 
     /**
@@ -83,8 +78,7 @@ public class PluginPrerequisites
      *
      * @return a {@link java.lang.String} object
      */
-    public String getJdkVersion()
-    {
+    public String getJdkVersion() {
         return jdkVersion;
     }
 
@@ -93,8 +87,7 @@ public class PluginPrerequisites
      *
      * @param jdkVersion a {@link java.lang.String} object
      */
-    public void setJdkVersion( String jdkVersion )
-    {
+    public void setJdkVersion(String jdkVersion) {
         this.jdkVersion = jdkVersion;
     }
 
@@ -103,8 +96,7 @@ public class PluginPrerequisites
      *
      * @return a {@link java.lang.String} object
      */
-    public String getPluginName()
-    {
+    public String getPluginName() {
         return pluginName;
     }
 
@@ -113,8 +105,7 @@ public class PluginPrerequisites
      *
      * @return a {@link java.lang.String} object
      */
-    public String getPluginVersion()
-    {
+    public String getPluginVersion() {
         return pluginVersion;
     }
 
@@ -123,8 +114,7 @@ public class PluginPrerequisites
      *
      * @return a {@link java.lang.String} object
      */
-    public String getReleaseDate()
-    {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
@@ -133,9 +123,7 @@ public class PluginPrerequisites
      *
      * @param pluginName a {@link java.lang.String} object
      */
-    public void setPluginName( String pluginName )
-    {
+    public void setPluginName(String pluginName) {
         this.pluginName = pluginName;
     }
-
 }

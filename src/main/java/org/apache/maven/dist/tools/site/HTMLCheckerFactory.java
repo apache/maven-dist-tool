@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.site;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.site;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.site;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,25 +30,20 @@ import org.apache.maven.dist.tools.site.checkers.StylusRightHTMLChecker;
  *
  * @author skygo
  */
-public final class HTMLCheckerFactory
-{
+public final class HTMLCheckerFactory {
 
-    private HTMLCheckerFactory()
-    {
-    }
+    private HTMLCheckerFactory() {}
 
     /**
      * get all checker
      *
      * @return list of checker
      */
-    public static List<HTMLChecker> getCheckers()
-    {
+    public static List<HTMLChecker> getCheckers() {
         List<HTMLChecker> tmp = new LinkedList<>();
-        tmp.add( new FluidoHTMLChecker() );
-        tmp.add( new StylusRightHTMLChecker() );
-        tmp.add( new StylusLeftHTMLChecker() );
+        tmp.add(new FluidoHTMLChecker());
+        tmp.add(new StylusRightHTMLChecker());
+        tmp.add(new StylusLeftHTMLChecker());
         return tmp;
     }
-
 }

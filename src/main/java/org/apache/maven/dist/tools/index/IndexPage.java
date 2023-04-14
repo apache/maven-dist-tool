@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.index;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,19 +16,18 @@ package org.apache.maven.dist.tools.index;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.index;
 
 import org.jsoup.nodes.Document;
 
-class IndexPage
-{
+class IndexPage {
     final String url;
     final String name;
     final int versionColumn;
     final boolean containsDate;
     Document document;
-    
-    IndexPage( String url, String name, int versionColumn, boolean containsDate )
-    {
+
+    IndexPage(String url, String name, int versionColumn, boolean containsDate) {
         this.url = url;
         this.name = name;
         this.versionColumn = versionColumn;

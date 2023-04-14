@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.site.checkers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.site.checkers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.site.checkers;
 
 import org.apache.maven.dist.tools.site.HTMLChecker;
 import org.jsoup.nodes.Document;
@@ -28,35 +27,29 @@ import org.jsoup.nodes.Element;
  *
  * @author skygo
  */
-public class StylusLeftHTMLChecker implements HTMLChecker
-{
+public class StylusLeftHTMLChecker implements HTMLChecker {
     /**
      * Stylus Left Html Checker
      */
-    public StylusLeftHTMLChecker()
-    {
-    }
+    public StylusLeftHTMLChecker() {}
 
     /** {@inheritDoc} */
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Stylus left side";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getSkin()
-    {
+    public String getSkin() {
         return "Stylus";
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean isDisplayedArtifactVersionOk( Document doc, String version )
-    {
-        Element links = doc.select( "div.xleft" ).first();
+    public boolean isDisplayedArtifactVersionOk(Document doc, String version) {
+        Element links = doc.select("div.xleft").first();
 
-        return ( links != null ) && links.text().contains( version );
+        return (links != null) && links.text().contains(version);
     }
 }

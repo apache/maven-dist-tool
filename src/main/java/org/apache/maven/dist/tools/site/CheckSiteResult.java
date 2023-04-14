@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.site;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.site;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.site;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,9 +29,7 @@ import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
 
-class CheckSiteResult
-    extends AbstractCheckResult
-{
+class CheckSiteResult extends AbstractCheckResult {
     private String url;
 
     private Map<HTMLChecker, Boolean> checkMap = new HashMap<>();
@@ -43,13 +40,11 @@ class CheckSiteResult
 
     private String screenshotName;
 
-    CheckSiteResult( ConfigurationLineInfo r, String version )
-    {
-        super( r, version );
+    CheckSiteResult(ConfigurationLineInfo r, String version) {
+        super(r, version);
     }
 
-    void setUrl( String url )
-    {
+    void setUrl(String url) {
         this.url = url;
     }
 
@@ -58,8 +53,7 @@ class CheckSiteResult
      *
      * @return the url
      */
-    public String getUrl()
-    {
+    public String getUrl() {
         return url;
     }
 
@@ -68,13 +62,11 @@ class CheckSiteResult
      *
      * @return the checkMap
      */
-    public Map<HTMLChecker, Boolean> getCheckMap()
-    {
+    public Map<HTMLChecker, Boolean> getCheckMap() {
         return checkMap;
     }
 
-    void setHTTPErrorUrl( int status )
-    {
+    void setHTTPErrorUrl(int status) {
         this.statusCode = status;
     }
 
@@ -83,94 +75,71 @@ class CheckSiteResult
      *
      * @return the statusCode
      */
-    public int getStatusCode()
-    {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    void renderDetectedSkin( Sink sink )
-    {
-        if ( statusCode != DistCheckSiteReport.HTTP_OK )
-        {
-            sink.text( "None" );
-        }
-        else 
-        {
-            sink.text( "skin: " );
-            if ( isSkin( "Fluido" ) )
-            {
-                sink.text( "Fluido" );
+    void renderDetectedSkin(Sink sink) {
+        if (statusCode != DistCheckSiteReport.HTTP_OK) {
+            sink.text("None");
+        } else {
+            sink.text("skin: ");
+            if (isSkin("Fluido")) {
+                sink.text("Fluido");
+            } else if (isSkin("Stylus")) {
+                sink.text("Stylus");
+            } else {
+                sink.text("Not determined");
             }
-            else if ( isSkin( "Stylus" ) )
-            {
-                sink.text( "Stylus" );
-            }
-            else 
-            {
-                sink.text( "Not determined" );
-            }
-            sink.verbatim( null );
-            sink.text( comment.trim().replace( " |", "|" ).replace( "| ", "" ) );
+            sink.verbatim(null);
+            sink.text(comment.trim().replace(" |", "|").replace("| ", ""));
             sink.verbatim_();
         }
     }
 
-    void renderDisplayedArtifactVersion( Sink sink )
-    {
-        if ( statusCode != DistCheckSiteReport.HTTP_OK )
-        {
-            AbstractDistCheckReport.iconError( sink );
-        }
-        else
-        {
+    void renderDisplayedArtifactVersion(Sink sink) {
+        if (statusCode != DistCheckSiteReport.HTTP_OK) {
+            AbstractDistCheckReport.iconError(sink);
+        } else {
             boolean found = false;
-            for ( Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet() )
-            {
-                if ( e.getValue() )
-                {
-                    AbstractDistCheckReport.iconSuccess( sink );
-                    sink.text( ": " + e.getKey().getName() );
+            for (Map.Entry<HTMLChecker, Boolean> e : checkMap.entrySet()) {
+                if (e.getValue()) {
+                    AbstractDistCheckReport.iconSuccess(sink);
+                    sink.text(": " + e.getKey().getName());
                     found = true;
                 }
             }
-            if ( !found )
-            {
-                AbstractDistCheckReport.iconWarning( sink );
-                sink.text( ": artifact version not found" );
+            if (!found) {
+                AbstractDistCheckReport.iconWarning(sink);
+                sink.text(": artifact version not found");
             }
         }
     }
 
-    private boolean isSkin( String skinName )
-    {
-        return comment.contains( skinName );
+    private boolean isSkin(String skinName) {
+        return comment.contains(skinName);
     }
 
-    void setDocument( Document doc )
-    {
-        comment = extractComment( doc );
-        statusCode = ( doc == null ) ? -1 : DistCheckSiteReport.HTTP_OK;
+    void setDocument(Document doc) {
+        comment = extractComment(doc);
+        statusCode = (doc == null) ? -1 : DistCheckSiteReport.HTTP_OK;
     }
 
-    static String extractComment( Document document )
-    {
-        for ( Node node : document.childNodes() )
-        {
-            if ( node instanceof Comment )
-            {
-                return ( ( Comment ) node ).getData();
+    static String extractComment(Document document) {
+        for (Node node : document.childNodes()) {
+            if (node instanceof Comment) {
+                return ((Comment) node).getData();
             }
         }
 
         return "";
     }
 
-    void setScreenShot( String fileName )
-    {
+    void setScreenShot(String fileName) {
         this.screenshotName = fileName;
     }
-    String getScreenShot()
-    {
+
+    String getScreenShot() {
         return screenshotName;
     }
 }

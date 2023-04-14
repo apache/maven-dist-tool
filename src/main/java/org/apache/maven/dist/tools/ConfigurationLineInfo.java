@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools;
 
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
@@ -32,8 +31,7 @@ import org.apache.maven.dist.tools.index.DistCheckIndexPageReport;
  *
  * @author skygo
  */
-public class ConfigurationLineInfo
-{
+public class ConfigurationLineInfo {
     private static final String URLSEP = "/";
 
     private final String directory;
@@ -43,7 +41,7 @@ public class ConfigurationLineInfo
 
     private final String artifactId;
     private final VersionRange versionRange;
-    
+
     private String forceVersion;
     private String indexPageUrl;
     private Metadata metadata;
@@ -53,16 +51,15 @@ public class ConfigurationLineInfo
      *
      * @param infos an array of {@link java.lang.String} objects
      */
-    public ConfigurationLineInfo( String[] infos )
-    {
-        this.directory = infos[0].replace( '/', ' ' ).replace( ':', ' ' ).trim();
+    public ConfigurationLineInfo(String[] infos) {
+        this.directory = infos[0].replace('/', ' ').replace(':', ' ').trim();
         String g = infos[1];
-        int index = g.indexOf( ':' );
-        this.groupId = ( index < 0 ) ? g : g.substring( 0, index );
-        this.srcBin = ( infos.length > 2 ) && "src+bin".equals( infos[2] );
-        this.groupIndexPageUrl = ( !srcBin && ( infos.length > 2 ) ) ? infos[2] : null;
+        int index = g.indexOf(':');
+        this.groupId = (index < 0) ? g : g.substring(0, index);
+        this.srcBin = (infos.length > 2) && "src+bin".equals(infos[2]);
+        this.groupIndexPageUrl = (!srcBin && (infos.length > 2)) ? infos[2] : null;
 
-        this.artifactId = ( index < 0 ) ? null : g.substring( index + 1 );
+        this.artifactId = (index < 0) ? null : g.substring(index + 1);
         this.versionRange = null;
         this.indexPageUrl = DistCheckIndexPageReport.POMS_INDEX_URL; // in case of group parent pom artifact
     }
@@ -74,16 +71,15 @@ public class ConfigurationLineInfo
      * @param infos an array of {@link java.lang.String} objects
      * @throws org.apache.maven.artifact.versioning.InvalidVersionSpecificationException if any.
      */
-    public ConfigurationLineInfo( ConfigurationLineInfo group, String[] infos )
-        throws InvalidVersionSpecificationException
-    {
+    public ConfigurationLineInfo(ConfigurationLineInfo group, String[] infos)
+            throws InvalidVersionSpecificationException {
         this.directory = group.getDirectory();
         this.groupId = group.getGroupId();
         this.srcBin = group.isSrcBin();
         this.groupIndexPageUrl = group.groupIndexPageUrl;
 
         this.artifactId = infos[0];
-        this.versionRange = ( infos.length > 1 ) ? VersionRange.createFromVersionSpec( infos[1] ) : null;
+        this.versionRange = (infos.length > 1) ? VersionRange.createFromVersionSpec(infos[1]) : null;
         this.indexPageUrl = group.groupIndexPageUrl;
     }
 
@@ -92,38 +88,34 @@ public class ConfigurationLineInfo
      *
      * @return a {@link java.lang.String} object
      */
-    public String getIndexPageUrl()
-    {
+    public String getIndexPageUrl() {
         return indexPageUrl;
     }
-    
+
     /**
      * <p>getForcedVersion.</p>
      *
      * @return a {@link java.lang.String} object
      */
-    public String getForcedVersion()
-    {
+    public String getForcedVersion() {
         return forceVersion;
     }
-    
+
     /**
      * <p>Setter for the field <code>forceVersion</code>.</p>
      *
      * @param forceVersion a {@link java.lang.String} object
      */
-    public void setForceVersion( String forceVersion )
-    {
+    public void setForceVersion(String forceVersion) {
         this.forceVersion = forceVersion;
     }
-    
+
     /**
      * <p>Getter for the field <code>versionRange</code>.</p>
      *
      * @return a {@link org.apache.maven.artifact.versioning.VersionRange} object
      */
-    public VersionRange getVersionRange()
-    {
+    public VersionRange getVersionRange() {
         return versionRange;
     }
 
@@ -132,8 +124,7 @@ public class ConfigurationLineInfo
      *
      * @return the groupId
      */
-    public String getGroupId()
-    {
+    public String getGroupId() {
         return groupId;
     }
 
@@ -142,8 +133,7 @@ public class ConfigurationLineInfo
      *
      * @return the artifactId
      */
-    public String getArtifactId()
-    {
+    public String getArtifactId() {
         return artifactId;
     }
 
@@ -152,8 +142,7 @@ public class ConfigurationLineInfo
      *
      * @return the directory
      */
-    public String getDirectory()
-    {
+    public String getDirectory() {
         return directory;
     }
 
@@ -162,8 +151,7 @@ public class ConfigurationLineInfo
      *
      * @return a boolean
      */
-    public boolean isSrcBin()
-    {
+    public boolean isSrcBin() {
         return srcBin;
     }
 
@@ -174,9 +162,8 @@ public class ConfigurationLineInfo
      * @param folder a {@link java.lang.String} object
      * @return a {@link java.lang.String} object
      */
-    public String getBaseURL( String repoBaseUrl, String folder )
-    {
-        return repoBaseUrl + groupId.replaceAll( "\\.", URLSEP ) + URLSEP + artifactId + URLSEP + folder;
+    public String getBaseURL(String repoBaseUrl, String folder) {
+        return repoBaseUrl + groupId.replaceAll("\\.", URLSEP) + URLSEP + artifactId + URLSEP + folder;
     }
 
     /**
@@ -185,9 +172,8 @@ public class ConfigurationLineInfo
      * @param repoBaseUrl a {@link java.lang.String} object
      * @return a {@link java.lang.String} object
      */
-    public String getMetadataFileURL( String repoBaseUrl )
-    {
-        return getBaseURL( repoBaseUrl, "maven-metadata.xml" );
+    public String getMetadataFileURL(String repoBaseUrl) {
+        return getBaseURL(repoBaseUrl, "maven-metadata.xml");
     }
 
     /**
@@ -197,18 +183,15 @@ public class ConfigurationLineInfo
      * @param version a {@link java.lang.String} object
      * @return a {@link java.lang.String} object
      */
-    public String getVersionnedFolderURL( String repoBaseUrl, String version )
-    {
-        return getBaseURL( repoBaseUrl, version ) + '/';
+    public String getVersionnedFolderURL(String repoBaseUrl, String version) {
+        return getBaseURL(repoBaseUrl, version) + '/';
     }
 
-    String getVersionnedPomFileURL( String repoBaseUrl, String version )
-    {
-        return getBaseURL( repoBaseUrl, version + URLSEP + artifactId + "-" + version + ".pom" );
+    String getVersionnedPomFileURL(String repoBaseUrl, String version) {
+        return getBaseURL(repoBaseUrl, version + URLSEP + artifactId + "-" + version + ".pom");
     }
 
-    void setMetadata( Metadata aMetadata )
-    {
+    void setMetadata(Metadata aMetadata) {
         this.metadata = aMetadata;
     }
 
@@ -217,13 +200,12 @@ public class ConfigurationLineInfo
      *
      * @return a {@link java.lang.String} object
      */
-    public String getReleaseDateFromMetadata()
-    {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern( "yyyyMMddkkmmss" );
-        TemporalAccessor ta = dateFormatter.parse( metadata.getVersioning().getLastUpdated() );
+    public String getReleaseDateFromMetadata() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddkkmmss");
+        TemporalAccessor ta = dateFormatter.parse(metadata.getVersioning().getLastUpdated());
 
         // inverted for index page check
-        return DateTimeFormatter.ISO_LOCAL_DATE.format( ta );
+        return DateTimeFormatter.ISO_LOCAL_DATE.format(ta);
     }
 
     /**
@@ -233,9 +215,8 @@ public class ConfigurationLineInfo
      * @param dist a boolean
      * @return a {@link java.lang.String} object
      */
-    public String getSourceReleaseFilename( String version, boolean dist )
-    {
+    public String getSourceReleaseFilename(String version, boolean dist) {
         return artifactId + "-" + version
-            + ( srcBin && ( dist || !"maven-ant-tasks".equals( artifactId ) ) ? "-src" : "-source-release" ) + ".zip";
+                + (srcBin && (dist || !"maven-ant-tasks".equals(artifactId)) ? "-src" : "-source-release") + ".zip";
     }
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.source;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,37 +16,32 @@ package org.apache.maven.dist.tools.source;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.source;
 
 import java.util.List;
 
 import org.apache.maven.dist.tools.AbstractCheckResult;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 
-class CheckSourceReleaseResult
-    extends AbstractCheckResult
-{
+class CheckSourceReleaseResult extends AbstractCheckResult {
 
     List<String> central;
     List<String> dist;
     List<String> distOlder;
 
-    CheckSourceReleaseResult( ConfigurationLineInfo r, String version )
-    {
-        super( r, version );
+    CheckSourceReleaseResult(ConfigurationLineInfo r, String version) {
+        super(r, version);
     }
 
-    void setMissingDistSourceRelease( List<String> checkRepos )
-    {
+    void setMissingDistSourceRelease(List<String> checkRepos) {
         dist = checkRepos;
     }
 
-    void setMissingCentralSourceRelease( List<String> checkRepos )
-    {
+    void setMissingCentralSourceRelease(List<String> checkRepos) {
         central = checkRepos;
     }
 
-    void setDistOlderSourceRelease( List<String> checkRepos )
-    {
+    void setDistOlderSourceRelease(List<String> checkRepos) {
         distOlder = checkRepos;
     }
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools;
 
 import java.util.Locale;
 
@@ -28,20 +27,15 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @author skygo
  */
-@Mojo( name = "failure-report", requiresProject = false )
-public class DummyFailureReport
-    extends DistCheckErrorsReport
-{
+@Mojo(name = "failure-report", requiresProject = false)
+public class DummyFailureReport extends DistCheckErrorsReport {
     /**
      * Dummy
      */
-    public DummyFailureReport()
-    {
-    }
+    public DummyFailureReport() {}
 
     @Override
-    boolean isDummyFailure()
-    {
+    boolean isDummyFailure() {
         return true;
     }
 
@@ -50,29 +44,25 @@ public class DummyFailureReport
      *
      * @return a {@link java.lang.String} object
      */
-    protected String getFailuresFilename()
-    {
+    protected String getFailuresFilename() {
         return "dummy";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getOutputName()
-    {
+    public String getOutputName() {
         return "dist-tool-failure";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getName( Locale locale )
-    {
+    public String getName(Locale locale) {
         return "Dist Tool> Failure Hack";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getDescription( Locale locale )
-    {
+    public String getDescription(Locale locale) {
         return "Dist Tool report to fail the build in case of inconsistency found by any check reports";
     }
 }

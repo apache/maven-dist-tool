@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.site.checkers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.site.checkers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.site.checkers;
 
 import org.apache.maven.dist.tools.site.HTMLChecker;
 import org.jsoup.nodes.Document;
@@ -28,34 +27,28 @@ import org.jsoup.nodes.Element;
  *
  * @author skygo
  */
-public class FluidoHTMLChecker implements HTMLChecker
-{
+public class FluidoHTMLChecker implements HTMLChecker {
     /**
      * Fluido Html Checker
      */
-    public FluidoHTMLChecker()
-    {
-    }
+    public FluidoHTMLChecker() {}
 
     /** {@inheritDoc} */
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Fluido";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getSkin()
-    {
+    public String getSkin() {
         return "Fluido";
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean isDisplayedArtifactVersionOk( Document doc, String version )
-    {
-        Element links = doc.select( "li#projectVersion" ).first();
-        return ( links != null ) && links.text().contains( version );
+    public boolean isDisplayedArtifactVersionOk(Document doc, String version) {
+        Element links = doc.select("li#projectVersion").first();
+        return (links != null) && links.text().contains(version);
     }
 }

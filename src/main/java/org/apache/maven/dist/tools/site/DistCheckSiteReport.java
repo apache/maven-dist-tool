@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.site;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.site;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.site;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,19 +44,15 @@ import org.jsoup.nodes.Document;
  *
  * @author skygo
  */
-@Mojo( name = "check-site", requiresProject = false )
-public class DistCheckSiteReport
-    extends AbstractDistCheckReport
-{
+@Mojo(name = "check-site", requiresProject = false)
+public class DistCheckSiteReport extends AbstractDistCheckReport {
     /** Constant <code>FAILURES_FILENAME="check-site.log"</code> */
     public static final String FAILURES_FILENAME = "check-site.log";
 
     /**
      * <p>Constructor for DistCheckSiteReport.</p>
      */
-    public DistCheckSiteReport()
-    {
-    }
+    public DistCheckSiteReport() {}
 
     /**
      * Ignore site failure for <code>artifactId</code> or <code>artifactId:version</code>
@@ -74,7 +69,7 @@ public class DistCheckSiteReport
     /**
      * Local repository.
      */
-    @Parameter( defaultValue = "${localRepository}", required = true, readonly = true )
+    @Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
     protected ArtifactRepository localRepository;
 
     /**
@@ -90,8 +85,7 @@ public class DistCheckSiteReport
 
     /** {@inheritDoc} */
     @Override
-    protected boolean isIndexPageCheck()
-    {
+    protected boolean isIndexPageCheck() {
         return false;
     }
 
@@ -100,22 +94,19 @@ public class DistCheckSiteReport
      *
      * @return a {@link java.lang.String} object
      */
-    protected String getFailuresFilename()
-    {
+    protected String getFailuresFilename() {
         return FAILURES_FILENAME;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getName( Locale locale )
-    {
+    public String getName(Locale locale) {
         return "Dist Tool> Check Sites";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getDescription( Locale locale )
-    {
+    public String getDescription(Locale locale) {
         return "Verification of documentation site corresponding to artifact";
     }
 
@@ -125,75 +116,66 @@ public class DistCheckSiteReport
 
     /** {@inheritDoc} */
     @Override
-    protected void executeReport( Locale locale )
-        throws MavenReportException
-    {
-        if ( !outputDirectory.exists() )
-        {
+    protected void executeReport(Locale locale) throws MavenReportException {
+        if (!outputDirectory.exists()) {
             outputDirectory.mkdirs();
         }
-        try
-        {
+        try {
             this.execute();
-        }
-        catch ( MojoExecutionException ex )
-        {
-            throw new MavenReportException( ex.getMessage(), ex );
+        } catch (MojoExecutionException ex) {
+            throw new MavenReportException(ex.getMessage(), ex);
         }
         Sink sink = getSink();
         sink.head();
         sink.title();
-        sink.text( "Check sites" );
+        sink.text("Check sites");
         sink.title_();
         sink.head_();
 
         sink.body();
         sink.section1();
-        sink.rawText( "Checked sites, also do some basic checking in index.html contents." );
-        sink.rawText( "This is to help maintaining some coherence. How many site are skin fluido, stylus,"
-                + " where they have artifact version (right, left)" );
-        sink.rawText( "All sun icons in one column is kind of objective." );
+        sink.rawText("Checked sites, also do some basic checking in index.html contents.");
+        sink.rawText("This is to help maintaining some coherence. How many site are skin fluido, stylus,"
+                + " where they have artifact version (right, left)");
+        sink.rawText("All sun icons in one column is kind of objective.");
         sink.section1_();
         sink.table();
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.rawText( "groupId/artifactId" );
+        sink.rawText("groupId/artifactId");
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "LATEST" );
+        sink.rawText("LATEST");
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "DATE" );
+        sink.rawText("DATE");
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "URL" );
+        sink.rawText("URL");
         sink.lineBreak();
-        sink.rawText( "Skins" );
+        sink.rawText("Skins");
         sink.lineBreak();
-        sink.rawText( "Comments on top of html" );
+        sink.rawText("Comments on top of html");
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.rawText( "Artifact version displayed" );
+        sink.rawText("Artifact version displayed");
         sink.tableHeaderCell_();
         sink.tableRow_();
 
         String directory = null;
-        for ( CheckSiteResult csr : results )
-        {
+        for (CheckSiteResult csr : results) {
             ConfigurationLineInfo cli = csr.getConfigurationLine();
 
-            if ( !cli.getDirectory().equals( directory ) )
-            {
+            if (!cli.getDirectory().equals(directory)) {
                 directory = cli.getDirectory();
                 sink.tableRow();
                 sink.tableHeaderCell();
                 // shorten groupid
-                sink.rawText( cli.getGroupId().replaceAll( "org.apache.maven", "o.a.m" ) );
+                sink.rawText(cli.getGroupId().replaceAll("org.apache.maven", "o.a.m"));
                 sink.tableHeaderCell_();
-                for ( int i = 0; i < 5 ; i++ )
-                {
+                for (int i = 0; i < 5; i++) {
                     sink.tableHeaderCell();
-                    sink.rawText( " " );
+                    sink.rawText(" ");
                     sink.tableHeaderCell_();
                 }
                 sink.tableRow_();
@@ -201,33 +183,32 @@ public class DistCheckSiteReport
 
             sink.tableRow();
             sink.tableCell();
-            sink.anchor( cli.getArtifactId() );
-            sink.rawText( cli.getArtifactId() );
+            sink.anchor(cli.getArtifactId());
+            sink.rawText(cli.getArtifactId());
             sink.anchor_();
             sink.tableCell_();
 
             sink.tableCell();
-            sink.rawText( csr.getVersion() );
+            sink.rawText(csr.getVersion());
             sink.tableCell_();
 
             sink.tableCell();
-            sink.rawText( cli.getReleaseDateFromMetadata() );
+            sink.rawText(cli.getReleaseDateFromMetadata());
             sink.tableCell_();
             sink.tableCell();
-            if ( csr.getStatusCode() != HTTP_OK )
-            {
-                iconError( sink );
-                sink.rawText( "[" + csr.getStatusCode() + "] " );
+            if (csr.getStatusCode() != HTTP_OK) {
+                iconError(sink);
+                sink.rawText("[" + csr.getStatusCode() + "] ");
             }
-            sink.link( csr.getUrl() );
-            sink.rawText( getSimplifiedUrl( csr.getUrl() ) );
+            sink.link(csr.getUrl());
+            sink.rawText(getSimplifiedUrl(csr.getUrl()));
             sink.link_();
             sink.lineBreak();
-            csr.renderDetectedSkin( sink );
+            csr.renderDetectedSkin(sink);
             sink.tableCell_();
 
             sink.tableCell();
-            csr.renderDisplayedArtifactVersion( sink );
+            csr.renderDisplayedArtifactVersion(sink);
             sink.tableCell_();
 
             sink.tableRow_();
@@ -238,63 +219,50 @@ public class DistCheckSiteReport
         sink.close();
     }
 
-    private String getSimplifiedUrl( String url )
-    {
-        return url.replace( "://maven.apache.org", "://m.a.o" );
+    private String getSimplifiedUrl(String url) {
+        return url.replace("://maven.apache.org", "://m.a.o");
     }
 
-    private void checkSite( ConfigurationLineInfo cli, String version )
-    {
-        CheckSiteResult result = new CheckSiteResult( cli, version );
-        results.add( result );
-        try
-        {
-            Artifact artifact =
-                artifactFactory.createProjectArtifact( cli.getGroupId(), cli.getArtifactId(), version );
+    private void checkSite(ConfigurationLineInfo cli, String version) {
+        CheckSiteResult result = new CheckSiteResult(cli, version);
+        results.add(result);
+        try {
+            Artifact artifact = artifactFactory.createProjectArtifact(cli.getGroupId(), cli.getArtifactId(), version);
             MavenProject artifactProject =
-                mavenProjectBuilder.buildFromRepository( artifact, artifactRepositories, localRepository, false );
+                    mavenProjectBuilder.buildFromRepository(artifact, artifactRepositories, localRepository, false);
 
-            String siteUrl = sites.get( cli.getArtifactId() );
-            if ( siteUrl == null )
-            {
-                siteUrl = sites.get( cli.getArtifactId() + ':' + version );
-                if ( siteUrl == null )
-                {
+            String siteUrl = sites.get(cli.getArtifactId());
+            if (siteUrl == null) {
+                siteUrl = sites.get(cli.getArtifactId() + ':' + version);
+                if (siteUrl == null) {
                     siteUrl = artifactProject.getUrl();
                 }
             }
 
-            result.setUrl( siteUrl );
-            Document doc = JsoupRetry.get( siteUrl );
-            for ( HTMLChecker c : checkers )
-            {
-                result.getCheckMap().put( c, c.isDisplayedArtifactVersionOk( doc, version ) );
+            result.setUrl(siteUrl);
+            Document doc = JsoupRetry.get(siteUrl);
+            for (HTMLChecker c : checkers) {
+                result.getCheckMap().put(c, c.isDisplayedArtifactVersionOk(doc, version));
             }
-            result.setDocument( doc );
+            result.setDocument(doc);
 
+        } catch (HttpStatusException hes) {
+            addErrorLine(
+                    cli,
+                    version,
+                    ignoreSiteFailures,
+                    "HTTP result code: " + hes.getStatusCode() + " for " + cli.getArtifactId() + " site = "
+                            + hes.getUrl());
+            result.setHTTPErrorUrl(hes.getStatusCode());
+        } catch (Exception ex) {
+            // continue for  other artifact
+            getLog().error(ex.getMessage() + cli.getArtifactId());
         }
-        catch ( HttpStatusException hes )
-        {
-            addErrorLine( cli,
-                          version,
-                          ignoreSiteFailures,
-                          "HTTP result code: " + hes.getStatusCode() + " for " + cli.getArtifactId() + " site = "
-                              + hes.getUrl() );
-            result.setHTTPErrorUrl( hes.getStatusCode() );
-        }
-        catch ( Exception ex )
-        {
-            //continue for  other artifact
-            getLog().error( ex.getMessage() + cli.getArtifactId() );
-        }
-
     }
 
     /** {@inheritDoc} */
     @Override
-    protected void checkArtifact( ConfigurationLineInfo configLine, String latestVersion )
-        throws MojoExecutionException
-    {
-        checkSite( configLine, latestVersion );
+    protected void checkArtifact(ConfigurationLineInfo configLine, String latestVersion) throws MojoExecutionException {
+        checkSite(configLine, latestVersion);
     }
 }

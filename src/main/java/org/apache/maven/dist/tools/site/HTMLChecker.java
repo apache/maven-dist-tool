@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools.site;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools.site;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools.site;
 
 import org.jsoup.nodes.Document;
 
@@ -26,8 +25,7 @@ import org.jsoup.nodes.Document;
  *
  * @author skygo
  */
-public interface HTMLChecker
-{
+public interface HTMLChecker {
 
     /**
      * name of the checker.
@@ -50,6 +48,5 @@ public interface HTMLChecker
      * @param version version to check against
      * @return true if version is found
      */
-    boolean isDisplayedArtifactVersionOk( Document doc, String version );
-    
+    boolean isDisplayedArtifactVersionOk(Document doc, String version);
 }

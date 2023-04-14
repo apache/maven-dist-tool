@@ -1,5 +1,3 @@
-package org.apache.maven.dist.tools;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.dist.tools;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.dist.tools;
 
 import java.io.IOException;
 
@@ -27,8 +26,7 @@ import org.jsoup.nodes.Document;
 /**
  * Reads a url with Jsoup, retrying multiple times in case of IOException.
  */
-public class JsoupRetry
-{
+public class JsoupRetry {
     /** Constant <code>MAX_RETRY=3</code> */
     public static final int MAX_RETRY = 3;
 
@@ -38,9 +36,7 @@ public class JsoupRetry
     /**
      * JsoupRetry constructor.
      */
-    public JsoupRetry()
-    {
-    }
+    public JsoupRetry() {}
 
     /**
      * <p>get.</p>
@@ -49,35 +45,25 @@ public class JsoupRetry
      * @return a {@link org.jsoup.nodes.Document} object
      * @throws java.io.IOException if any.
      */
-    public static Document get( String url )
-        throws IOException
-    {
-        for ( int i = 1; i <= MAX_RETRY; i++ )
-        {
-            try
-            {
-                return Jsoup.connect( url )
-                        .userAgent( "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0" )
-                        .maxBodySize( 0 )
+    public static Document get(String url) throws IOException {
+        for (int i = 1; i <= MAX_RETRY; i++) {
+            try {
+                return Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+                        .maxBodySize(0)
                         .get();
-            }
-            catch ( IOException ioe )
-            {
-                System.err.println( "IOException try " + i + " while reading " + url + ": " + ioe.getClass() + " "
-                    + ioe.getMessage() );
+            } catch (IOException ioe) {
+                System.err.println("IOException try " + i + " while reading " + url + ": " + ioe.getClass() + " "
+                        + ioe.getMessage());
 
-                if ( i == MAX_RETRY )
-                {
-                    throw new IOException( "IOException while reading " + url, ioe );
+                if (i == MAX_RETRY) {
+                    throw new IOException("IOException while reading " + url, ioe);
                 }
             }
 
-            try
-            {
-                Thread.sleep( WAIT_RETRY_SECONDS * 1000 );
-            }
-            catch ( InterruptedException e )
-            {
+            try {
+                Thread.sleep(WAIT_RETRY_SECONDS * 1000);
+            } catch (InterruptedException e) {
                 // not expected to happen
             }
         }
