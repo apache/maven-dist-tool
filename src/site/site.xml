@@ -45,8 +45,8 @@ under the License.
 
     <body>
       <links>
-        <item name="CI Job" href="https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master/" />
-        <item name="Get Sources" href="/scm.html" />
+        <item name="CI Job" href="ci-management.html" />
+        <item name="Get Sources" href="scm.html" />
       </links>
 
       <menu name="Overwiev">

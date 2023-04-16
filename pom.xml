@@ -28,7 +28,7 @@
   <description>Dist tool plugin: check content of Maven distribution area. 
         Not to be released.</description>
 
-  <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/dist-tool-plugin/site/</url>
+  <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master/site/index.html</url>
 
   <prerequisites>
     <maven>${mvnversion}</maven>
