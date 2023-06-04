@@ -194,7 +194,7 @@ public class ListBranchesReport extends AbstractJobsReport {
                 Element headsTable = gitboxHeadsDoc.selectFirst("table.heads");
 
                 if (headsTable == null) {
-                    getLog().warn("Ignoring " + repository);
+                    getLog().warn("Ignoring " + repository + ": unexpected content from " + gitboxHeadsUrl);
                     continue;
                 }
 
