@@ -51,6 +51,7 @@ public class ListMasterJobsReport extends AbstractMavenReport {
     private String mavenboxJobsBaseUrl = "https://ci-maven.apache.org/job/Maven/job/maven-box/";
 
     private Collection<String> excluded = Arrays.asList(
+            "maven-blog",
             "maven-integration-testing", // runs with Maven core job
             "maven-jenkins-env",
             "maven-jenkins-lib",
