@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.dist.tools.branches;
+package org.apache.maven.dist.tools.jobs.branches;
 
 import java.util.Collection;
 

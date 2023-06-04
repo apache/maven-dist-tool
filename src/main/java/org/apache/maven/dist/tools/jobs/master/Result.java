@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.dist.tools.masterjobs;
+package org.apache.maven.dist.tools.jobs.master;
 
 import java.time.ZonedDateTime;
 

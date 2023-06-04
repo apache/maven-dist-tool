@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.dist.tools.masterjobs;
+package org.apache.maven.dist.tools.jobs.master;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -31,13 +31,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.maven.dist.tools.JsoupRetry;
+import org.apache.maven.dist.tools.jobs.AbstractJobsReport;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
@@ -46,20 +45,7 @@ import org.jsoup.select.Elements;
  * @author Robert Scholte
  */
 @Mojo(name = "list-master-jobs", requiresProject = false)
-public class ListMasterJobsReport extends AbstractMavenReport {
-    private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
-    private String mavenboxJobsBaseUrl = "https://ci-maven.apache.org/job/Maven/job/maven-box/";
-
-    public static final Collection<String> EXCLUDED = Arrays.asList(
-            "maven-blog",
-            "maven-integration-testing", // runs with Maven core job
-            "maven-jenkins-env",
-            "maven-jenkins-lib",
-            "maven-sources",
-            "maven-studies",
-            "maven-mvnd",
-            "maven-metric-extension",
-            "maven-gh-actions-shared");
+public class ListMasterJobsReport extends AbstractJobsReport {
 
     /**
      * <p>Constructor for DistCheckSiteReport.</p>
@@ -87,20 +73,12 @@ public class ListMasterJobsReport extends AbstractMavenReport {
     /** {@inheritDoc} */
     @Override
     protected void executeReport(Locale locale) throws MavenReportException {
-        Collection<String> repositoryNames;
-        try {
-            repositoryNames = repositoryNames();
-        } catch (IOException e) {
-            throw new MavenReportException("Failed to extract repositorynames from Gitbox", e);
-        }
+        Collection<String> repositoryNames = repositoryNames();
 
         List<Result> repoStatus = new ArrayList<>(repositoryNames.size());
 
-        Collection<String> included =
-                repositoryNames.stream().filter(s -> !EXCLUDED.contains(s)).collect(Collectors.toList());
-
-        for (String repository : included) {
-            final String repositoryJobUrl = mavenboxJobsBaseUrl + "job/" + repository;
+        for (String repository : repositoryNames) {
+            final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + "job/" + repository;
 
             try {
                 Document doc = JsoupRetry.get(repositoryJobUrl);
@@ -109,7 +87,7 @@ public class ListMasterJobsReport extends AbstractMavenReport {
 
                 Element masterRow = doc.getElementById("job_master");
                 if (masterRow == null) {
-                    getLog().warn(mavenboxJobsBaseUrl + repository + " is missing id job_master");
+                    getLog().warn(MAVENBOX_JOBS_BASE_URL + repository + " is missing id job_master");
                     continue;
                 } else if (masterRow.hasClass("job-status-red") || masterRow.hasClass("job-status-red-anime")) {
                     result.setStatus("FAILURE");
@@ -215,29 +193,5 @@ public class ListMasterJobsReport extends AbstractMavenReport {
         } else {
             return failure;
         }
-    }
-
-    /**
-     * Extract Git repository names for Apache Maven from
-     * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
-     *
-     * @return the list of repository names (without ".git")
-     * @throws java.io.IOException problem with reading repository index
-     */
-    protected Collection<String> repositoryNames() throws IOException {
-        List<String> names = new ArrayList<>(100);
-        Document doc = JsoupRetry.get(gitboxUrl);
-        // find Apache Maven table
-        Element apacheMavenTable =
-                doc.getElementsMatchingText("^Apache Maven$").parents().get(0);
-
-        Elements gitRepo =
-                apacheMavenTable.select("tbody tr").not("tr.disabled").select("td:first-child a");
-
-        for (Element element : gitRepo) {
-            names.add(element.text().split("\\.git")[0]);
-        }
-
-        return names;
     }
 }

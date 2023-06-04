@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.dist.tools.branches;
+package org.apache.maven.dist.tools.jobs.branches;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -33,16 +33,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.maven.dist.tools.JsoupRetry;
-import org.apache.maven.dist.tools.masterjobs.ListMasterJobsReport;
+import org.apache.maven.dist.tools.jobs.AbstractJobsReport;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
@@ -51,18 +49,12 @@ import org.jsoup.select.Elements;
  * @author Robert Scholte
  */
 @Mojo(name = "list-branches", requiresProject = false)
-public class ListBranchesReport extends AbstractMavenReport {
+public class ListBranchesReport extends AbstractJobsReport {
     private static final String JIRA_BASE_URL = "https://issues.apache.org/jira/projects/";
-
-    private static final String GITBOX_URL = "https://gitbox.apache.org/repos/asf";
-
-    private static final String MAVENBOX_JOBS_BASE_URL = "https://ci-maven.apache.org/job/Maven/job/maven-box/job/";
 
     private static final String GITHUB_URL = "https://github.com/apache/";
 
     private static final String DEPENDABOT_CONFIG = ".github/dependabot.yml";
-
-    private static final Collection<String> EXCLUDED = ListMasterJobsReport.EXCLUDED;
 
     private static final Map<String, String> JIRAPROJECTS = new HashMap<>();
 
@@ -188,19 +180,11 @@ public class ListBranchesReport extends AbstractMavenReport {
     /** {@inheritDoc} */
     @Override
     protected void executeReport(Locale locale) throws MavenReportException {
-        Collection<String> repositoryNames;
-        try {
-            repositoryNames = repositoryNames();
-        } catch (IOException e) {
-            throw new MavenReportException("Failed to extract repositorynames from Gitbox", e);
-        }
+        Collection<String> repositoryNames = repositoryNames();
 
         List<Result> repoStatus = new ArrayList<>(repositoryNames.size());
 
-        Collection<String> included =
-                repositoryNames.stream().filter(s -> !EXCLUDED.contains(s)).collect(Collectors.toList());
-
-        for (String repository : included) {
+        for (String repository : repositoryNames) {
             final String gitboxHeadsUrl = getGitboxHeadsUrl(repository);
             final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
 
@@ -507,29 +491,6 @@ public class ListBranchesReport extends AbstractMavenReport {
 
         sink.table_();
         sink.body_();
-    }
-
-    /**
-     * Extract Git repository names for Apache Maven from
-     * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
-     *
-     * @return the list of repository names (without ".git")
-     * @throws java.io.IOException problem with reading repository index
-     */
-    protected Collection<String> repositoryNames() throws IOException {
-        List<String> names = new ArrayList<>(100);
-        Document doc = JsoupRetry.get(GITBOX_URL);
-        // find Apache Maven table
-        Element apacheMavenTable = doc.getElementById("maven");
-
-        Elements gitRepo =
-                apacheMavenTable.select("tbody tr").not("tr.disabled").select("td:first-child a");
-
-        for (Element element : gitRepo) {
-            names.add(element.text().split("\\.git")[0]);
-        }
-
-        return names;
     }
 
     /**
