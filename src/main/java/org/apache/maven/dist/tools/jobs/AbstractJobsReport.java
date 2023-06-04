@@ -50,10 +50,11 @@ public abstract class AbstractJobsReport extends AbstractMavenReport {
 
     /**
      * Extract Git repository names for Apache Maven from
-     * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>.
+     * <a href="https://gitbox.apache.org/repos/asf">Gitbox main page</a>,
+     * with some excludes.
      *
      * @return the list of repository names (without ".git")
-     * @throws java.io.IOException problem with reading repository index
+     * @throws MavenReportException problem with reading repository index
      */
     protected Collection<String> repositoryNames() throws MavenReportException {
         try {
