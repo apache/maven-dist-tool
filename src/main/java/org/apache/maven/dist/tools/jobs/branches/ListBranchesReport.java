@@ -41,6 +41,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
@@ -185,16 +186,16 @@ public class ListBranchesReport extends AbstractJobsReport {
         List<Result> repoStatus = new ArrayList<>(repositoryNames.size());
 
         for (String repository : repositoryNames) {
-            final String gitboxHeadsUrl = getGitboxHeadsUrl(repository);
+            final String githubBranchesUrl = getGitHubBranchesUrl(repository);
             final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
 
             try {
-                Document gitboxHeadsDoc = JsoupRetry.get(gitboxHeadsUrl);
+                Document githubBranchesDoc = JsoupRetry.get(githubBranchesUrl);
 
-                Element headsTable = gitboxHeadsDoc.selectFirst("table.heads");
+                Elements branchItems = githubBranchesDoc.select("branch-filter-item");
 
-                if (headsTable == null) {
-                    getLog().warn("Ignoring " + repository + ": unexpected content from " + gitboxHeadsUrl);
+                if (branchItems.size() == 0) {
+                    getLog().warn("Ignoring " + repository + ": no branch-filter-item found in " + githubBranchesUrl);
                     continue;
                 }
 
@@ -210,8 +211,8 @@ public class ListBranchesReport extends AbstractJobsReport {
                 Collection<String> restGit = new ArrayList<>();
                 Collection<String> restJenkins = new ArrayList<>();
 
-                for (Element tableRow : headsTable.select("tr")) {
-                    String name = tableRow.selectFirst("a.name").text();
+                for (Element branchItem : branchItems) {
+                    String name = branchItem.attr("branch");
 
                     if ("master".equals(name)) {
                         masterBranchesGit++;
@@ -255,8 +256,8 @@ public class ListBranchesReport extends AbstractJobsReport {
         generateReport(repoStatus);
     }
 
-    private String getGitboxHeadsUrl(String repository) {
-        return GITBOX_URL + "?p=" + repository + ".git;a=heads";
+    private String getGitHubBranchesUrl(String repository) {
+        return GITHUB_URL + repository + "/branches/all";
     }
 
     private void generateReport(List<Result> repoStatus) {
@@ -369,7 +370,7 @@ public class ListBranchesReport extends AbstractJobsReport {
                         sink.rawText(String.valueOf(r.getJiraBranchesJenkins().size()));
                         sink.link_();
                         sink.text(" / ");
-                        sink.link(getGitboxHeadsUrl(r.getRepositoryName()), gitLinkAttributes);
+                        sink.link(getGitHubBranchesUrl(r.getRepositoryName()), gitLinkAttributes);
                         sink.rawText(String.valueOf(r.getJiraBranchesGit().size()));
                         sink.link_();
                         sink.bold_();
@@ -408,7 +409,7 @@ public class ListBranchesReport extends AbstractJobsReport {
                                 String.valueOf(r.getDependabotBranchesJenkins().size()));
                         sink.link_();
                         sink.text(" / ");
-                        sink.link(getGitboxHeadsUrl(r.getRepositoryName()), gitLinkAttributes);
+                        sink.link(getGitHubBranchesUrl(r.getRepositoryName()), gitLinkAttributes);
                         sink.rawText(String.valueOf(r.getDependabotBranchesGit().size()));
                         sink.link_();
 
@@ -441,7 +442,7 @@ public class ListBranchesReport extends AbstractJobsReport {
                         sink.rawText(String.valueOf(r.getRestJenkins().size()));
                         sink.link_();
                         sink.text(" / ");
-                        sink.link(getGitboxHeadsUrl(r.getRepositoryName()), gitLinkAttributes);
+                        sink.link(getGitHubBranchesUrl(r.getRepositoryName()), gitLinkAttributes);
                         sink.rawText(String.valueOf(r.getRestGit().size()));
                         sink.link_();
 
