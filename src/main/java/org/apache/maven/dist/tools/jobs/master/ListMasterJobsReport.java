@@ -78,7 +78,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         List<Result> repoStatus = new ArrayList<>(repositoryNames.size());
 
         for (String repository : repositoryNames) {
-            final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + "job/" + repository;
+            final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
 
             try {
                 Document doc = JsoupRetry.get(repositoryJobUrl);
