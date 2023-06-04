@@ -50,7 +50,7 @@ public class ListMasterJobsReport extends AbstractMavenReport {
     private String gitboxUrl = "https://gitbox.apache.org/repos/asf";
     private String mavenboxJobsBaseUrl = "https://ci-maven.apache.org/job/Maven/job/maven-box/";
 
-    private Collection<String> excluded = Arrays.asList(
+    public static final Collection<String> EXCLUDED = Arrays.asList(
             "maven-blog",
             "maven-integration-testing", // runs with Maven core job
             "maven-jenkins-env",
@@ -97,7 +97,7 @@ public class ListMasterJobsReport extends AbstractMavenReport {
         List<Result> repoStatus = new ArrayList<>(repositoryNames.size());
 
         Collection<String> included =
-                repositoryNames.stream().filter(s -> !excluded.contains(s)).collect(Collectors.toList());
+                repositoryNames.stream().filter(s -> !EXCLUDED.contains(s)).collect(Collectors.toList());
 
         for (String repository : included) {
             final String repositoryJobUrl = mavenboxJobsBaseUrl + "job/" + repository;

@@ -23,7 +23,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -34,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.maven.dist.tools.JsoupRetry;
+import org.apache.maven.dist.tools.masterjobs.ListMasterJobsReport;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
@@ -62,15 +62,7 @@ public class ListBranchesReport extends AbstractMavenReport {
 
     private static final String DEPENDABOT_CONFIG = ".github/dependabot.yml";
 
-    private static final Collection<String> EXCLUDED = Arrays.asList(
-            "maven-integration-testing",
-            "maven-jenkins-env",
-            "maven-jenkins-lib",
-            "maven-sources",
-            "maven-studies",
-            "maven-mvnd",
-            "maven-metric-extension",
-            "maven-gh-actions-shared");
+    private static final Collection<String> EXCLUDED = ListMasterJobsReport.EXCLUDED;
 
     private static final Map<String, String> JIRAPROJECTS = new HashMap<>();
 
