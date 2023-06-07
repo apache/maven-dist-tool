@@ -134,6 +134,10 @@ public class GetPrerequisites {
             releaseDate = text.substring(index + 16).substring(0, 10);
         }
 
+        // select table(s):
+        // - first one is the goals table
+        // - second one is system requirements
+        // - (optional) third one is system requirements history
         Elements select = doc.select("table.bodyTable"); // Stylus skin
 
         if (select.size() < 1) {
@@ -142,12 +146,13 @@ public class GetPrerequisites {
 
         if (select.size() < 1) {
             System.err.println("Could not find expected plugin info for " + url);
-            return new PluginPrerequisites(pluginName, "?", "?", "?", "?");
+            return new PluginPrerequisites(pluginName, "?", "?", "?", "?", 0, null);
         }
 
-        Element tableInfo = select.get(1);
-        Elements elementsByAttributeA = tableInfo.getElementsByAttributeValue("class", "a");
-        Elements elementsByAttributeB = tableInfo.getElementsByAttributeValue("class", "b");
+        // extract system requirements
+        Element systemRequirementsTable = select.get(1);
+        Elements elementsByAttributeA = systemRequirementsTable.getElementsByAttributeValue("class", "a");
+        Elements elementsByAttributeB = systemRequirementsTable.getElementsByAttributeValue("class", "b");
         String mavenVersion = elementsByAttributeA.first().text();
         String jdkVersion = elementsByAttributeB.first().text();
 
@@ -171,7 +176,28 @@ public class GetPrerequisites {
             pluginVersion = pluginVersion.substring(0, pluginVersion.indexOf("</version>"));
         }
 
-        return new PluginPrerequisites(pluginName, pluginVersion, releaseDate, mavenVersion, jdkVersion);
+        // extract system requirements history
+        int systemRequirementsHistorySize = 0;
+        String oldest = null;
+        if (select.size() > 2) {
+            Elements systemRequirementsHistoryTrs = select.get(2).select("tr");
+            systemRequirementsHistorySize = systemRequirementsHistoryTrs.size() - 1;
+
+            Elements td = systemRequirementsHistoryTrs
+                    .get(systemRequirementsHistorySize)
+                    .select("td");
+            oldest = td.get(0).text() + " requires Maven " + td.get(1).text() + ", JDK "
+                    + td.get(2).text();
+        }
+
+        return new PluginPrerequisites(
+                pluginName,
+                pluginVersion,
+                releaseDate,
+                mavenVersion,
+                jdkVersion,
+                systemRequirementsHistorySize,
+                oldest);
     }
 
     /**

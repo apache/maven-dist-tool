@@ -84,6 +84,10 @@ public class ListPluginsPrerequisitesReport extends AbstractMavenReport {
                     sink.tableHeaderCell_();
 
                     sink.tableHeaderCell();
+                    sink.rawText("Plugin Documentation");
+                    sink.tableHeaderCell_();
+
+                    sink.tableHeaderCell();
                     sink.rawText("Maven Version");
                     sink.tableHeaderCell_();
 
@@ -95,16 +99,22 @@ public class ListPluginsPrerequisitesReport extends AbstractMavenReport {
                     sink.rawText("Release Date");
                     sink.tableHeaderCell_();
 
+                    sink.tableHeaderCell();
+                    sink.rawText("Requirements History");
+                    sink.tableHeaderCell_();
+
                     sink.tableRow_();
 
                     for (PluginPrerequisites pluginPrerequisites : pluginsPrerequisites) {
                         sink.tableRow();
                         sink.tableCell();
-                        sink.link(prerequisites.getPluginInfoUrl(pluginPrerequisites.getPluginName()));
                         sink.text(pluginPrerequisites.getPluginName());
-                        sink.link_();
-                        sink.text(" ");
+                        sink.tableCell_();
+
+                        sink.tableCell();
+                        sink.link(prerequisites.getPluginInfoUrl(pluginPrerequisites.getPluginName()));
                         sink.text(pluginPrerequisites.getPluginVersion());
+                        sink.link_();
                         sink.tableCell_();
 
                         sink.tableCell();
@@ -118,6 +128,18 @@ public class ListPluginsPrerequisitesReport extends AbstractMavenReport {
                         sink.tableCell();
                         sink.text(pluginPrerequisites.getReleaseDate());
                         sink.tableCell_();
+
+                        sink.tableCell();
+                        int history = pluginPrerequisites.getSystemRequirementsHistory();
+                        if (history > 0) {
+                            sink.link(prerequisites.getPluginInfoUrl(pluginPrerequisites.getPluginName())
+                                    + "#system-requirements-history");
+                            sink.text(String.valueOf(history));
+                            sink.link_();
+                            sink.text(", up to " + pluginPrerequisites.getOldestRequirements());
+                        }
+                        sink.tableCell_();
+
                         sink.tableRow_();
                     }
                 });

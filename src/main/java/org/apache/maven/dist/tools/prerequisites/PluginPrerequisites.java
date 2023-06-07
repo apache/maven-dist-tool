@@ -37,6 +37,10 @@ public class PluginPrerequisites {
 
     private String jdkVersion;
 
+    private int systemRequirementsHistory;
+
+    private String oldestRequirements;
+
     /**
      * <p>Constructor for PluginPrerequisites.</p>
      *
@@ -47,12 +51,20 @@ public class PluginPrerequisites {
      * @param jdkVersion a {@link java.lang.String} object
      */
     public PluginPrerequisites(
-            String pluginName, String pluginVersion, String releaseDate, String mavenVersion, String jdkVersion) {
+            String pluginName,
+            String pluginVersion,
+            String releaseDate,
+            String mavenVersion,
+            String jdkVersion,
+            int systemRequirementsHistory,
+            String oldestRequirements) {
         this.pluginName = pluginName;
         this.pluginVersion = pluginVersion;
         this.releaseDate = releaseDate;
         this.mavenVersion = new DefaultArtifactVersion(mavenVersion);
         this.jdkVersion = jdkVersion;
+        this.systemRequirementsHistory = systemRequirementsHistory;
+        this.oldestRequirements = oldestRequirements;
     }
 
     /**
@@ -125,5 +137,23 @@ public class PluginPrerequisites {
      */
     public void setPluginName(String pluginName) {
         this.pluginName = pluginName;
+    }
+
+    /**
+     * <p>Getter for the field <code>systemRequirementsHistory</code>.</p>
+     *
+     * @return an int
+     */
+    public int getSystemRequirementsHistory() {
+        return systemRequirementsHistory;
+    }
+
+    /**
+     * <p>Getter for the field <code>oldestRequirements</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
+    public String getOldestRequirements() {
+        return oldestRequirements;
     }
 }
