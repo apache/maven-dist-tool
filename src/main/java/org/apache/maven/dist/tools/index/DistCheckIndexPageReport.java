@@ -231,6 +231,7 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
             sink.sectionTitle2_();
 
             sink.table();
+            sink.tableRows(null, true);
             sink.tableRow();
             sink.tableHeaderCell();
             sink.rawText("Component (" + indexPageResults.size() + ")");
@@ -252,6 +253,8 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
             for (CheckIndexPageResult csr : indexPageResults) {
                 reportLine(sink, csr, indexPage.containsDate);
             }
+
+            sink.tableRows_();
             sink.table_();
         }
 
