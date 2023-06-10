@@ -188,9 +188,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             if (!cliMissing.toString().isEmpty()) {
                 sink.lineBreak();
                 SinkEventAttributeSet atts = new SinkEventAttributeSet();
-                sink.unknown("pre", new Object[] {new Integer(HtmlMarkup.TAG_TYPE_START)}, atts);
+                sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_START)}, atts);
                 sink.text(cliMissing.toString());
-                sink.unknown("pre", new Object[] {new Integer(HtmlMarkup.TAG_TYPE_END)}, null);
+                sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_END)}, null);
             }
 
             StringBuilder cliOlder = new StringBuilder();
@@ -203,9 +203,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             if (!cliOlder.toString().isEmpty()) {
                 sink.lineBreak();
                 SinkEventAttributeSet atts = new SinkEventAttributeSet();
-                sink.unknown("pre", new Object[] {new Integer(HtmlMarkup.TAG_TYPE_START)}, atts);
+                sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_START)}, atts);
                 sink.text(cliOlder.toString());
-                sink.unknown("pre", new Object[] {new Integer(HtmlMarkup.TAG_TYPE_END)}, null);
+                sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_END)}, null);
             }
         }
 
