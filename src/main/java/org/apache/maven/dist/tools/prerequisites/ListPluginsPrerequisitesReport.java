@@ -70,6 +70,15 @@ public class ListPluginsPrerequisitesReport extends AbstractMavenReport {
         sink.body();
 
         sink.table();
+        int[] justif = new int[] {
+            Sink.JUSTIFY_RIGHT,
+            Sink.JUSTIFY_LEFT,
+            Sink.JUSTIFY_CENTER,
+            Sink.JUSTIFY_CENTER,
+            Sink.JUSTIFY_CENTER,
+            Sink.JUSTIFY_LEFT
+        };
+        sink.tableRows(justif, true);
         prerequisites.getGroupedPrequisites().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .forEachOrdered(plugin -> {
@@ -144,6 +153,7 @@ public class ListPluginsPrerequisitesReport extends AbstractMavenReport {
                     }
                 });
 
+        sink.tableRows_();
         sink.table_();
         sink.body_();
     }

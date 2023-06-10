@@ -140,6 +140,7 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
         sink.rawText("All sun icons in one column is kind of objective.");
         sink.section1_();
         sink.table();
+        sink.tableRows(null, true);
         sink.tableRow();
         sink.tableHeaderCell();
         sink.rawText("groupId/artifactId");
@@ -213,6 +214,7 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
 
             sink.tableRow_();
         }
+        sink.tableRows_();
         sink.table_();
         sink.body_();
         sink.flush();

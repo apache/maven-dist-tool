@@ -293,7 +293,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.text("Older artifacts exploration is Work In Progress...");
         sink.paragraph_();
         sink.section1_();
+
         sink.table();
+        sink.tableRows(null, true);
         sink.tableRow();
         sink.tableHeaderCell();
         sink.rawText("groupId/artifactId: " + String.valueOf(stats.artifactsCount));
@@ -333,6 +335,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             reportLine(sink, csrr);
         }
 
+        sink.tableRows_();
         sink.table_();
         sink.body_();
         sink.flush();

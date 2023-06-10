@@ -288,6 +288,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         sink.paragraph();
 
         sink.table();
+        sink.tableRows(null, true);
         sink.tableRow();
         sink.tableHeaderCell();
         sink.text("Repository");
@@ -490,6 +491,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         sink.tableHeaderCell_();
         sink.tableRow_();
 
+        sink.tableRows_();
         sink.table_();
         sink.body_();
     }
