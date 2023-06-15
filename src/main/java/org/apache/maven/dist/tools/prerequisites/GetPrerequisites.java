@@ -186,8 +186,8 @@ public class GetPrerequisites {
             Elements td = systemRequirementsHistoryTrs
                     .get(systemRequirementsHistorySize)
                     .select("td");
-            oldest = td.get(0).text() + " requires Maven " + td.get(1).text() + ", JDK "
-                    + td.get(2).text();
+            oldest = td.get(0).text() + " requires Maven " + td.get(1).text() + " + JDK "
+                    + td.get(2).text().replace("1.", "");
         }
 
         return new PluginPrerequisites(
