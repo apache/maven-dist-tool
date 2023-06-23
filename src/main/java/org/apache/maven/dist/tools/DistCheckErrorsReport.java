@@ -20,12 +20,17 @@ package org.apache.maven.dist.tools;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.dist.tools.index.DistCheckIndexPageReport;
 import org.apache.maven.dist.tools.pgp.CheckPgpKeysReport;
 import org.apache.maven.dist.tools.site.DistCheckSiteReport;
 import org.apache.maven.dist.tools.source.DistCheckSourceReleaseReport;
+import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -74,16 +79,35 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
                     getLog().error(failuresFilename + " error log not empty:" + EOL + content);
                 } else {
                     String failure = failuresFilename.substring(0, failuresFilename.length() - 4);
-                    getSink().section2();
-                    getSink().sectionTitle2();
-                    getSink().link("dist-tool-" + failure + ".html");
-                    getSink().text(failure);
-                    getSink().link_();
-                    getSink().sectionTitle2_();
-                    getSink().verbatim(SinkEventAttributeSet.BOXED);
-                    getSink().rawText(content);
-                    getSink().verbatim_();
-                    getSink().section2_();
+                    Sink s = getSink();
+                    s.section2();
+                    s.sectionTitle2();
+                    s.link("dist-tool-" + failure + ".html");
+                    s.text(failure);
+                    s.link_();
+                    s.sectionTitle2_();
+                    s.verbatim(SinkEventAttributeSet.BOXED);
+                    s.rawText(content);
+                    s.verbatim_();
+                    s.section2_();
+
+                    Set<String> urls = new HashSet<>();
+                    Pattern p = Pattern.compile("https://[\\S]+");
+                    Matcher m = p.matcher(content);
+                    while (m.find()) {
+                        urls.add(m.group());
+                    }
+                    if (!urls.isEmpty()) {
+                        s.list();
+                        for (String url : urls) {
+                            s.listItem();
+                            s.link(url);
+                            s.text(url);
+                            s.link_();
+                            s.listItem_();
+                        }
+                        s.list_();
+                    }
                 }
             }
 
@@ -110,9 +134,9 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
                                 + "dist-tool-check-errors.html for more information");
             }
         } else {
-            getSink().paragraph();
-            getSink().text("No issue found.");
-            getSink().paragraph_();
+            s.paragraph();
+            s.text("No issue found.");
+            s.paragraph_();
         }
     }
 
