@@ -134,9 +134,9 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
                                 + "dist-tool-check-errors.html for more information");
             }
         } else {
-            s.paragraph();
-            s.text("No issue found.");
-            s.paragraph_();
+            getSink().paragraph();
+            getSink().text("No issue found.");
+            getSink().paragraph_();
         }
     }
 
