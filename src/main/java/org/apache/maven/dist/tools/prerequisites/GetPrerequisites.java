@@ -44,6 +44,7 @@ public class GetPrerequisites {
         //        "maven-ant-plugin", // retired
         "maven-antrun-plugin",
         "maven-archetype-plugin",
+        "maven-artifact-plugin",
         "maven-assembly-plugin",
         "maven-changelog-plugin",
         "maven-changes-plugin",
