@@ -26,7 +26,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
@@ -381,7 +384,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
      */
     protected static String getSourceReleasePattern(String artifact) {
         /// not the safest
-        return "^" + artifact + "-[0-9].*source-release.*$";
+        return "^" + artifact + "-([0-9].*)-source-release.*$";
     }
 
     private String cachedUrl;
@@ -413,12 +416,21 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         Elements links = selectLinks(url);
 
         String sourceReleaseFilename = cli.getSourceReleaseFilename(version, true);
+        Pattern sourceReleasePattern = Pattern.compile(getSourceReleasePattern(cli.getArtifactId()));
 
         List<String> retrievedOldFiles = new LinkedList<>();
         for (Element e : links) {
-            String art = e.attr("href");
-            if (art.matches(getSourceReleasePattern(cli.getArtifactId()))) {
-                String retrievedFile = e.attr("href");
+            String retrievedFile = e.attr("href");
+            Matcher m = sourceReleasePattern.matcher(retrievedFile);
+            if (m.matches()) {
+                if (cli.getVersionRange() != null) {
+                    // check version range
+                    String retrievedVersion = m.group(1);
+                    if (!cli.getVersionRange().containsVersion(new DefaultArtifactVersion(retrievedVersion))) {
+                        // ignore version not in range
+                        continue;
+                    }
+                }
                 if (!retrievedFile.startsWith(sourceReleaseFilename)) {
                     retrievedOldFiles.add(retrievedFile);
                 }
