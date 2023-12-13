@@ -50,6 +50,7 @@
   </ciManagement>
 
   <properties>
+    <project.build.outputTimestamp>x</project.build.outputTimestamp>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
     <mvnversion>3.2.5</mvnversion>
     <maven.plugin.tools.version>3.9.0</maven.plugin.tools.version>
