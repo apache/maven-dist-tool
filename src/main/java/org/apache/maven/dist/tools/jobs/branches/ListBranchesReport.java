@@ -32,16 +32,17 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.dist.tools.jobs.AbstractJobsReport;
+import org.apache.maven.dist.tools.jobs.branches.BranchesResponse.Branch;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
@@ -185,21 +186,12 @@ public class ListBranchesReport extends AbstractJobsReport {
         List<Result> repoStatus = new ArrayList<>(repositoryNames.size());
 
         for (String repository : repositoryNames) {
-            final String githubBranchesUrl = getGitHubBranchesUrl(repository);
+            getLog().info("processing " + repository);
             final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
 
             try {
-                Document githubBranchesDoc = JsoupRetry.get(githubBranchesUrl);
-
-                Elements branchItems = githubBranchesDoc.select("branch-filter-item");
-
-                if (branchItems.size() == 0) {
-                    getLog().warn("Ignoring " + repository + ": no branch-filter-item found in " + githubBranchesUrl);
-                    continue;
-                }
-
                 Document jenkinsBranchesDoc = JsoupRetry.get(repositoryJobUrl);
-
+                BranchesResponse branchesResponse = null;
                 Result result = new Result(repository, repositoryJobUrl);
                 int masterBranchesGit = 0;
                 int masterBranchesJenkins = 0;
@@ -209,34 +201,46 @@ public class ListBranchesReport extends AbstractJobsReport {
                 Collection<String> dependabotBranchesJenkins = new ArrayList<>();
                 Collection<String> restGit = new ArrayList<>();
                 Collection<String> restJenkins = new ArrayList<>();
+                int page = 1;
 
-                for (Element branchItem : branchItems) {
-                    String name = branchItem.attr("branch");
+                do {
+                    final String githubBranchesUrl = getGitHubBranchesUrl(repository, page);
+                    Document githubBranchesDoc = JsoupRetry.get(githubBranchesUrl);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                    branchesResponse =
+                            objectMapper.readValue(githubBranchesDoc.body().text(), BranchesResponse.class);
 
-                    if ("master".equals(name)) {
-                        masterBranchesGit++;
+                    for (Branch branch : branchesResponse.getPayload().getBranches()) {
+                        String name = branch.getName();
 
-                        if (jenkinsBranchesDoc.getElementById("job_master") != null) {
-                            masterBranchesJenkins++;
-                        }
-                    } else if (JIRAPROJECTS.containsKey(repository)
-                            && name.toUpperCase().startsWith(JIRAPROJECTS.get(repository) + '-')) {
-                        jiraBranchesGit.add(name);
-                        if (jenkinsBranchesDoc.getElementById(URLEncoder.encode("job_" + name, "UTF-8")) != null) {
-                            jiraBranchesJenkins.add(name);
-                        }
-                    } else if (name.startsWith("dependabot/")) {
-                        dependabotBranchesGit.add(name);
-                        if (jenkinsBranchesDoc.getElementById(URLEncoder.encode("job_" + name, "UTF-8")) != null) {
-                            dependabotBranchesJenkins.add(name);
-                        }
-                    } else {
-                        restGit.add(name);
-                        if (jenkinsBranchesDoc.getElementById(URLEncoder.encode("job_" + name, "UTF-8")) != null) {
-                            restJenkins.add(name);
+                        if ("master".equals(name)) {
+                            masterBranchesGit++;
+
+                            if (jenkinsBranchesDoc.getElementById("job_master") != null) {
+                                masterBranchesJenkins++;
+                            }
+                        } else if (JIRAPROJECTS.containsKey(repository)
+                                && name.toUpperCase().startsWith(JIRAPROJECTS.get(repository) + '-')) {
+                            jiraBranchesGit.add(name);
+                            if (jenkinsBranchesDoc.getElementById(URLEncoder.encode("job_" + name, "UTF-8")) != null) {
+                                jiraBranchesJenkins.add(name);
+                            }
+                        } else if (name.startsWith("dependabot/")) {
+                            dependabotBranchesGit.add(name);
+                            if (jenkinsBranchesDoc.getElementById(URLEncoder.encode("job_" + name, "UTF-8")) != null) {
+                                dependabotBranchesJenkins.add(name);
+                            }
+                        } else {
+                            restGit.add(name);
+                            if (jenkinsBranchesDoc.getElementById(URLEncoder.encode("job_" + name, "UTF-8")) != null) {
+                                restJenkins.add(name);
+                            }
                         }
                     }
-                }
+                    page = branchesResponse.getPayload().getCurrentPage() + 1;
+                } while (branchesResponse.getPayload().hasMore());
+
                 result.setMasterBranchesGit(masterBranchesGit);
                 result.setMasterBranchesJenkins(masterBranchesJenkins);
                 result.setJiraBranchesGit(jiraBranchesGit);
@@ -257,6 +261,10 @@ public class ListBranchesReport extends AbstractJobsReport {
 
     private String getGitHubBranchesUrl(String repository) {
         return GITHUB_URL + repository + "/branches/all";
+    }
+
+    private String getGitHubBranchesUrl(String repository, int page) {
+        return GITHUB_URL + repository + "/branches/all?page=" + page;
     }
 
     private void generateReport(List<Result> repoStatus) {
