@@ -42,7 +42,7 @@ pipeline {
                   artifactsPublisher(disabled: true),
                   findbugsPublisher(disabled: true),
                 ]) {
-                    sh "mvn -ntp -V -e -Preporting -Papache.snapshots -Dscreenshot=false clean install site"
+                    sh "mvn -ntp -V -e -Preporting -Dscreenshot=false clean install site"
                 }
             }
         }
