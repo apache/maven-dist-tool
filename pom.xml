@@ -227,7 +227,7 @@
                 <artifactItem>
                   <groupId>org.apache.maven.skins</groupId>
                   <artifactId>maven-fluido-skin</artifactId>
-                  <version>2.0.0-M6</version>
+                  <version>2.0.0-M9</version>
                   <outputDirectory>${project.build.directory}/site</outputDirectory>
                   <includes>**\/*.css, **\/*.png, **\/*.gif</includes>
                 </artifactItem>
