@@ -267,6 +267,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         return GITHUB_URL + repository + "/branches/all?page=" + page;
     }
 
+    @SuppressWarnings("checkstyle:MethodLength")
     private void generateReport(List<Result> repoStatus) {
         AtomicInteger masterJenkinsTotal = new AtomicInteger();
         AtomicInteger masterGitTotal = new AtomicInteger();
