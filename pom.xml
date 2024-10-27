@@ -290,11 +290,6 @@
             <ignoreDistFailure>apache-incubator-disclaimer-resource-bundle:1.1</ignoreDistFailure>
             <ignoreDistFailure>apache-jar-resource-bundle:1.4</ignoreDistFailure>
             <ignoreDistFailure>apache-license-header-resource-bundle:1.1</ignoreDistFailure>
-            <!-- temp ignore, wait for final release -->
-            <ignoreDistFailure>maven-reporting-api:4.0.0-M2</ignoreDistFailure>
-            <ignoreDistFailure>maven-reporting-impl:4.0.0-M2</ignoreDistFailure>
-            <ignoreDistFailure>maven-scm:2.0.0-M1</ignoreDistFailure>
-            <ignoreDistFailure>maven-site-plugin:4.0.0-M3</ignoreDistFailure>
           </ignoreDistFailures>
         </configuration>
         <reportSets>
