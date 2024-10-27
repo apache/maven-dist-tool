@@ -29,7 +29,6 @@ import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -120,11 +119,9 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
         if (!outputDirectory.exists()) {
             outputDirectory.mkdirs();
         }
-        try {
-            this.execute();
-        } catch (MojoExecutionException ex) {
-            throw new MavenReportException(ex.getMessage(), ex);
-        }
+
+        prepareReportData();
+
         Sink sink = getSink();
         sink.head();
         sink.title();
@@ -264,7 +261,7 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
 
     /** {@inheritDoc} */
     @Override
-    protected void checkArtifact(ConfigurationLineInfo configLine, String latestVersion) throws MojoExecutionException {
+    protected void checkArtifact(ConfigurationLineInfo configLine, String latestVersion) {
         checkSite(configLine, latestVersion);
     }
 }

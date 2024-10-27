@@ -44,9 +44,9 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.AbstractMavenReport;
+import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
@@ -121,9 +121,9 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
      *
      * @param request a {@link org.apache.maven.dist.tools.ConfigurationLineInfo} object
      * @param repoBase a {@link java.lang.String} object
-     * @throws org.apache.maven.plugin.MojoExecutionException if any.
+     * @throws MavenReportException if any.
      */
-    protected abstract void checkArtifact(ConfigurationLineInfo request, String repoBase) throws MojoExecutionException;
+    protected abstract void checkArtifact(ConfigurationLineInfo request, String repoBase) throws MavenReportException;
 
     /**
      * <p>getFailuresFilename.</p>
@@ -138,7 +138,7 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
         return "dist-tool-" + getFailuresFilename().replace(".log", "");
     }
 
-    private void loadConfiguration() throws MojoExecutionException {
+    private void loadConfiguration() throws MavenReportException {
         URL configuration = Thread.currentThread().getContextClassLoader().getResource(CONF);
         try (BufferedReader in = new BufferedReader(new InputStreamReader(configuration.openStream()))) {
             String text;
@@ -146,7 +146,7 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
                 configurationLines.add(text);
             }
         } catch (IOException e) {
-            throw new MojoExecutionException("error while reading " + configuration, e);
+            throw new MavenReportException("error while reading " + configuration, e);
         }
     }
 
@@ -155,9 +155,7 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
                 enabled, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void execute() throws MojoExecutionException {
+    protected void prepareReportData() throws MavenReportException {
         ArtifactRepository aa = new MavenArtifactRepository(
                 "central",
                 repoBaseUrl,
@@ -196,7 +194,7 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
                 // parameter
                 int index = line.indexOf('=');
                 if (index < 0) {
-                    throw new MojoExecutionException("unparseable configuration line, missing '=': " + line);
+                    throw new MavenReportException("unparseable configuration line, missing '=': " + line);
                 }
 
                 String param = line.substring(1, index).trim();
@@ -215,11 +213,11 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
                     } else if ("site".equals(param)) {
                         sites.put(artifactId, value);
                     } else {
-                        throw new MojoExecutionException(
+                        throw new MavenReportException(
                                 "unknown artifact parameter '" + param + "' in configuration line: " + line);
                     }
                 } else {
-                    throw new MojoExecutionException("unparseable configuration line: " + line);
+                    throw new MavenReportException("unparseable configuration line: " + line);
                 }
 
                 continue;
@@ -249,7 +247,7 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
                 try {
                     aLine = new ConfigurationLineInfo(currentGroup, line.split(" "));
                 } catch (InvalidVersionSpecificationException e) {
-                    throw new MojoExecutionException(e.getMessage());
+                    throw new MavenReportException(e.getMessage());
                 }
             }
 
@@ -259,7 +257,7 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
         getLog().info("");
     }
 
-    private String getVersion(ConfigurationLineInfo aLine) throws MojoExecutionException {
+    private String getVersion(ConfigurationLineInfo aLine) throws MavenReportException {
         String metadataUrl = aLine.getMetadataFileURL(repoBaseUrl);
         try (InputStream input = new BufferedInputStream(new URL(metadataUrl).openStream())) {
             MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
@@ -310,7 +308,7 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
 
             return version;
         } catch (IOException | XmlPullParserException ex) {
-            throw new MojoExecutionException("error while reading " + metadataUrl, ex);
+            throw new MavenReportException("error while reading " + metadataUrl, ex);
         }
     }
 

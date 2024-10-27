@@ -34,7 +34,6 @@ import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
 import org.kohsuke.github.GHWorkflowJob;
@@ -141,7 +140,7 @@ public class MemoryCheckReport extends AbstractDistCheckReport {
 
     /** {@inheritDoc} */
     @Override
-    protected void checkArtifact(ConfigurationLineInfo request, String repoBase) throws MojoExecutionException {}
+    protected void checkArtifact(ConfigurationLineInfo request, String repoBase) {}
 
     /** {@inheritDoc} */
     @Override

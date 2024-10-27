@@ -31,8 +31,6 @@ import org.apache.maven.dist.tools.pgp.CheckPgpKeysReport;
 import org.apache.maven.dist.tools.site.DistCheckSiteReport;
 import org.apache.maven.dist.tools.source.DistCheckSourceReleaseReport;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.FileUtils;
@@ -86,7 +84,7 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
                     s.text(failure);
                     s.link_();
                     s.sectionTitle2_();
-                    s.verbatim(SinkEventAttributeSet.BOXED);
+                    s.verbatim();
                     s.rawText(content);
                     s.verbatim_();
                     s.section2_();
@@ -169,5 +167,5 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
 
     /** {@inheritDoc} */
     @Override
-    protected void checkArtifact(ConfigurationLineInfo request, String repoBase) throws MojoExecutionException {}
+    protected void checkArtifact(ConfigurationLineInfo request, String repoBase) {}
 }

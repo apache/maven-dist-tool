@@ -34,7 +34,6 @@ import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.MavenReportException;
@@ -195,11 +194,8 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
         if (!outputDirectory.exists()) {
             outputDirectory.mkdirs();
         }
-        try {
-            this.execute();
-        } catch (MojoExecutionException ex) {
-            throw new MavenReportException(ex.getMessage(), ex);
-        }
+
+        prepareReportData();
 
         Sink sink = getSink();
         sink.head();
@@ -300,7 +296,7 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
 
     /** {@inheritDoc} */
     @Override
-    protected void checkArtifact(ConfigurationLineInfo configLine, String version) throws MojoExecutionException {
+    protected void checkArtifact(ConfigurationLineInfo configLine, String version) throws MavenReportException {
         try {
             CheckIndexPageResult result = new CheckIndexPageResult(configLine, version);
 
@@ -312,7 +308,7 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
                 updateIndexPageInfo(configLine, result, INDEX_PAGES_REF.get(configLine.getIndexPageUrl()));
             }
         } catch (IOException ex) {
-            throw new MojoExecutionException(ex.getMessage(), ex);
+            throw new MavenReportException(ex.getMessage(), ex);
         }
     }
 }

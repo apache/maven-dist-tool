@@ -132,12 +132,12 @@
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
-      <version>4.0.0-M2</version>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-exec</artifactId>
-      <version>2.0.0-M1</version>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.aether</groupId>
@@ -184,12 +184,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.4.5</version>
+          <version>3.8.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>4.0.0-M8</version>
+          <version>3.20.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -230,7 +230,7 @@
                 <artifactItem>
                   <groupId>org.apache.maven.skins</groupId>
                   <artifactId>maven-fluido-skin</artifactId>
-                  <version>2.0.0-M6</version>
+                  <version>2.0.0-M11</version>
                   <outputDirectory>${project.build.directory}/site</outputDirectory>
                   <includes>**\/*.css, **\/*.png, **\/*.gif</includes>
                 </artifactItem>

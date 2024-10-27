@@ -34,7 +34,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
 
@@ -168,7 +167,7 @@ public class CheckPgpKeysReport extends AbstractDistCheckReport {
 
     /** {@inheritDoc} */
     @Override
-    protected void checkArtifact(ConfigurationLineInfo request, String repoBase) throws MojoExecutionException {}
+    protected void checkArtifact(ConfigurationLineInfo request, String repoBase) {}
 
     private String fetchUrl(String url) throws MavenReportException {
         try (InputStream in = new URL(url).openStream();

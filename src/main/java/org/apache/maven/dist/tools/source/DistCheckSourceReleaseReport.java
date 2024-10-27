@@ -36,7 +36,6 @@ import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.markup.HtmlMarkup;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.MavenReportException;
@@ -244,11 +243,8 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         if (!outputDirectory.exists()) {
             outputDirectory.mkdirs();
         }
-        try {
-            this.execute();
-        } catch (MojoExecutionException ex) {
-            throw new MavenReportException(ex.getMessage(), ex);
-        }
+
+        prepareReportData();
 
         DirectoryStatistics stats = new DirectoryStatistics("", "org.apache.maven"); // global stats
 
@@ -504,7 +500,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
     /** {@inheritDoc} */
     @Override
-    protected void checkArtifact(ConfigurationLineInfo configLine, String version) throws MojoExecutionException {
+    protected void checkArtifact(ConfigurationLineInfo configLine, String version) throws MavenReportException {
         try {
             CheckSourceReleaseResult result = new CheckSourceReleaseResult(configLine, version);
             results.add(result);
@@ -525,7 +521,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             result.setMissingDistSourceRelease(checkDirectoryIndex(distUrl, configLine, version, true));
             result.setDistOlderSourceRelease(checkContainsOld(distUrl, configLine, version));
         } catch (IOException ex) {
-            throw new MojoExecutionException(ex.getMessage(), ex);
+            throw new MavenReportException(ex.getMessage(), ex);
         }
     }
 }
