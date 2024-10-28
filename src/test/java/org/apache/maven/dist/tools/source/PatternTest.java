@@ -18,27 +18,23 @@
  */
 package org.apache.maven.dist.tools.source;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * PatternTest
  *
  * @author skygo
  */
-public class PatternTest {
-    /**
-     * Test Pattern
-     */
-    public PatternTest() {}
+class PatternTest {
 
     /**
      * Test of getGroupId method, of class ConfigurationLineInfo.
      */
     @Test
-    public void testGetGroupId() {
+    void testGetGroupId() {
         String q = DistCheckSourceReleaseReport.getSourceReleasePattern("doxia");
 
         assertTrue("doxia-1.4-source-release.zip.asc".matches(q));

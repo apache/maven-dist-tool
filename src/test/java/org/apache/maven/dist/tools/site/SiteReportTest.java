@@ -23,18 +23,14 @@ import java.io.InputStream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * SiteReportTest
  */
-public class SiteReportTest {
-    /**
-     * SiteReportTest
-     */
-    public SiteReportTest() {}
+class SiteReportTest {
 
     private String readDocument(String resource) throws IOException {
         try (InputStream in = getClass().getResourceAsStream(resource)) {
