@@ -22,3 +22,6 @@ github:
     - java
     - build-management
     - maven
+  features:
+    # Enable issue management
+    issues: true
