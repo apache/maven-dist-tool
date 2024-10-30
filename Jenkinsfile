@@ -34,27 +34,25 @@ pipeline {
             }
         }
         stage('Check') {
-            when {
-                branch 'master'
-            }
             steps {
                 withMaven(jdk:'jdk_17_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
                   artifactsPublisher(disabled: true),
                   findbugsPublisher(disabled: true),
                 ]) {
-                    sh "mvn -ntp -V -e -Preporting -Dscreenshot=false clean install site"
+                    catchError {
+                        sh "mvn -ntp -V -e -Preporting -Dscreenshot=clean install site"
+                    }
+                }
+                archiveArtifacts artifacts: "**/target/site/**/*",allowEmptyArchive: true
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'site', reportTitles: ''])
+                    }
                 }
             }
         }
     }
-    post {
-        always {
-            // not sure what is this
-            //jenkinsNotify()
-            archiveArtifacts artifacts: "**/site/*.*",allowEmptyArchive: true
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'site', reportTitles: ''])
-        }
-    }
+
     options {
         buildDiscarder(logRotator(numToKeepStr:'15'))
         timeout(time: 10, unit: 'MINUTES')
