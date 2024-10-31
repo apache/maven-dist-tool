@@ -36,7 +36,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                withMaven(jdk:'jdk_17_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
+                withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
                   artifactsPublisher(disabled: true),
                   findbugsPublisher(disabled: true),
                 ]) {
@@ -60,7 +60,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                withMaven(jdk:'jdk_17_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
+                withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
                   artifactsPublisher(disabled: true),
                   findbugsPublisher(disabled: true),
                 ]) {
