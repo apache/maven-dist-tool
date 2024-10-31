@@ -62,8 +62,8 @@
     <mvnversion>3.9.9</mvnversion>
     <!-- TODO check with next parent -->
     <versions.junit5>5.11.3</versions.junit5>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.target>21</maven.compiler.target>
+    <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
   </properties>
 
   <dependencyManagement>
