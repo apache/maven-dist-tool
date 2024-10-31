@@ -42,27 +42,19 @@ import org.codehaus.plexus.util.FileUtils;
  */
 @Mojo(name = "check-errors", requiresProject = false)
 public class DistCheckErrorsReport extends AbstractDistCheckReport {
-    private static final String[] FAILURES_FILENAMES = {
+
+    public static final String[] FAILURES_FILENAMES = {
         DistCheckSourceReleaseReport.FAILURES_FILENAME,
         DistCheckSiteReport.FAILURES_FILENAME,
         DistCheckIndexPageReport.FAILURES_FILENAME,
         CheckPgpKeysReport.FAILURES_FILENAME
     };
 
-    private static final String EOL = System.getProperty("line.separator");
-
     /**
-     * Dist Check Errors Report.
+     * {@inheritDoc}
      */
-    public DistCheckErrorsReport() {}
-
-    /** {@inheritDoc} */
     @Override
     protected boolean isIndexPageCheck() {
-        return false;
-    }
-
-    boolean isDummyFailure() {
         return false;
     }
 
@@ -73,39 +65,35 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
             if (failureFile.exists()) {
                 String content = FileUtils.fileRead(failureFile);
 
-                if (isDummyFailure()) {
-                    getLog().error(failuresFilename + " error log not empty:" + EOL + content);
-                } else {
-                    String failure = failuresFilename.substring(0, failuresFilename.length() - 4);
-                    Sink s = getSink();
-                    s.section2();
-                    s.sectionTitle2();
-                    s.link("dist-tool-" + failure + ".html");
-                    s.text(failure);
-                    s.link_();
-                    s.sectionTitle2_();
-                    s.verbatim();
-                    s.rawText(content);
-                    s.verbatim_();
-                    s.section2_();
+                String failure = failuresFilename.substring(0, failuresFilename.length() - 4);
+                Sink s = getSink();
+                s.section2();
+                s.sectionTitle2();
+                s.link("dist-tool-" + failure + ".html");
+                s.text(failure);
+                s.link_();
+                s.sectionTitle2_();
+                s.verbatim();
+                s.rawText(content);
+                s.verbatim_();
+                s.section2_();
 
-                    Set<String> urls = new HashSet<>();
-                    Pattern p = Pattern.compile("https://[\\S]+");
-                    Matcher m = p.matcher(content);
-                    while (m.find()) {
-                        urls.add(m.group());
+                Set<String> urls = new HashSet<>();
+                Pattern p = Pattern.compile("https://[\\S]+");
+                Matcher m = p.matcher(content);
+                while (m.find()) {
+                    urls.add(m.group());
+                }
+                if (!urls.isEmpty()) {
+                    s.list();
+                    for (String url : urls) {
+                        s.listItem();
+                        s.link(url);
+                        s.text(url);
+                        s.link_();
+                        s.listItem_();
                     }
-                    if (!urls.isEmpty()) {
-                        s.list();
-                        for (String url : urls) {
-                            s.listItem();
-                            s.link(url);
-                            s.text(url);
-                            s.link_();
-                            s.listItem_();
-                        }
-                        s.list_();
-                    }
+                    s.list_();
                 }
             }
 
@@ -115,23 +103,17 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void executeReport(Locale locale) throws MavenReportException {
         boolean failure = false;
-        // if failures log file is present, throw exception to fail build
         for (String failuresFilename : FAILURES_FILENAMES) {
             failure |= checkError(failuresFilename);
         }
 
-        if (failure) {
-            if (isDummyFailure()) {
-                throw new MavenReportException(
-                        "Dist Tool> Checks found inconsistencies in some released artifacts, see "
-                                + "https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master/site/"
-                                + "dist-tool-check-errors.html for more information");
-            }
-        } else {
+        if (!failure) {
             getSink().paragraph();
             getSink().text("No issue found.");
             getSink().paragraph_();
@@ -147,25 +129,33 @@ public class DistCheckErrorsReport extends AbstractDistCheckReport {
         return "dummy";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getOutputName() {
         return "dist-tool-check-errors";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName(Locale locale) {
         return "Dist Tool> Check Errors";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getDescription(Locale locale) {
         return "Dist Tool report to display inconsistencies found by any check report";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void checkArtifact(ConfigurationLineInfo request, String repoBase) {}
 }

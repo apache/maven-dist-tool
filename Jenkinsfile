@@ -33,26 +33,42 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Check') {
+
+        stage('Build') {
             steps {
                 withMaven(jdk:'jdk_17_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
                   artifactsPublisher(disabled: true),
                   findbugsPublisher(disabled: true),
                 ]) {
-                    catchError {
-                        sh "mvn -ntp -V -e -Preporting -Dscreenshot=clean install site"
-                    }
+                    sh "mvn -ntp -V -e -Preporting -Dscreenshot=false clean install site"
                 }
                 archiveArtifacts artifacts: "**/target/site/**/*",allowEmptyArchive: true
-                script {
-                    if (env.BRANCH_NAME == 'master') {
-                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'site', reportTitles: ''])
-                    }
+            }
+        }
+
+        stage('Publish') {
+            when {
+                branch 'master'
+            }
+            steps {
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'site', reportTitles: ''])
+            }
+        }
+
+        stage('Check errors') {
+            when {
+                branch 'master'
+            }
+            steps {
+                withMaven(jdk:'jdk_17_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
+                  artifactsPublisher(disabled: true),
+                  findbugsPublisher(disabled: true),
+                ]) {
+                    sh "mvn -ntp -V -e failsafe:integration-test"
                 }
             }
         }
     }
-
     options {
         buildDiscarder(logRotator(numToKeepStr:'15'))
         timeout(time: 10, unit: 'MINUTES')

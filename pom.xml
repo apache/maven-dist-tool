@@ -60,6 +60,8 @@
     <project.build.outputTimestamp>x</project.build.outputTimestamp>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
     <mvnversion>3.2.5</mvnversion>
+    <!-- TODO check with next parent -->
+    <versions.junit5>5.11.3</versions.junit5>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
   </properties>
@@ -165,6 +167,11 @@
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -200,31 +207,6 @@
             <goals>
               <goal>helpmojo</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- copy data from fluido skin to make generated site usable even if failure -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <phase>pre-site</phase>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.apache.maven.skins</groupId>
-                  <artifactId>maven-fluido-skin</artifactId>
-                  <version>2.0.0-M11</version>
-                  <outputDirectory>${project.build.directory}/site</outputDirectory>
-                  <includes>**\/*.css, **\/*.png, **\/*.gif</includes>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -294,12 +276,6 @@
               <report>list-master-jobs</report>
               <report>list-branches</report>
               <report>memory-check</report>
-            </reports>
-          </reportSet>
-          <reportSet>
-            <id>fail</id>
-            <reports>
-              <report>failure-report</report>
             </reports>
           </reportSet>
         </reportSets>
