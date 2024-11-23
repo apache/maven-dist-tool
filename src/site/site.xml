@@ -61,6 +61,7 @@ under the License.
             <item name="List Plugins Prerequisites" href="dist-tool-prerequisites.html" />
             <item name="List Master Jobs" href="dist-tool-master-jobs.html" />
             <item name="List Branches" href="dist-tool-branches.html" />
+            <item name="Committers Stats" href="dist-tool-committers-stats.html" />
         </menu>
         <menu name="for dev">
             <item name="TODO" href="todo.html" />
