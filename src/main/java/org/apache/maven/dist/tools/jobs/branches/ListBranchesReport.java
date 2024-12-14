@@ -116,7 +116,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         JIRAPROJECTS.put("maven-linkcheck-plugin", "MLINKCHECK");
         JIRAPROJECTS.put("maven-mapping", "MSHARED");
         JIRAPROJECTS.put("maven-parent", "MPOM");
-        JIRAPROJECTS.put("maven-patch-plugin", "MPATCH");
+        // JIRAPROJECTS.put("maven-patch-plugin", "MPATCH"); retired
         JIRAPROJECTS.put("maven-pdf-plugin", "MPDF");
         JIRAPROJECTS.put("maven-plugin-testing", "MPLUGINTESTING");
         JIRAPROJECTS.put("maven-plugin-tools", "MPLUGIN");
