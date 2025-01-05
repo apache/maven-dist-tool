@@ -79,7 +79,7 @@ public abstract class MLStats {
                     .build();
             HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
             Optional<String> last = parseLast(response.body());
-            log.info("Query: {}, retunrs: {}", statsURI, last);
+            log.info("Query: {}, returns: {}", statsURI, last);
             return last;
 
         } catch (IOException e) {
