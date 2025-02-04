@@ -52,7 +52,9 @@ under the License.
         </menu>        
         <menu name="Dist Tool Checks">
             <item name="Check Source Release" href="dist-tool-check-source-release.html" />
-            <item name="Check Sites" href="dist-tool-check-site.html" />
+            <item name="Check Sites" href="dist-tool-check-site.html">
+                <item name="Check Site Archives" href="dist-tool-check-site-archives.html" />
+            </item>
             <item name="Check Index Pages" href="dist-tool-check-index-page.html" />
             <item name="Check PGP KEYS" href="dist-tool-check-pgp-keys.html" />
             <item name="Check Errors" href="dist-tool-check-errors.html" />
