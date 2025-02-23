@@ -92,7 +92,10 @@ public class CommittersStatsReport extends AbstractMavenReport {
             Map<Committer, List<String>> committerStats = retrieveCommitterStats();
 
             startSection("Committers Stats");
-            paragraph("Committer statistics are based on the searching at public mailing lists");
+            sink.paragraph();
+            sink.text("Committer statistics are based on the searching at ");
+            link("https://lists.apache.org/list.html?dev@maven.apache.org", "public mailing lists");
+            sink.paragraph_();
             renderStatsTable(committerStats);
             endSection();
 
@@ -243,7 +246,7 @@ public class CommittersStatsReport extends AbstractMavenReport {
                 sink.text(entry.getKey());
                 sink.definedTerm_();
                 sink.definition();
-                sink.text(entry.getValue().getQueryDescription());
+                entry.getValue().describe(sink);
                 sink.definition_();
             }
 

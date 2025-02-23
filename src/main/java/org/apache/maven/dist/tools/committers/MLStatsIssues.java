@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committer;
+import org.apache.maven.doxia.sink.Sink;
 
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
@@ -33,8 +34,9 @@ import static java.util.Map.ofEntries;
 @Singleton
 public class MLStatsIssues extends MLStats {
 
-    protected String getQueryDescription() {
-        return "list issues and header_from committer name";
+    protected boolean describeList(Sink sink) {
+        linkList(sink, "issues");
+        return true;
     }
 
     @Override

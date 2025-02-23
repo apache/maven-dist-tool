@@ -38,6 +38,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committer;
+import org.apache.maven.doxia.sink.Sink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +54,21 @@ public abstract class MLStats {
             entry("d", "lte=1d"), // for stats 1 day is enough
             entry("domain", "maven.apache.org"));
 
-    protected abstract String getQueryDescription();
+    protected abstract boolean describeList(Sink sink);
 
     protected abstract List<Map<String, String>> getQueryParamsList(Committer committer);
+
+    protected void linkList(Sink sink, String list) {
+        sink.link("https://lists.apache.org/list.html?" + list + "@maven.apache.org");
+        sink.text(list);
+        sink.link_();
+    }
+
+    protected void describe(Sink sink) {
+        sink.text("list ");
+        boolean name = describeList(sink);
+        sink.text(" and header_from " + (name ? "committer name" : "<committerId>@apache.org"));
+    }
 
     public String getLast(Committer committer) {
 

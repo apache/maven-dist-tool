@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committer;
+import org.apache.maven.doxia.sink.Sink;
 
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
@@ -33,8 +34,11 @@ import static java.util.Map.ofEntries;
 @Singleton
 public class MLStatsVotes extends MLStats {
 
-    protected String getQueryDescription() {
-        return "list dev and header_subject [VOTE] and header_from committer name";
+    protected boolean describeList(Sink sink) {
+        sink.link("https://lists.apache.org/list?dev@maven.apache.org:lte=1M:&header_subject=[VOTE]");
+        sink.text("dev and header_subject [VOTE]");
+        sink.link_();
+        return true;
     }
 
     @Override

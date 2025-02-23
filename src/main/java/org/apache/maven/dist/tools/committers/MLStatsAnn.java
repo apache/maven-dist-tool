@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committer;
+import org.apache.maven.doxia.sink.Sink;
 
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
@@ -34,8 +35,9 @@ import static java.util.Map.ofEntries;
 public class MLStatsAnn extends MLStats {
 
     @Override
-    protected String getQueryDescription() {
-        return "list announce and header_from committerId + @apache.org";
+    protected boolean describeList(Sink sink) {
+        linkList(sink, "announce");
+        return false;
     }
 
     @Override
