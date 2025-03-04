@@ -25,3 +25,7 @@ github:
   features:
     # Enable issue management
     issues: true
+  enabled_merge_buttons:
+    squash: true
+    merge: false
+    rebase: true
