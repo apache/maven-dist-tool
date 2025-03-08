@@ -40,19 +40,28 @@ import org.apache.maven.reporting.MavenReportException;
 import static org.apache.maven.doxia.sink.impl.SinkEventAttributeSet.Semantics.BOLD;
 
 /**
- * Check PGP KEYS files.
+ * Check PGP public KEYS files.
  */
 @Mojo(name = "check-pgp-keys", requiresProject = false)
 public class CheckPgpKeysReport extends AbstractDistCheckReport {
     /** Constant <code>FAILURES_FILENAME="check-pgp-keys.log"</code> */
     public static final String FAILURES_FILENAME = "check-pgp-keys.log";
 
-    /** Constant <code>PROJECT_KEYS_URL="<a href="https://raw.githubusercontent.com/apache/maven-parent/refs/heads/master/KEYS">...</a>"{trunked}</code> */
-    public static final String PROJECT_KEYS_URL =
+    public static final String EDIT_AREA_1_URL = "https://github.com/apache/maven-parent/";
+
+    /** Constant <code>EDIT_KEYS_1_URL="<a href="https://raw.githubusercontent.com/apache/maven-parent/refs/heads/master/KEYS">...</a>"{trunked}</code> */
+    public static final String EDIT_KEYS_1_URL =
             "https://raw.githubusercontent.com/apache/maven-parent/refs/heads/master/KEYS";
 
-    /** Constant <code>DIST_KEYS_URL="<a href="https://dist.apache.org/repos/dist/rele">...</a>"{trunked}</code> */
-    public static final String DIST_KEYS_URL = "https://dist.apache.org/repos/dist/release/maven/KEYS";
+    public static final String PUBLISH_AREA_2_URL = "https://dist.apache.org/repos/dist/release/maven";
+
+    /** Constant <code>PUBLISH_KEYS_2_URL="<a href="https://dist.apache.org/repos/dist/rele">...</a>"{trunked}</code> */
+    public static final String PUBLISH_KEYS_2_URL = PUBLISH_AREA_2_URL + "/KEYS";
+
+    public static final String DOWNLOAD_AREA_3_URL = "https://dlcdn.apache.org/maven";
+
+    /** Constant <code>DOWNLOAD_KEYS_3_URL="<a href="https://dlcdn.apache.org/maven/KEYS">...</a>"{trunked}</code> */
+    public static final String DOWNLOAD_KEYS_3_URL = DOWNLOAD_AREA_3_URL + "/KEYS";
 
     /**
      * Check PGP Keys report.
@@ -86,13 +95,14 @@ public class CheckPgpKeysReport extends AbstractDistCheckReport {
     /** {@inheritDoc} */
     @Override
     protected void executeReport(Locale locale) throws MavenReportException {
-        String projectKeys = fetchUrl(PROJECT_KEYS_URL);
-        String distKeys = fetchUrl(DIST_KEYS_URL);
+        String editKeys1 = fetchUrl(EDIT_KEYS_1_URL);
+        String publishKeys2 = fetchUrl(PUBLISH_KEYS_2_URL);
+        String downloadKeys3 = fetchUrl(DOWNLOAD_KEYS_3_URL);
 
-        if (!projectKeys.equals(distKeys)) {
+        if (!editKeys1.equals(publishKeys2)) {
             File failure = new File(failuresDirectory, FAILURES_FILENAME);
             try (PrintWriter output = new PrintWriter(new FileWriter(failure))) {
-                output.println("PGP KEYS files content is different: " + DIST_KEYS_URL + " vs " + PROJECT_KEYS_URL);
+                output.println("PGP KEYS files content is different: " + PUBLISH_KEYS_2_URL + " vs " + EDIT_KEYS_1_URL);
             } catch (Exception e) {
                 getLog().error("Cannot append to " + getFailuresFilename());
             }
@@ -101,61 +111,95 @@ public class CheckPgpKeysReport extends AbstractDistCheckReport {
         Sink sink = getSink();
         sink.head();
         sink.title();
-        sink.text("Check PGP KEYS files");
+        sink.text("Check PGP public KEYS files");
         sink.title_();
         sink.head_();
 
         sink.body();
         sink.section1();
         sink.paragraph();
-        sink.rawText("Check that:");
+        sink.rawText("Check that PGP public KEYS workflow is ok:");
         sink.paragraph_();
+        sink.numberedList(Sink.NUMBERING_DECIMAL);
+
+        // 1. committer edit
+        sink.numberedListItem();
+        sink.rawText("committer edits <code>KEYS</code> in <a href='" + EDIT_AREA_1_URL
+                + "'><code>maven-parent.git</code></a>: ");
+        sink.link(EDIT_KEYS_1_URL);
+        sink.rawText(EDIT_KEYS_1_URL);
+        sink.link_();
+        sink.numberedListItem_();
+
+        // 2. PMC publish
+        sink.numberedListItem();
+        sink.rawText("PMC publishes to <a href='" + PUBLISH_AREA_2_URL + "'>distribution area</a>: ");
+        sink.link(PUBLISH_KEYS_2_URL);
+        sink.rawText(PUBLISH_KEYS_2_URL);
+        sink.link_();
+        sink.numberedListItem_();
+
+        // 3. INFRA distribute
+        sink.numberedListItem();
+        sink.rawText("INFRA syncs to <a href='" + DOWNLOAD_AREA_3_URL + "'>download area</a>: ");
+        sink.link(DOWNLOAD_KEYS_3_URL);
+        sink.rawText(DOWNLOAD_KEYS_3_URL);
+        sink.link_();
+        sink.numberedListItem_();
+
+        sink.numberedList_();
+
+        sink.paragraph();
+        sink.rawText(
+                "Committers are supposed to edit <code>maven-parent.git</code>'s <code>KEYS</code>, then ask PMC for publication, but sometimes PMC"
+                        + " members directly add in distribution area, then future publication is not trivial any more.");
+        sink.paragraph_();
+
+        sink.paragraph();
+        sink.rawText("INFRA distribution is then sync'ed (once per hour?).");
+        sink.paragraph_();
+
+        sink.paragraph();
+        sink.paragraph_();
+
         sink.list();
         sink.listItem();
-        sink.rawText("official Maven PGP KEYS file from distribution area origin (<b>PMC write only</b>) ");
-        sink.link(DIST_KEYS_URL);
-        sink.rawText(DIST_KEYS_URL);
-        sink.link_();
-        sink.listItem_();
-        sink.listItem();
-        sink.rawText(
-                "match <b>committer write</b> one in <a href='https://github.com/apache/maven-parent/'><code>maven-parent</code> Git</a> ");
-        sink.link(PROJECT_KEYS_URL);
-        sink.rawText(PROJECT_KEYS_URL);
-        sink.link_();
-        sink.listItem_();
-        sink.list_();
-        sink.paragraph();
-        sink.rawText("Committers are supposed to write to project's KEYS then ask PMC for sync, but sometimes PMC"
-                + " members directly add in distribution area, then future sync is not trivial any more.");
-        sink.paragraph_();
-        sink.paragraph();
-        sink.rawText("match: ");
-        if (projectKeys.equals(distKeys)) {
+        sink.rawText("KEYS 2 == KEYS 1: ");
+        if (publishKeys2.equals(editKeys1)) {
             iconSuccess(sink);
         } else {
             iconError(sink);
         }
-        sink.paragraph_();
+        sink.listItem_();
 
-        sink.numberedList(0);
-        KeysIterator distIterator = new KeysIterator(distKeys);
-        KeysIterator projectIterator = new KeysIterator(projectKeys);
-        while (distIterator.hasNext() || projectIterator.hasNext()) {
-            String distKey = distIterator.hasNext() ? distIterator.next() : "";
-            String projectKey = projectIterator.hasNext() ? projectIterator.next() : "";
+        sink.listItem();
+        sink.rawText("KEYS 3 == KEYS 2: ");
+        if (downloadKeys3.equals(publishKeys2)) {
+            iconSuccess(sink);
+        } else {
+            iconError(sink);
+        }
+        sink.listItem_();
+        sink.list_();
+
+        sink.numberedList(Sink.NUMBERING_DECIMAL);
+        KeysIterator edit1Iterator = new KeysIterator(editKeys1);
+        KeysIterator publish2Iterator = new KeysIterator(publishKeys2);
+        while (edit1Iterator.hasNext() || publish2Iterator.hasNext()) {
+            String editKey1 = edit1Iterator.hasNext() ? edit1Iterator.next() : "";
+            String publishKey2 = publish2Iterator.hasNext() ? publish2Iterator.next() : "";
 
             sink.numberedListItem();
             sink.verbatim(BOLD);
-            sink.rawText(distKey);
+            sink.rawText(editKey1);
             sink.verbatim_();
-            if (!projectKey.equals(distKey)) {
-                sink.rawText("dist target (PMC) ");
+            if (!publishKey2.equals(editKey1)) {
+                sink.rawText("edit (committer) ");
                 iconError(sink);
-                sink.rawText(" project (committers)");
+                sink.rawText(" publish (PMC)");
 
                 sink.verbatim(BOLD);
-                sink.rawText(projectKey);
+                sink.rawText(publishKey2);
                 sink.verbatim_();
             }
             sink.numberedListItem_();
