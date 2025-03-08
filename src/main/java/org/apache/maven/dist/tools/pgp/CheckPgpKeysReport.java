@@ -47,8 +47,9 @@ public class CheckPgpKeysReport extends AbstractDistCheckReport {
     /** Constant <code>FAILURES_FILENAME="check-pgp-keys.log"</code> */
     public static final String FAILURES_FILENAME = "check-pgp-keys.log";
 
-    /** Constant <code>PROJECT_KEYS_URL="<a href="https://svn.apache.org/repos/asf/maven/">...</a>"{trunked}</code> */
-    public static final String PROJECT_KEYS_URL = "https://svn.apache.org/repos/asf/maven/project/KEYS";
+    /** Constant <code>PROJECT_KEYS_URL="<a href="https://raw.githubusercontent.com/apache/maven-parent/refs/heads/master/KEYS">...</a>"{trunked}</code> */
+    public static final String PROJECT_KEYS_URL =
+            "https://raw.githubusercontent.com/apache/maven-parent/refs/heads/master/KEYS";
 
     /** Constant <code>DIST_KEYS_URL="<a href="https://dist.apache.org/repos/dist/rele">...</a>"{trunked}</code> */
     public static final String DIST_KEYS_URL = "https://dist.apache.org/repos/dist/release/maven/KEYS";
@@ -111,13 +112,14 @@ public class CheckPgpKeysReport extends AbstractDistCheckReport {
         sink.paragraph_();
         sink.list();
         sink.listItem();
-        sink.rawText("official Maven PGP KEYS file from distribution area (<b>PMC write only</b>) ");
+        sink.rawText("official Maven PGP KEYS file from distribution area origin (<b>PMC write only</b>) ");
         sink.link(DIST_KEYS_URL);
         sink.rawText(DIST_KEYS_URL);
         sink.link_();
         sink.listItem_();
         sink.listItem();
-        sink.rawText("intermediate <b>committer write</b> one in Maven Subversion tree ");
+        sink.rawText(
+                "match <b>committer write</b> one in <a href='https://github.com/apache/maven-parent/'><code>maven-parent</code> Git</a> ");
         sink.link(PROJECT_KEYS_URL);
         sink.rawText(PROJECT_KEYS_URL);
         sink.link_();
