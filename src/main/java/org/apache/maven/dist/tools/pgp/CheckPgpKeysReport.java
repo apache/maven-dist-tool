@@ -243,7 +243,15 @@ public class CheckPgpKeysReport extends AbstractDistCheckReport {
 
         @Override
         public String next() {
+            // get only gpg --list-sigs <ID>, not armoured content
             String id = content.substring(0, content.indexOf(BEGIN)).trim();
+            // and even strip variable complex content: pub and uid are the 2 (or 3, it depends) interesting lines here
+            int uid = id.indexOf("uid                  ");
+            if (uid > 0) {
+                int eol = id.indexOf('\n', uid);
+                id = id.substring(0, eol);
+            }
+
             content = content.substring(content.indexOf(END) + END.length()).trim();
             return id;
         }
