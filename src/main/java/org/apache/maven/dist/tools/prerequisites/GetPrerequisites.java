@@ -74,7 +74,7 @@ public class GetPrerequisites {
         "maven-jxr-plugin",
         "maven-linkcheck-plugin",
         // "maven-patch-plugin", retired
-        "maven-pdf-plugin",
+        // "maven-pdf-plugin", retired
         "maven-plugin-plugin",
         "maven-pmd-plugin",
         "maven-project-info-reports-plugin",
