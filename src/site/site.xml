@@ -37,7 +37,7 @@ under the License.
     <skin>
       <groupId>org.apache.maven.skins</groupId>
       <artifactId>maven-fluido-skin</artifactId>
-      <version>2.0.0-M11</version>
+      <version>2.1.0</version>
     </skin>
 
     <body>
@@ -49,7 +49,7 @@ under the License.
       <menu name="Overwiev">
             <item name="Introduction" href="index.html" />
             <item name="Configuration" href="dist-tool.conf.html" />
-        </menu>        
+        </menu>
         <menu name="Dist Tool Checks">
             <item name="Check Source Release" href="dist-tool-check-source-release.html" />
             <item name="Check Sites" href="dist-tool-check-site.html">
