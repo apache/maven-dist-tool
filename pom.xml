@@ -60,8 +60,6 @@
     <project.build.outputTimestamp>x</project.build.outputTimestamp>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
     <mvnversion>3.9.9</mvnversion>
-    <!-- TODO check with next parent -->
-    <versions.junit5>5.11.3</versions.junit5>
     <maven.compiler.target>21</maven.compiler.target>
     <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
   </properties>
@@ -88,6 +86,7 @@
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
+      <version>${version.maven-plugin-tools}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -196,20 +195,6 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.9.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.21.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.eclipse.sisu</groupId>
