@@ -39,14 +39,17 @@ public abstract class AbstractJobsReport extends AbstractMavenReport {
 
     private static final Collection<String> EXCLUDED = Arrays.asList(
             "maven-blog",
+            "maven-build-helper-plugin",
+            "maven-gh-actions-shared",
+            "maven-hocon-extension",
             "maven-integration-testing", // runs with Maven core job
             "maven-jenkins-env",
             "maven-jenkins-lib",
+            "maven-metric-extension",
+            "maven-mvnd",
             "maven-sources",
             "maven-studies",
-            "maven-mvnd",
-            "maven-metric-extension",
-            "maven-gh-actions-shared");
+            "maven-xinclude-extension");
 
     /**
      * Extract Git repository names for Apache Maven from
