@@ -28,6 +28,6 @@
 
 Dist Tool configuration
 
-    Here is the content of the <<<dist-tool.conf>>> configuration file:
+    Here is the content of the <<<dist-tool.conf>>> configuration file (see {{{https://github.com/apache/maven-dist-tool/blob/master/src/main/resources/dist-tool.conf}master in GitHub}}):
 
 %{snippet|file=${project.basedir}/src/main/resources/dist-tool.conf} 
