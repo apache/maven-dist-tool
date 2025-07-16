@@ -59,7 +59,7 @@
   <properties>
     <project.build.outputTimestamp>x</project.build.outputTimestamp>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
-    <mvnversion>3.9.10</mvnversion>
+    <mvnversion>3.9.11</mvnversion>
     <maven.compiler.target>21</maven.compiler.target>
     <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
   </properties>
