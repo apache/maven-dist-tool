@@ -78,7 +78,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         JIRAPROJECTS.put("maven-clean-plugin", "MCLEAN");
         JIRAPROJECTS.put("maven-common-artifact-filters", "MSHARED");
         JIRAPROJECTS.put("maven-compiler-plugin", "MCOMPILER");
-        JIRAPROJECTS.put("maven-default-skin", "MSKINS");
+        // JIRAPROJECTS.put("maven-default-skin", "MSKINS"); retired
         JIRAPROJECTS.put("maven-dependency-analyzer", "MSHARED");
         JIRAPROJECTS.put("maven-dependency-plugin", "MDEP");
         JIRAPROJECTS.put("maven-dependency-tree", "MSHARED");
