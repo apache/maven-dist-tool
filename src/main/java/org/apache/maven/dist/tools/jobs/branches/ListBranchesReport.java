@@ -69,7 +69,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         JIRAPROJECTS.put("maven-archetypes", "ARCHETYPE");
         JIRAPROJECTS.put("maven-archiver", "MSHARED");
         JIRAPROJECTS.put("maven-artifact-plugin", "MARTIFACT");
-        JIRAPROJECTS.put("maven-artifact-transfer", "MSHARED");
+        // JIRAPROJECTS.put("maven-artifact-transfer", "MSHARED"); retired
         JIRAPROJECTS.put("maven-assembly-plugin", "MASSEMBLY");
         JIRAPROJECTS.put("maven-build-cache-extension", "MBUILDCACHE");
         JIRAPROJECTS.put("maven-changelog-plugin", "MCHANGELOG");
@@ -122,7 +122,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         JIRAPROJECTS.put("maven-plugin-tools", "MPLUGIN");
         JIRAPROJECTS.put("maven-pmd-plugin", "MPMD");
         JIRAPROJECTS.put("maven-project-info-reports-plugin", "MPIR");
-        JIRAPROJECTS.put("maven-project-utils", "MSHARED");
+        // JIRAPROJECTS.put("maven-project-utils", "MSHARED"); retired
         JIRAPROJECTS.put("maven-rar-plugin", "MRAR");
         JIRAPROJECTS.put("maven-release", "MRELEASE");
         JIRAPROJECTS.put("maven-remote-resources-plugin", "MRRESOURCES");
