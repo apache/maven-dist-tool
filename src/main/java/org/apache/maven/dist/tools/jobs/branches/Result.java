@@ -32,6 +32,8 @@ public class Result {
 
     private int masterBranchesGit;
     private int masterBranchesJenkins;
+    private int mvn4BranchesGit;
+    private int mvn4BranchesJenkins;
 
     private Collection<String> jiraBranchesGit;
     private Collection<String> jiraBranchesJenkins;
@@ -87,6 +89,42 @@ public class Result {
      */
     public void setMasterBranchesJenkins(int masterBranchesJenkins) {
         this.masterBranchesJenkins = masterBranchesJenkins;
+    }
+
+    /**
+     * <p>Getter for the field <code>mvn4BranchesGit</code>.</p>
+     *
+     * @return a int
+     */
+    public int getMvn4BranchesGit() {
+        return mvn4BranchesGit;
+    }
+
+    /**
+     * <p>Setter for the field <code>mvn4BranchesGit</code>.</p>
+     *
+     * @param mvn4Branches a int
+     */
+    public void setMvn4BranchesGit(int mvn4Branches) {
+        this.mvn4BranchesGit = mvn4Branches;
+    }
+
+    /**
+     * <p>Getter for the field <code>mvn4BranchesJenkins</code>.</p>
+     *
+     * @return a int
+     */
+    public int getMvn4BranchesJenkins() {
+        return mvn4BranchesJenkins;
+    }
+
+    /**
+     * <p>Setter for the field <code>mvn4BranchesJenkins</code>.</p>
+     *
+     * @param mvn4BranchesJenkins a int
+     */
+    public void setMvn4BranchesJenkins(int mvn4BranchesJenkins) {
+        this.mvn4BranchesJenkins = mvn4BranchesJenkins;
     }
 
     /**
@@ -221,7 +259,11 @@ public class Result {
      * @return a int
      */
     public final int getTotalGit() {
-        return masterBranchesGit + jiraBranchesGit.size() + dependabotBranchesGit.size() + restGit.size();
+        return masterBranchesGit
+                + mvn4BranchesGit
+                + jiraBranchesGit.size()
+                + dependabotBranchesGit.size()
+                + restGit.size();
     }
 
     /**
@@ -231,6 +273,7 @@ public class Result {
      */
     public final int getTotalJenkins() {
         return masterBranchesJenkins
+                + mvn4BranchesJenkins
                 + jiraBranchesJenkins.size()
                 + dependabotBranchesJenkins.size()
                 + restJenkins.size();
