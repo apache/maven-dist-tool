@@ -268,7 +268,6 @@
             <ignoreSiteFailure>apache-incubator-disclaimer-resource-bundle:1.1</ignoreSiteFailure>
           </ignoreSiteFailures>
           <ignoreDistFailures>
-            <ignoreDistFailure>doxia-linkcheck:1.2</ignoreDistFailure>
             <ignoreDistFailure>apache-maven:3.0.5</ignoreDistFailure>
             <ignoreDistFailure>maven-reactor-plugin:1.0</ignoreDistFailure>
             <ignoreDistFailure>file-management:1.2.1</ignoreDistFailure>
