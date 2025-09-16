@@ -86,9 +86,9 @@ public class ListBranchesReport extends AbstractJobsReport {
         JIRAPROJECTS.put("maven-doap-plugin", "MDOAP");
         JIRAPROJECTS.put("maven-doxia", "DOXIA");
         JIRAPROJECTS.put("maven-doxia-book-maven-plugin", "DOXIA");
-        JIRAPROJECTS.put("maven-doxia-book-renderer", "DOXIA");
+        // JIRAPROJECTS.put("maven-doxia-book-renderer", "DOXIA"); retired
         JIRAPROJECTS.put("maven-doxia-converter", "DOXIATOOLS");
-        JIRAPROJECTS.put("maven-doxia-linkcheck", "DOXIATOOLS");
+        // JIRAPROJECTS.put("maven-doxia-linkcheck", "DOXIATOOLS"); retired
         JIRAPROJECTS.put("maven-doxia-site", "DOXIA");
         JIRAPROJECTS.put("maven-doxia-sitetools", "DOXIASITETOOLS");
         JIRAPROJECTS.put("maven-ear-plugin", "MEAR");
@@ -113,7 +113,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         JIRAPROJECTS.put("maven-jlink-plugin", "MJLINK");
         JIRAPROJECTS.put("maven-jmod-plugin", "MJMOD");
         JIRAPROJECTS.put("maven-jxr", "JXR");
-        JIRAPROJECTS.put("maven-linkcheck-plugin", "MLINKCHECK");
+        //        JIRAPROJECTS.put("maven-linkcheck-plugin", "MLINKCHECK"); retired
         JIRAPROJECTS.put("maven-mapping", "MSHARED");
         JIRAPROJECTS.put("maven-parent", "MPOM");
         // JIRAPROJECTS.put("maven-patch-plugin", "MPATCH"); retired
