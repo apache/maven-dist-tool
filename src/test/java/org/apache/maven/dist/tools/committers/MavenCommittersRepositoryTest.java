@@ -66,7 +66,7 @@ class MavenCommittersRepositoryTest {
             """;
 
     @Test
-    void testDataLoad(WireMockRuntimeInfo wireMockRuntimeInfo) {
+    void dataLoad(WireMockRuntimeInfo wireMockRuntimeInfo) {
 
         stubFor(get("/json/foundation/groups.json")
                 .willReturn(aResponse().withStatus(200).withBody(GROUP)));
