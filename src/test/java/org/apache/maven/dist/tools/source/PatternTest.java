@@ -34,7 +34,7 @@ class PatternTest {
      * Test of getGroupId method, of class ConfigurationLineInfo.
      */
     @Test
-    void testGetGroupId() {
+    void getGroupId() {
         String q = DistCheckSourceReleaseReport.getSourceReleasePattern("doxia");
 
         assertTrue("doxia-1.4-source-release.zip.asc".matches(q));

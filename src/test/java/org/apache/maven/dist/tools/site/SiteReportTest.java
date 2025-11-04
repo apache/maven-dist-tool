@@ -45,7 +45,7 @@ class SiteReportTest {
      * @throws IOException if the resource cannot be read
      */
     @Test
-    public void testFluidoSkin() throws IOException {
+    void fluidoSkin() throws Exception {
         String comment = readDocument("fluido.html");
         assertTrue(comment.contains("Fluido"));
     }
@@ -56,7 +56,7 @@ class SiteReportTest {
      * @throws IOException if the resource cannot be read
      */
     @Test
-    public void testStylusRightSkin() throws IOException {
+    void stylusRightSkin() throws Exception {
         String comment = readDocument("stylus-right.html");
         assertTrue(comment.contains("Stylus"));
     }

@@ -19,7 +19,6 @@
 package org.apache.maven.dist.tools;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +39,7 @@ class CheckReportResultIT {
 
     @ParameterizedTest
     @FieldSource("org.apache.maven.dist.tools.DistCheckErrorsReport#FAILURES_FILENAMES")
-    void shouldBeNoErrors(Path logFile) throws IOException {
+    void shouldBeNoErrors(Path logFile) throws Exception {
         Path logPath = ERROR_LOGS_PATH.resolve(logFile);
         if (Files.isRegularFile(logPath)) {
             List<String> lines = Files.readAllLines(logPath);
