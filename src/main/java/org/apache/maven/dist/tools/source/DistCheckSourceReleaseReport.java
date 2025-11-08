@@ -455,19 +455,21 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
      * @param cli
      * @param version
      * @return missing files
-     * @throws IOException
      */
-    private List<String> checkDirectoryIndex(String url, ConfigurationLineInfo cli, String version, boolean dist)
-            throws IOException {
+    private List<String> checkDirectoryIndex(String url, ConfigurationLineInfo cli, String version, boolean dist) {
         Set<String> retrievedFiles = new HashSet<>();
-        Elements links = selectLinks(url);
-        for (Element e : links) {
-            retrievedFiles.add(e.attr("href"));
+        List<String> missingFiles = new ArrayList<>();
+
+        try {
+            Elements links = selectLinks(url);
+            for (Element e : links) {
+                retrievedFiles.add(e.attr("href"));
+            }
+        } catch (IOException e) {
+            missingFiles.add(url + ": " + e.getMessage());
         }
 
         String sourceReleaseFilename = cli.getSourceReleaseFilename(version, dist);
-
-        List<String> missingFiles = new ArrayList<>();
 
         // require source release file
         if (!retrievedFiles.contains(sourceReleaseFilename)) {
@@ -491,7 +493,6 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             }
             if (error) {
                 getLog().warn("==> when reading " + url + " got following hrefs: " + retrievedFiles);
-                getLog().warn(url + " = " + read(url));
             }
         }
 
