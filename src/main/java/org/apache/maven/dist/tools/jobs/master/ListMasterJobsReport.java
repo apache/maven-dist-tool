@@ -125,7 +125,10 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         sink.head_();
 
         sink.body();
-        sink.text("Jenkins jobs for master branch sorted by status of last build:");
+        sink.link(MAVENBOX_JOBS_BASE_URL + "..");
+        sink.text("Jenkins jobs");
+        sink.link_();
+        sink.text(" for master branch sorted by status of last build:");
         sink.list();
 
         Map<String, List<Result>> groupedResults =
