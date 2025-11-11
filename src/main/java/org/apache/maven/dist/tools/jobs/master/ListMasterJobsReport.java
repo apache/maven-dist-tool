@@ -141,26 +141,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
                     int size = e.getValue().size();
                     sink.text(size + " job" + (size > 1 ? "s" : "") + " with status " + e.getKey() + ":");
                     sink.list();
-                    e.getValue().forEach(r -> {
-                        sink.listItem();
-                        sink.rawText(r.getIcon());
-
-                        sink.rawText("<span");
-                        if ((r.getLastBuild() == null)
-                                || r.getLastBuild().isBefore(ZonedDateTime.now().minusMonths(1))) {
-                            sink.rawText(" style=\"color:red\"");
-                        }
-                        sink.rawText(">("
-                                + ((r.getLastBuild() == null)
-                                        ? "-"
-                                        : r.getLastBuild().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                                + ")</span> ");
-
-                        sink.link(r.getBuildUrl());
-                        sink.rawText(r.getRepositoryName());
-                        sink.link_();
-                        sink.listItem_();
-                    });
+                    e.getValue().forEach(r -> renderJobResult(sink, r));
                     sink.list_();
 
                     sink.listItem_();
@@ -168,6 +149,25 @@ public class ListMasterJobsReport extends AbstractJobsReport {
 
         sink.list_();
         sink.body_();
+    }
+
+    private void renderJobResult(Sink sink, Result r) {
+        sink.listItem();
+        sink.rawText(r.getIcon());
+
+        sink.rawText("<span");
+        if ((r.getLastBuild() == null)
+                || r.getLastBuild().isBefore(ZonedDateTime.now().minusMonths(1))) {
+            sink.rawText(" style=\"color:red\"");
+        }
+        sink.rawText(">("
+                + ((r.getLastBuild() == null) ? "-" : r.getLastBuild().format(DateTimeFormatter.ISO_LOCAL_DATE))
+                + ")</span> ");
+
+        sink.link(r.getBuildUrl());
+        sink.rawText(r.getRepositoryName());
+        sink.link_();
+        sink.listItem_();
     }
 
     private Comparator<String> resultComparator() {
