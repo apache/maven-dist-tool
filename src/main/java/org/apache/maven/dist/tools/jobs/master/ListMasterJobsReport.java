@@ -168,9 +168,9 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         sink.link(r.getBuildUrl());
         sink.rawText(r.getRepositoryName());
         sink.link_();
-        sink.text(" (see also ");
+        sink.text(" (see also GH ");
         sink.link("https://github.com/apache/" + r.getRepositoryName());
-        sink.rawText("GH master");
+        sink.figureGraphics("https://img.shields.io/github/checks-status/apache/" + r.getRepositoryName() + "/master");
         sink.link_();
         sink.text(")");
         sink.listItem_();
