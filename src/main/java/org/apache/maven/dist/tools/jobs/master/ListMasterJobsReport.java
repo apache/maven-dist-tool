@@ -41,6 +41,7 @@ import org.jsoup.nodes.Element;
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
  * <a href="https://ci-maven.apache.org/job/Maven/job/maven-box/">{@code maven-box} Apache Hosted Git Folder job</a>.
+ * TODO also add maintenance branches (4 vs 3)
  *
  * @author Robert Scholte
  */
@@ -167,6 +168,11 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         sink.link(r.getBuildUrl());
         sink.rawText(r.getRepositoryName());
         sink.link_();
+        sink.text(" (see also ");
+        sink.link("https://github.com/apache/" + r.getRepositoryName());
+        sink.rawText("GH master");
+        sink.link_();
+        sink.text(")");
         sink.listItem_();
     }
 
