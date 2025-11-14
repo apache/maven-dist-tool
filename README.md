@@ -15,14 +15,14 @@
  limitations under the License.
 -->
 
-Apache [Maven Distribution Tool][report] Plugin
+Apache [Maven Distribution Tool][report]
 ============
 
 [![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
 [![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master.svg)][build]
 
 
-Maven Distribution Tool plugin is a tool executed daily on Maven CI server to produce [a report][report]
+Maven Distribution Tool is a tool executed daily on Maven CI server to produce [a report][report]
 of the different checks done on our releases.
 
 Quick Build
