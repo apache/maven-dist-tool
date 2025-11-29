@@ -89,11 +89,11 @@ public class GetPrerequisites {
         "maven-shade-plugin",
         "maven-site-plugin",
         "maven-source-plugin",
-        "maven-stage-plugin",
+        // "maven-stage-plugin", retired
         "maven-surefire-plugin",
         "maven-surefire-report-plugin",
         "maven-toolchains-plugin",
-        "maven-verifier-plugin",
+        // "maven-verifier-plugin", retired
         "maven-war-plugin",
         "maven-wrapper-plugin",
     };
