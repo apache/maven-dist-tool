@@ -34,6 +34,8 @@ import org.apache.maven.reporting.MavenReportException;
  */
 @Mojo(name = "list-plugins-prerequisites", requiresProject = false)
 public class ListPluginsPrerequisitesReport extends AbstractMavenReport {
+    private static final String GITHUB_URL = "https://github.com/apache/";
+
     /**
      * List Plugins Prerequisites Report
      */
@@ -117,7 +119,9 @@ public class ListPluginsPrerequisitesReport extends AbstractMavenReport {
                     for (PluginPrerequisites pluginPrerequisites : pluginsPrerequisites) {
                         sink.tableRow();
                         sink.tableCell();
+                        sink.link(GITHUB_URL + pluginPrerequisites.getPluginName());
                         sink.text(pluginPrerequisites.getPluginName());
+                        sink.link_();
                         sink.tableCell_();
 
                         sink.tableCell();
