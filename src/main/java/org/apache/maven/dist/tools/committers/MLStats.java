@@ -124,7 +124,7 @@ public abstract class MLStats {
                         lastMonth = parser.getValueAsInt();
                         break;
                     default:
-                        // ignore
+                    // ignore
                 }
             }
         }
