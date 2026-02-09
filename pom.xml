@@ -62,7 +62,6 @@
     <project.build.outputTimestamp>x</project.build.outputTimestamp>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
     <mvnversion>3.9.12</mvnversion>
-    <maven.compiler.target>${javaVersion}</maven.compiler.target>
     <minimalJavaBuildVersion>${javaVersion}</minimalJavaBuildVersion>
   </properties>
 
