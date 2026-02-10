@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>45</version>
+    <version>47</version>
     <relativePath />
   </parent>
 
@@ -57,11 +57,12 @@
   </ciManagement>
 
   <properties>
+    <!-- This variable needs to be overwritten, as it is used in the Enforce Bytecode Version rule -->
+    <javaVersion>21</javaVersion>
     <project.build.outputTimestamp>x</project.build.outputTimestamp>
     <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
     <mvnversion>3.9.12</mvnversion>
-    <maven.compiler.target>21</maven.compiler.target>
-    <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
+    <minimalJavaBuildVersion>${javaVersion}</minimalJavaBuildVersion>
   </properties>
 
   <dependencyManagement>

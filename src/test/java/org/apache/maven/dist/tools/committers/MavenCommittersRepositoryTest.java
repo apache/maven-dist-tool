@@ -33,8 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @WireMockTest
 class MavenCommittersRepositoryTest {
 
-    private static final String GROUP =
-            """
+    private static final String GROUP = """
             {
               "test1": [
                 "test1",
@@ -51,8 +50,7 @@ class MavenCommittersRepositoryTest {
             }
             """;
 
-    private static final String NAMES =
-            """
+    private static final String NAMES = """
             {
               "test1": "test 1 name",
               "m1": "M1 name",
