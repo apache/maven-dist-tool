@@ -194,6 +194,8 @@ public class ListBranchesReport extends AbstractJobsReport {
                 Result result = new Result(repository, repositoryJobUrl);
                 int masterBranchesGit = 0;
                 int masterBranchesJenkins = 0;
+                int mvn4BranchesGit = 0;
+                int mvn4BranchesJenkins = 0;
                 Collection<String> jiraBranchesGit = new ArrayList<>();
                 Collection<String> jiraBranchesJenkins = new ArrayList<>();
                 Collection<String> dependabotBranchesGit = new ArrayList<>();
@@ -207,6 +209,12 @@ public class ListBranchesReport extends AbstractJobsReport {
 
                         if (jenkinsBranchesDoc.getElementById("job_master") != null) {
                             masterBranchesJenkins++;
+                        }
+                    } else if ("mvn4".equals(branch)) {
+                        mvn4BranchesGit++;
+
+                        if (jenkinsBranchesDoc.getElementById("job_mvn4") != null) {
+                            mvn4BranchesJenkins++;
                         }
                     } else if (JIRAPROJECTS.containsKey(repository)
                             && branch.toUpperCase().startsWith(JIRAPROJECTS.get(repository) + '-')) {
@@ -229,6 +237,8 @@ public class ListBranchesReport extends AbstractJobsReport {
 
                 result.setMasterBranchesGit(masterBranchesGit);
                 result.setMasterBranchesJenkins(masterBranchesJenkins);
+                result.setMvn4BranchesGit(mvn4BranchesGit);
+                result.setMvn4BranchesJenkins(mvn4BranchesJenkins);
                 result.setJiraBranchesGit(jiraBranchesGit);
                 result.setJiraBranchesJenkins(jiraBranchesJenkins);
                 result.setDependabotBranchesGit(dependabotBranchesGit);
@@ -253,6 +263,8 @@ public class ListBranchesReport extends AbstractJobsReport {
     private void generateReport(List<Result> repoStatus) {
         AtomicInteger masterJenkinsTotal = new AtomicInteger();
         AtomicInteger masterGitTotal = new AtomicInteger();
+        AtomicInteger mvn4JenkinsTotal = new AtomicInteger();
+        AtomicInteger mvn4GitTotal = new AtomicInteger();
         AtomicInteger jiraJenkinsTotal = new AtomicInteger();
         AtomicInteger jiraGitTotal = new AtomicInteger();
         AtomicInteger dependabotJenkinsTotal = new AtomicInteger();
@@ -291,6 +303,9 @@ public class ListBranchesReport extends AbstractJobsReport {
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text("master");
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text("mvn4");
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text("JIRA");
@@ -338,6 +353,13 @@ public class ListBranchesReport extends AbstractJobsReport {
                     sink.tableCell_();
                     masterJenkinsTotal.addAndGet(r.getMasterBranchesJenkins());
                     masterGitTotal.addAndGet(r.getMasterBranchesGit());
+
+                    // mvn4
+                    sink.tableCell();
+                    sink.text(r.getMvn4BranchesJenkins() + " / " + r.getMvn4BranchesGit());
+                    sink.tableCell_();
+                    mvn4JenkinsTotal.addAndGet(r.getMvn4BranchesJenkins());
+                    mvn4GitTotal.addAndGet(r.getMvn4BranchesGit());
 
                     // jira branches
                     sink.tableCell();
@@ -463,6 +485,9 @@ public class ListBranchesReport extends AbstractJobsReport {
         sink.text(masterJenkinsTotal.get() + " / " + masterGitTotal.get());
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
+        sink.text(mvn4JenkinsTotal.get() + " / " + mvn4GitTotal.get());
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
         sink.text(jiraJenkinsTotal.get() + " / " + jiraGitTotal.get());
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
@@ -473,11 +498,16 @@ public class ListBranchesReport extends AbstractJobsReport {
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
         sink.text((masterJenkinsTotal.get()
+                        + mvn4JenkinsTotal.get()
                         + jiraJenkinsTotal.get()
                         + dependabotJenkinsTotal.get()
                         + restJenkinsTotal.get())
                 + " / "
-                + (masterGitTotal.get() + jiraGitTotal.get() + dependabotGitTotal.get() + restGitTotal.get()));
+                + (masterGitTotal.get()
+                        + mvn4GitTotal.get()
+                        + jiraGitTotal.get()
+                        + dependabotGitTotal.get()
+                        + restGitTotal.get()));
         sink.tableHeaderCell_();
         sink.tableRow_();
 
