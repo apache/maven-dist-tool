@@ -36,10 +36,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
-                  artifactsPublisher(disabled: true),
-                  findbugsPublisher(disabled: true),
-                ]) {
+                withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', publisherStrategy='EXPLICIT', mavenLocalRepo:'.repository') {
                     sh "mvn -ntp -V -e -Preporting -Dscreenshot=false clean install site"
                 }
                 archiveArtifacts artifacts: "**/target/site/**/*",allowEmptyArchive: true
