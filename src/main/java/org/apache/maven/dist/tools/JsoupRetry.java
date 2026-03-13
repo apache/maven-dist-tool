@@ -49,6 +49,7 @@ public class JsoupRetry {
         for (int i = 1; i <= MAX_RETRY; i++) {
             try {
                 return Jsoup.connect(url)
+                        .header("Authorization", "Basic " + System.getenv("API_TOKEN"))
                         .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
                         .maxBodySize(0)
                         .get();
