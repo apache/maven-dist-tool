@@ -36,8 +36,10 @@ pipeline {
 
         stage('Build') {
             steps {
-                withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', publisherStrategy: 'EXPLICIT', mavenLocalRepo:'.repository') {
-                    sh "mvn -ntp -V -e -Preporting -Dscreenshot=false clean install site"
+                withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {
+                    withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', publisherStrategy: 'EXPLICIT', mavenLocalRepo:'.repository') {
+                        sh "mvn -ntp -V -e -Preporting -Dscreenshot=false clean install site"
+                    }
                 }
                 archiveArtifacts artifacts: "**/target/site/**/*",allowEmptyArchive: true
             }
