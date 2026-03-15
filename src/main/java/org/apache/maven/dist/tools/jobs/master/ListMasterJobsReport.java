@@ -18,7 +18,6 @@
  */
 package org.apache.maven.dist.tools.jobs.master;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,13 +29,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.maven.dist.tools.JsoupRetry;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.maven.dist.tools.JsonRetry;
 import org.apache.maven.dist.tools.jobs.AbstractJobsReport;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
@@ -82,33 +81,43 @@ public class ListMasterJobsReport extends AbstractJobsReport {
             final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
 
             try {
-                Document doc = JsoupRetry.get(repositoryJobUrl);
 
-                Result result = new Result(repository, repositoryJobUrl);
-
-                Element masterRow = doc.getElementById("job_master");
-                if (masterRow == null) {
-                    getLog().warn(MAVENBOX_JOBS_BASE_URL + repository + " is missing id job_master");
+                JsonNode jsonNode = JsonRetry.get(
+                        repositoryJobUrl + "/api/json?tree=jobs[name,url,color,lastBuild[result,number]]");
+                if (jsonNode == null) {
+                    getLog().warn("Failed to read JSON for " + repository + " Jenkins job " + repositoryJobUrl);
                     continue;
-                } else if (masterRow.hasClass("job-status-red") || masterRow.hasClass("job-status-red-anime")) {
-                    result.setStatus("FAILURE");
-                } else if (masterRow.hasClass("job-status-yellow") || masterRow.hasClass("job-status-yellow-anime")) {
-                    result.setStatus("UNSTABLE");
-                } else if (masterRow.hasClass("job-status-blue") || masterRow.hasClass("job-status-blue-anime")) {
-                    result.setStatus("SUCCESS");
-                } else {
-                    result.setStatus("UNKNOWN");
                 }
-                result.setIcon(masterRow
-                        .select("span.build-status-icon__wrapper")
-                        .first()
-                        .outerHtml());
 
-                result.setLastBuild(getLastBuild(
-                        masterRow.child(3).attr("data"), masterRow.child(4).attr("data")));
+                // find the master node
+                if (jsonNode instanceof ObjectNode objectNode) {
+                    objectNode
+                            .get("jobs")
+                            .valueStream()
+                            .filter(jsonNode1 -> jsonNode1.get("name").asText().equals("master"))
+                            .findFirst()
+                            .ifPresent(jsonNode1 -> {
+                                JsonNode lastBuild = jsonNode1.get("lastBuild");
+                                String status = "UNKNOWN";
+                                if (lastBuild != null) {
+                                    status = lastBuild.get("result").asText();
+                                }
 
-                repoStatus.add(result);
-            } catch (IOException e) {
+                                String buildUrl = jsonNode1.get("url").asText()
+                                        + jsonNode1
+                                                .get("lastBuild")
+                                                .get("number")
+                                                .asText();
+                                Result result = new Result(repository, buildUrl);
+                                result.setStatus(status);
+                                // https://ci-maven.apache.org/static/67d6365a/images/24x24/blue.png
+                                result.setIcon("https://ci-maven.apache.org/static/48x48/"
+                                        + jsonNode1.get("color").asText().toLowerCase() + ".png");
+                                repoStatus.add(result);
+                            });
+                }
+
+            } catch (Exception e) {
                 getLog().warn("Failed to read status for " + repository + " Jenkins job " + repositoryJobUrl);
             }
         }

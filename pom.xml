@@ -160,6 +160,11 @@
       <version>7.5.0.202512021534-r</version>
     </dependency>
     <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+      <version>12.1.7</version>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
     </dependency>
@@ -187,9 +192,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.wiremock</groupId>
-      <artifactId>wiremock</artifactId>
-      <version>3.13.2</version>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>12.1.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
