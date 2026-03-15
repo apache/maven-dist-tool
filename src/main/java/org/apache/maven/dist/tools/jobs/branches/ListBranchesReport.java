@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 /**
@@ -203,8 +205,9 @@ public class ListBranchesReport extends AbstractJobsReport {
         String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository + "/api/json?tree=jobs[name]";
 
         Mono<JsonNode> jenkinsMono = JsonRetry.getAsync(repositoryJobUrl);
+        Scheduler scheduler = Schedulers.fromExecutorService(Executors.newVirtualThreadPerTaskExecutor());
         Mono<Collection<String>> branchesMono =
-                Mono.fromCallable(() -> getBranches(repository)).subscribeOn(Schedulers.boundedElastic());
+                Mono.fromCallable(() -> getBranches(repository)).subscribeOn(scheduler);
 
         return Mono.zip(jenkinsMono, branchesMono).map(tuple -> {
             JsonNode jenkinsBranchesDoc = tuple.getT1();
