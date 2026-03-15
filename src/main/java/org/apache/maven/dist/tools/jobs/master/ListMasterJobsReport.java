@@ -77,14 +77,16 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         Collection<String> repositoryNames = repositoryNames();
 
         List<Result> repoStatus = Flux.fromIterable(repositoryNames)
-                .flatMap(repo -> JsonRetry.getAsync(MAVENBOX_JOBS_BASE_URL + repo
-                                + "/api/json?tree=jobs[name,url,color,lastBuild[result,number]]")
-                        .flatMap(jsonNode -> buildResult(repo, jsonNode))
-                        .onErrorResume(e -> {
-                            getLog().warn("Failed to read status for " + repo + " Jenkins job " + MAVENBOX_JOBS_BASE_URL
-                                    + repo);
-                            return Mono.empty();
-                        }))
+                .flatMap(
+                        repo -> JsonRetry.getAsync(MAVENBOX_JOBS_BASE_URL + repo
+                                        + "/api/json?tree=jobs[name,url,color,lastBuild[result,number]]")
+                                .flatMap(jsonNode -> buildResult(repo, jsonNode))
+                                .onErrorResume(e -> {
+                                    getLog().warn("Failed to read status for " + repo + " Jenkins job "
+                                            + MAVENBOX_JOBS_BASE_URL + repo);
+                                    return Mono.empty();
+                                }),
+                        concurrency)
                 .collectList()
                 .block();
 

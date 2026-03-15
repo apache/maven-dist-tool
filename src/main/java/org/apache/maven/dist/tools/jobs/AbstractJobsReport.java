@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.maven.dist.tools.JsoupRetry;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.nodes.Document;
@@ -34,6 +35,9 @@ import org.jsoup.select.Elements;
 
 public abstract class AbstractJobsReport extends AbstractMavenReport {
     protected static final String GITBOX_URL = "https://gitbox.apache.org/repos/asf";
+
+    @Parameter(defaultValue = "8", property = "dist-tool.jobs.concurrency")
+    protected int concurrency;
 
     protected static final String MAVENBOX_JOBS_BASE_URL = "https://ci-maven.apache.org/job/Maven/job/maven-box/job/";
 
