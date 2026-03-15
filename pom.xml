@@ -214,6 +214,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <repositories>
+    <!-- https://github.com/hub4j/github-api/issues/2206 -->
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </repository>
+  </repositories>
 
   <build>
     <pluginManagement>
@@ -332,11 +339,4 @@
       </plugin>
     </plugins>
   </reporting>
-  <repositories>
-    <!-- https://github.com/hub4j/github-api/issues/2206 -->
-    <repository>
-      <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </repository>
-  </repositories>
 </project>
