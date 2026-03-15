@@ -60,10 +60,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {
-                    withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', options: [
-                      artifactsPublisher(disabled: true),
-                      findbugsPublisher(disabled: true),
-                    ]) {
+                    withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', publisherStrategy: 'EXPLICIT') {
                         sh "mvn -ntp -V -e failsafe:integration-test"
                     }
                 }
