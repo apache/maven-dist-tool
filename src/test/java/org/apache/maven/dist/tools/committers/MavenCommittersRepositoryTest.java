@@ -18,19 +18,24 @@
  */
 package org.apache.maven.dist.tools.committers;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
-import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committer;
+import org.eclipse.jetty.http.HttpHeader;
+import org.eclipse.jetty.io.Content;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Response;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.Callback;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@WireMockTest
 class MavenCommittersRepositoryTest {
 
     private static final String GROUP = """
@@ -63,17 +68,45 @@ class MavenCommittersRepositoryTest {
             }
             """;
 
+    private Server server;
+    private String baseUrl;
+
+    @BeforeEach
+    void startServer() throws Exception {
+        server = new Server(new InetSocketAddress("localhost", 0));
+        server.setHandler(new Handler.Abstract() {
+            @Override
+            public boolean handle(Request request, Response response, Callback callback) throws Exception {
+                String path = request.getHttpURI().getPath();
+                String body;
+                if ("/json/foundation/groups.json".equals(path)) {
+                    body = GROUP;
+                } else if ("/json/foundation/people_name.json".equals(path)) {
+                    body = NAMES;
+                } else {
+                    Response.writeError(request, response, callback, 404);
+                    return true;
+                }
+                response.setStatus(200);
+                response.getHeaders().put(HttpHeader.CONTENT_TYPE, "application/json");
+                Content.Sink.write(response, true, body, callback);
+                return true;
+            }
+        });
+        server.start();
+        int port = ((ServerConnector) server.getConnectors()[0]).getLocalPort();
+        baseUrl = "http://localhost:" + port;
+    }
+
+    @AfterEach
+    void stopServer() throws Exception {
+        server.stop();
+    }
+
     @Test
-    void dataLoad(WireMockRuntimeInfo wireMockRuntimeInfo) {
-
-        stubFor(get("/json/foundation/groups.json")
-                .willReturn(aResponse().withStatus(200).withBody(GROUP)));
-        stubFor(get("/json/foundation/people_name.json")
-                .willReturn(aResponse().withStatus(200).withBody(NAMES)));
-
-        MavenCommittersRepository mavenCommittersRepository =
-                new MavenCommittersRepository(wireMockRuntimeInfo.getHttpBaseUrl());
-        assertThat(mavenCommittersRepository.getCommitters())
+    void dataLoad() {
+        MavenCommittersRepository repo = new MavenCommittersRepository(baseUrl);
+        assertThat(repo.getCommitters())
                 .containsExactly(
                         new Committer("cstamas", List.of("Tamas Cservenak", "Tamás Cservenák"), true),
                         new Committer("m1", List.of("M1 name"), false),

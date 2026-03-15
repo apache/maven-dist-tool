@@ -18,35 +18,37 @@
  */
 package org.apache.maven.dist.tools.committers;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.maven.dist.tools.JsonRetry;
 import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committer;
 import org.apache.maven.doxia.sink.Sink;
+import org.eclipse.jetty.client.Request;
+import org.eclipse.jetty.reactive.client.ReactiveRequest;
+import org.eclipse.jetty.reactive.client.ReactiveResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static java.util.Map.entry;
 
 public abstract class MLStats {
 
     private final Logger log = LoggerFactory.getLogger(MLStats.class);
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private static final String ML_STATS_ADDRES = "https://lists.apache.org/api/stats.lua";
 
@@ -70,72 +72,55 @@ public abstract class MLStats {
         sink.text(" and header_from " + (name ? "committer name" : "<committerId>@apache.org"));
     }
 
-    public String getLast(Committer committer) {
-
-        List<Map<String, String>> queryParamsList = getQueryParamsList(committer);
-        return queryParamsList.stream()
+    public Mono<String> getLastAsync(Committer committer) {
+        List<URI> uris = getQueryParamsList(committer).stream()
                 .map(this::prepareStatsURI)
-                .map(this::getLastFromML)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .max(Comparator.naturalOrder())
-                .orElse("-");
+                .toList();
+
+        return Flux.fromIterable(uris)
+                .flatMapSequential(uri -> {
+                    Request request = JsonRetry.getInstance()
+                            .getHttpClient()
+                            .newRequest(uri.toString())
+                            .headers(f -> f.add("Accept", "application/json"))
+                            .timeout(60, TimeUnit.SECONDS);
+                    ReactiveRequest reactiveRequest =
+                            ReactiveRequest.newBuilder(request).build();
+                    return Mono.from(reactiveRequest.response(ReactiveResponse.Content.asString()))
+                            .flatMap(json -> {
+                                try {
+                                    Optional<String> last = parseLastFromNode(OBJECT_MAPPER.readTree(json));
+                                    log.info("Query: {}, returns: {}", uri, last);
+                                    return Mono.justOrEmpty(last);
+                                } catch (Exception e) {
+                                    return Mono.error(e);
+                                }
+                            })
+                            .onErrorResume(e -> {
+                                log.warn("Query: {}, error: {}", uri, e.getMessage());
+                                return Mono.empty();
+                            });
+                })
+                .collect(Collectors.maxBy(Comparator.naturalOrder()))
+                .map(opt -> opt.orElse("-"));
     }
 
-    private Optional<String> getLastFromML(URI statsURI) {
-        try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .header("Accept", "application/json")
-                    .uri(statsURI)
-                    .timeout(Duration.ofSeconds(60))
-                    .build();
-            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            Optional<String> last = parseLast(response.body());
-            log.info("Query: {}, returns: {}", statsURI, last);
-            return last;
-
-        } catch (IOException e) {
-            log.warn("Query: {}, error: {}", statsURI, e.getMessage());
-            // try next one ...
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
-        }
-        return Optional.empty();
+    public String getLast(Committer committer) {
+        return getLastAsync(committer).block();
     }
 
-    private Optional<String> parseLast(InputStream input) throws IOException {
-        JsonFactory factory = new JsonFactory();
-        Integer lastYear = null;
-        Integer lastMonth = null;
-
-        try (JsonParser parser = factory.createParser(input)) {
-            while ((lastYear == null || lastMonth == null) && parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken() != JsonToken.VALUE_NUMBER_INT) {
-                    continue;
-                }
-                String name = parser.currentName();
-                switch (name) {
-                    case "lastYear":
-                        lastYear = parser.getValueAsInt();
-                        break;
-                    case "lastMonth":
-                        lastMonth = parser.getValueAsInt();
-                        break;
-                    default:
-                    // ignore
-                }
-            }
+    private Optional<String> parseLastFromNode(JsonNode node) {
+        JsonNode lastYearNode = node.get("lastYear");
+        JsonNode lastMonthNode = node.get("lastMonth");
+        if (lastYearNode == null || lastMonthNode == null) {
+            return Optional.empty();
         }
-
-        if (lastYear != null && lastMonth != null) {
-            if (lastYear == 1970 && lastMonth == 1) {
-                return Optional.empty();
-            }
-            return Optional.of(String.format("%04d-%02d", lastYear, lastMonth));
+        int lastYear = lastYearNode.asInt();
+        int lastMonth = lastMonthNode.asInt();
+        if (lastYear == 1970 && lastMonth == 1) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        return Optional.of(String.format("%04d-%02d", lastYear, lastMonth));
     }
 
     private URI prepareStatsURI(Map<String, String> queryParams) {

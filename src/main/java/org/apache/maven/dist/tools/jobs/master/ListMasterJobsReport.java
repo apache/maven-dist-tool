@@ -18,10 +18,8 @@
  */
 package org.apache.maven.dist.tools.jobs.master;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -30,13 +28,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.maven.dist.tools.JsoupRetry;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.maven.dist.tools.JsonRetry;
 import org.apache.maven.dist.tools.jobs.AbstractJobsReport;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
@@ -76,44 +76,47 @@ public class ListMasterJobsReport extends AbstractJobsReport {
     protected void executeReport(Locale locale) throws MavenReportException {
         Collection<String> repositoryNames = repositoryNames();
 
-        List<Result> repoStatus = new ArrayList<>(repositoryNames.size());
-
-        for (String repository : repositoryNames) {
-            final String repositoryJobUrl = MAVENBOX_JOBS_BASE_URL + repository;
-
-            try {
-                Document doc = JsoupRetry.get(repositoryJobUrl);
-
-                Result result = new Result(repository, repositoryJobUrl);
-
-                Element masterRow = doc.getElementById("job_master");
-                if (masterRow == null) {
-                    getLog().warn(MAVENBOX_JOBS_BASE_URL + repository + " is missing id job_master");
-                    continue;
-                } else if (masterRow.hasClass("job-status-red") || masterRow.hasClass("job-status-red-anime")) {
-                    result.setStatus("FAILURE");
-                } else if (masterRow.hasClass("job-status-yellow") || masterRow.hasClass("job-status-yellow-anime")) {
-                    result.setStatus("UNSTABLE");
-                } else if (masterRow.hasClass("job-status-blue") || masterRow.hasClass("job-status-blue-anime")) {
-                    result.setStatus("SUCCESS");
-                } else {
-                    result.setStatus("UNKNOWN");
-                }
-                result.setIcon(masterRow
-                        .select("span.build-status-icon__wrapper")
-                        .first()
-                        .outerHtml());
-
-                result.setLastBuild(getLastBuild(
-                        masterRow.child(3).attr("data"), masterRow.child(4).attr("data")));
-
-                repoStatus.add(result);
-            } catch (IOException e) {
-                getLog().warn("Failed to read status for " + repository + " Jenkins job " + repositoryJobUrl);
-            }
-        }
+        List<Result> repoStatus = Flux.fromIterable(repositoryNames)
+                .flatMap(
+                        repo -> JsonRetry.getAsync(MAVENBOX_JOBS_BASE_URL + repo
+                                        + "/api/json?tree=jobs[name,url,color,lastBuild[result,number]]")
+                                .flatMap(jsonNode -> buildResult(repo, jsonNode))
+                                .onErrorResume(e -> {
+                                    getLog().warn("Failed to read status for " + repo + " Jenkins job "
+                                            + MAVENBOX_JOBS_BASE_URL + repo);
+                                    return Mono.empty();
+                                }),
+                        concurrency)
+                .collectList()
+                .block();
 
         generateReport(repoStatus);
+    }
+
+    private Mono<Result> buildResult(String repository, JsonNode jsonNode) {
+        if (!(jsonNode instanceof ObjectNode objectNode)) {
+            getLog().warn("Failed to read JSON for " + repository + " Jenkins job " + MAVENBOX_JOBS_BASE_URL
+                    + repository);
+            return Mono.empty();
+        }
+        // find the master node
+        return Mono.justOrEmpty(objectNode
+                .get("jobs")
+                .valueStream()
+                .filter(n -> n.get("name").asText().equals("master"))
+                .findFirst()
+                .map(n -> {
+                    JsonNode lastBuild = n.get("lastBuild");
+                    String status = lastBuild != null ? lastBuild.get("result").asText() : "UNKNOWN";
+                    String buildUrl = n.get("url").asText()
+                            + n.get("lastBuild").get("number").asText();
+                    Result result = new Result(repository, buildUrl);
+                    result.setStatus(status);
+                    // https://ci-maven.apache.org/static/67d6365a/images/24x24/blue.png
+                    result.setIcon("https://ci-maven.apache.org/static/48x48/"
+                            + n.get("color").asText().toLowerCase() + ".png");
+                    return result;
+                }));
     }
 
     private void generateReport(List<Result> repoStatus) {

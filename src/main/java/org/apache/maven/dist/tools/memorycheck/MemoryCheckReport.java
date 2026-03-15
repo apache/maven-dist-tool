@@ -118,9 +118,8 @@ public class MemoryCheckReport extends AbstractDistCheckReport {
         status.forEach(s -> {
             sink.listItem();
             sink.link(s.getHtmlUrl().toString());
-            sink.text(DateTimeFormatter.ISO_LOCAL_DATE
-                    .withZone(ZoneId.of("UTC"))
-                    .format(s.getStartedAt().toInstant()));
+            sink.text(
+                    DateTimeFormatter.ISO_LOCAL_DATE.withZone(ZoneId.of("UTC")).format(s.getStartedAt()));
             if (s.getConclusion() == GHWorkflowRun.Conclusion.SUCCESS) {
                 iconSuccess(sink);
             } else {
@@ -168,8 +167,9 @@ public class MemoryCheckReport extends AbstractDistCheckReport {
 
     private List<GHWorkflowJob> getLatestBuildStatus() {
         try {
+            // FIXME we should use some GH token
             return StreamSupport.stream(
-                            GitHub.connect()
+                            GitHub.connectAnonymously()
                                     .getRepository(GITHUB_REPOSITORY)
                                     .queryWorkflowRuns()
                                     .list()
