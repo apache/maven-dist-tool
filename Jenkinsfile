@@ -47,7 +47,7 @@ pipeline {
 
         stage('Publish') {
             when {
-                branch 'use_json_jenkins_api'
+                branch 'master'
             }
             steps {
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'site', reportTitles: ''])
@@ -56,7 +56,7 @@ pipeline {
 
         stage('Check errors') {
             when {
-                branch 'use_json_jenkins_api'
+                branch 'master'
             }
             steps {
                 withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {

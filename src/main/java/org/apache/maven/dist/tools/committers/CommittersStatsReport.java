@@ -38,9 +38,11 @@ import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committe
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet.Semantics;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.AbstractMavenReportRenderer;
 import org.apache.maven.reporting.MavenReportException;
+import reactor.core.publisher.Flux;
 
 /**
  * Generate a Committers statistic
@@ -51,6 +53,9 @@ public class CommittersStatsReport extends AbstractMavenReport {
     public static final int LAST_ACTIVITY_MONTHS_ERROR = 4 * 12;
 
     public static final int LAST_ACTIVITY_MONTHS_WARNING = 2 * 12;
+
+    @Parameter(defaultValue = "4", property = "dist-tool.committers.concurrency")
+    private int concurrency;
 
     private final Map<String, MLStats> mlStats;
 
@@ -110,14 +115,18 @@ public class CommittersStatsReport extends AbstractMavenReport {
         }
 
         private Map<Committer, List<String>> retrieveCommitterStats() {
-            Map<Committer, List<String>> result = new LinkedHashMap<>();
-            for (Committer committer : mavenCommitters.getCommitters()) {
-                List<String> lastDateList = mlStats.values().stream()
-                        .map(ml -> ml.getLast(committer))
-                        .toList();
-                result.put(committer, lastDateList);
-            }
-            return result;
+            List<Committer> committers = new ArrayList<>(mavenCommitters.getCommitters());
+            List<MLStats> statsList = new ArrayList<>(mlStats.values());
+
+            return Flux.fromIterable(committers)
+                    .flatMapSequential(
+                            committer -> Flux.fromIterable(statsList)
+                                    .flatMapSequential(ml -> ml.getLastAsync(committer))
+                                    .collectList()
+                                    .map(dates -> Map.entry(committer, dates)),
+                            concurrency)
+                    .collectMap(Map.Entry::getKey, Map.Entry::getValue, LinkedHashMap::new)
+                    .block();
         }
 
         private void renderStatsTable(Map<Committer, List<String>> committerStats) {
