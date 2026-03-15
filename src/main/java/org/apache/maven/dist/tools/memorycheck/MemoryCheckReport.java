@@ -167,8 +167,9 @@ public class MemoryCheckReport extends AbstractDistCheckReport {
 
     private List<GHWorkflowJob> getLatestBuildStatus() {
         try {
+            // FIXME we should use some GH token
             return StreamSupport.stream(
-                            GitHub.connect()
+                            GitHub.connectAnonymously()
                                     .getRepository(GITHUB_REPOSITORY)
                                     .queryWorkflowRuns()
                                     .list()
