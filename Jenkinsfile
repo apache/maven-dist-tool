@@ -46,18 +46,12 @@ pipeline {
         }
 
         stage('Publish') {
-            when {
-                branch 'master'
-            }
             steps {
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${env.WORKSPACE}/target/site", reportFiles: 'index.html', reportName: 'site', reportTitles: ''])
             }
         }
 
         stage('Check errors') {
-            when {
-                branch 'master'
-            }
             steps {
                 withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {
                     withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', publisherStrategy: 'EXPLICIT') {
