@@ -18,6 +18,8 @@
  */
 package org.apache.maven.dist.tools;
 
+import java.util.concurrent.TimeUnit;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -26,9 +28,6 @@ import org.eclipse.jetty.client.Request;
 import org.eclipse.jetty.reactive.client.ReactiveRequest;
 import org.eclipse.jetty.reactive.client.ReactiveResponse;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class JsonRetry {
 
