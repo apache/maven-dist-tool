@@ -27,6 +27,9 @@ import org.eclipse.jetty.reactive.client.ReactiveRequest;
 import org.eclipse.jetty.reactive.client.ReactiveResponse;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 public class JsonRetry {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -49,6 +52,10 @@ public class JsonRetry {
         return JsonRetryHolder.INSTANCE;
     }
 
+    public HttpClient getHttpClient() {
+        return httpClient;
+    }
+
     public static JsonNode get(String url) throws Exception {
         Request request = getInstance().httpClient.newRequest(url);
         String apiToken = System.getenv("API_TOKEN");
@@ -60,7 +67,7 @@ public class JsonRetry {
     }
 
     public static Mono<JsonNode> getAsync(String url) {
-        Request request = getInstance().httpClient.newRequest(url);
+        Request request = getInstance().httpClient.newRequest(url).timeout(60, TimeUnit.SECONDS);
         String apiToken = System.getenv("API_TOKEN");
         if (StringUtils.isNotBlank(apiToken)) {
             request.headers(httpFields -> httpFields.add("Authorization", "Basic " + apiToken));
