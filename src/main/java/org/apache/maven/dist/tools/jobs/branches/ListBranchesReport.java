@@ -34,9 +34,6 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.maven.dist.tools.JsonRetry;
 import org.apache.maven.dist.tools.jobs.AbstractJobsReport;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
@@ -45,6 +42,9 @@ import org.apache.maven.reporting.MavenReportException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * Generate report with build status of the Jenkins job for the master branch of every Git repository in
@@ -187,12 +187,11 @@ public class ListBranchesReport extends AbstractJobsReport {
 
         List<Result> repoStatus = Flux.fromIterable(repositoryNames)
                 .flatMap(
-                        repo -> fetchResult(repo)
-                                .onErrorResume(e -> {
-                                    getLog().warn("Failed to read status for " + repo + " Jenkins job "
-                                            + MAVENBOX_JOBS_BASE_URL + repo);
-                                    return Mono.empty();
-                                }),
+                        repo -> fetchResult(repo).onErrorResume(e -> {
+                            getLog().warn("Failed to read status for " + repo + " Jenkins job " + MAVENBOX_JOBS_BASE_URL
+                                    + repo);
+                            return Mono.empty();
+                        }),
                         concurrency)
                 .collectList()
                 .block();
