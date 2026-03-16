@@ -31,6 +31,39 @@ Quick Build
 mvn verify site
 ```
 
+Configuration
+-------
+
+### API_TOKEN
+
+The `API_TOKEN` environment variable is required to authenticate HTTP requests against the
+[Apache Jenkins instance](https://ci-maven.apache.org/) and other Apache infrastructure.
+It is a Base64-encoded `username:apitoken` string used for HTTP Basic Authentication.
+
+#### Generating the Token
+
+1. Log in to the [Apache Jenkins instance](https://ci-maven.apache.org/).
+2. Click your username in the top-right corner to open your user profile.
+3. Navigate to **Security** (or go directly to `https://ci-maven.apache.org/user/<your-username>/security/`).
+4. Under **API Token**, click **Add new Token**, give it a name, and click **Generate**.
+5. Copy the generated token — it will not be shown again.
+
+#### Setting the Environment Variable
+
+Base64-encode your Jenkins username and API token, then export it:
+
+```bash
+export API_TOKEN=$(echo -n 'your-username:your-api-token' | base64)
+```
+
+You can add this to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) for persistence.
+
+#### Usage
+
+- **Local build with site reports:** `mvn verify site` — the reports use `API_TOKEN` to fetch data from Jenkins.
+- **Integration tests:** `mvn failsafe:integration-test` — the token is passed to the failsafe plugin via the `API_TOKEN` environment variable.
+- **CI (Jenkins):** The token is automatically injected via the `withCredentials` binding in the `Jenkinsfile` using the `API_TOKEN` credential ID.
+
 [report]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master/site/
 [license]: https://www.apache.org/licenses/LICENSE-2.0
 [build]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master
