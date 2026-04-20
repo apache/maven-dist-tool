@@ -1,4 +1,9 @@
-# Plugins Build Results
+# Plugins Build Results for Maven 4 Compatibility Check
+
+WIP (should be in Maven 4.0.0-RC6):
+
+- [PR #11868](https://github.com/apache/maven/pull/11868) for `maven-source-plugin`
+- [PR #11869](https://github.com/apache/maven/pull/11869) for `plugin-tools`
 
 ## core
 

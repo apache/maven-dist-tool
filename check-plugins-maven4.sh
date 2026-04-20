@@ -14,8 +14,15 @@ sdk use java 25
 # pushd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/4.0.x" clean package && popd
 
 
-echo "# Plugins Build Results" > $OUT
+echo "# Plugins Build Results for Maven 4 Compatibility Check" > $OUT
 echo >> $OUT
+
+echo "WIP (should be in Maven 4.0.0-RC6):
+
+- [PR #11868](https://github.com/apache/maven/pull/11868) for \`maven-source-plugin\`
+- [PR #11869](https://github.com/apache/maven/pull/11869) for \`plugin-tools\`
+
+" >> $OUT
 
 checkMvn() {
   local cat=$1
