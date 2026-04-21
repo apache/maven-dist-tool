@@ -8,7 +8,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 
 ## core
 
-|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.x |
+|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.0-SNAPSHOT |
 | ---------------- | -------- | -------- | -------- | -------- |
 | [maven-clean-plugin](https://github.com/apache/maven-clean-plugin/tree/maven-clean-plugin-3.x) 3.5.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-compiler-plugin](https://github.com/apache/maven-compiler-plugin/tree/maven-compiler-plugin-3.x) 3.15.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :x: | :x: |
@@ -21,7 +21,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 
 ## packaging
 
-|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.x |
+|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.0-SNAPSHOT |
 | ---------------- | -------- | -------- | -------- | -------- |
 | [maven-acr-plugin](https://github.com/apache/maven-acr-plugin/tree/master) 3.2.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-ear-plugin](https://github.com/apache/maven-ear-plugin/tree/master) 3.4.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
@@ -36,7 +36,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 
 ## reporting
 
-|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.x |
+|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.0-SNAPSHOT |
 | ---------------- | -------- | -------- | -------- | -------- |
 | [jxr](https://github.com/apache/maven-jxr/tree/master) 3.6.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-changelog-plugin](https://github.com/apache/maven-changelog-plugin/tree/master) 3.0.0-M2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -50,7 +50,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 
 ## tools
 
-|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.x |
+|                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.0-SNAPSHOT |
 | ---------------- | -------- | -------- | -------- | -------- |
 | [archetype](https://github.com/apache/maven-archetype/tree/master) 3.4.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x: |
 | [enforcer](https://github.com/apache/maven-enforcer/tree/master) 3.6.3-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
