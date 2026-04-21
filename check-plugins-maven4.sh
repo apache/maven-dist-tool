@@ -14,7 +14,7 @@ sdk use java 25
 # pushd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/4.0.x" clean package && popd
 
 
-echo "# Plugins Build Results for Maven 4 Compatibility Check" > $OUT
+echo "# Maven 3 Plugins Build Results for Maven 4 Compatibility Check" > $OUT
 echo >> $OUT
 
 echo "WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/127)):
@@ -51,6 +51,8 @@ check() {
   local dir=$2
   cd $dir
   echo -n "| [$(basename $(pwd))]($(git config --get remote.origin.url | sed 's/.git$//')/tree/$(git rev-parse --abbrev-ref HEAD))" >> $OUT
+  sdk use maven 3.9.15 > /dev/null
+  echo -n " $(mvn -B -N help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $OUT
   for v in $mvnVersions
   do
     echo -n " | " >> $OUT
