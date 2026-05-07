@@ -21,6 +21,7 @@ package org.apache.maven.dist.tools.committers;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,11 @@ public class MLStatsVotes extends MLStats {
 
     @Override
     protected List<Map<String, String>> getQueryParamsList(Committer committer) {
-        return committer.names().stream()
+        ArrayList<String> names = new ArrayList<>(committer.names());
+        // vote by ATR - commiter ASF id is used
+        names.add(committer.id() + "@apache.org");
+
+        return names.stream()
                 .map(name ->
                         ofEntries(entry("list", "dev"), entry("header_subject", "[VOTE]"), entry("header_from", name)))
                 .toList();
