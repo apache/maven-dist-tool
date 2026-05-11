@@ -89,6 +89,6 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | [maven-stage-plugin](https://github.com/apache/maven-stage-plugin/tree/master) 1.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-toolchains-plugin](https://github.com/apache/maven-toolchains-plugin/tree/master) 3.2.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [plugin-tools](https://github.com/apache/maven-plugin-tools/tree/master) 4.0.0-beta-3-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [release](https://github.com/apache/maven-release/tree/master) 3.3.2-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
+| [release](https://github.com/apache/maven-release/tree/master) 3.3.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [scm](https://github.com/apache/maven-scm/tree/master) 2.2.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
