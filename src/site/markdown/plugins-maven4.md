@@ -1,21 +1,22 @@
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements. See the NOTICE file
+  or more contributor license agreements.  See the NOTICE file
   distributed with this work for additional information
-  regarding copyright ownership. The ASF licenses this file
+  regarding copyright ownership.  The ASF licenses this file
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
-  with the License. You may obtain a copy of the License at
+  with the License.  You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied. See the License for the
+  KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
 -->
+
 # Maven 3 Plugins Build Results for Maven 4 Compatibility Check
 
 WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/127)):
@@ -34,7 +35,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | [maven-deploy-plugin](https://github.com/apache/maven-deploy-plugin/tree/maven-deploy-plugin-3.x) 3.1.5-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-install-plugin](https://github.com/apache/maven-install-plugin/tree/maven-install-plugin-3.x) 3.1.5-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-resources-plugin](https://github.com/apache/maven-resources-plugin/tree/maven-resources-plugin-3.x) 3.5.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
-| [maven-site-plugin](https://github.com/apache/maven-site-plugin/tree/master) 3.21.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
+| [maven-site-plugin](https://github.com/apache/maven-site-plugin/tree/master) 3.22.0-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-verifier-plugin](https://github.com/apache/maven-verifier-plugin/tree/master) 3.0.0-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [surefire](https://github.com/apache/maven-surefire/tree/HEAD) 3.6.0-SNAPSHOT | :x: | :x: | :x: | :x: |
 
@@ -79,7 +80,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | [maven-dependency-plugin](https://github.com/apache/maven-dependency-plugin/tree/master) 3.10.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-gpg-plugin](https://github.com/apache/maven-gpg-plugin/tree/master) 3.2.9-SNAPSHOT | :white_check_mark: | :x: | :white_check_mark: | :white_check_mark: |
 | [maven-help-plugin](https://github.com/apache/maven-help-plugin/tree/master) 3.5.2-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
-| [maven-invoker-plugin](https://github.com/apache/maven-invoker-plugin/tree/master) 3.9.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [maven-invoker-plugin](https://github.com/apache/maven-invoker-plugin/tree/master) 3.10.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-jarsigner-plugin](https://github.com/apache/maven-jarsigner-plugin/tree/master) 3.1.1-SNAPSHOT | :x: | :x: | :x: | :x: |
 | [maven-jdeprscan-plugin](https://github.com/apache/maven-jdeprscan-plugin/tree/master) 3.0.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-remote-resources-plugin](https://github.com/apache/maven-remote-resources-plugin/tree/master) 3.3.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |

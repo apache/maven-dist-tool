@@ -28,10 +28,10 @@ mvnVersions="3.9.15 4.0.0-rc-4 4.0.0-rc-5 4.0.0-SNAPSHOT"
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk use java 25
 #set -x
-# pushd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/4.0.0-SNAPSHOT" clean package && popd
+#pushd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/4.0.0-SNAPSHOT" clean package && popd
 
-
-echo "# Maven 3 Plugins Build Results for Maven 4 Compatibility Check" > $OUT
+head -19 $(pwd)/src/site/markdown/index.md > $OUT # license header
+echo "# Maven 3 Plugins Build Results for Maven 4 Compatibility Check" >> $OUT
 echo >> $OUT
 
 echo "WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/127)):
