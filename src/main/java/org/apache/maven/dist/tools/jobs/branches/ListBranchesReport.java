@@ -227,31 +227,35 @@ public class ListBranchesReport extends AbstractJobsReport {
                 if ("master".equals(branch)) {
                     masterBranchesGit++;
 
-                    if (jenkinsBranchesDoc.get("jobs").valueStream().anyMatch(n -> n.get("name")
-                            .asText()
-                            .equals("master"))) {
+                    if (jenkinsBranchesDoc
+                            .get("jobs")
+                            .valueStream()
+                            .anyMatch(n -> n.get("name").asText().equals("master"))) {
                         masterBranchesJenkins++;
                     }
                 } else if (JIRAPROJECTS.containsKey(repository)
                         && branch.toUpperCase().startsWith(JIRAPROJECTS.get(repository) + '-')) {
                     jiraBranchesGit.add(branch);
-                    if (jenkinsBranchesDoc.get("jobs").valueStream().anyMatch(n -> n.get("name")
-                            .asText()
-                            .equals(branch))) {
+                    if (jenkinsBranchesDoc
+                            .get("jobs")
+                            .valueStream()
+                            .anyMatch(n -> n.get("name").asText().equals(branch))) {
                         jiraBranchesJenkins.add(branch);
                     }
                 } else if (branch.startsWith("dependabot/")) {
                     dependabotBranchesGit.add(branch);
-                    if (jenkinsBranchesDoc.get("jobs").valueStream().anyMatch(n -> n.get("name")
-                            .asText()
-                            .equals(branch))) {
+                    if (jenkinsBranchesDoc
+                            .get("jobs")
+                            .valueStream()
+                            .anyMatch(n -> n.get("name").asText().equals(branch))) {
                         dependabotBranchesJenkins.add(branch);
                     }
                 } else {
                     restGit.add(branch);
-                    if (jenkinsBranchesDoc.get("jobs").valueStream().anyMatch(n -> n.get("name")
-                            .asText()
-                            .equals(branch))) {
+                    if (jenkinsBranchesDoc
+                            .get("jobs")
+                            .valueStream()
+                            .anyMatch(n -> n.get("name").asText().equals(branch))) {
                         restJenkins.add(branch);
                     }
                 }
