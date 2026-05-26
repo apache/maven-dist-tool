@@ -89,7 +89,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         JIRAPROJECTS.put("maven-deploy-plugin", "MDEPLOY");
         JIRAPROJECTS.put("maven-doap-plugin", "MDOAP");
         JIRAPROJECTS.put("maven-doxia", "DOXIA");
-        JIRAPROJECTS.put("maven-doxia-book-maven-plugin", "DOXIA");
+        // JIRAPROJECTS.put("maven-doxia-book-maven-plugin", "DOXIA"); retired
         // JIRAPROJECTS.put("maven-doxia-book-renderer", "DOXIA"); retired
         JIRAPROJECTS.put("maven-doxia-converter", "DOXIATOOLS");
         // JIRAPROJECTS.put("maven-doxia-linkcheck", "DOXIATOOLS"); retired
