@@ -45,7 +45,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | ---------------- | -------- | -------- | -------- | -------- |
 | [maven-acr-plugin](https://github.com/apache/maven-acr-plugin/tree/master) 3.2.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-ear-plugin](https://github.com/apache/maven-ear-plugin/tree/master) 3.4.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
-| [maven-ejb-plugin](https://github.com/apache/maven-ejb-plugin/tree/master) 3.3.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :x: | :x: |
+| [maven-ejb-plugin](https://github.com/apache/maven-ejb-plugin/tree/master) 3.3.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-jar-plugin](https://github.com/apache/maven-jar-plugin/tree/maven-jar-plugin-3.x) 3.5.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-jlink-plugin](https://github.com/apache/maven-jlink-plugin/tree/master) 3.3.1-SNAPSHOT | :x: | :x: | :x: | :x: |
 | [maven-jmod-plugin](https://github.com/apache/maven-jmod-plugin/tree/master) 3.0.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
