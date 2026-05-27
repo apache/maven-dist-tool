@@ -35,7 +35,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | [maven-deploy-plugin](https://github.com/apache/maven-deploy-plugin/tree/maven-deploy-plugin-3.x) 3.1.5-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-install-plugin](https://github.com/apache/maven-install-plugin/tree/maven-install-plugin-3.x) 3.1.5-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-resources-plugin](https://github.com/apache/maven-resources-plugin/tree/maven-resources-plugin-3.x) 3.5.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
-| [maven-site-plugin](https://github.com/apache/maven-site-plugin/tree/master) 3.22.0-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
+| [maven-site-plugin](https://github.com/apache/maven-site-plugin/tree/master) 3.22.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-verifier-plugin](https://github.com/apache/maven-verifier-plugin/tree/master) 3.0.0-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [surefire](https://github.com/apache/maven-surefire/tree/HEAD) 3.6.0-SNAPSHOT | :x: | :x: | :x: | :x: |
 
@@ -51,7 +51,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | [maven-jmod-plugin](https://github.com/apache/maven-jmod-plugin/tree/master) 3.0.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-rar-plugin](https://github.com/apache/maven-rar-plugin/tree/master) 3.1.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-shade-plugin](https://github.com/apache/maven-shade-plugin/tree/master) 3.6.3-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
-| [maven-source-plugin](https://github.com/apache/maven-source-plugin/tree/master) 3.4.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
+| [maven-source-plugin](https://github.com/apache/maven-source-plugin/tree/master) 3.4.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :white_check_mark: |
 | [maven-war-plugin](https://github.com/apache/maven-war-plugin/tree/master) 3.5.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ## reporting
@@ -59,7 +59,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 |                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.0-SNAPSHOT |
 | ---------------- | -------- | -------- | -------- | -------- |
 | [jxr](https://github.com/apache/maven-jxr/tree/master) 3.6.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [maven-changelog-plugin](https://github.com/apache/maven-changelog-plugin/tree/master) 3.0.0-M2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [maven-changelog-plugin](https://github.com/apache/maven-changelog-plugin/tree/master) 3.0.0-M3-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-changes-plugin](https://github.com/apache/maven-changes-plugin/tree/master) 3.0.0-M4-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-checkstyle-plugin](https://github.com/apache/maven-checkstyle-plugin/tree/master) 3.6.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-doap-plugin](https://github.com/apache/maven-doap-plugin/tree/master) 3.0.0-M2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -73,11 +73,11 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 |                  | 3.9.15 | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.0-SNAPSHOT |
 | ---------------- | -------- | -------- | -------- | -------- |
 | [archetype](https://github.com/apache/maven-archetype/tree/master) 3.4.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x: |
-| [enforcer](https://github.com/apache/maven-enforcer/tree/master) 3.6.3-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [enforcer](https://github.com/apache/maven-enforcer/tree/master) 3.6.4-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-antrun-plugin](https://github.com/apache/maven-antrun-plugin/tree/master) 3.2.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-artifact-plugin](https://github.com/apache/maven-artifact-plugin/tree/master) 3.6.2-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-assembly-plugin](https://github.com/apache/maven-assembly-plugin/tree/master) 3.8.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
-| [maven-dependency-plugin](https://github.com/apache/maven-dependency-plugin/tree/master) 3.10.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [maven-dependency-plugin](https://github.com/apache/maven-dependency-plugin/tree/master) 3.11.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-gpg-plugin](https://github.com/apache/maven-gpg-plugin/tree/master) 3.2.9-SNAPSHOT | :white_check_mark: | :x: | :white_check_mark: | :white_check_mark: |
 | [maven-help-plugin](https://github.com/apache/maven-help-plugin/tree/master) 3.5.2-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: |
 | [maven-invoker-plugin](https://github.com/apache/maven-invoker-plugin/tree/master) 3.10.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
