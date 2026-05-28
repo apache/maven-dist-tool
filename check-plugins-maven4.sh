@@ -24,11 +24,12 @@ OUT=$(pwd)/src/site/markdown/plugins-maven4.md
 LOG=$(pwd)/build
 
 # use SDKMan
-mvnVersions="3.9.15 4.0.0-rc-4 4.0.0-rc-5 4.0.0-SNAPSHOT"
+mvnVersions="3.9.15 3.10.0-SNAPSHOT 4.0.0-rc-4 4.0.0-rc-5 4.0.0-SNAPSHOT"
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk use java 25
 #set -x
 #pushd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/4.0.0-SNAPSHOT" clean package && popd
+#pushd $SRC/../core/3.x/maven-3 && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/3.10.0-SNAPSHOT" clean package && popd
 
 head -19 $(pwd)/src/site/markdown/index.md > $OUT # license header
 echo "# Maven 3 Plugins Build Results for Maven 4 Compatibility Check" >> $OUT
