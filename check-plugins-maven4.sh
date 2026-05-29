@@ -56,10 +56,12 @@ checkMvn() {
   fi
   if [ $(tail $log | grep "\[INFO\] BUILD SUCCESS" | wc -l) -eq 1 ]
   then
-    echo -n ":white_check_mark:"
+    echo -n ":white_check_mark:<br>"
+    echo -n "$(tail $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-')"
   elif [ $(tail -20 $log | grep "\[INFO\] BUILD FAILURE" | wc -l) -eq 1 ]
   then
-    echo -n ":x:"
+    echo -n ":x:<br>"
+    echo -n "$(tail -20 $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-')"
   else
     echo -n ":warning:"
   fi
