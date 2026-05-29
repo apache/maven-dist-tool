@@ -79,7 +79,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | [maven-assembly-plugin](https://github.com/apache/maven-assembly-plugin/tree/master) 3.8.1-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: | :x: |
 | [maven-dependency-plugin](https://github.com/apache/maven-dependency-plugin/tree/master) 3.11.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-gpg-plugin](https://github.com/apache/maven-gpg-plugin/tree/master) 3.2.9-SNAPSHOT | :white_check_mark: | :white_check_mark: | :x: | :white_check_mark: | :white_check_mark: |
-| [maven-help-plugin](https://github.com/apache/maven-help-plugin/tree/master) 3.5.2-SNAPSHOT | :white_check_mark: | :x: | :x: | :x: | :x: |
+| [maven-help-plugin](https://github.com/apache/maven-help-plugin/tree/master) 3.5.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :x: | :x: | :x: |
 | [maven-invoker-plugin](https://github.com/apache/maven-invoker-plugin/tree/master) 3.10.2-SNAPSHOT | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [maven-jarsigner-plugin](https://github.com/apache/maven-jarsigner-plugin/tree/master) 3.1.1-SNAPSHOT | :x: | :x: | :x: | :x: | :x: |
 | [maven-jdeprscan-plugin](https://github.com/apache/maven-jdeprscan-plugin/tree/master) 3.0.1-SNAPSHOT | :white_check_mark: | :white_check_mark: | :x: | :x: | :x: |
