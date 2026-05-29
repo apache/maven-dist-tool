@@ -57,11 +57,11 @@ checkMvn() {
   if [ $(tail $log | grep "\[INFO\] BUILD SUCCESS" | wc -l) -eq 1 ]
   then
     echo -n ":white_check_mark:<br>"
-    echo -n "$(tail $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-')"
+    echo -n "$(tail $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-' | sed -e 's/ /\&nbsp;/' -e 's/min/m/')"
   elif [ $(tail -20 $log | grep "\[INFO\] BUILD FAILURE" | wc -l) -eq 1 ]
   then
     echo -n ":x:<br>"
-    echo -n "$(tail -20 $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-')"
+    echo -n "$(tail -20 $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-' | sed -e 's/ /\&nbsp;/' -e 's/min/m/')"
   else
     echo -n ":warning:"
   fi
@@ -73,7 +73,7 @@ check() {
   cd $dir
   echo -n "| [$(basename $(pwd))]($(git config --get remote.origin.url | sed 's/.git$//')/tree/$(git rev-parse --abbrev-ref HEAD))" >> $OUT
   sdk use maven 3.9.15 > /dev/null
-  echo -n " $(mvn -B -N help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $OUT
+  echo -n "<br>$(mvn -B -N help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $OUT
   for v in $mvnVersions
   do
     echo -n " | " >> $OUT
