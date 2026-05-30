@@ -57,11 +57,11 @@ checkMvn() {
   if [ $(tail $log | grep "\[INFO\] BUILD SUCCESS" | wc -l) -eq 1 ]
   then
     echo -n ":white_check_mark:<br>"
-    echo -n "$(tail $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-' | sed -e 's/ /\&nbsp;/' -e 's/min/m/')"
+    echo -n "$(tail $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '5-' | sed -e 's/min/m/' -e 's/\d\d s/ s/')"
   elif [ $(tail -20 $log | grep "\[INFO\] BUILD FAILURE" | wc -l) -eq 1 ]
   then
     echo -n ":x:<br>"
-    echo -n "$(tail -20 $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '4-' | sed -e 's/ /\&nbsp;/' -e 's/min/m/')"
+    echo -n "$(tail -20 $log | grep "\[INFO\] Total time:" | cut -d ' ' -f '5-' | sed -e 's/min/m/' -e 's/\d\d s/ s/')"
   else
     echo -n ":warning:"
   fi
