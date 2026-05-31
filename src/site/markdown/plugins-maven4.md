@@ -72,7 +72,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 
 |                  | 3.9.15 | 3.10.0-SNAPSHOT | 4.0.0-rc-4 | 4.0.0-rc-5 | 4.0.0-SNAPSHOT |
 | ---------------- | -------- | -------- | -------- | -------- | -------- |
-| [archetype](https://github.com/apache/maven-archetype/tree/master)<br>3.4.2-SNAPSHOT | :white_check_mark:<br>01:31 m | :x:<br>01:37 m | :white_check_mark:<br>02:05 m | :white_check_mark:<br>02:08 m | :x:<br>02:09 m |
+| [archetype](https://github.com/apache/maven-archetype/tree/master)<br>3.4.2-SNAPSHOT | :white_check_mark:<br>01:36 m | :white_check_mark:<br>01:47 m | :white_check_mark:<br>02:09 m | :white_check_mark:<br>02:14 m | :white_check_mark:<br>02:17 m |
 | [enforcer](https://github.com/apache/maven-enforcer/tree/master)<br>3.6.4-SNAPSHOT | :white_check_mark:<br>02:18 m | :white_check_mark:<br>02:52 m | :white_check_mark:<br>03:32 m | :white_check_mark:<br>03:33 m | :white_check_mark:<br>03:43 m |
 | [maven-antrun-plugin](https://github.com/apache/maven-antrun-plugin/tree/master)<br>3.2.1-SNAPSHOT | :white_check_mark:<br>32.5 s | :white_check_mark:<br>41.8 s | :white_check_mark:<br>49.2 s | :white_check_mark:<br>52.9 s | :white_check_mark:<br>54.9 s |
 | [maven-artifact-plugin](https://github.com/apache/maven-artifact-plugin/tree/master)<br>3.6.2-SNAPSHOT | :white_check_mark:<br>40.3 s | :white_check_mark:<br>48.7 s | :x:<br>1.5 s | :x:<br>45.2 s | :x:<br>45.1 s |
