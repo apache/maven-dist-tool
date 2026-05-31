@@ -37,7 +37,7 @@ WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/12
 | [maven-resources-plugin](https://github.com/apache/maven-resources-plugin/tree/maven-resources-plugin-3.x)<br>3.5.1-SNAPSHOT | :white_check_mark:<br>29.5 s | :white_check_mark:<br>38.7 s | :x:<br>47.0 s | :x:<br>52.6 s | :x:<br>53.4 s |
 | [maven-site-plugin](https://github.com/apache/maven-site-plugin/tree/master)<br>3.22.1-SNAPSHOT | :white_check_mark:<br>02:37 m | :white_check_mark:<br>02:48 m | :x:<br>03:21 m | :x:<br>03:28 m | :x:<br>03:38 m |
 | [maven-verifier-plugin](https://github.com/apache/maven-verifier-plugin/tree/master)<br>3.0.0-SNAPSHOT | :white_check_mark:<br>5.3 s | :white_check_mark:<br>7.6 s | :white_check_mark:<br>7.2 s | :white_check_mark:<br>8.6 s | :white_check_mark:<br>8.9 s |
-| [surefire](https://github.com/apache/maven-surefire/tree/HEAD)<br>3.6.0-SNAPSHOT | :x:<br>05:36 m | :x:<br>06:09 m | :x:<br>03:06 m | :x:<br>03:19 m | :x:<br>03:19 m |
+| [surefire](https://github.com/apache/maven-surefire/tree/master)<br>3.6.0-SNAPSHOT | :white_check_mark:<br>05:38 m | :white_check_mark:<br>06:10 m | :x:<br>03:04 m | :x:<br>03:17 m | :x:<br>03:18 m |
 
 ## packaging
 

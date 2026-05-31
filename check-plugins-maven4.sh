@@ -49,9 +49,16 @@ checkMvn() {
   local logdir=$LOG/$cat/$(basename $(pwd))
   mkdir -p $logdir
   local log=$logdir/build-$version.log
-  sdk use maven $version > /dev/null
   if [ ! -f $log ]
   then
+    case "$(basename $(pwd))" in
+      "maven-jlink-plugin")
+        sdk use java 21 > /dev/null
+        ;;
+      *)
+        sdk use java 25 > /dev/null
+    esac
+    sdk use maven $version > /dev/null
     mvn -V -B -Prun-its clean verify > $log 2>&1
   fi
   if [ $(tail $log | grep "\[INFO\] BUILD SUCCESS" | wc -l) -eq 1 ]
