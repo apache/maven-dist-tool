@@ -27,6 +27,7 @@ LOG=$(pwd)/build
 mvnVersions="3.9.15 3.10.0-SNAPSHOT 4.0.0-rc-4 4.0.0-rc-5 4.0.0-SNAPSHOT"
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk use java 25
+export LANG=en
 #set -x
 #pushd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/4.0.0-SNAPSHOT" clean package && popd
 #pushd $SRC/../core/3.x/maven-3 && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/3.10.0-SNAPSHOT" clean package && popd
