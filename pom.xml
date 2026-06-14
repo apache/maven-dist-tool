@@ -172,7 +172,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-reactive-httpclient</artifactId>
-      <version>4.1.4</version>
+      <version>4.1.5</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
