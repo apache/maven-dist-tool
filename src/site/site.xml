@@ -26,14 +26,6 @@ under the License.
     <publishDate format="yyyy-MM-dd HH:mm z" position="right" />
     <version position="none" />
 
-    <bannerLeft href="https://www.apache.org/">
-      <image src="/images/apache-maven-project.png"/>
-    </bannerLeft>
-
-    <bannerRight href="https://maven.apache.org/">
-      <image src="/images/maven-logo-black-on-white.png"/>
-    </bannerRight>
-
     <skin>
       <groupId>org.apache.maven.skins</groupId>
       <artifactId>maven-fluido-skin</artifactId>
