@@ -267,6 +267,7 @@
         <configuration>
           <excludes combine.children="append">
             <exclude>.repository/**</exclude>
+            <exclude>**/*.css</exclude>
             <!-- jenkins with local maven repository -->
             <exclude>src/test/resources/**/*.html</exclude>
             <!-- sample HTML -->
@@ -317,6 +318,7 @@
           <reportSet>
             <id>html</id>
             <reports>
+              <!--
               <report>check-site</report>
               <report>check-source-release</report>
               <report>check-index-page</report>
@@ -327,6 +329,8 @@
               <report>list-branches</report>
               <report>committers-stats</report>
               <report>memory-check</report>
+              -->
+              <report>list-master-jobs</report>
             </reports>
           </reportSet>
         </reportSets>

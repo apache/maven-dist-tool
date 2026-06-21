@@ -112,11 +112,19 @@ public class ListMasterJobsReport extends AbstractJobsReport {
                             + n.get("lastBuild").get("number").asText();
                     Result result = new Result(repository, buildUrl);
                     result.setStatus(status);
-                    // https://ci-maven.apache.org/static/67d6365a/images/24x24/blue.png
-                    result.setIcon("https://ci-maven.apache.org/static/48x48/"
-                            + n.get("color").asText().toLowerCase() + ".png");
+                    result.setIcon(retrieveIcon(status));
                     return result;
                 }));
+    }
+
+    private String retrieveIcon(String status) {
+        return switch (status) {
+            case "FAILURE" -> "&#10060;"; // (red) CROSS MARK
+            case "SUCCESS" -> "&#9989;"; // (green) WHITE HEAVY CHECK MARK
+            case "UNKNOWN" -> "&#10067;"; // BLACK QUESTION MARK ORNAMENT
+            case "UNSTABLE" -> "&#10071;"; // HEAVY EXCLAMATION MARK SYMBOL
+            default -> "&#10067;"; // BLACK QUESTION MARK ORNAMENT
+        };
     }
 
     private void generateReport(List<Result> repoStatus) {
@@ -162,7 +170,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         sink.rawText("<span");
         if ((r.getLastBuild() == null)
                 || r.getLastBuild().isBefore(ZonedDateTime.now().minusMonths(1))) {
-            sink.rawText(" style=\"color:red\"");
+            sink.rawText(" class=\"text-red\"");
         }
         sink.rawText(">("
                 + ((r.getLastBuild() == null) ? "-" : r.getLastBuild().format(DateTimeFormatter.ISO_LOCAL_DATE))
