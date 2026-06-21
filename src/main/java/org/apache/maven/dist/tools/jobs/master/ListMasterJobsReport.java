@@ -18,6 +18,8 @@
  */
 package org.apache.maven.dist.tools.jobs.master;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -79,7 +81,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         List<Result> repoStatus = Flux.fromIterable(repositoryNames)
                 .flatMap(
                         repo -> JsonRetry.getAsync(MAVENBOX_JOBS_BASE_URL + repo
-                                        + "/api/json?tree=jobs[name,url,color,lastBuild[result,number]]")
+                                        + "/api/json?tree=jobs[name,url,color,lastBuild[result,number,timestamp]]")
                                 .flatMap(jsonNode -> buildResult(repo, jsonNode))
                                 .onErrorResume(e -> {
                                     getLog().warn("Failed to read status for " + repo + " Jenkins job "
@@ -113,6 +115,14 @@ public class ListMasterJobsReport extends AbstractJobsReport {
                     Result result = new Result(repository, buildUrl);
                     result.setStatus(status);
                     result.setIcon(retrieveIcon(status));
+
+                    long timestamp =
+                            lastBuild != null ? lastBuild.get("timestamp").asLong() : 0L;
+                    if (timestamp != 0L) {
+                        result.setLastBuild(
+                                ZonedDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
+                    }
+
                     return result;
                 }));
     }
@@ -121,9 +131,9 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         return switch (status) {
             case "FAILURE" -> "&#10060;"; // (red) CROSS MARK
             case "SUCCESS" -> "&#9989;"; // (green) WHITE HEAVY CHECK MARK
-            case "UNKNOWN" -> "&#10067;"; // BLACK QUESTION MARK ORNAMENT
-            case "UNSTABLE" -> "&#10071;"; // HEAVY EXCLAMATION MARK SYMBOL
-            default -> "&#10067;"; // BLACK QUESTION MARK ORNAMENT
+            case "UNKNOWN" -> "&#2754;"; // White Question Mark Ornament (same as default)
+            case "UNSTABLE" -> "&#9888;&#65039;"; // WARNING SIGN rendered as yellow
+            default -> "&#2754;"; // White Question Mark Ornament (same as Unknown)
         };
     }
 
