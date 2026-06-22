@@ -269,6 +269,7 @@
             <exclude>.repository/**</exclude>
             <!-- jenkins with local maven repository -->
             <exclude>src/test/resources/**/*.html</exclude>
+            <exclude>**/*.svg</exclude>
             <!-- sample HTML -->
           </excludes>
         </configuration>
