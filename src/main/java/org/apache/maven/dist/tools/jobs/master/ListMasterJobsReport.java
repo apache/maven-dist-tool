@@ -191,7 +191,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         sink.link_();
         sink.text(" (see also GH ");
         sink.link("https://github.com/apache/" + r.getRepositoryName());
-        sink.figureGraphics("https://img.shields.io/github/checks-status/apache/" + r.getRepositoryName() + "/master");
+        sink.rawText(getLocalBadge(r.getStatus()));
         sink.link_();
         sink.text(")");
         sink.listItem_();
@@ -223,5 +223,59 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         } else {
             return failure;
         }
+    }
+
+    private String getLocalBadge(String status) {
+        return switch (status) {
+            case "FAILURE" -> prepareBadge("failure", "#dd4343");
+            case "SUCCESS" -> prepareBadge("passing", "#4b0");
+            case "UNKNOWN" -> prepareBadge("unknown", "#57606a");
+            case "UNSTABLE" -> prepareBadge("unstable", "#ffff00");
+            default -> prepareBadge("unknown", "#57606a");
+        };
+    }
+
+    private String prepareBadge(String buildStatus, String color) {
+        // Replace with text-block, when maven-plugin-plugin supports needed Java version
+        String badge =
+                "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"98\" height=\"20\" role=\"img\" aria-label=\"checks: VAR_STATUS\">"
+                        + "  <title>checks: VAR_STATUS</title>"
+                        + "      <filter id=\"blur\">"
+                        + "          <feGaussianBlur stdDeviation=\"16\"/>"
+                        + "      </filter>"
+                        + "      <linearGradient id=\"s\" x2=\"0\" y2=\"100%\">"
+                        + "          <stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/>"
+                        + "          <stop offset=\"1\" stop-opacity=\".1\"/>"
+                        + "      </linearGradient>"
+                        + "      <clipPath id=\"r\">"
+                        + "          <rect width=\"98\" height=\"20\" rx=\"3\"/>"
+                        + "      </clipPath>"
+                        + "      <g clip-path=\"url(#r)\">"
+                        + "          <rect width=\"47\" height=\"20\" fill=\"#555\"/>"
+                        + "          <rect x=\"47\" width=\"51\" height=\"20\" fill=\"VAR_COLOR\"/>"
+                        + "          <rect width=\"98\" height=\"20\" fill=\"url(#s)\"/>"
+                        + "      </g>"
+                        + "      <g fill=\"#fff\" text-anchor=\"middle\" font-family=\"Verdana,Geneva,DejaVu Sans,sans-serif\" text-rendering=\"geometricPrecision\" font-size=\"100\">"
+                        + "          <g transform=\"scale(.1)\">"
+                        + "               <g aria-hidden=\"true\" fill=\"#010101\">"
+                        + "               <text x=\"245\" y=\"150\" fill-opacity=\".8\" filter=\"url(#blur)\" textLength=\"370\">checks</text>"
+                        + "               <text x=\"245\" y=\"150\" fill-opacity=\".3\" textLength=\"370\">checks</text>"
+                        + "               </g>"
+                        + "              <text x=\"245\" y=\"140\" textLength=\"370\">checks</text>"
+                        + "          </g>"
+                        + "          <g transform=\"scale(.1)\">"
+                        + "              <g aria-hidden=\"true\" fill=\"#010101\">"
+                        + "              <text x=\"715\" y=\"150\" fill-opacity=\".8\" filter=\"url(#blur)\" textLength=\"410\">VAR_STATUS</text>"
+                        + "              <text x=\"715\" y=\"150\" fill-opacity=\".3\" textLength=\"410\">VAR_STATUS</text>"
+                        + "              </g>"
+                        + "              <text x=\"715\" y=\"140\" textLength=\"410\">VAR_STATUS</text>"
+                        + "          </g>"
+                        + "      </g>"
+                        + "    </svg>";
+
+        badge = badge.replaceAll("VAR_STATUS", buildStatus);
+        badge = badge.replaceAll("VAR_COLOR", color);
+
+        return badge;
     }
 }
