@@ -267,6 +267,7 @@
         <configuration>
           <excludes combine.children="append">
             <exclude>.repository/**</exclude>
+            <exclude>**/*.css</exclude>
             <!-- jenkins with local maven repository -->
             <exclude>src/test/resources/**/*.html</exclude>
             <exclude>**/*.svg</exclude>
