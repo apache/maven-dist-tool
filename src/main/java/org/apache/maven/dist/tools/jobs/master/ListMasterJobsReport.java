@@ -18,6 +18,8 @@
  */
 package org.apache.maven.dist.tools.jobs.master;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -79,7 +81,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         List<Result> repoStatus = Flux.fromIterable(repositoryNames)
                 .flatMap(
                         repo -> JsonRetry.getAsync(MAVENBOX_JOBS_BASE_URL + repo
-                                        + "/api/json?tree=jobs[name,url,color,lastBuild[result,number]]")
+                                        + "/api/json?tree=jobs[name,url,color,lastBuild[result,number,timestamp]]")
                                 .flatMap(jsonNode -> buildResult(repo, jsonNode))
                                 .onErrorResume(e -> {
                                     getLog().warn("Failed to read status for " + repo + " Jenkins job "
@@ -112,11 +114,27 @@ public class ListMasterJobsReport extends AbstractJobsReport {
                             + n.get("lastBuild").get("number").asText();
                     Result result = new Result(repository, buildUrl);
                     result.setStatus(status);
-                    // https://ci-maven.apache.org/static/67d6365a/images/24x24/blue.png
-                    result.setIcon("https://ci-maven.apache.org/static/48x48/"
-                            + n.get("color").asText().toLowerCase() + ".png");
+                    result.setIcon(retrieveIcon(status));
+
+                    long timestamp =
+                            lastBuild != null ? lastBuild.get("timestamp").asLong() : 0L;
+                    if (timestamp != 0L) {
+                        result.setLastBuild(
+                                ZonedDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
+                    }
+
                     return result;
                 }));
+    }
+
+    private String retrieveIcon(String status) {
+        return switch (status) {
+            case "FAILURE" -> "&#10060;"; // (red) CROSS MARK
+            case "SUCCESS" -> "&#9989;"; // (green) WHITE HEAVY CHECK MARK
+            case "UNKNOWN" -> "&#2754;"; // White Question Mark Ornament (same as default)
+            case "UNSTABLE" -> "&#9888;&#65039;"; // WARNING SIGN rendered as yellow
+            default -> "&#2754;"; // White Question Mark Ornament (same as Unknown)
+        };
     }
 
     private void generateReport(List<Result> repoStatus) {
@@ -162,7 +180,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         sink.rawText("<span");
         if ((r.getLastBuild() == null)
                 || r.getLastBuild().isBefore(ZonedDateTime.now().minusMonths(1))) {
-            sink.rawText(" style=\"color:red\"");
+            sink.rawText(" class=\"text-red\"");
         }
         sink.rawText(">("
                 + ((r.getLastBuild() == null) ? "-" : r.getLastBuild().format(DateTimeFormatter.ISO_LOCAL_DATE))
