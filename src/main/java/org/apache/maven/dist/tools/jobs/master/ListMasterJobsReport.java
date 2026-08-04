@@ -109,9 +109,14 @@ public class ListMasterJobsReport extends AbstractJobsReport {
                 .findFirst()
                 .map(n -> {
                     JsonNode lastBuild = n.get("lastBuild");
-                    String status = lastBuild != null ? lastBuild.get("result").asText() : "UNKNOWN";
-                    String buildUrl = n.get("url").asText()
-                            + n.get("lastBuild").get("number").asText();
+                    // "result" is null while a build is still running, and lastBuild
+                    // itself is absent for a job that has never run. Dereferencing
+                    // either unconditionally dropped the repository from the report.
+                    JsonNode resultNode = lastBuild != null ? lastBuild.get("result") : null;
+                    String status = (resultNode == null || resultNode.isNull()) ? "UNKNOWN" : resultNode.asText();
+                    String buildUrl = lastBuild != null
+                            ? n.get("url").asText() + lastBuild.get("number").asText()
+                            : n.get("url").asText();
                     Result result = new Result(repository, buildUrl);
                     result.setStatus(status);
                     result.setIcon(retrieveIcon(status));
@@ -131,9 +136,9 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         return switch (status) {
             case "FAILURE" -> "&#10060;"; // (red) CROSS MARK
             case "SUCCESS" -> "&#9989;"; // (green) WHITE HEAVY CHECK MARK
-            case "UNKNOWN" -> "&#2754;"; // White Question Mark Ornament (same as default)
+            case "UNKNOWN" -> "&#10068;"; // White Question Mark Ornament
             case "UNSTABLE" -> "&#9888;&#65039;"; // WARNING SIGN rendered as yellow
-            default -> "&#2754;"; // White Question Mark Ornament (same as Unknown)
+            default -> "&#10068;"; // White Question Mark Ornament (same as Unknown)
         };
     }
 
@@ -147,54 +152,76 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         sink.head_();
 
         sink.body();
-        sink.link(MAVENBOX_JOBS_BASE_URL + "..");
-        sink.text("Jenkins jobs");
-        sink.link_();
-        sink.text(" for master branch sorted by status of last build:");
-        sink.list();
 
         Map<String, List<Result>> groupedResults =
                 repoStatus.stream().collect(Collectors.groupingBy(Result::getStatus));
 
+        sink.paragraph();
+        sink.link(MAVENBOX_JOBS_BASE_URL + "..");
+        sink.text("Jenkins jobs");
+        sink.link_();
+        sink.text(" for the master branch of " + repoStatus.size() + " repositories, worst status first: ");
+        sink.text(groupedResults.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey(resultComparator()))
+                        .map(e -> e.getValue().size() + " " + e.getKey().toLowerCase(Locale.ROOT))
+                        .collect(Collectors.joining(", "))
+                + ".");
+        sink.paragraph_();
+
+        sink.table();
+        sink.tableRows(new int[] {Sink.JUSTIFY_CENTER, Sink.JUSTIFY_LEFT, Sink.JUSTIFY_LEFT, Sink.JUSTIFY_LEFT}, true);
+
+        sink.tableRow();
+        for (String header : new String[] {"Status", "Repository", "Last build", "Sources"}) {
+            sink.tableHeaderCell();
+            sink.text(header);
+            sink.tableHeaderCell_();
+        }
+        sink.tableRow_();
+
         groupedResults.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(resultComparator()))
-                .forEach(e -> {
-                    sink.listItem();
-                    int size = e.getValue().size();
-                    sink.text(size + " job" + (size > 1 ? "s" : "") + " with status " + e.getKey() + ":");
-                    sink.list();
-                    e.getValue().forEach(r -> renderJobResult(sink, r));
-                    sink.list_();
+                .forEach(e -> e.getValue().stream()
+                        // Results arrive in completion order, which differs on every
+                        // run; sort so the page is stable and diffable.
+                        .sorted(Comparator.comparing(Result::getRepositoryName))
+                        .forEach(r -> renderJobResult(sink, r)));
 
-                    sink.listItem_();
-                });
-
-        sink.list_();
+        sink.tableRows_();
+        sink.table_();
         sink.body_();
     }
 
     private void renderJobResult(Sink sink, Result r) {
-        sink.listItem();
-        sink.rawText(r.getIcon());
+        sink.tableRow();
 
-        sink.rawText("<span");
-        if ((r.getLastBuild() == null)
-                || r.getLastBuild().isBefore(ZonedDateTime.now().minusMonths(1))) {
-            sink.rawText(" class=\"text-red\"");
-        }
-        sink.rawText(">("
-                + ((r.getLastBuild() == null) ? "-" : r.getLastBuild().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                + ")</span> ");
+        sink.tableCell();
+        sink.rawText(r.getIcon() + " " + r.getStatus());
+        sink.tableCell_();
 
+        sink.tableCell();
         sink.link(r.getBuildUrl());
         sink.rawText(r.getRepositoryName());
         sink.link_();
-        sink.text(" (see also GH ");
+        sink.tableCell_();
+
+        sink.tableCell();
+        boolean stale = (r.getLastBuild() == null)
+                || r.getLastBuild().isBefore(ZonedDateTime.now().minusMonths(1));
+        sink.rawText("<span"
+                + (stale ? " class=\"text-red\" title=\"no build in the last month\"" : "")
+                + ">"
+                + ((r.getLastBuild() == null) ? "-" : r.getLastBuild().format(DateTimeFormatter.ISO_LOCAL_DATE))
+                + "</span>");
+        sink.tableCell_();
+
+        sink.tableCell();
         sink.link("https://github.com/apache/" + r.getRepositoryName());
-        sink.rawText(getLocalBadge(r.getStatus()));
+        sink.text("GitHub");
         sink.link_();
-        sink.text(")");
-        sink.listItem_();
+        sink.tableCell_();
+
+        sink.tableRow_();
     }
 
     private Comparator<String> resultComparator() {
@@ -202,79 +229,5 @@ public class ListMasterJobsReport extends AbstractJobsReport {
         return (l, r) -> {
             return Integer.compare(orderedStatus.indexOf(l), orderedStatus.indexOf(r));
         };
-    }
-
-    private ZonedDateTime getLastBuild(String lastSuccess, String lastFailure) {
-        ZonedDateTime success = null;
-        if (!"-".equals(lastSuccess)) {
-            success = ZonedDateTime.parse(lastSuccess);
-        }
-        ZonedDateTime failure = null;
-        if (!"-".equals(lastFailure)) {
-            failure = ZonedDateTime.parse(lastFailure);
-        }
-
-        if (success == null) {
-            return failure;
-        } else if (failure == null) {
-            return success;
-        } else if (success.compareTo(failure) >= 0) {
-            return success;
-        } else {
-            return failure;
-        }
-    }
-
-    private String getLocalBadge(String status) {
-        return switch (status) {
-            case "FAILURE" -> prepareBadge("failure", "#dd4343");
-            case "SUCCESS" -> prepareBadge("passing", "#4b0");
-            case "UNKNOWN" -> prepareBadge("unknown", "#57606a");
-            case "UNSTABLE" -> prepareBadge("unstable", "#ffff00");
-            default -> prepareBadge("unknown", "#57606a");
-        };
-    }
-
-    private String prepareBadge(String buildStatus, String color) {
-        String badge = """
-            <svg xmlns=\"http://www.w3.org/2000/svg\" width="98" height="20" role="img" aria-label="checks: VAR_STATUS">\
-              <title>checks: VAR_STATUS</title>\
-                  <filter id="blur">\
-                      <feGaussianBlur stdDeviation="16"/>\
-                  </filter>\
-                  <linearGradient id="s" x2="0" y2="100%">\
-                      <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>\
-                      <stop offset="1" stop-opacity=".1"/>\
-                  </linearGradient>\
-                  <clipPath id="r">\
-                      <rect width="98" height="20" rx="3"/>\
-                  </clipPath>\
-                  <g clip-path="url(#r)">\
-                      <rect width="47" height="20" fill="#555"/>\
-                      <rect x="47" width="51" height="20" fill="VAR_COLOR"/>\
-                      <rect width="98" height="20" fill="url(#s)"/>\
-                  </g>\
-                  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="100">\
-                      <g transform="scale(.1)">\
-                           <g aria-hidden="true" fill="#010101">\
-                           <text x="245" y="150" fill-opacity=".8" filter="url(#blur)" textLength="370">checks</text>\
-                           <text x="245" y="150" fill-opacity=".3" textLength="370">checks</text>\
-                           </g>\
-                          <text x="245" y="140" textLength="370">checks</text>\
-                      </g>\
-                      <g transform="scale(.1)">\
-                          <g aria-hidden="true" fill="#010101">\
-                          <text x="715" y="150" fill-opacity=".8" filter="url(#blur)" textLength="410">VAR_STATUS</text>\
-                          <text x="715" y="150" fill-opacity=".3" textLength="410">VAR_STATUS</text>\
-                          </g>\
-                          <text x="715" y="140" textLength="410">VAR_STATUS</text>\
-                      </g>\
-                  </g>\
-                </svg>""";
-
-        badge = badge.replaceAll("VAR_STATUS", buildStatus);
-        badge = badge.replaceAll("VAR_COLOR", color);
-
-        return badge;
     }
 }
