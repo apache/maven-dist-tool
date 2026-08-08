@@ -29,11 +29,14 @@ import org.apache.maven.dist.tools.AbstractDistCheckReport;
 import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.ProjectBuilder;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.reporting.MavenReportException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
@@ -75,7 +78,10 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
      * Maven project builder.
      */
     @Component
-    protected MavenProjectBuilder mavenProjectBuilder;
+    protected ProjectBuilder projectBuilder;
+
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    protected MavenSession session;
 
     /**
      * Http status ok code.
@@ -227,8 +233,12 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
         results.add(result);
         try {
             Artifact artifact = artifactFactory.createProjectArtifact(cli.getGroupId(), cli.getArtifactId(), version);
+            ProjectBuildingRequest request = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
+            request.setRemoteRepositories(artifactRepositories);
+            request.setLocalRepository(localRepository);
+            request.setProcessPlugins(false);
             MavenProject artifactProject =
-                    mavenProjectBuilder.buildFromRepository(artifact, artifactRepositories, localRepository, false);
+                    projectBuilder.build(artifact, false, request).getProject();
 
             String siteUrl = sites.get(cli.getArtifactId());
             if (siteUrl == null) {
