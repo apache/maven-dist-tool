@@ -38,7 +38,7 @@
   <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dist-tool/job/master/site/index.html</url>
 
   <prerequisites>
-    <maven>${mvnversion}</maven>
+    <maven>3.6.3</maven>
   </prerequisites>
 
   <scm>
