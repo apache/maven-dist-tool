@@ -24,24 +24,42 @@ OUT=$(pwd)/src/site/markdown/plugins-maven4.md
 LOG=$(pwd)/build
 
 # use SDKMan
-mvnVersions="3.9.15 3.10.0-rc-1 4.0.0-rc-5 4.0.0-rc-6 4.0.0-SNAPSHOT"
+mvn3Version=3.9.16
+mvnVersions="$mvn3Version 3.10.0-rc-1 4.0.0-SNAPSHOT"
+javaVersion=25
+javaVersionJlink=21
 source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk use java 25
+sdk use java $javaVersion
 export LANG=en
 #set -x
 #pushd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/4.0.0-SNAPSHOT" clean package && popd
-#pushd $SRC/../core/3.x/maven-3 && mvn -DdistributionTargetDir="$HOME/.sdkman/candidates/maven/3.10.0-SNAPSHOT" clean package && popd
+
+# sdk use failures are silent below, and would run a build with the previously selected JDK or Maven
+for v in $javaVersion $javaVersionJlink
+do
+  [ -d "$HOME/.sdkman/candidates/java/$v" ] || { echo "Java $v is not installed: sdk install java $v <path to a JDK $v>"; exit 1; }
+done
+for v in $mvnVersions
+do
+  [ -d "$HOME/.sdkman/candidates/maven/$v" ] && continue
+  case $v in
+    *-SNAPSHOT)
+      echo "Maven $v is not installed: build it from the matching checkout, e.g. cd $SRC/../core/maven-4.0.x && mvn -DdistributionTargetDir=\"\$HOME/.sdkman/candidates/maven/$v\" clean package"
+      ;;
+    *)
+      echo "Maven $v is not installed: sdk install maven $v"
+  esac
+  exit 1
+done
 
 head -19 $(pwd)/src/site/markdown/index.md > $OUT # license header
 echo "# Maven 3 Plugins Build Results for Maven 4 Compatibility Check" >> $OUT
 echo >> $OUT
 
-echo "WIP (should be in [Maven 4.0.0-RC6](https://github.com/apache/maven/milestone/127)):
+echo "WIP:
 
-- [PR #11868](https://github.com/apache/maven/pull/11868) for \`maven-source-plugin\`
-- [PR #11869](https://github.com/apache/maven/pull/11869) for \`plugin-tools\`
-- [issue #11973](https://github.com/apache/maven/issues/11973) for \`maven-toolchain-plugin\`
-- [PR #12245](hhttps://github.com/apache/maven/pull/12245) reports inheritance for \`maven-site-plugin\` (site.xml [issue](https://github.com/apache/maven-doxia-sitetools/pull/655) remains)
+- [maven-doxia-sitetools#655](https://github.com/apache/maven-doxia-sitetools/pull/655), Maven 4 specific \`site.xml\` resolution, reaches \`maven-site-plugin\` on Doxia's own release cycle
+- the remaining core fixes are collected in the [Maven 4.0.0-RC7 milestone](https://github.com/apache/maven/milestone/131)
 
 " >> $OUT
 
@@ -51,14 +69,17 @@ checkMvn() {
   local logdir=$LOG/$cat/$(basename $(pwd))
   mkdir -p $logdir
   local log=$logdir/build-$version.log
-  if [ ! -f $log ]
+  # a rebuilt distribution, SNAPSHOT or not, invalidates the log it produced.
+  # compare against the candidate directory, not its contents: a reproducible build stamps
+  # every file it unpacks with project.build.outputTimestamp, a date in the past
+  if [ ! -f $log ] || [ $log -ot "$HOME/.sdkman/candidates/maven/$version" ]
   then
     case "$(basename $(pwd))" in
       "maven-jlink-plugin")
-        sdk use java 21 > /dev/null
+        sdk use java $javaVersionJlink > /dev/null
         ;;
       *)
-        sdk use java 25 > /dev/null
+        sdk use java $javaVersion > /dev/null
     esac
     sdk use maven $version > /dev/null
     mvn -V -B -Prun-its clean verify > $log 2>&1
@@ -81,7 +102,7 @@ check() {
   local dir=$2
   cd $dir
   echo -n "| [$(basename $(pwd))]($(git config --get remote.origin.url | sed 's/.git$//')/tree/$(git rev-parse --abbrev-ref HEAD))" >> $OUT
-  sdk use maven 3.9.15 > /dev/null
+  sdk use maven $mvn3Version > /dev/null
   echo -n "<br/>$(mvn -B -N help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $OUT
   for v in $mvnVersions
   do
