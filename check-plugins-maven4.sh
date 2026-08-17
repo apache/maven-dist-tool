@@ -24,7 +24,7 @@ OUT=$(pwd)/src/site/markdown/plugins-maven4.md
 LOG=$(pwd)/build
 
 # use SDKMan
-mvnVersions="3.9.15 3.10.0-SNAPSHOT 4.0.0-rc-4 4.0.0-rc-5 4.0.0-SNAPSHOT"
+mvnVersions="3.9.15 3.10.0-rc-1 4.0.0-rc-5 4.0.0-rc-6 4.0.0-SNAPSHOT"
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk use java 25
 export LANG=en
