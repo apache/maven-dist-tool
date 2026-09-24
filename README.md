@@ -47,6 +47,10 @@ It is a Base64-encoded `username:apitoken` string used for HTTP Basic Authentica
 3. Navigate to **Security** (or go directly to `https://ci-maven.apache.org/user/<your-username>/security/`).
 4. Under **API Token**, click **Add new Token**, give it a name, and click **Generate**.
 5. Copy the generated token — it will not be shown again.
+6. Press **Save** to store generated token.
+
+To verify the created token got stored correctly, log out and in again and check if the token is listed on the **Security** page.
+If the token did not get stored, hit **Terminate all sessions**. This will log you out. Then repeat the steps above.
 
 #### Setting the Environment Variable
 
@@ -57,6 +61,21 @@ export API_TOKEN=$(echo -n 'your-username:your-api-token' | base64)
 ```
 
 You can add this to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) for persistence.
+
+On Windows, you can use the following CMD command to encode it:  
+
+```
+powershell "[convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(\"your-username:your-api-token\"))"
+```
+
+After encoding store it in your environment variables using the following CMD command:
+
+```
+setx API_TOKEN your-Base64-encoded-token /m
+```
+
+Alternatively, configure the variable through the graphical interface.
+Navigate to `Settings` → `System` → `About` → `Advanced system settings` → `Environment Variables`, or search for `Environment Variables` using the Windows search bar.
 
 #### Usage
 
