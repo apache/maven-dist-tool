@@ -25,7 +25,7 @@ LOG=$(pwd)/build
 
 # use SDKMan
 mvn3Version=3.9.16
-mvnVersions="$mvn3Version 3.10.0-rc-1 4.0.0-SNAPSHOT"
+mvnVersions="$mvn3Version 3.10.0 4.0.0-rc-7 4.0.0-SNAPSHOT"
 javaVersion=25
 javaVersionJlink=21
 source "$HOME/.sdkman/bin/sdkman-init.sh"
@@ -55,13 +55,6 @@ done
 head -19 $(pwd)/src/site/markdown/index.md > $OUT # license header
 echo "# Maven 3 Plugins Build Results for Maven 4 Compatibility Check" >> $OUT
 echo >> $OUT
-
-echo "WIP:
-
-- [maven-doxia-sitetools#655](https://github.com/apache/maven-doxia-sitetools/pull/655), Maven 4 specific \`site.xml\` resolution, reaches \`maven-site-plugin\` on Doxia's own release cycle
-- the remaining core fixes are collected in the [Maven 4.0.0-RC7 milestone](https://github.com/apache/maven/milestone/131)
-
-" >> $OUT
 
 checkMvn() {
   local cat=$1
