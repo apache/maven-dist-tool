@@ -152,7 +152,7 @@ public class ListBranchesReport extends AbstractJobsReport {
         // JIRAPROJECTS.put("maven-stage-plugin", "MSTAGE"); retired
         JIRAPROJECTS.put("maven-surefire", "SUREFIRE");
         JIRAPROJECTS.put("maven-toolchains-plugin", "MTOOLCHAINS");
-        JIRAPROJECTS.put("maven-verifier", "MSHARED");
+        // JIRAPROJECTS.put("maven-verifier", "MSHARED"); retired
         // JIRAPROJECTS.put("maven-verifier-plugin", "MVERIFIER"); retired
         JIRAPROJECTS.put("maven-wagon", "WAGON");
         JIRAPROJECTS.put("maven-war-plugin", "MWAR");
