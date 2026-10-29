@@ -18,6 +18,8 @@
  */
 package org.apache.maven.dist.tools.site;
 
+import javax.inject.Inject;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +32,6 @@ import org.apache.maven.dist.tools.ConfigurationLineInfo;
 import org.apache.maven.dist.tools.JsoupRetry;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
@@ -53,8 +54,15 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
 
     /**
      * <p>Constructor for DistCheckSiteReport.</p>
+     *
+     * @param artifactFactory the artifact factory
+     * @param projectBuilder the Maven project builder
      */
-    public DistCheckSiteReport() {}
+    @Inject
+    public DistCheckSiteReport(ArtifactFactory artifactFactory, ProjectBuilder projectBuilder) {
+        this.artifactFactory = artifactFactory;
+        this.projectBuilder = projectBuilder;
+    }
 
     /**
      * Ignore site failure for <code>artifactId</code> or <code>artifactId:version</code>
@@ -65,8 +73,7 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
     /**
      * Artifact factory.
      */
-    @Component
-    protected ArtifactFactory artifactFactory;
+    protected final ArtifactFactory artifactFactory;
 
     /**
      * Local repository.
@@ -77,8 +84,7 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
     /**
      * Maven project builder.
      */
-    @Component
-    protected ProjectBuilder projectBuilder;
+    protected final ProjectBuilder projectBuilder;
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
