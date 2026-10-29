@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 import org.apache.maven.dist.tools.IconsUtils;
 import org.apache.maven.dist.tools.committers.MavenCommittersRepository.Committer;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet.Semantics;
+import org.apache.maven.doxia.sink.SinkEventAttributeSet.Semantics;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.AbstractMavenReport;
