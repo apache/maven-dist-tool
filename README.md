@@ -36,9 +36,12 @@ Configuration
 
 ### API_TOKEN
 
-The `API_TOKEN` environment variable is required to authenticate HTTP requests against the
-[Apache Jenkins instance](https://ci-maven.apache.org/) and other Apache infrastructure.
+The `API_TOKEN` environment variable is needed by the two Jenkins reports (`list-master-jobs` and
+`list-branches`), since `ci-maven.apache.org` doesn't allow anonymous access to its JSON API.
 It is a Base64-encoded `username:apitoken` string used for HTTP Basic Authentication.
+
+Everything else (gitbox, maven.apache.org, dist/archive.apache.org, lists.apache.org) is read
+anonymously. Without the token the two reports still build, but come out empty.
 
 #### Generating the Token
 
