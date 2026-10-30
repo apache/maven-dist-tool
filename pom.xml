@@ -271,14 +271,14 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
-          <excludes combine.children="append">
-            <exclude>.repository/**</exclude>
-            <exclude>**/*.css</exclude>
+          <inputExcludes combine.children="append">
+            <inputExclude>.repository/**</inputExclude>
+            <inputExclude>**/*.css</inputExclude>
             <!-- jenkins with local maven repository -->
-            <exclude>src/test/resources/**/*.html</exclude>
-            <exclude>**/*.svg</exclude>
+            <inputExclude>src/test/resources/**/*.html</inputExclude>
+            <inputExclude>**/*.svg</inputExclude>
             <!-- sample HTML -->
-          </excludes>
+          </inputExcludes>
         </configuration>
       </plugin>
     </plugins>
