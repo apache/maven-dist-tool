@@ -41,6 +41,7 @@ public class ConfigurationLineInfo {
 
     private final String artifactId;
     private final VersionRange versionRange;
+    private final String gitRepositoryId;
 
     private String forceVersion;
     private String indexPageUrl;
@@ -62,6 +63,7 @@ public class ConfigurationLineInfo {
         this.artifactId = (index < 0) ? null : g.substring(index + 1);
         this.versionRange = null;
         this.indexPageUrl = DistCheckIndexPageReport.POMS_INDEX_URL; // in case of group parent pom artifact
+        this.gitRepositoryId = toGitRepositoryId(artifactId);
     }
 
     /**
@@ -81,6 +83,7 @@ public class ConfigurationLineInfo {
         this.artifactId = infos[0];
         this.versionRange = (infos.length > 1) ? VersionRange.createFromVersionSpec(infos[1]) : null;
         this.indexPageUrl = group.groupIndexPageUrl;
+        this.gitRepositoryId = toGitRepositoryId(artifactId);
     }
 
     /**
@@ -218,5 +221,19 @@ public class ConfigurationLineInfo {
     public String getSourceReleaseFilename(String version, boolean dist) {
         return artifactId + "-" + version
                 + (srcBin && (dist || !"maven-ant-tasks".equals(artifactId)) ? "-src" : "-source-release") + ".zip";
+    }
+
+    public String getGitRepositoryId() {
+        return gitRepositoryId;
+    }
+
+    public static String toGitRepositoryId(String artifactId) {
+        if ("apache-maven".equals(artifactId)) {
+            return "maven";
+        }
+        if (artifactId.startsWith("maven-")) {
+            return artifactId;
+        }
+        return "maven-" + artifactId;
     }
 }

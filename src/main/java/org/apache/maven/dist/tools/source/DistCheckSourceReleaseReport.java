@@ -233,7 +233,28 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         }
         sink.tableCell_();
 
+        String gitRepositoryId = cli.getGitRepositoryId();
+        // GitHub column
+        sink.tableCell();
+        sink.link("https://github.com/apache/" + gitRepositoryId);
+        sink.text(gitRepositoryId);
+        sink.link_();
         sink.tableCell_();
+
+        // ATR column
+        sink.tableCell();
+        sink.link("https://releases.apache.org/projects/" + gitRepositoryId);
+        sink.text(gitRepositoryId);
+        sink.link_();
+        sink.tableCell_();
+
+        // Release Catalog column
+        sink.tableCell();
+        sink.link("https://release-catalog.apache.org/" + gitRepositoryId + "/index.html");
+        sink.text(gitRepositoryId);
+        sink.link_();
+        sink.tableCell_();
+
         sink.tableRow_();
     }
 
@@ -291,6 +312,23 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.paragraph();
         sink.text("Older artifacts exploration is Work In Progress...");
         sink.paragraph_();
+        sink.paragraph();
+        sink.text("Also links to ATR and Catalog:");
+        sink.paragraph_();
+        sink.list();
+        sink.listItem();
+        sink.text("Maven Committee in ATR: ");
+        sink.link("https://releases.apache.org/committees/maven");
+        sink.text("https://releases.apache.org/committees/maven");
+        sink.link_();
+        sink.listItem_();
+        sink.listItem();
+        sink.text("ATR Release Catalog for Maven: ");
+        sink.link("https://release-catalog.apache.org/maven/index.html");
+        sink.text("https://release-catalog.apache.org/maven/index.html");
+        sink.link_();
+        sink.listItem_();
+        sink.list_();
         sink.section1_();
 
         sink.table();
@@ -306,6 +344,20 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.rawText("DATE");
         sink.tableHeaderCell_();
         reportStatisticsHeader(stats, sink);
+        sink.tableHeaderCell();
+        sink.link("https://github.com/orgs/apache/repositories?q=maven");
+        sink.text("GitHub");
+        sink.link_();
+        sink.tableHeaderCell();
+        sink.link("https://releases.apache.org/committees/maven");
+        sink.text("ATR");
+        sink.link_();
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.link("https://release-catalog.apache.org/maven/index.html");
+        sink.text("Catalog");
+        sink.link_();
+        sink.tableHeaderCell_();
         sink.tableRow_();
 
         Iterator<DirectoryStatistics> dirs = statistics.iterator();
