@@ -234,6 +234,12 @@ public class ConfigurationLineInfo {
         if ("apache-maven".equals(artifactId)) {
             return "maven";
         }
+        if ("apache".equals(artifactId)) {
+            return "maven-apache-parent";
+        }
+        if ("apache-resource-bundles".equals(artifactId)) {
+            return "maven-apache-resources";
+        }
         return "maven-" + artifactId;
     }
 }
