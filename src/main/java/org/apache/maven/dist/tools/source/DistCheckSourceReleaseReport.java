@@ -141,21 +141,22 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
     private void reportLine(Sink sink, CheckSourceReleaseResult csrr) {
         ConfigurationLineInfo cli = csrr.getConfigurationLine();
+        String gitRepositoryId = cli.getGitRepositoryId();
 
         sink.tableRow();
         sink.tableCell();
         sink.anchor(cli.getArtifactId());
-        sink.rawText(cli.getArtifactId());
         sink.anchor_();
-        sink.tableCell_();
-
-        String gitRepositoryId = cli.getGitRepositoryId();
-        // GitHub/ATR/Catalog column
-        sink.tableCell();
+        sink.rawText(cli.getArtifactId());
+        sink.text(" (");
         sink.link("https://github.com/apache/" + gitRepositoryId);
         sink.text("Git");
         sink.link_();
-        sink.text("/");
+        sink.text(")");
+        sink.tableCell_();
+
+        // GitHub/ATR/Catalog column
+        sink.tableCell();
         sink.link("https://releases.apache.org/projects/" + gitRepositoryId);
         sink.text("ATR");
         sink.link_();
@@ -336,13 +337,13 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.tableRows(null, true);
         sink.tableRow();
         sink.tableHeaderCell();
-        sink.rawText("groupId/artifactId: " + String.valueOf(stats.artifactsCount));
+        sink.rawText("groupId/artifactId (");
+        sink.link("https://github.com/orgs/apache/repositories?q=maven");
+        sink.text("Git");
+        sink.link_();
+        sink.rawText("): " + String.valueOf(stats.artifactsCount));
         sink.tableHeaderCell_();
         sink.tableHeaderCell();
-        sink.link("https://github.com/orgs/apache/repositories?q=maven");
-        sink.text("GitHub");
-        sink.link_();
-        sink.text("/");
         sink.link("https://releases.apache.org/committees/maven");
         sink.text("ATR");
         sink.link_();
