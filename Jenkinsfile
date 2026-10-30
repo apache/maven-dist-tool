@@ -36,11 +36,11 @@ pipeline {
 
         stage('Build') {
             steps {
-                withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {
+                //withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {
                     withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', publisherStrategy: 'EXPLICIT', mavenLocalRepo:'.repository') {
                         sh "mvn -ntp -V -e -Preporting -Dscreenshot=false clean install site"
                     }
-                }
+                //}
                 archiveArtifacts artifacts: "**/target/site/**/*",allowEmptyArchive: true
             }
         }
@@ -53,11 +53,11 @@ pipeline {
 
         stage('Check errors') {
             steps {
-                withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {
+                //withCredentials([string(credentialsId: 'API_TOKEN', variable: 'API_TOKEN')]) {
                     withMaven(jdk:'jdk_21_latest', maven:'maven_3_latest', mavenLocalRepo:'.repository', publisherStrategy: 'EXPLICIT') {
                         sh "mvn -ntp -V -e failsafe:integration-test"
                     }
-                }
+                //}
             }
         }
     }

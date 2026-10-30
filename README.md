@@ -34,7 +34,7 @@ mvn verify site
 Configuration
 -------
 
-### API_TOKEN
+### API_TOKEN (currently disabled)
 
 The `API_TOKEN` environment variable is needed by the two Jenkins reports (`list-master-jobs` and
 `list-branches`), since `ci-maven.apache.org` doesn't allow anonymous access to its JSON API.
