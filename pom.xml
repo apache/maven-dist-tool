@@ -272,12 +272,10 @@
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
           <inputExcludes combine.children="append">
-            <inputExclude>.repository/**</inputExclude>
             <inputExclude>**/*.css</inputExclude>
-            <!-- jenkins with local maven repository -->
-            <inputExclude>src/test/resources/**/*.html</inputExclude>
             <inputExclude>**/*.svg</inputExclude>
             <!-- sample HTML -->
+            <inputExclude>src/test/resources/**/*.html</inputExclude>
           </inputExcludes>
         </configuration>
       </plugin>
