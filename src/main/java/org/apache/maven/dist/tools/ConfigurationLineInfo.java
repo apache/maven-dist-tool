@@ -228,11 +228,11 @@ public class ConfigurationLineInfo {
     }
 
     public static String toGitRepositoryId(String artifactId) {
+        if ((artifactId == null) || artifactId.startsWith("maven-")) {
+            return artifactId;
+        }
         if ("apache-maven".equals(artifactId)) {
             return "maven";
-        }
-        if (artifactId.startsWith("maven-")) {
-            return artifactId;
         }
         return "maven-" + artifactId;
     }
