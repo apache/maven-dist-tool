@@ -294,6 +294,13 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.text("Apache Maven distribution area: ");
         sink.link(distributionAreaUrl);
         sink.text(distributionAreaUrl);
+        sink.text(", sync'ed from svn distribution area ");
+        sink.link("https://dist.apache.org/repos/dist/release/maven/");
+        sink.text("https://dist.apache.org/repos/dist/release/maven/");
+        sink.link_();
+        sink.text(", archived to Apache Archive Distribution area ");
+        sink.link("https://archive.apache.org/dist/maven/");
+        sink.text("https://archive.apache.org/dist/maven/");
         sink.link_();
         sink.listItem_();
         sink.listItem();
