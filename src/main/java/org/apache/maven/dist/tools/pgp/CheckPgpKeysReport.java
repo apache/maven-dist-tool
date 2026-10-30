@@ -37,7 +37,7 @@ import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.reporting.MavenReportException;
 
-import static org.apache.maven.doxia.sink.SinkEventAttributeSet.Semantics.BOLD;
+import static org.apache.maven.doxia.sink.impl.SinkEventAttributeSet.Semantics.BOLD;
 
 /**
  * Check PGP public KEYS files.
