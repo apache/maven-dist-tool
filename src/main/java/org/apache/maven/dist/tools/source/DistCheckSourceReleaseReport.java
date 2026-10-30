@@ -295,6 +295,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.text("Apache Maven distribution area: ");
         sink.link(distributionAreaUrl);
         sink.text(distributionAreaUrl);
+        sink.link_();
         sink.text(", sync'ed from svn distribution area ");
         sink.link("https://dist.apache.org/repos/dist/release/maven/");
         sink.text("https://dist.apache.org/repos/dist/release/maven/");
@@ -312,9 +313,6 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.listItem_();
         sink.list_();
         sink.paragraph();
-        sink.text("Older artifacts exploration is Work In Progress...");
-        sink.paragraph_();
-        sink.paragraph();
         sink.text("Also links to ATR and Catalog:");
         sink.paragraph_();
         sink.list();
@@ -331,6 +329,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.link_();
         sink.listItem_();
         sink.list_();
+        sink.paragraph();
+        sink.text("Older artifacts exploration is Work In Progress...");
+        sink.paragraph_();
         sink.section1_();
 
         sink.table();
@@ -373,6 +374,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
                 // shorten groupid
                 sink.rawText(csrr.getConfigurationLine().getGroupId().replaceAll("org.apache.maven", "o.a.m") + ": "
                         + String.valueOf(current.artifactsCount));
+                sink.tableHeaderCell_();
+                sink.tableHeaderCell();
+                sink.rawText(" ");
                 sink.tableHeaderCell_();
                 sink.tableHeaderCell();
                 sink.rawText(" ");
