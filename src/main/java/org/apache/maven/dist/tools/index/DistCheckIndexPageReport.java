@@ -299,6 +299,10 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
     protected void checkArtifact(ConfigurationLineInfo configLine, String version) throws MavenReportException {
         try {
             CheckIndexPageResult result = new CheckIndexPageResult(configLine, version);
+            if ("mvnd".equals(configLine.getArtifactId())) {
+                // ignore mvnd
+                return;
+            }
 
             if (configLine.getIndexPageUrl() != null) {
                 if (results.get(configLine.getIndexPageUrl()) == null) {
