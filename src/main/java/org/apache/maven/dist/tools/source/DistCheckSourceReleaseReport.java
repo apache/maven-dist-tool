@@ -230,23 +230,28 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         // central column
         sink.tableCell();
-        sink.link(cli.getBaseURL(repoBaseUrl, ""));
-        sink.text("<artifactId>");
-        sink.link_();
-        sink.text("/");
-        sink.link(cli.getVersionnedFolderURL(repoBaseUrl, csrr.getVersion()));
-        sink.text(csrr.getVersion());
-        sink.link_();
-        sink.text("/(source-release)");
-        if (csrr.central.isEmpty()) {
-            iconSuccess(sink);
+        if ("mvnd".equals(cli.getArtifactId())) {
+            // no Maven Central publication for mvnd
+            sink.text(" ");
         } else {
-            iconWarning(sink);
-        }
-        for (String missing : csrr.central) {
-            sink.lineBreak();
-            iconError(sink);
-            sink.rawText(missing);
+            sink.link(cli.getBaseURL(repoBaseUrl, ""));
+            sink.text("<artifactId>");
+            sink.link_();
+            sink.text("/");
+            sink.link(cli.getVersionnedFolderURL(repoBaseUrl, csrr.getVersion()));
+            sink.text(csrr.getVersion());
+            sink.link_();
+            sink.text("/(source-release)");
+            if (csrr.central.isEmpty()) {
+                iconSuccess(sink);
+            } else {
+                iconWarning(sink);
+            }
+            for (String missing : csrr.central) {
+                sink.lineBreak();
+                iconError(sink);
+                sink.rawText(missing);
+            }
         }
         sink.tableCell_();
 
@@ -416,15 +421,20 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             }
         }
         sink.tableHeaderCell_();
+
         sink.tableHeaderCell();
-        sink.link(repoBaseUrl + current.groupId.replace('.', '/'));
-        sink.text("<central>/" + current.groupId.replace('.', '/').replace("org/apache/maven", "o/a/m"));
-        sink.link_();
-        sink.rawText(": " + String.valueOf(current.artifactsCount - current.centralMissing));
-        iconSuccess(sink);
-        if (current.centralMissing > 0) {
-            sink.rawText("/" + String.valueOf(current.centralMissing));
-            iconWarning(sink);
+        if ("org.apache.maven.daemon".equals(current.groupId)) {
+            sink.text(" ");
+        } else {
+            sink.link(repoBaseUrl + current.groupId.replace('.', '/'));
+            sink.text("<central>/" + current.groupId.replace('.', '/').replace("org/apache/maven", "o/a/m"));
+            sink.link_();
+            sink.rawText(": " + String.valueOf(current.artifactsCount - current.centralMissing));
+            iconSuccess(sink);
+            if (current.centralMissing > 0) {
+                sink.rawText("/" + String.valueOf(current.centralMissing));
+                iconWarning(sink);
+            }
         }
         sink.tableHeaderCell_();
     }
