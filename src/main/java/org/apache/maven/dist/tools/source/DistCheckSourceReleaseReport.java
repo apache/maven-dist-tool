@@ -200,7 +200,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
                 sink.lineBreak();
                 iconError(sink);
                 sink.rawText(missing);
-                if (!csrr.central.contains(missing)) {
+                if ((csrr.central != null) && !csrr.central.contains(missing)) {
                     // if the release distribution is in central repository, we can get it from there...
                     cliMissing.append("\nwget ");
                     cliMissing.append(cli.getVersionnedFolderURL(repoBaseUrl, csrr.getVersion()));
