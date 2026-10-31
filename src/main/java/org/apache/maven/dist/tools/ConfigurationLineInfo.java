@@ -20,6 +20,9 @@ package org.apache.maven.dist.tools;
 
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
@@ -37,6 +40,8 @@ public class ConfigurationLineInfo {
     private final String directory;
     private final String groupId;
     private final boolean srcBin;
+    private final boolean srcNative;
+    private final boolean noCentral;
     private final String groupIndexPageUrl;
 
     private final String artifactId;
@@ -57,8 +62,11 @@ public class ConfigurationLineInfo {
         String g = infos[1];
         int index = g.indexOf(':');
         this.groupId = (index < 0) ? g : g.substring(0, index);
-        this.srcBin = (infos.length > 2) && "src+bin".equals(infos[2]);
-        this.groupIndexPageUrl = (!srcBin && (infos.length > 2)) ? infos[2] : null;
+        Set<String> params = new HashSet<String>(Arrays.asList(infos).subList(2, infos.length));
+        this.srcBin = params.remove("src+bin");
+        this.srcNative = params.remove("src+native");
+        this.noCentral = params.remove("no-central");
+        this.groupIndexPageUrl = params.isEmpty() ? null : params.iterator().next();
 
         this.artifactId = (index < 0) ? null : g.substring(index + 1);
         this.versionRange = null;
@@ -78,6 +86,8 @@ public class ConfigurationLineInfo {
         this.directory = group.getDirectory();
         this.groupId = group.getGroupId();
         this.srcBin = group.isSrcBin();
+        this.srcNative = group.isSrcNative();
+        this.noCentral = group.isNoCentral();
         this.groupIndexPageUrl = group.groupIndexPageUrl;
 
         this.artifactId = infos[0];
@@ -159,6 +169,24 @@ public class ConfigurationLineInfo {
     }
 
     /**
+     * <p>isSrcNative.</p>
+     *
+     * @return a boolean
+     */
+    public boolean isSrcNative() {
+        return srcNative;
+    }
+
+    /**
+     * <p>isNoCentral.</p>
+     *
+     * @return a boolean
+     */
+    public boolean isNoCentral() {
+        return noCentral;
+    }
+
+    /**
      * <p>getBaseURL.</p>
      *
      * @param repoBaseUrl a {@link java.lang.String} object
@@ -220,7 +248,7 @@ public class ConfigurationLineInfo {
      */
     public String getSourceReleaseFilename(String version, boolean dist) {
         if ("mvnd".equals(artifactId)) {
-            // ignore tar.gz and OS-specific builds
+            // ignore tar.gz and OS-specific builds, as mvnd is src+native (only one)
             return "maven-mvnd-" + version + "-src.zip";
         }
         return artifactId + "-" + version

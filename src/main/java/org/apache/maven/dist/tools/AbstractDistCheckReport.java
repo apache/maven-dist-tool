@@ -264,9 +264,12 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
         getLog().info("");
     }
 
-    private String getVersion(ConfigurationLineInfo aLine) throws MavenReportException {
+    /**
+     * get current version when a release is not published to Maven Central, then has no standard
+     * way to get maven-metadata.xml
+     */
+    private String getVersionNoCentral(ConfigurationLineInfo aLine) {
         if ("mvnd".equals(aLine.getArtifactId())) {
-            // not available in Maven Central, cannot use maven-metadata.xml
             // use https://github.com/apache/maven-site/blob/master/pom.xml#L64 instead
             // short term: hard code
             if (aLine.getVersionRange().containsVersion(new DefaultArtifactVersion("1.0"))) {
@@ -274,6 +277,14 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
             } else {
                 return "2.0.0-rc-3";
             }
+        }
+        return "?";
+    }
+
+    private String getVersion(ConfigurationLineInfo aLine) throws MavenReportException {
+        if (aLine.isNoCentral()) {
+            // not available in Maven Central, cannot use maven-metadata.xml
+            return getVersionNoCentral(aLine);
         }
         String metadataUrl = aLine.getMetadataFileURL(repoBaseUrl);
         try (InputStream input = new BufferedInputStream(new URL(metadataUrl).openStream())) {

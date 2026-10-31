@@ -104,6 +104,8 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         int centralMissing = 0;
 
+        int noCentral = 0;
+
         int distError = 0;
 
         int distMissing = 0;
@@ -121,7 +123,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         public void addArtifact(CheckSourceReleaseResult result) {
             artifactsCount++;
-            if ((result.central != null) && !result.central.isEmpty()) {
+            if (result.central == null) {
+                noCentral++;
+            } else if (!result.central.isEmpty()) {
                 centralMissing++;
             }
             if (result.dist == null) {
@@ -168,7 +172,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         // LATEST column
         sink.tableCell();
-        if ("mvnd".equals(cli.getArtifactId())) {
+        if (cli.isNoCentral()) {
             sink.rawText(csrr.getVersion());
         } else {
             sink.link(cli.getMetadataFileURL(repoBaseUrl));
@@ -179,7 +183,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         // DATE column
         sink.tableCell();
-        if ("mvnd".equals(cli.getArtifactId())) {
+        if (cli.isNoCentral()) {
             sink.rawText(" ");
         } else {
             sink.rawText(cli.getReleaseDateFromMetadata());
@@ -192,7 +196,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             String subDirectory = "";
             if (cli.isSrcBin()) {
                 subDirectory = csrr.getVersion() + "/source/";
-            } else if ("mvnd".equals(cli.getArtifactId())) {
+            } else if (cli.isSrcNative()) {
                 subDirectory = csrr.getVersion() + "/";
             }
             if (!subDirectory.isEmpty()) {
@@ -452,13 +456,13 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.tableHeaderCell_();
 
         sink.tableHeaderCell();
-        if ("org.apache.maven.daemon".equals(current.groupId)) {
+        if (current.artifactsCount == current.noCentral) {
             sink.text(" ");
         } else {
             sink.link(repoBaseUrl + current.groupId.replace('.', '/'));
             sink.text("<central>/" + current.groupId.replace('.', '/').replace("org/apache/maven", "o/a/m"));
             sink.link_();
-            sink.rawText(": " + String.valueOf(current.artifactsCount - current.centralMissing));
+            sink.rawText(": " + String.valueOf(current.artifactsCount - current.centralMissing - current.noCentral));
             iconSuccess(sink);
             if (current.centralMissing > 0) {
                 sink.rawText("/" + String.valueOf(current.centralMissing));
@@ -603,8 +607,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             results.add(result);
 
             // central
-            if (!"mvnd".equals(configLine.getArtifactId())) {
-                // only mvnd is not in Maven Central
+            if (!configLine.isNoCentral()) {
                 String centralUrl = configLine.getVersionnedFolderURL(repoBaseUrl, version);
                 result.setMissingCentralSourceRelease(checkDirectoryIndex(centralUrl, configLine, version, false));
             }
@@ -616,8 +619,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
             // dist
             String distPath = configLine.getDirectory() + (configLine.isSrcBin() ? ("/" + version + "/source") : "");
-            if ("mvnd".equals(configLine.getArtifactId())) {
-                // mnvd has a specific layout in distribution area...
+            if (configLine.isSrcNative()) {
                 distPath = configLine.getDirectory() + "/" + version;
             }
             String distUrl = distributionAreaUrl + distPath;
