@@ -189,27 +189,35 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         // dist column
         sink.tableCell();
         if (csrr.dist != null) {
+            String subDirectory = "";
             if (cli.isSrcBin()) {
-                String directory = csrr.getVersion() + "/source/";
-                sink.link(distributionAreaUrl + cli.getDirectory() + '/' + directory);
-                sink.text(directory);
-                sink.link_();
+                subDirectory = csrr.getVersion() + "/source/";
             } else if ("mvnd".equals(cli.getArtifactId())) {
-                String directory = csrr.getVersion() + "/";
-                sink.link(distributionAreaUrl + cli.getDirectory() + '/' + directory);
-                sink.text(directory);
+                subDirectory = csrr.getVersion() + "/";
+            }
+            if (!subDirectory.isEmpty()) {
+                sink.link(distributionAreaUrl + cli.getDirectory() + '/' + subDirectory);
+                sink.text(subDirectory);
                 sink.link_();
             }
             if (csrr.dist.isEmpty() && csrr.distOlder.isEmpty()) {
                 sink.text(cli.getSourceReleaseFilename(csrr.getVersion(), true));
                 iconSuccess(sink);
             }
+
+            // missing from dist-area?
             StringBuilder cliMissing = new StringBuilder();
+            boolean svnSyncIssues = false;
             for (String missing : csrr.dist) {
                 sink.lineBreak();
                 iconError(sink);
                 sink.rawText(missing);
-                if ((csrr.central != null) && !csrr.central.contains(missing)) {
+
+                // check if missing also from svn:dist = the RM forgot to add
+                if ((csrr.svnDist != null) && !csrr.svnDist.contains(missing)) {
+                    // available in svn:dist but not downloads: sync from svn to downloads
+                    svnSyncIssues = true;
+                } else if ((csrr.central != null) && !csrr.central.contains(missing)) {
                     // if the release distribution is in central repository, we can get it from there...
                     cliMissing.append("\nwget ");
                     cliMissing.append(cli.getVersionnedFolderURL(repoBaseUrl, csrr.getVersion()));
@@ -223,6 +231,14 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
                 sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_START)}, atts);
                 sink.text(cliMissing.toString());
                 sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_END)}, null);
+            } else if (svnSyncIssues) {
+                sink.lineBreak();
+                iconInfo(sink);
+                sink.text("infra sync issue: available in svn:dist ");
+                String svnDist = svnDistAreaUrl + cli.getDirectory() + '/' + subDirectory;
+                sink.link(svnDist);
+                sink.text(svnDist);
+                sink.link_();
             }
 
             StringBuilder cliOlder = new StringBuilder();
@@ -232,7 +248,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
                 sink.rawText(missing);
                 cliOlder.append("\nsvn rm ").append(missing);
             }
-            if (!cliOlder.toString().isEmpty()) {
+            if (!cliOlder.toString().isEmpty() && !svnSyncIssues) {
                 sink.lineBreak();
                 SinkEventAttributeSet atts = new SinkEventAttributeSet();
                 sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_START)}, atts);
@@ -529,7 +545,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
     }
 
     /**
-     * Check that url points to a directory index containing expected release files
+     * Check that url points to a directory index containing expected release files (archives + .asc + fingerprint)
      *
      * @param url
      * @param cli
@@ -599,14 +615,15 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             }
 
             // dist
-            String distUrl = distributionAreaUrl
-                    + configLine.getDirectory()
-                    + (configLine.isSrcBin() ? ("/" + version + "/source") : "");
+            String distPath = configLine.getDirectory() + (configLine.isSrcBin() ? ("/" + version + "/source") : "");
             if ("mvnd".equals(configLine.getArtifactId())) {
                 // mnvd has a specific layout in distribution area...
-                distUrl = distributionAreaUrl + configLine.getDirectory() + "/" + version;
+                distPath = configLine.getDirectory() + "/" + version;
             }
+            String distUrl = distributionAreaUrl + distPath;
+            String svnDistUrl = svnDistAreaUrl + distPath;
             result.setMissingDistSourceRelease(checkDirectoryIndex(distUrl, configLine, version, true));
+            result.setMissingSvnDistSourceRelease(checkDirectoryIndex(svnDistUrl, configLine, version, true));
             result.setDistOlderSourceRelease(checkContainsOld(distUrl, configLine, version));
         } catch (IOException ex) {
             throw new MavenReportException(ex.getMessage(), ex);

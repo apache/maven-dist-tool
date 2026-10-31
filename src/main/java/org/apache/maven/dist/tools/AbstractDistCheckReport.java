@@ -88,9 +88,14 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
     protected List<ArtifactRepository> artifactRepositories = new LinkedList<>();
 
     /**
-     * Location of distribution area
+     * Location of distribution area (in https://downloads.apache.org/)
      */
     protected String distributionAreaUrl;
+
+    /**
+     * Location of svn distribution area (in https://dist.apache.org/repos/dist/release/)
+     */
+    protected String svnDistAreaUrl;
 
     /**
      * Path in index page mapping, when path is not the classical /artifact-id/
@@ -202,6 +207,8 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
 
                 if ("dist-area".equals(param)) {
                     distributionAreaUrl = value;
+                } else if ("svn-dist".equals(param)) {
+                    svnDistAreaUrl = value;
                 } else if (param.contains(" ")) {
                     // parameter for an artifactId
                     index = param.indexOf(' ');
@@ -329,6 +336,15 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
      */
     public static void iconError(Sink sink) {
         icon(sink, "icon_error_sml");
+    }
+
+    /**
+     * add an info icon.
+     *
+     * @param sink doxiasink
+     */
+    public static void iconInfo(Sink sink) {
+        icon(sink, "icon_info_sml");
     }
 
     /**

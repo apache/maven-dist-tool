@@ -27,6 +27,7 @@ class CheckSourceReleaseResult extends AbstractCheckResult {
 
     List<String> central;
     List<String> dist;
+    List<String> svnDist;
     List<String> distOlder;
 
     CheckSourceReleaseResult(ConfigurationLineInfo r, String version) {
@@ -35,6 +36,10 @@ class CheckSourceReleaseResult extends AbstractCheckResult {
 
     void setMissingDistSourceRelease(List<String> checkRepos) {
         dist = checkRepos;
+    }
+
+    void setMissingSvnDistSourceRelease(List<String> checkRepos) {
+        svnDist = checkRepos;
     }
 
     void setMissingCentralSourceRelease(List<String> checkRepos) {
