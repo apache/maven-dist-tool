@@ -154,7 +154,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.rawText(cli.getArtifactId());
         sink.text(" (");
         sink.link("https://github.com/apache/" + gitRepositoryId);
-        sink.text("Git");
+        sink.text(cli.getArtifactId().equals(gitRepositoryId) ? "Git" : (gitRepositoryId + ".git"));
         sink.link_();
         sink.text(")");
         sink.tableCell_();
