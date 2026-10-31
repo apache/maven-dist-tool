@@ -175,7 +175,11 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         // DATE column
         sink.tableCell();
-        sink.rawText(cli.getReleaseDateFromMetadata());
+        if ("mvnd".equals(cli.getArtifactId())) {
+            sink.rawText(" ");
+        } else {
+            sink.rawText(cli.getReleaseDateFromMetadata());
+        }
         sink.tableCell_();
 
         // dist column
