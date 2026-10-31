@@ -262,9 +262,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
                     sink.lineBreak();
                     sink.text(subDirectory + main.replace("-src.zip", "-<os>-<arch>.zip & tar.gz"));
                     sink.lineBreak();
-                    sink.text("os = darwin, linux, windows");
+                    sink.text("- <os> in darwin, linux, windows");
                     sink.lineBreak();
-                    sink.text("arch = aarch64, amd64");
+                    sink.text("- <arch> in aarch64, amd64");
                 }
             }
 
