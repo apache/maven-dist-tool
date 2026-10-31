@@ -192,6 +192,40 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         // dist column
         sink.tableCell();
+        reportDistCell(sink, csrr, cli);
+        sink.tableCell_();
+
+        // central column
+        sink.tableCell();
+        if ("mvnd".equals(cli.getArtifactId())) {
+            // no Maven Central publication for mvnd
+            sink.text(" ");
+        } else {
+            sink.link(cli.getBaseURL(repoBaseUrl, ""));
+            sink.text("<artifactId>");
+            sink.link_();
+            sink.text("/");
+            sink.link(cli.getVersionnedFolderURL(repoBaseUrl, csrr.getVersion()));
+            sink.text(csrr.getVersion());
+            sink.link_();
+            sink.text("/(source-release)");
+            if (csrr.central.isEmpty()) {
+                iconSuccess(sink);
+            } else {
+                iconWarning(sink);
+            }
+            for (String missing : csrr.central) {
+                sink.lineBreak();
+                iconError(sink);
+                sink.rawText(missing);
+            }
+        }
+        sink.tableCell_();
+
+        sink.tableRow_();
+    }
+
+    private void reportDistCell(Sink sink, CheckSourceReleaseResult csrr, ConfigurationLineInfo cli) {
         if (csrr.dist != null) {
             String subDirectory = "";
             if (cli.isSrcBin()) {
@@ -205,8 +239,33 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
                 sink.link_();
             }
             if (csrr.dist.isEmpty() && csrr.distOlder.isEmpty()) {
-                sink.text(cli.getSourceReleaseFilename(csrr.getVersion(), true));
+                String main = cli.getSourceReleaseFilename(csrr.getVersion(), true);
+                sink.text(main);
                 iconSuccess(sink);
+                // list eventual additional files, even if their existence is not checked
+                if (cli.isSrcBin()) {
+                    // source/*-src.zip & tar.gz + bin/*-bin.zip & tar.gz
+                    sink.lineBreak();
+                    sink.text(subDirectory + main.replace("-src.zip", "-src.tar.gz"));
+                    sink.lineBreak();
+                    subDirectory = subDirectory.replace("/source/", "/bin/");
+                    sink.link(distributionAreaUrl + cli.getDirectory() + '/' + subDirectory);
+                    sink.text(subDirectory);
+                    sink.link_();
+                    sink.text(main.replace("-src.zip", "-bin.zip"));
+                    sink.lineBreak();
+                    sink.text(subDirectory + main.replace("-src.zip", "-bin.tar.gz"));
+                } else if (cli.isSrcNative()) {
+                    // *-src.zip & tar.gz + *-<os>-<arch>.zip & tar.gz
+                    sink.lineBreak();
+                    sink.text(subDirectory + main.replace("-src.zip", "-src.tar.gz"));
+                    sink.lineBreak();
+                    sink.text(subDirectory + main.replace("-src.zip", "-<os>-<arch>.zip & tar.gz"));
+                    sink.lineBreak();
+                    sink.text("os = darwin, linux, windows");
+                    sink.lineBreak();
+                    sink.text("arch = aarch64, amd64");
+                }
             }
 
             // missing from dist-area?
@@ -260,35 +319,6 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
                 sink.unknown("pre", new Object[] {Integer.valueOf(HtmlMarkup.TAG_TYPE_END)}, null);
             }
         }
-
-        // central column
-        sink.tableCell();
-        if ("mvnd".equals(cli.getArtifactId())) {
-            // no Maven Central publication for mvnd
-            sink.text(" ");
-        } else {
-            sink.link(cli.getBaseURL(repoBaseUrl, ""));
-            sink.text("<artifactId>");
-            sink.link_();
-            sink.text("/");
-            sink.link(cli.getVersionnedFolderURL(repoBaseUrl, csrr.getVersion()));
-            sink.text(csrr.getVersion());
-            sink.link_();
-            sink.text("/(source-release)");
-            if (csrr.central.isEmpty()) {
-                iconSuccess(sink);
-            } else {
-                iconWarning(sink);
-            }
-            for (String missing : csrr.central) {
-                sink.lineBreak();
-                iconError(sink);
-                sink.rawText(missing);
-            }
-        }
-        sink.tableCell_();
-
-        sink.tableRow_();
     }
 
     /** {@inheritDoc} */
