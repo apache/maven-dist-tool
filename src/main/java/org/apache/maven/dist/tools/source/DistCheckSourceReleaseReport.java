@@ -121,7 +121,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         public void addArtifact(CheckSourceReleaseResult result) {
             artifactsCount++;
-            if (!result.central.isEmpty()) {
+            if ((result.central != null) && !result.central.isEmpty()) {
                 centralMissing++;
             }
             if (result.dist == null) {
