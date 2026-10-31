@@ -219,6 +219,10 @@ public class ConfigurationLineInfo {
      * @return a {@link java.lang.String} object
      */
     public String getSourceReleaseFilename(String version, boolean dist) {
+        if ("mvnd".equals(artifactId)) {
+            // ignore tar.gz and OS-specific builds
+            return "maven-mvnd-" + version + "-src.zip";
+        }
         return artifactId + "-" + version
                 + (srcBin && (dist || !"maven-ant-tasks".equals(artifactId)) ? "-src" : "-source-release") + ".zip";
     }

@@ -168,9 +168,13 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
 
         // LATEST column
         sink.tableCell();
-        sink.link(cli.getMetadataFileURL(repoBaseUrl));
-        sink.rawText(csrr.getVersion());
-        sink.link_();
+        if ("mvnd".equals(cli.getArtifactId())) {
+            sink.rawText(csrr.getVersion());
+        } else {
+            sink.link(cli.getMetadataFileURL(repoBaseUrl));
+            sink.rawText(csrr.getVersion());
+            sink.link_();
+        }
         sink.tableCell_();
 
         // DATE column
@@ -187,6 +191,11 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         if (csrr.dist != null) {
             if (cli.isSrcBin()) {
                 String directory = csrr.getVersion() + "/source/";
+                sink.link(distributionAreaUrl + cli.getDirectory() + '/' + directory);
+                sink.text(directory);
+                sink.link_();
+            } else if ("mvnd".equals(cli.getArtifactId())) {
+                String directory = csrr.getVersion() + "/";
                 sink.link(distributionAreaUrl + cli.getDirectory() + '/' + directory);
                 sink.text(directory);
                 sink.link_();
@@ -593,6 +602,10 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             String distUrl = distributionAreaUrl
                     + configLine.getDirectory()
                     + (configLine.isSrcBin() ? ("/" + version + "/source") : "");
+            if ("mvnd".equals(configLine.getArtifactId())) {
+                // mnvd has a specific layout in distribution area...
+                distUrl = distributionAreaUrl + configLine.getDirectory() + "/" + version;
+            }
             result.setMissingDistSourceRelease(checkDirectoryIndex(distUrl, configLine, version, true));
             result.setDistOlderSourceRelease(checkContainsOld(distUrl, configLine, version));
         } catch (IOException ex) {
