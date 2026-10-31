@@ -268,20 +268,15 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
             indexPage.document = doc;
         }
 
-        // Maven parent POM is now a special case in https://maven.apache.org/pom/
-        boolean isMavenParentPoms = ("maven-parent".equals(cli.getArtifactId()));
-
-        Elements a = isMavenParentPoms ? doc.select("tr > th > b") : doc.select("tr > td > a[href]:not(.externalLink)");
+        Elements a = doc.select("tr > td > a[href]:not(.externalLink)");
 
         String path = paths.get(cli.getArtifactId());
-        if (isMavenParentPoms) {
-            path = "Maven Parent POMs"; // looking for this <th><b> content
-        } else if (path == null) {
+        if (path == null) {
             path = '/' + cli.getArtifactId() + '/';
         }
 
         for (Element e : a) {
-            String href = isMavenParentPoms ? e.text() : e.attr("href");
+            String href = e.attr("href");
 
             if (href.contains(path)) {
                 Element row = e.parent().parent();
