@@ -175,6 +175,10 @@ public class DistCheckSiteReport extends AbstractDistCheckReport {
         String directory = null;
         for (CheckSiteResult csr : results) {
             ConfigurationLineInfo cli = csr.getConfigurationLine();
+            if ("mvnd".equals(cli.getArtifactId())) {
+                // no Maven site for mvnd
+                continue;
+            }
 
             if (!cli.getDirectory().equals(directory)) {
                 directory = cli.getDirectory();
