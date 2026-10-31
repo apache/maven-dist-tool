@@ -53,7 +53,7 @@ public class ConfigurationLineInfo {
     private Metadata metadata;
 
     /**
-     * <p>Constructor for ConfigurationLineInfo.</p>
+     * <p>Constructor for ConfigurationLineInfo based on a /directory entry.</p>
      *
      * @param infos an array of {@link java.lang.String} objects
      */
@@ -75,7 +75,7 @@ public class ConfigurationLineInfo {
     }
 
     /**
-     * <p>Constructor for ConfigurationLineInfo.</p>
+     * <p>Constructor for ConfigurationLineInfo defining an artifact from a group.</p>
      *
      * @param group a {@link org.apache.maven.dist.tools.ConfigurationLineInfo} object
      * @param infos an array of {@link java.lang.String} objects

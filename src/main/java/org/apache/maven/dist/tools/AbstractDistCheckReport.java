@@ -300,9 +300,12 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
                     for (String versioningVersion : metadata.getVersioning().getVersions()) {
                         artifactVersions.add(new DefaultArtifactVersion(versioningVersion));
                     }
-                    version = aLine.getVersionRange()
-                            .matchVersion(artifactVersions)
-                            .toString();
+                    ArtifactVersion match = aLine.getVersionRange().matchVersion(artifactVersions);
+                    if (match == null) {
+                        getLog().error("no version matches " + aLine.getVersionRange() + " from " + metadataUrl + " = "
+                                + metadata.getVersioning().getVersions());
+                    }
+                    version = (match == null) ? "NA" : match.toString();
                 } else {
                     version = aLine.getVersionRange().getRecommendedVersion().toString();
                 }
