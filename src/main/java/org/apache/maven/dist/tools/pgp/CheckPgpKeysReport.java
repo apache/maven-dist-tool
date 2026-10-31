@@ -160,6 +160,13 @@ public class CheckPgpKeysReport extends AbstractDistCheckReport {
         sink.paragraph_();
 
         sink.paragraph();
+        sink.rawText("Currently, ATR reads KEYS file from svn: see ");
+        sink.link("https://releases.apache.org/committees/maven");
+        sink.rawText("https://releases.apache.org/committees/maven");
+        sink.link_();
+        sink.paragraph_();
+
+        sink.paragraph();
         sink.paragraph_();
 
         sink.list();
