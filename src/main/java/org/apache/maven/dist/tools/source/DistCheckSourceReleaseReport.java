@@ -574,8 +574,11 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             results.add(result);
 
             // central
-            String centralUrl = configLine.getVersionnedFolderURL(repoBaseUrl, version);
-            result.setMissingCentralSourceRelease(checkDirectoryIndex(centralUrl, configLine, version, false));
+            if (!"mvnd".equals(configLine.getArtifactId())) {
+                // only mvnd is not in Maven Central
+                String centralUrl = configLine.getVersionnedFolderURL(repoBaseUrl, version);
+                result.setMissingCentralSourceRelease(checkDirectoryIndex(centralUrl, configLine, version, false));
+            }
 
             if (NOT_IN_DISTRIBUTION_AREA.equals(configLine.getDirectory())) {
                 // no distribution check
