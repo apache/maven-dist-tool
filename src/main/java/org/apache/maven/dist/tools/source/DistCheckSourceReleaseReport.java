@@ -165,7 +165,7 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.text("ATR");
         sink.link_();
         sink.text("/");
-        sink.link("https://release-catalog.apache.org/" + gitRepositoryId + "/index.html");
+        sink.link("https://release-catalog.apache.org/" + gitRepositoryId);
         sink.text("Catalog");
         sink.link_();
         sink.tableCell_();
@@ -179,6 +179,9 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             sink.rawText(csrr.getVersion());
             sink.link_();
         }
+        sink.link("https://release-catalog.apache.org/" + gitRepositoryId + "/" + csrr.getVersion());
+        iconInfo(sink);
+        sink.link_();
         sink.tableCell_();
 
         // DATE column
