@@ -270,8 +270,9 @@ public abstract class AbstractDistCheckReport extends AbstractMavenReport {
      */
     private String getVersionNoCentral(ConfigurationLineInfo aLine) {
         if ("mvnd".equals(aLine.getArtifactId())) {
-            // use https://github.com/apache/maven-site/blob/master/pom.xml#L64 instead
             // short term: hard code
+            // checking from https://github.com/apache/maven-site/blob/master/pom.xml#L64
+            // TODO get from https://release-catalog.apache.org/project_releases.json
             if (aLine.getVersionRange().containsVersion(new DefaultArtifactVersion("1.0"))) {
                 return "1.0.6";
             } else {

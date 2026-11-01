@@ -49,7 +49,7 @@ public class ConfigurationLineInfo {
     private final String gitRepositoryId;
 
     private String forceVersion;
-    private String indexPageUrl;
+    private final String indexPageUrl;
     private Metadata metadata;
 
     /**

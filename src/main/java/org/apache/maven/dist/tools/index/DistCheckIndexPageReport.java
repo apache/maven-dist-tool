@@ -107,7 +107,7 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
     }
 
     private static class CheckIndexPageResult extends AbstractCheckResult {
-
+        private String path;
         private String indexVersion;
         private String indexDate;
 
@@ -166,8 +166,8 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
                     cli,
                     null,
                     null,
-                    cli.getArtifactId() + ": found " + cipr.indexVersion + " instead of " + cipr.getVersion() + " in "
-                            + cli.getIndexPageUrl());
+                    cli.getArtifactId() + ": found " + cipr.indexVersion + " for " + cipr.path + " instead of "
+                            + cipr.getVersion() + " in " + cli.getIndexPageUrl());
         }
         sink.tableCell_();
 
@@ -274,6 +274,7 @@ public class DistCheckIndexPageReport extends AbstractDistCheckReport {
         if (path == null) {
             path = '/' + cli.getArtifactId() + '/';
         }
+        r.path = path;
 
         for (Element e : a) {
             String href = e.attr("href");
