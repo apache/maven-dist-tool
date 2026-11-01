@@ -391,9 +391,15 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
         sink.link_();
         sink.listItem_();
         sink.listItem();
-        sink.text("ATR Release Catalog for Maven: ");
+        sink.text("ATR Release Catalog UI for Maven: ");
         sink.link("https://release-catalog.apache.org/maven/index.html");
         sink.text("https://release-catalog.apache.org/maven/index.html");
+        sink.link_();
+        sink.listItem_();
+        sink.listItem();
+        sink.text("ATR Release Catalog project releases data: ");
+        sink.link("https://release-catalog.apache.org/project_releases.json");
+        sink.text("https://release-catalog.apache.org/project_releases.json");
         sink.link_();
         sink.listItem_();
         sink.list_();
