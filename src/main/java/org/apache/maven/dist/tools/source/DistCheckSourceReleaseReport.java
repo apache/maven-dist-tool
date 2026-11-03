@@ -179,8 +179,16 @@ public class DistCheckSourceReleaseReport extends AbstractDistCheckReport {
             sink.rawText(csrr.getVersion());
             sink.link_();
         }
-        sink.link("https://release-catalog.apache.org/" + gitRepositoryId + "/" + csrr.getVersion());
-        iconInfo(sink);
+        String releaseCatalogUrl = "https://release-catalog.apache.org/" + gitRepositoryId + "/" + csrr.getVersion();
+        sink.link(releaseCatalogUrl);
+        try {
+            // check that the release exists in catalog
+            read(releaseCatalogUrl);
+            iconInfo(sink);
+        } catch (IOException ioe) {
+            // not found
+            iconError(sink);
+        }
         sink.link_();
         sink.tableCell_();
 

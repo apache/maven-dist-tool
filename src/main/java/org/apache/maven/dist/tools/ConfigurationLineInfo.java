@@ -261,6 +261,9 @@ public class ConfigurationLineInfo {
 
     public static String toGitRepositoryId(String artifactId) {
         if ((artifactId == null) || artifactId.startsWith("maven-")) {
+            if ("maven-archetype-bundles".equals(artifactId)) {
+                return "maven-archetypes";
+            }
             return artifactId;
         }
         if ("apache-maven".equals(artifactId)) {
