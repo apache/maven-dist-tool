@@ -76,6 +76,9 @@ public class ListMasterJobsReport extends AbstractJobsReport {
     /** {@inheritDoc} */
     @Override
     protected void executeReport(Locale locale) throws MavenReportException {
+        if (skipWithoutApiToken("List Master Jobs")) {
+            return;
+        }
         Collection<String> repositoryNames = repositoryNames();
 
         List<Result> repoStatus = Flux.fromIterable(repositoryNames)
