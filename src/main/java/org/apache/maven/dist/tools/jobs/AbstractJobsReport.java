@@ -25,7 +25,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.dist.tools.JsoupRetry;
+import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
@@ -54,6 +56,38 @@ public abstract class AbstractJobsReport extends AbstractMavenReport {
             "maven-sources",
             "maven-studies",
             "maven-xinclude-extension");
+
+    /**
+     * The Jenkins JSON API of ci-maven.apache.org does not allow anonymous access, so without an
+     * {@code API_TOKEN} every request fails and the report would come out empty. In that case render
+     * a page saying so instead, without calling Gitbox or Jenkins.
+     *
+     * @param title the report title
+     * @return {@code true} if the report was skipped and the caller must return
+     */
+    protected boolean skipWithoutApiToken(String title) {
+        if (StringUtils.isNotBlank(System.getenv("API_TOKEN"))) {
+            return false;
+        }
+        getLog().warn("API_TOKEN is not set: skipping " + title + ", Jenkins does not allow anonymous API access");
+
+        Sink sink = getSink();
+        sink.head();
+        sink.title();
+        sink.text(title);
+        sink.title_();
+        sink.head_();
+        sink.body();
+        sink.paragraph();
+        sink.text("This report was not generated: it reads the ");
+        sink.link(MAVENBOX_JOBS_BASE_URL + "..");
+        sink.text("Jenkins jobs");
+        sink.link_();
+        sink.text(" through the Jenkins JSON API, which needs the API_TOKEN environment variable.");
+        sink.paragraph_();
+        sink.body_();
+        return true;
+    }
 
     /**
      * Extract Git repository names for Apache Maven from

@@ -41,7 +41,7 @@ The `API_TOKEN` environment variable is needed by the two Jenkins reports (`list
 It is a Base64-encoded `username:apitoken` string used for HTTP Basic Authentication.
 
 Everything else (gitbox, maven.apache.org, dist/archive.apache.org, lists.apache.org) is read
-anonymously. Without the token the two reports still build, but come out empty.
+anonymously. Without the token the two reports skip Jenkins and render a page saying the token is missing.
 
 #### Generating the Token
 
