@@ -105,9 +105,13 @@ public class ListMasterJobsReport extends AbstractJobsReport {
             return Mono.empty();
         }
         // find the master node
-        return Mono.justOrEmpty(objectNode
-                .get("jobs")
-                .valueStream()
+        JsonNode jobs = objectNode.get("jobs");
+        if (jobs == null || !jobs.isArray()) {
+            getLog().warn("Failed to read jobs for " + repository + " Jenkins job " + MAVENBOX_JOBS_BASE_URL
+                    + repository);
+            return Mono.empty();
+        }
+        return Mono.just(jobs.valueStream()
                 .filter(n -> n.get("name").asText().equals("master"))
                 .findFirst()
                 .map(n -> {
@@ -132,6 +136,14 @@ public class ListMasterJobsReport extends AbstractJobsReport {
                     }
 
                     return result;
+                })
+                .orElseGet(() -> {
+                    getLog().info("No master job found for " + repository + " at " + MAVENBOX_JOBS_BASE_URL
+                            + repository);
+                    Result result = new Result(repository, MAVENBOX_JOBS_BASE_URL + repository);
+                    result.setStatus("MISSING");
+                    result.setIcon(retrieveIcon("MISSING"));
+                    return result;
                 }));
     }
 
@@ -141,6 +153,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
             case "SUCCESS" -> "&#9989;"; // (green) WHITE HEAVY CHECK MARK
             case "UNKNOWN" -> "&#10068;"; // White Question Mark Ornament
             case "UNSTABLE" -> "&#9888;&#65039;"; // WARNING SIGN rendered as yellow
+            case "MISSING" -> "&#9898;"; // medium white circle
             default -> "&#10068;"; // White Question Mark Ornament (same as Unknown)
         };
     }
@@ -228,7 +241,7 @@ public class ListMasterJobsReport extends AbstractJobsReport {
     }
 
     private Comparator<String> resultComparator() {
-        final List<String> orderedStatus = Arrays.asList("FAILURE", "UNSTABLE", "UNKNOWN", "SUCCESS");
+        final List<String> orderedStatus = Arrays.asList("FAILURE", "UNSTABLE", "UNKNOWN", "MISSING", "SUCCESS");
         return (l, r) -> {
             return Integer.compare(orderedStatus.indexOf(l), orderedStatus.indexOf(r));
         };
